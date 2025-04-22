@@ -28,36 +28,16 @@
             --card-padding: 18px;
             --outer-padding: 15px;
             --transition-speed: 0.3s;
-            --transition-speed-fast: 0.15s; /* Faster click effect */
+            --transition-speed-fast: 0.15s;
             --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { height: 100%; -webkit-tap-highlight-color: transparent; }
         body { font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color); line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px; }
 
-        #dashboard-box {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 15px var(--card-padding);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start; /* Align tops */
-            text-align: center;
-            gap: 15px;
-        }
-        .dashboard-item {
-             position: relative;
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-             justify-content: flex-start; /* Start content at the top */
-             flex: 1; /* Allow flex grow/shrink */
-        }
-        .dashboard-item--progress {
-             width: 90px; height: 90px;
-             flex-shrink: 0; /* Prevent shrinking too much */
-        }
+        #dashboard-box { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 15px var(--card-padding); margin-bottom: 20px; display: flex; justify-content: space-around; align-items: flex-start; text-align: center; gap: 15px; }
+        .dashboard-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; }
+        .dashboard-item--progress { width: 90px; height: 90px; flex-shrink: 0; }
         .progress-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
         .progress-ring__circle { fill: none; stroke-width: 5; transition: stroke-dashoffset 0.5s ease-out; }
         .progress-ring__bg { stroke: var(--progress-track-color); }
@@ -65,31 +45,14 @@
         .dashboard-item--progress .dashboard-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
         #dashboard-month-percentage { font-size: 1.6em; color: var(--text-color); margin-bottom: 0; font-weight: 600;}
         .dashboard-item--progress .dashboard-label { margin-top: 2px; margin-bottom: 0; font-size: 0.65em; }
-
         .dashboard-label { font-size: 0.85em; color: var(--text-color-secondary); margin-bottom: 4px; display: block; }
         .dashboard-value { font-size: 1.4em; font-weight: 500; color: var(--primary-color); line-height: 1.2; margin-bottom: 5px; }
+        .dashboard-value .unit { font-size: 0.6em; font-weight: 500; color: var(--text-color-secondary); margin-left: 2px; }
 
-        #dashboard-planned-dates .dashboard-label { margin-bottom: 8px; } /* More space for plan label */
-         #dashboard-plan-list {
-             list-style: none;
-             padding: 0;
-             margin: 0;
-             text-align: left;
-             font-size: 0.8em;
-             line-height: 1.4;
-             color: var(--text-color-secondary);
-             width: 100%; /* Ensure it takes available width */
-             max-height: 60px; /* Limit height for a few items */
-             overflow: hidden; /* Hide overflow if too many */
-         }
-         #dashboard-plan-list li {
-             margin-bottom: 3px;
-             white-space: nowrap;
-             overflow: hidden;
-             text-overflow: ellipsis;
-         }
+        #dashboard-planned-dates .dashboard-label { margin-bottom: 8px; }
+         #dashboard-plan-list { list-style: none; padding: 0; margin: 0; text-align: left; font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow: hidden; }
+         #dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
          #dashboard-plan-list li strong { color: var(--text-color); }
-
 
         #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
         h1 { display: none; }
@@ -98,8 +61,8 @@
         .card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
         .card.expanded .card-header::after { opacity: 0; }
         .card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
-        .card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; }
-        .toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; }
+        .card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; /* Prevent h2 intercepting clicks */ }
+        .toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; /* Prevent icon intercepting clicks */ }
         .card.expanded .toggle-icon { transform: rotate(180deg); }
         .card-content { padding: 0 var(--card-padding) 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
         .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
@@ -115,13 +78,15 @@
         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
         input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         textarea { resize: vertical; min-height: 90px; }
-        button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: calc(50% - 4px); }
-        @media (min-width: 600px) { button { width: auto; } } button:last-child { margin-right: 0; }
-        button:hover { background-color: #007aff; filter: brightness(1.1); }
-        button:active { transform: scale(0.97); filter: brightness(0.9); transition-duration: 0.05s; } /* Click effect */
+        button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: auto; /* Let button size naturally */}
+        button:active { transform: scale(0.97); filter: brightness(0.9); transition-duration: 0.05s; }
         button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; filter: none; } button.secondary:active { background-color: #48484a; }
         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.1); } button.danger:active { background-color: #ff5a52; transform: scale(0.97); filter: brightness(0.9); }
-        .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); } /* Add click effect */
+         /* Adjust button width in forms if needed */
+         #record-form .text-center button, #plan-form .text-center button { width: calc(50% - 4px); }
+         @media (min-width: 600px) { #record-form .text-center button, #plan-form .text-center button { width: auto; } }
+
+        .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
         .stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
         .stat-value { font-size: 1.7em; font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; }
@@ -161,6 +126,10 @@
          <div class="dashboard-item">
              <span class="dashboard-label">Horas Semana</span>
              <span id="dashboard-week-hours" class="dashboard-value">0 horas</span>
+             <div class="hidden" id="dashboard-planned-dates">
+                <span class="dashboard-label" style="margin-top: 10px;">Próximos Planos</span>
+                <ul id="dashboard-plan-list"></ul>
+             </div>
          </div>
          <div class="dashboard-item dashboard-item--progress">
             <svg viewBox="0 0 36 36" class="progress-ring">
@@ -172,10 +141,7 @@
                 <span class="dashboard-label">Meta Mês</span>
              </div>
          </div>
-         <div class="dashboard-item hidden" id="dashboard-planned-dates">
-             <span class="dashboard-label">Próximos Planos</span>
-             <ul id="dashboard-plan-list"></ul>
-         </div>
+
     </div>
 
     <div id="app">
@@ -217,7 +183,6 @@
                     </div>
                     <div class="text-center" style="margin-top: 20px;">
                         <button type="submit" id="save-record-btn">Salvar Registro</button>
-                         <!-- Clear button removed -->
                     </div>
                 </form>
             </div>
@@ -231,7 +196,7 @@
              <div class="card-content">
                 <form id="plan-form"> <input type="hidden" id="plan-id"> <div class="form-group"><label for="plan-date">Data Futura:</label><input type="date" id="plan-date" required></div> <div class="form-group"><label for="plan-hours">Horas Planejadas (HH:MM):</label><input type="text" inputmode="numeric" id="plan-hours" required placeholder="Ex: 3:00" pattern="^\d{1,3}(:\d{1,2})?$"></div> <div class="text-center"> <button type="submit" id="save-plan-btn">Salvar Plano</button> <button type="button" id="clear-plan-form-btn" class="secondary">Limpar</button> </div> </form>
                 <div id="planning-list-container" class="mt-2">
-                    <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);">Próximos Planos:</h3>
+                    <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);">Próximos Planos (Interno):</h3>
                     <ul id="planning-list" class="data-list"> <li class="placeholder hidden" style="padding-left: var(--card-padding);">Nenhum planejamento futuro.</li> </ul>
                 </div>
              </div>
@@ -307,7 +272,6 @@
             const recordTagSelect = document.getElementById('record-tag');
             const recordNotesInput = document.getElementById('record-notes');
             const saveRecordBtn = document.getElementById('save-record-btn');
-            /* Clear button removed */
             const planCard = document.getElementById('plan-card');
             const planForm = document.getElementById('plan-form');
             const planIdInput = document.getElementById('plan-id');
@@ -370,7 +334,7 @@
             function getStartOfWeek(date = new Date()) { const dOW = date.getDay(); const diff = date.getDate() - dOW; const sOW = new Date(date.setDate(diff)); sOW.setHours(0,0,0,0); return `${sOW.getFullYear()}-${String(sOW.getMonth()+1).padStart(2,'0')}-${String(sOW.getDate()).padStart(2,'0')}`; }
             function getDateMonthsAgo(months) { const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0,0,0,0); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
             function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/')) return monthYearString; const [m, y] = monthYearString.split('/'); const monthIndex = parseInt(m, 10) - 1; if (monthIndex < 0 || monthIndex > 11) return monthYearString; return `${MONTH_NAMES_PT[monthIndex]} de ${y}`; }
-            function formatHoursExtensive(hoursDecimal) { if (isNaN(hoursDecimal) || hoursDecimal < 0) return '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; if (hours > 0) { result += `${hours} ${hours === 1 ? 'hora' : 'horas'}`; } if (minutes > 0) { result += `${hours > 0 ? ' e ' : ''}${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`; } if (!result && hoursDecimal === 0) { result = '0 horas'; } else if (!result) { result = `${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`; /* Handle cases like 0.5 hours */ } return result; }
+            function formatHoursExtensive(hoursDecimal) { if (isNaN(hoursDecimal) || hoursDecimal < 0) return '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; if (hours > 0) { result += `${hours} ${hours === 1 ? 'hora' : 'horas'}`; } if (minutes > 0) { result += `${hours > 0 ? ' e ' : ''}${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`; } if (!result && hoursDecimal === 0) { result = '0 horas'; } else if (!result) { result = `${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`; } return result; }
             function formatDecimalToTimeInput(decimalHours) { if (isNaN(decimalHours) || decimalHours <= 0) return ""; const totalMinutes = Math.round((decimalHours || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; return `${hours}:${String(minutes).padStart(2, '0')}`; }
             function parseTimeInputToDecimal(timeString) { if (!timeString) return 0; const timeRegex = /^(\d{1,3})(?:[:](\d{1,2}))?$/; const match = timeString.trim().match(timeRegex); if (!match) return NaN; const hours = parseInt(match[1], 10); const minutes = parseInt(match[2] || '0', 10); if (isNaN(hours) || isNaN(minutes) || minutes >= 60 || minutes < 0 || hours < 0) return NaN; return hours + (minutes / 60); }
 
@@ -383,7 +347,7 @@
             changeDateBtn.addEventListener('click',()=>setDateInputVisibility(true));
 
             function toggleCard(cardElement){ if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';}}
-            appElement.addEventListener('click', (event) => { const h=event.target.closest('.card-header');if(h){const c=h.closest('.card');if(c){toggleCard(c);}}});
+            appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header'); if (header) { const card = header.closest('.card'); if (card) { toggleCard(card); } } });
             document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
 
             function clearRecordForm() { recordForm.reset(); recordIdInput.value=''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG; recordNotesInput.value = ''; recordHoursInput.value=''; saveRecordBtn.textContent='Salvar Registro'; saveRecordBtn.classList.remove('editing'); currentEditingId=null; }
@@ -407,14 +371,14 @@
 
             function updateDashboard() { const today=new Date();const cM=today.getMonth();const cY=today.getFullYear();const sOW=getStartOfWeek(today);let mH=0;let wH=0; recordedEntries.forEach(e=>{const eD=new Date(e.date+'T00:00:00'); if(eD.getMonth()===cM && eD.getFullYear()===cY){mH+=e.hours;} if(e.date>=sOW && e.date<=getCurrentDateString()){wH+=e.hours;}}); dashboardWeekHours.textContent = formatHoursExtensive(wH); const goal = settings.monthlyGoal || 70; const percent = goal > 0 ? Math.min(100, (mH / goal) * 100) : 0; dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(mH, goal); updateDashboardPlannedDates(); }
             function updateProgressRing(cV,mV) { const p=mV>0?Math.min(100,(cV/mV)*100):0; const offset=progressRingCircumference*(1-p/100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset=Math.max(0, offset);}
-            function updateDashboardPlannedDates() { const todayStr = getCurrentDateString(); const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0, 4); // Show next 4 plans dashboardPlanList.innerHTML = ''; if(futurePlans.length > 0) { dashboardPlannedDatesContainer.classList.remove('hidden'); futurePlans.forEach(plan => { const li = document.createElement('li'); li.innerHTML = `<strong>${formatDisplayDate(plan.date)}:</strong> ${formatHoursExtensive(plan.hours)}`; dashboardPlanList.appendChild(li); }); } else { dashboardPlannedDatesContainer.classList.add('hidden'); } }
+            function updateDashboardPlannedDates() { const todayStr = getCurrentDateString(); const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0, 3); dashboardPlanList.innerHTML = ''; if(futurePlans.length > 0) { dashboardPlannedDatesContainer.classList.remove('hidden'); futurePlans.forEach(plan => { const li = document.createElement('li'); li.innerHTML = `<strong>${formatDisplayDate(plan.date)}:</strong> ${formatHoursExtensive(plan.hours)}`; dashboardPlanList.appendChild(li); }); } else { dashboardPlannedDatesContainer.classList.add('hidden'); } }
 
 
             function renderHistory() { historyList.innerHTML = ''; const sT=historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt=''; const hasSearch = sT.length > 0; if(hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours||0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.',',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || formatHoursExtensive(e.hours).toLowerCase().includes(sT));}); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"':''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Últimos ${HISTORY_MONTH_LIMIT} meses`; if(recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum nos últimos ${HISTORY_MONTH_LIMIT} meses`;} else if (recordedEntries.length === 0) {lblTxt='';}} showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado' : `Nenhum recente (use busca)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id=entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click',(e)=>{e.stopPropagation();editRecordEntry(entry.id);}); li.querySelector('.delete-btn').addEventListener('click',(e)=>{e.stopPropagation();deleteRecordEntry(entry.id);}); historyList.appendChild(li);}); }
-            function renderPlanning() { planningList.innerHTML = ''; const tS=getCurrentDateString(); const fP=plannedEntries.filter(p=>p.date>=tS).sort((a,b)=>new Date(a.date)-new Date(b.date)); if(fP.length===0){planningListPlaceholder.classList.remove('hidden');return;} planningListPlaceholder.classList.add('hidden'); fP.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; const hD=formatHoursExtensive(plan.hours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hD}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); }); }
+             function renderPlanning() { planningList.innerHTML = ''; const tS=getCurrentDateString(); const fP=plannedEntries.filter(p=>p.date>=tS).sort((a,b)=>new Date(a.date)-new Date(b.date)); if(fP.length===0){planningListPlaceholder.classList.remove('hidden');return;} planningListPlaceholder.classList.add('hidden'); fP.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; const hD=formatHoursExtensive(plan.hours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hD}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); }); }
             function updateStatistics() { const cM=new Date().getMonth();const cY=new Date().getFullYear(); const eM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()===cM && d.getFullYear()===cY;}); let tH=0;const aD=new Set(); eM.forEach(e=>{tH+=e.hours;aD.add(e.date);}); const g=settings.monthlyGoal||70; const pP=g>0?Math.min(Math.round((tH/g)*100),100):0; const aH=aD.size>0?(tH/aD.size):0; const dAC=aD.size; statsMonthHours.textContent=formatHoursExtensive(tH); statsMonthGoalProgress.textContent=`${pP}%`;statsMonthProgressBar.style.width=`${pP}%`;statsAvgHoursDay.textContent=formatHoursExtensive(aH); statsMonthDaysActive.textContent=dAC; }
             function populateMonthSelector() { const aM=new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM=Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMSValue=getMonthYearString(new Date()); const cMSFormatted=formatMonthYearExtensive(cMSValue); let hCM=false; sM.forEach(mSValue=>{const o=document.createElement('option');const mSFormatted=formatMonthYearExtensive(mSValue);o.value=mSValue;o.textContent=mSFormatted;if(mSValue===cMSValue){o.selected=true;hCM=true;} chartMonthSelector.appendChild(o);}); if(!hCM && recordedEntries.length > 0){const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); o.selected=true;} else if (!hCM) { const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.appendChild(o); o.selected=true;} }
-            function renderCharts(sMYV) { const sMYF=formatMonthYearExtensive(sMYV); const [sM, sY]=sMYV.split('/').map(Number); const eSM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()+1===sM && d.getFullYear()===sY;}); const dISM=new Date(sY, sM, 0).getDate(); const dH=Array(dISM).fill(0); eSM.forEach(e=>{dH[new Date(e.date+'T00:00:00').getDate()-1]+=e.hours;}); const lbls=Array.from({length: dISM}, (_,i)=>i+1); if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();} monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'bar',data:{labels:lbls, datasets:[{label:`Horas Diárias (${sMYF})`, data:dH, backgroundColor:primaryColor, borderColor:primaryColor, borderWidth:0, borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true, title:{display:false},ticks:{color:textMutedColor,padding:10, callback: function(value) { return formatHoursExtensive(value); } }, grid:{color:gridColor,drawBorder:false}}, x:{title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}}, plugins:{ title:{display:true, text:sMYF, color:textMutedColor, font:{size:14,weight:'normal'}, padding:{bottom:15}}, tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}`}}, legend:{display:false}}}}); }
+             function renderCharts(sMYV) { const sMYF=formatMonthYearExtensive(sMYV); const [sM, sY]=sMYV.split('/').map(Number); const eSM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()+1===sM && d.getFullYear()===sY;}); const dISM=new Date(sY, sM, 0).getDate(); const dH=Array(dISM).fill(0); eSM.forEach(e=>{dH[new Date(e.date+'T00:00:00').getDate()-1]+=e.hours;}); const lbls=Array.from({length: dISM}, (_,i)=>i+1); if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();} monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'bar',data:{labels:lbls, datasets:[{label:`Horas Diárias (${sMYF})`, data:dH, backgroundColor:primaryColor, borderColor:primaryColor, borderWidth:0, borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true, title:{display:false},ticks:{color:textMutedColor,padding:10, callback: function(value) { return formatHoursExtensive(value); } }, grid:{color:gridColor,drawBorder:false}}, x:{title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}}, plugins:{ title:{display:true, text:sMYF, color:textMutedColor, font:{size:14,weight:'normal'}, padding:{bottom:15}}, tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}`}}, legend:{display:false}}}}); }
 
             function updateAllDisplays() {
                 updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning(); const sMV = chartMonthSelector.value; let chartNeedsUpdate = false; let clearChartMsg = 'Selecione um mês'; if (recordedEntries.length === 0) clearChartMsg = 'Registre suas horas.'; if (sMV) { const hasData = recordedEntries.some(e => getMonthYearString(new Date(e.date + 'T00:00:00')) === sMV); if (hasData) { try { renderCharts(sMV); chartNeedsUpdate = true; } catch(e){ console.error("Chart render error:", e); } } else { clearChartMsg = `Nenhum registro em ${formatMonthYearExtensive(sMV)}.`; } } if (!chartNeedsUpdate) { if(monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } const ctx=monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=textMutedColor; ctx.font="14px " + computedStyles.fontFamily; ctx.fillText(clearChartMsg, ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore(); }
