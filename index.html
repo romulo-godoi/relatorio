@@ -322,13 +322,17 @@
             let currentConfirmCallback = null;
             let isDateInputVisible = false;
             let deferredInstallPrompt = null;
+            let progressRingRadius = 0;
+            let progressRingCircumference = 0;
+             if(progressRingFg && progressRingFg.r) {
+                progressRingRadius = progressRingFg.r.baseVal.value;
+                progressRingCircumference = 2 * Math.PI * progressRingRadius;
+            }
 
             const DEFAULT_TAG = "Casa em casa";
             const HISTORY_MONTH_LIMIT = 3;
             const NOTES_MAX_LENGTH = 300;
             const MIN_HOURS_PER_DAY_FORECAST = 1.0;
-            const progressRingRadius = progressRingFg.r.baseVal.value;
-            const progressRingCircumference = 2 * Math.PI * progressRingRadius;
             const MONTH_NAMES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
             const WEEKDAY_NAMES_PT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
@@ -376,7 +380,7 @@
                 }
             }
 
-            function promptForMonthlyGoal() {
+            function promptForMonthlyGoal(goalInputRef, updateDisplaysFunc) {
                  let gS=false;
                  while(!gS){
                      const gI=prompt("Por favor, informe sua meta mensal de horas (ex: 70):", settings.monthlyGoal);
@@ -385,7 +389,7 @@
                          if (!settings.goalHasBeenSet) {
                              settings.goalHasBeenSet = true;
                              saveData();
-                             updateDashboard();
+                             updateDisplaysFunc(); // Atualiza a interface após cancelar
                              console.log("Usuário cancelou a definição inicial da meta.");
                          }
                      } else {
@@ -393,10 +397,10 @@
                          if (!isNaN(g) && g > 0) {
                              settings.monthlyGoal=g;
                              settings.goalHasBeenSet=true;
-                             monthlyGoalInput.value=g;
+                             goalInputRef.value=g;
                              saveData();
                              gS=true;
-                             updateAllDisplays();
+                             updateDisplaysFunc(); // Atualiza a interface após definir
                              showFeedback("Meta definida!", "success");
                              triggerInstallPromptIfAvailable('Após definir meta inicial');
                          } else {
@@ -405,6 +409,7 @@
                      }
                  }
              }
+
 
             function setDateInputVisibility(visible) { isDateInputVisible=visible; if(visible){ recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent=(!recordDateInput.value || recordDateInput.value===getCurrentDateString())?"Hoje":formatDisplayDate(recordDateInput.value);}}
             function toggleCard(cardElement){ if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';}}
@@ -422,7 +427,7 @@
                  currentEditingId=null;
              }
 
-            function handleRecordSubmit(event) {
+            function handleRecordSubmit(event, updateDisplaysFunc) {
                 event.preventDefault();
                 const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now();
                 const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString();
@@ -438,7 +443,7 @@
                 recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
                 saveData();
                 clearRecordForm();
-                updateAllDisplays();
+                updateDisplaysFunc();
                 showFeedback('Registro salvo!', 'success');
             }
 
@@ -460,13 +465,13 @@
                 }
             }
 
-             function deleteRecordEntry(id) {
+             function deleteRecordEntry(id, updateDisplaysFunc) {
                  showConfirmationDialog(`Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.`, () => {
                      const index = recordedEntries.findIndex(e => e.id === id);
                      if (index > -1) {
                          recordedEntries.splice(index, 1);
                          saveData();
-                         updateAllDisplays();
+                         updateDisplaysFunc();
                          showFeedback('Registro excluído.', 'info');
                          if (currentEditingId === id) {
                              clearRecordForm();
@@ -477,7 +482,6 @@
                  });
              }
 
-
             function clearPlanForm() {
                 planForm.reset();
                 planIdInput.value = '';
@@ -487,7 +491,7 @@
                 currentEditingId=null;
             }
 
-            function handlePlanSubmit(event){
+            function handlePlanSubmit(event, renderPlanFunc, updateDashboardFunc){
                 event.preventDefault();
                 const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now();
                 const date = planDateInput.value;
@@ -502,8 +506,8 @@
                 plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
                 saveData();
                 clearPlanForm();
-                renderPlanning();
-                updateDashboardPlannedDates();
+                renderPlanFunc();
+                updateDashboardFunc();
                 showFeedback('Planejamento salvo!', 'success');
             }
 
@@ -521,25 +525,24 @@
                 }
             }
 
-             function deletePlanEntry(id){
+             function deletePlanEntry(id, renderPlanFunc, updateDashboardFunc){
                  showConfirmationDialog(`Tem certeza que deseja excluir este planejamento?`,()=>{
                     plannedEntries=plannedEntries.filter(p=>p.id!==id);
                     saveData();
-                    renderPlanning();
-                    updateDashboardPlannedDates();
+                    renderPlanFunc();
+                    updateDashboardFunc();
                     showFeedback('Planejamento excluído.','info');
                     if(currentEditingId===id){ clearPlanForm(); }
                 });
             }
 
-
-            function handleGoalSave(){
+            function handleGoalSave(updateDisplaysFunc){
                  const nG=parseInt(monthlyGoalInput.value,10);
                  if(!isNaN(nG) && nG>0){
                      settings.monthlyGoal=nG;
                      settings.goalHasBeenSet=true;
                      saveData();
-                     updateAllDisplays();
+                     updateDisplaysFunc();
                      showFeedback('Meta mensal atualizada!','success');
                      triggerInstallPromptIfAvailable('Após atualizar meta no card');
                  }else{
@@ -548,7 +551,7 @@
                  }
              }
 
-            function handleClearAllData() {
+            function handleClearAllData(updateDisplaysFunc) {
                 showConfirmationDialog('ATENÇÃO! TEM CERTEZA? Isto apagará TODOS os registros, planos e sua meta PERMANENTEMENTE. Esta ação é IRREVERSÍVEL!', () => {
                     recordedEntries = [];
                     plannedEntries = [];
@@ -557,7 +560,7 @@
                     saveData();
                     clearRecordForm();
                     clearPlanForm();
-                    updateAllDisplays();
+                    updateDisplaysFunc();
                     showFeedback('Todos os dados foram apagados com sucesso.', 'danger');
                     document.querySelectorAll('.card').forEach(c => { if (c.id !== 'record-card' && c.classList.contains('expanded')) toggleCard(c); else if (c.id === 'record-card' && !c.classList.contains('expanded')) toggleCard(c); });
                 });
@@ -571,13 +574,88 @@
             function updateProgressRing(cV, mV) { const p = mV > 0 ? Math.min(100, (cV / mV) * 100) : 0; const offset = progressRingCircumference * (1 - p / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); }
             function updateDashboardPlannedDates() { const todayStr = getCurrentDateString(); const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 3); dashboardPlanList.innerHTML = ''; if (futurePlans.length > 0) { dashboardPlannedDatesContainer.classList.remove('hidden'); futurePlans.forEach(plan => { const li = document.createElement('li'); li.innerHTML = `<strong>${formatRelativeDate(plan.date)}:</strong> ${formatHoursExtensive(plan.hours)}`; dashboardPlanList.appendChild(li); }); } else { dashboardPlannedDatesContainer.classList.add('hidden'); } }
 
-            function renderHistory() { historyList.innerHTML = ''; const sT = historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt = ''; const hasSearch = sT.length > 0; if (hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours || 0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); const fHE = formatHoursExtensive(e.hours).toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.', ',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || fHE.includes(sT)); }); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"' : ''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`; if (recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses`; } else if (recordedEntries.length === 0) { lblTxt = ''; } } showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado para a busca' : `Nenhum registro recente (use a busca para mais antigos)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); }); }
-            function renderPlanning() { planningList.innerHTML = ''; const tS = getCurrentDateString(); const fP = plannedEntries.filter(p => p.date >= tS).sort((a, b) => new Date(a.date) - new Date(b.date)); if (fP.length === 0) { planningListPlaceholder.classList.remove('hidden'); return; } planningListPlaceholder.classList.add('hidden'); fP.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const hD = formatHoursExtensive(plan.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hD}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); editPlanEntry(plan.id); }); li.querySelector('.delete-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id); }); planningList.appendChild(li); }); }
+            function renderHistory(historyInput, listElement, labelElement, placeholderElement, updateDisplaysFunc) {
+                 listElement.innerHTML = '';
+                 const sT = historyInput.value.trim().toLowerCase();
+                 let res = []; let lblTxt = '';
+                 const hasSearch = sT.length > 0;
+                 if (hasSearch) {
+                     res = recordedEntries.filter(e => {
+                         const hrStr = Math.round(e.hours || 0).toString();
+                         const dspDt = formatDisplayDate(e.date);
+                         const notes = (e.notes || '').toLowerCase();
+                         const tag = (e.tag || '').toLowerCase();
+                         const fHE = formatHoursExtensive(e.hours).toLowerCase();
+                         return (dspDt.includes(sT) || e.hours.toString().replace('.', ',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || fHE.includes(sT));
+                     });
+                     lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"':''}`;
+                 } else {
+                     const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT);
+                     res = recordedEntries.filter(e => e.date >= tMA);
+                     lblTxt = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`;
+                     if (recordedEntries.length > 0 && res.length === 0) {
+                         lblTxt = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses`;
+                     } else if (recordedEntries.length === 0) {
+                         lblTxt = '';
+                     }
+                 }
+                 labelElement.textContent = lblTxt;
+                 if (res.length === 0) {
+                     placeholderElement.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado para a busca' : `Nenhum registro recente (use a busca para mais antigos)`) : 'Nenhum registro encontrado.';
+                     placeholderElement.classList.remove('hidden');
+                 } else {
+                     placeholderElement.classList.add('hidden');
+                 }
+                 res.forEach(entry => {
+                     const li = document.createElement('li');
+                     li.dataset.id = entry.id;
+                     const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : '';
+                     const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>';
+                     const hrsDisp = formatHoursExtensive(entry.hours);
+                     li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`;
+                     li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); });
+                     li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id, updateDisplaysFunc); });
+                     listElement.appendChild(li);
+                 });
+             }
+            function renderPlanning(listElement, placeholderElement, renderPlanFunc, updateDashboardFunc) {
+                listElement.innerHTML = '';
+                const tS = getCurrentDateString();
+                const fP = plannedEntries.filter(p => p.date >= tS).sort((a, b) => new Date(a.date) - new Date(b.date));
+                if (fP.length === 0) { placeholderElement.classList.remove('hidden'); return; }
+                placeholderElement.classList.add('hidden');
+                fP.forEach(plan => {
+                    const li = document.createElement('li');
+                    li.dataset.id = plan.id;
+                    const hD = formatHoursExtensive(plan.hours);
+                    li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hD}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`;
+                    li.querySelector('.edit-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); editPlanEntry(plan.id); });
+                    li.querySelector('.delete-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id, renderPlanFunc, updateDashboardFunc); });
+                    listElement.appendChild(li);
+                });
+            }
             function updateStatistics() { const cM = new Date().getMonth(); const cY = new Date().getFullYear(); const eM = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === cM && d.getFullYear() === cY; }); let tH = 0; const aD = new Set(); eM.forEach(e => { tH += e.hours; aD.add(e.date); }); const g = settings.monthlyGoal || 70; const pP = settings.goalHasBeenSet ? (g > 0 ? Math.min(Math.round((tH / g) * 100), 100) : 0) : 0; const aH = aD.size > 0 ? (tH / aD.size) : 0; const dAC = aD.size; statsMonthHours.textContent = formatHoursExtensive(tH); statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${pP}%` : '--%'; statsMonthProgressBar.style.width = `${pP}%`; statsAvgHoursDay.textContent = formatHoursExtensive(aH); statsMonthDaysActive.textContent = dAC; }
             function populateMonthSelector() { const aM = new Set(); recordedEntries.forEach(e => { aM.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const sM = Array.from(aM).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = ''; if (sM.length === 0) { const o = document.createElement('option'); o.value = ''; o.textContent = 'Nenhum dado'; chartMonthSelector.appendChild(o); chartMonthSelector.disabled = true; return; } chartMonthSelector.disabled = false; const cMSValue = getMonthYearString(new Date()); const cMSFormatted = formatMonthYearExtensive(cMSValue); let hCM = false; let didSelectOld = false; sM.forEach(mSValue => { const o = document.createElement('option'); const mSFormatted = formatMonthYearExtensive(mSValue); o.value = mSValue; o.textContent = mSFormatted; if (mSValue === oldSelectedValue) { o.selected = true; didSelectOld = true; } else if (mSValue === cMSValue && !didSelectOld) { o.selected = true; } if (mSValue === cMSValue) { hCM = true; } chartMonthSelector.appendChild(o); }); if (!hCM) { const o = document.createElement('option'); o.value = cMSValue; o.textContent = `${cMSFormatted} (Mês Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); if (!didSelectOld) o.selected = true; } if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
             function getAveragesForChart(year, monthIndex) { const entriesThisYear = recordedEntries.filter(e => new Date(e.date + 'T00:00:00').getFullYear() === year); const entriesThisMonth = entriesThisYear.filter(e => new Date(e.date + 'T00:00:00').getMonth() === monthIndex); let totalHoursMonth = 0; const activeDaysMonth = new Set(); entriesThisMonth.forEach(e => { totalHoursMonth += e.hours; activeDaysMonth.add(e.date); }); let totalHoursYear = 0; const monthsWithActivityYear = new Set(); entriesThisYear.forEach(e => { totalHoursYear += e.hours; monthsWithActivityYear.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const daysInMonth = new Date(year, monthIndex + 1, 0).getDate(); return { avgDaily: activeDaysMonth.size > 0 ? totalHoursMonth / activeDaysMonth.size : 0, avgWeekly: daysInMonth >= 7 && totalHoursMonth > 0 ? (totalHoursMonth / daysInMonth) * 7 : 0, avgMonthly: monthsWithActivityYear.size > 0 ? totalHoursYear / monthsWithActivityYear.size : 0 }; }
             function renderCharts(selectedMonthYearValue) { if (!selectedMonthYearValue) { return; } try { const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue); const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number); const monthIndex = selectedMonth - 1; const year = selectedYear; const entriesSelectedMonth = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === monthIndex && d.getFullYear() === year; }); const daysInSelectedMonth = new Date(year, monthIndex + 1, 0).getDate(); const dailyHoursData = Array(daysInSelectedMonth).fill(0); entriesSelectedMonth.forEach(e => { dailyHoursData[new Date(e.date + 'T00:00:00').getDate() - 1] += e.hours; }); const chartLabels = Array.from({ length: daysInSelectedMonth }, (_, i) => i + 1); const averages = getAveragesForChart(year, monthIndex); const annotations = {}; let pluginOptions = {}; if (window.ChartAnnotation) { if (averages.avgDaily > 0) { annotations.avgDay = { type: 'line', scaleID: 'y', value: averages.avgDaily, borderColor: avgLineColor1, borderWidth: 1.5, borderDash: [6, 6], label: { content: `Média Diária: ${formatHoursExtensive(averages.avgDaily, true)}`, display: true, position: 'end', color: avgLineColor1, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: -10 } }; } if (averages.avgWeekly > 0) { annotations.avgWeek = { type: 'line', scaleID: 'y', value: averages.avgWeekly, borderColor: avgLineColor2, borderWidth: 1.5, borderDash: [10, 10], label: { content: `Média Semanal (est.): ${formatHoursExtensive(averages.avgWeekly, true)}`, display: true, position: 'end', color: avgLineColor2, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 2 } }; } if (averages.avgMonthly > 0) { annotations.avgMonth = { type: 'line', scaleID: 'y', value: averages.avgMonthly, borderColor: avgLineColor3, borderWidth: 1.5, borderDash: [2, 2], label: { content: `Média Mensal (no ano): ${formatHoursExtensive(averages.avgMonthly, true)}`, display: true, position: 'end', color: avgLineColor3, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 14 } }; } pluginOptions.annotation = { drawTime: 'afterDatasetsDraw', annotations: annotations };} else { console.warn("ChartAnnotation não carregado, anotações desabilitadas."); } if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); } monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'bar', data: { labels: chartLabels, datasets: [{ label: `Horas Diárias`, data: dailyHoursData, backgroundColor: primaryColor, borderColor: primaryColor, borderWidth: 0, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: false }, ticks: { color: textMutedColor, padding: 10, callback: function (value) { return formatHoursExtensive(value, true); } }, grid: { color: gridColor, drawBorder: false } }, x: { title: { display: false }, ticks: { color: textMutedColor }, grid: { display: false } } }, plugins: { ...pluginOptions, title: { display: true, text: selectedMonthYearFormatted, color: textColor, font: { size: 14, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: false, padding: 10, cornerRadius: 6, callbacks: { label: ctx => `Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}` } }, legend: { display: false } } } }); } catch (e) { console.error("Chart render error:", e); if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText("Erro ao renderizar gráfico.", ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); } }
-            function updateAllDisplays() { updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning(); const selectedMonthValue = chartMonthSelector.value; let chartNeedsUpdate = false; let clearChartMsg = 'Selecione um mês para visualizar'; if (recordedEntries.length === 0) { clearChartMsg = 'Comece registrando suas horas.'; } else if (selectedMonthValue) { const hasDataForSelectedMonth = recordedEntries.some(e => getMonthYearString(new Date(e.date + 'T00:00:00')) === selectedMonthValue); if (hasDataForSelectedMonth) { renderCharts(selectedMonthValue); chartNeedsUpdate = true; } else { clearChartMsg = `Nenhum registro encontrado em ${formatMonthYearExtensive(selectedMonthValue)}.`; } } else if (chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.value); chartNeedsUpdate = true; } else { clearChartMsg = 'Nenhum dado registrado ainda.'; } if (!chartNeedsUpdate) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(clearChartMsg, ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); } }
+
+             // ----- UPDATE ALL DISPLAYS -----
+            function updateAllDisplaysWrapper() {
+                updateDashboard();
+                updateStatistics();
+                populateMonthSelector();
+                renderHistory(historySearchInput, historyList, showingResultsLabel, historyListPlaceholder, updateAllDisplaysWrapper); // Passa a si mesma
+                renderPlanning(planningList, planningListPlaceholder, () => renderPlanning(planningList, planningListPlaceholder, /*...*/), updateDashboardPlannedDates); // Passa a si mesma como callback de render
+                const selectedMonthValue = chartMonthSelector.value;
+                let chartNeedsUpdate = false;
+                let clearChartMsg = 'Selecione um mês para visualizar';
+                if (recordedEntries.length === 0) { clearChartMsg = 'Comece registrando suas horas.'; }
+                else if (selectedMonthValue) { const hasDataForSelectedMonth = recordedEntries.some(e => getMonthYearString(new Date(e.date + 'T00:00:00')) === selectedMonthValue); if (hasDataForSelectedMonth) { renderCharts(selectedMonthValue); chartNeedsUpdate = true; } else { clearChartMsg = `Nenhum registro encontrado em ${formatMonthYearExtensive(selectedMonthValue)}.`; } }
+                else if (chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.value); chartNeedsUpdate = true; }
+                else { clearChartMsg = 'Nenhum dado registrado ainda.'; }
+                if (!chartNeedsUpdate) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(clearChartMsg, ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); }
+             }
+
 
             function formatTimeInputOnType(event) { const input = event.target; let value = input.value; let originalCursorPos = input.selectionStart; let numericValue = value.replace(/[^\d]/g, ''); numericValue = numericValue.substring(0, 4); let formattedValue = numericValue; let colonWasAdded = false; if (numericValue.length > 2) { const hoursPart = numericValue.substring(0, numericValue.length - 2); const minutesPart = numericValue.substring(numericValue.length - 2); formattedValue = `${hoursPart}:${minutesPart}`; if (value.length < formattedValue.length && value.indexOf(':') === -1) { colonWasAdded = true; } } if (input.value !== formattedValue) { input.value = formattedValue; let newCursorPos = originalCursorPos; if (colonWasAdded && originalCursorPos >= formattedValue.indexOf(':') + 1) { newCursorPos++; } newCursorPos = Math.min(newCursorPos, formattedValue.length); requestAnimationFrame(() => { input.setSelectionRange(newCursorPos, newCursorPos); }); } }
             function registerServiceWorker() { if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./service-worker.js').then((reg) => { console.log('Service Worker registered successfully. Scope:', reg.scope); }).catch((error) => { console.error('Service Worker registration failed:', error); }); } }
@@ -586,17 +664,17 @@
                 console.log(`Initializing PWT v${LOCAL_STORAGE_KEYS.ENTRIES.split('_v')[1]}...`);
                 loadData();
                 monthlyGoalInput.value = settings.monthlyGoal;
+                if(progressRingFg && progressRingFg.r) { // Recalcula em caso de carregamento tardio do SVG
+                    progressRingRadius = progressRingFg.r.baseVal.value;
+                    progressRingCircumference = 2 * Math.PI * progressRingRadius;
+                } else {
+                     console.error("Progress ring SVG element not ready during init.");
+                }
+
 
                 if (window.ChartAnnotation) {
-                    try {
-                        Chart.register(ChartAnnotation);
-                        console.log("ChartAnnotation plugin REGISTRADO com sucesso.");
-                    } catch (e) {
-                        console.error("Erro ao registrar ChartAnnotation:", e);
-                    }
-                } else {
-                    console.warn("!!! ChartAnnotation plugin NÃO ENCONTRADO globalmente no momento do init !!!");
-                }
+                    try { Chart.register(ChartAnnotation); console.log("ChartAnnotation plugin REGISTRADO com sucesso."); } catch (e) { console.error("Erro ao registrar ChartAnnotation:", e); }
+                } else { console.warn("!!! ChartAnnotation plugin NÃO ENCONTRADO globalmente no momento do init !!!"); }
 
                 appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header'); if (header) { const card = header.closest('.card'); if (card) { toggleCard(card); } } });
                 document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
@@ -606,14 +684,14 @@
                 recordHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue >= 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
                 planHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue > 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
                 recordNotesInput.addEventListener('input', (e) => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); showFeedback(`Limite de ${NOTES_MAX_LENGTH} caracteres atingido.`, 'info'); } });
-                historySearchInput.addEventListener('input', () => renderHistory());
-                recordForm.addEventListener('submit', (e) => handleRecordSubmit(e));
-                planForm.addEventListener('submit', (e) => handlePlanSubmit(e));
+                historySearchInput.addEventListener('input', () => renderHistory(historySearchInput, historyList, showingResultsLabel, historyListPlaceholder, updateAllDisplaysWrapper));
+                recordForm.addEventListener('submit', (e) => handleRecordSubmit(e, updateAllDisplaysWrapper));
+                planForm.addEventListener('submit', (e) => handlePlanSubmit(e, () => renderPlanning(planningList, planningListPlaceholder, /*...*/, updateDashboardPlannedDates), updateDashboardPlannedDates));
                 clearPlanFormBtn.addEventListener('click', () => clearPlanForm());
-                saveGoalBtn.addEventListener('click', () => handleGoalSave());
-                monthlyGoalInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); monthlyGoalInput.blur(); } });
-                chartMonthSelector.addEventListener('change', () => updateAllDisplays());
-                clearAllDataBtn.addEventListener('click', () => handleClearAllData());
+                saveGoalBtn.addEventListener('click', () => handleGoalSave(updateAllDisplaysWrapper));
+                monthlyGoalInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(updateAllDisplaysWrapper); monthlyGoalInput.blur(); } });
+                chartMonthSelector.addEventListener('change', () => updateAllDisplaysWrapper());
+                clearAllDataBtn.addEventListener('click', () => handleClearAllData(updateAllDisplaysWrapper));
                 dialogConfirmBtn.addEventListener('click', () => { try { if (typeof currentConfirmCallback === 'function') { currentConfirmCallback(); } } catch (e) { console.error("Error in confirmation callback:", e); } finally { hideConfirmationDialog(); } });
                 dialogCancelBtn.addEventListener('click', () => hideConfirmationDialog());
                 confirmationDialog.addEventListener('click', (e) => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
@@ -625,11 +703,11 @@
                  clearPlanForm();
                  document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) { toggleCard(card); } else { const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; } });
 
-                updateAllDisplays();
+                updateAllDisplaysWrapper(); // Primeira atualização
                 registerServiceWorker();
 
                 if (!settings.goalHasBeenSet) {
-                     setTimeout(promptForMonthlyGoal, 500);
+                     setTimeout(() => promptForMonthlyGoal(monthlyGoalInput, updateAllDisplaysWrapper), 500); // Passa a função de update
                 }
 
                 console.log("Init complete.");
