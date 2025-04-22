@@ -23,9 +23,9 @@
             --dialog-backdrop: rgba(0, 0, 0, 0.7);
             --progress-track-color: #38383a;
             --progress-bar-color: var(--success-color);
-            --avg-line-color-1: #FF9F0A; /* Orange */
-            --avg-line-color-2: #AF52DE; /* Purple */
-            --avg-line-color-3: #5E5CE6; /* Indigo */
+            --avg-line-color-1: #FF9F0A;
+            --avg-line-color-2: #AF52DE;
+            --avg-line-color-3: #5E5CE6;
 
             --font-family: var(--system-font);
             --border-radius: 10px;
@@ -87,17 +87,14 @@
         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
         input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         textarea { resize: vertical; min-height: 90px; }
-        button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: auto; transform: scale(1); filter: brightness(1); -webkit-user-select: none; /* Prevent text selection during quick taps */ user-select: none; }
+        button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: auto; transform: scale(1); filter: brightness(1); -webkit-user-select: none; user-select: none; }
         button:hover { filter: brightness(1.15); }
         button:active { transform: scale(0.95); filter: brightness(0.8); transition-duration: 0.05s; }
         button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; filter: none; } button.secondary:active { background-color: #48484a; transform: scale(0.96); filter: brightness(1); }
         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.15); } button.danger:active { background-color: #E0352D; transform: scale(0.96); filter: brightness(0.85); }
-        /* Removido ajuste para 50% - botões de registro agora são de largura automática */
-        #record-form .text-center button, #plan-form .text-center button { width: auto; margin-right: 8px; } /* Default width */
-        /* Correção: Assegurar que botão Salvar registro fique à esquerda */
+        #record-form .text-center button, #plan-form .text-center button { width: auto; margin-right: 8px; }
          #record-form .text-center button:last-child { margin-right: 0; }
-        /* Mantem media query apenas para plano se necessário, mas geralmente 'auto' funciona */
-         @media (min-width: 600px) { #plan-form .text-center button { /* width: auto;  -- já é auto */ } }
+         @media (min-width: 600px) { #plan-form .text-center button { } }
 
 
         .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
@@ -181,7 +178,7 @@
                     </div>
                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                          <div class="form-group">
-                             <label for="record-hours">Tempo:</label>
+                             <label for="record-hours">Tempo (H, H:MM, HHMM):</label>
                              <input type="text" inputmode="numeric" id="record-hours" class="time-input" required placeholder="Ex: 2:30 ou 130">
                          </div>
                         <div class="form-group">
@@ -201,7 +198,7 @@
                     </div>
                     <div class="text-center" style="margin-top: 20px;">
                         <button type="submit" id="save-record-btn">Salvar Registro</button>
-                        <!-- Botão Limpar foi removido -->
+
                     </div>
                 </form>
             </div>
@@ -654,10 +651,8 @@
             function init() {
                 console.log(`Initializing PWT v${LOCAL_STORAGE_KEYS.ENTRIES.split('_v')[1]}...`);
                 loadData();
-                 if (!settings.goalHasBeenSet && recordedEntries.length > 0) {
-                     setTimeout(() => showFeedback("Lembre-se de definir sua meta mensal.", "info"), 1000);
-                     setTimeout(promptForMonthlyGoal, 1500);
-                 } else if (!settings.goalHasBeenSet) {
+                 if (!settings.goalHasBeenSet) {
+                     setTimeout(promptForMonthlyGoal, 500);
                  }
                  recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false);
                  clearRecordForm(); clearPlanForm();
