@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registro de Campo Pioneiro</title>
-    <!-- Chart.js v4 Core -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Chart.js Annotation Plugin v3 -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     <style>
         :root {
@@ -79,7 +77,6 @@
         .form-group { margin-bottom: 16px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
         input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
-        /* Específico para o campo de horas */
         input[type="text"].time-input { font-variant-numeric: tabular-nums; }
         input[type="search"] { padding-right: 35px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 16px; }
         input[type="search"]::-webkit-search-cancel-button{ appearance: none; height: 14px; width: 14px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>'); background-size: 14px 14px; cursor: pointer; }
@@ -95,8 +92,13 @@
         button:active { transform: scale(0.95); filter: brightness(0.8); transition-duration: 0.05s; }
         button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; filter: none; } button.secondary:active { background-color: #48484a; transform: scale(0.96); filter: brightness(1); }
         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.15); } button.danger:active { background-color: #E0352D; transform: scale(0.96); filter: brightness(0.85); }
-        #record-form .text-center button, #plan-form .text-center button { width: calc(50% - 4px); }
-        @media (min-width: 600px) { #record-form .text-center button, #plan-form .text-center button { width: auto; } }
+        /* Removido ajuste para 50% - botões de registro agora são de largura automática */
+        #record-form .text-center button, #plan-form .text-center button { width: auto; margin-right: 8px; } /* Default width */
+        /* Correção: Assegurar que botão Salvar registro fique à esquerda */
+         #record-form .text-center button:last-child { margin-right: 0; }
+        /* Mantem media query apenas para plano se necessário, mas geralmente 'auto' funciona */
+         @media (min-width: 600px) { #plan-form .text-center button { /* width: auto;  -- já é auto */ } }
+
 
         .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
@@ -180,7 +182,6 @@
                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                          <div class="form-group">
                              <label for="record-hours">Tempo (H, H:MM, HHMM):</label>
-                             <!-- Adicionado classe time-input para CSS e JS -->
                              <input type="text" inputmode="numeric" id="record-hours" class="time-input" required placeholder="Ex: 2:30 ou 130">
                          </div>
                         <div class="form-group">
@@ -200,7 +201,7 @@
                     </div>
                     <div class="text-center" style="margin-top: 20px;">
                         <button type="submit" id="save-record-btn">Salvar Registro</button>
-                        <button type="button" id="clear-record-form-btn" class="secondary">Limpar</button> <!-- Adicionado Botão Limpar -->
+                        <!-- Botão Limpar foi removido -->
                     </div>
                 </form>
             </div>
@@ -273,7 +274,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Element References (Seem OK) ---
             const appElement = document.getElementById('app');
             const dashboardWeekHours = document.getElementById('dashboard-week-hours');
             const dashboardMonthPercentage = document.getElementById('dashboard-month-percentage');
@@ -293,7 +293,6 @@
             const recordTagSelect = document.getElementById('record-tag');
             const recordNotesInput = document.getElementById('record-notes');
             const saveRecordBtn = document.getElementById('save-record-btn');
-            const clearRecordFormBtn = document.getElementById('clear-record-form-btn'); // Get clear button
             const planCard = document.getElementById('plan-card');
             const planForm = document.getElementById('plan-form');
             const planIdInput = document.getElementById('plan-id');
@@ -322,7 +321,6 @@
             const dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
             const dialogCancelBtn = document.getElementById('dialog-cancel-btn');
 
-             // --- State Variables (Seem OK) ---
             let recordedEntries = [];
             let plannedEntries = [];
             let settings = { monthlyGoal: 70, goalHasBeenSet: false };
@@ -337,7 +335,6 @@
             const progressRingRadius = progressRingFg.r.baseVal.value;
             const progressRingCircumference = 2 * Math.PI * progressRingRadius;
 
-            // --- Style and Format Variables (Seem OK) ---
             const computedStyles = getComputedStyle(document.body);
             const textColor = computedStyles.getPropertyValue('--text-color').trim();
             const textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim();
@@ -351,42 +348,30 @@
             const MONTH_NAMES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
             const WEEKDAY_NAMES_PT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
-            // --- Constants (Seem OK) ---
             const LOCAL_STORAGE_KEYS = {
-                ENTRIES: 'pioneerTracker_entries_v5.1', // Version bump for adjusted forecast logic
+                ENTRIES: 'pioneerTracker_entries_v5.1',
                 PLANS: 'pioneerTracker_plans_v1.1',
                 SETTINGS: 'pioneerTracker_settings_v1.1'
             };
 
-             // --- *** CHART.JS FIX *** ---
-             // Explicitly register the annotation plugin
-             if (window.ChartAnnotation) {
-                 Chart.register(ChartAnnotation);
-                 console.log("ChartAnnotation plugin registered.");
-             } else {
-                 console.error("ChartAnnotation plugin failed to load or register!");
-                 // Provide feedback or fallback if the plugin is crucial
-             }
-             // --- END CHART.JS FIX ---
+            if (window.ChartAnnotation) {
+                Chart.register(ChartAnnotation);
+            } else {
+                console.error("ChartAnnotation plugin failed to load or register!");
+            }
 
-
-            // --- Utility Functions (Seem OK) ---
             function getCurrentDateString() { const t=new Date();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
             function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
             function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
             function getStartOfWeek(date = new Date()) { const d = new Date(date); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek; const sOW = new Date(d.setDate(diff)); sOW.setHours(0,0,0,0); return `${sOW.getFullYear()}-${String(sOW.getMonth()+1).padStart(2,'0')}-${String(sOW.getDate()).padStart(2,'0')}`; }
             function getDateMonthsAgo(months) { const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0,0,0,0); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
             function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/')) return monthYearString; const [m, y] = monthYearString.split('/'); const monthIndex = parseInt(m, 10) - 1; if (monthIndex < 0 || monthIndex > 11) return monthYearString; return `${MONTH_NAMES_PT[monthIndex]} de ${y}`; }
-            function formatHoursExtensive(hoursDecimal, short = false) { if (isNaN(hoursDecimal) || hoursDecimal < 0) return short ? '0h' : '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; const hSuffix = short ? 'h' : ` ${hours === 1 ? 'hora' : 'horas'}`; const mSuffix = short ? 'm' : ` ${minutes === 1 ? 'minuto' : 'minutos'}`; if (hours > 0) { result += `${hours}${hSuffix}`; } if (minutes > 0) { result += `${hours > 0 ? (short ? ' ' : ' e ') : ''}${minutes}${mSuffix}`; } if (!result && hoursDecimal === 0) { result = short ? '0h' : '0 horas'; } else if (!result && minutes > 0) { // Handle cases like 0.5 -> 30m
-                result = `${minutes}${mSuffix}`;
-            } return result; }
+            function formatHoursExtensive(hoursDecimal, short = false) { if (isNaN(hoursDecimal) || hoursDecimal < 0) return short ? '0h' : '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; const hSuffix = short ? 'h' : ` ${hours === 1 ? 'hora' : 'horas'}`; const mSuffix = short ? 'm' : ` ${minutes === 1 ? 'minuto' : 'minutos'}`; if (hours > 0) { result += `${hours}${hSuffix}`; } if (minutes > 0) { result += `${hours > 0 ? (short ? ' ' : ' e ') : ''}${minutes}${mSuffix}`; } if (!result && hoursDecimal === 0) { result = short ? '0h' : '0 horas'; } else if (!result && minutes > 0) { result = `${minutes}${mSuffix}`; } return result; }
             function formatDecimalToTimeInput(decimalHours) { if (isNaN(decimalHours) || decimalHours <= 0) return ""; const totalMinutes = Math.round((decimalHours || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; return `${hours}:${String(minutes).padStart(2, '0')}`; }
             function parseTimeInputToDecimal(timeString) {
                  if (!timeString) return 0;
                  const trimmed = timeString.trim();
                  if (!trimmed) return 0;
-
-                 // HH:MM format
                  const colonMatch = trimmed.match(/^(\d{1,3}):(\d{1,2})$/);
                  if (colonMatch) {
                      const hours = parseInt(colonMatch[1], 10);
@@ -394,50 +379,37 @@
                      if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) {
                          return hours + (minutes / 60);
                      } else {
-                         return NaN; // Invalid numbers or minutes >= 60
+                         return NaN;
                      }
                  }
-
-                 // Numeric input (minutes or HHMM)
                  const numberMatch = trimmed.match(/^(\d+)$/);
                  if (numberMatch) {
                      const numStr = numberMatch[1];
                      const numVal = parseInt(numStr, 10);
                      if(isNaN(numVal)) return NaN;
-
-                     // Interpret as minutes if 1 or 2 digits
                      if (numStr.length <= 2) {
-                         // Treat 1-59 as minutes, > 60 as potentially HH? -> More complex, stick to simple logic for now
-                         if (numVal < 60) return numVal / 60; // Direct minutes
-                         // Consider 130 should not be treated as 130 minutes here, use HHMM below
+                         if (numVal < 60) return numVal / 60;
                      }
-
-                     // Interpret as HHMM if 3 or 4 digits (or more, but take first 4)
                      if (numStr.length >= 3) {
                         const potentialHoursStr = numStr.slice(0, -2);
                         const potentialMinutesStr = numStr.slice(-2);
                         const hours = parseInt(potentialHoursStr, 10);
                         const minutes = parseInt(potentialMinutesStr, 10);
-
                         if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) {
                            return hours + (minutes / 60);
                         } else {
-                           return NaN; // Invalid HHMM split
+                           return NaN;
                         }
                      }
-                     // Fallback for lengths like 60, 70 etc. -> should return NaN based on above logic.
-                     return NaN; // Neither simple minutes nor HHMM
+                     return NaN;
                  }
-
-                 return NaN; // No valid format matched
+                 return NaN;
             }
-             function formatRelativeDate(dateString) { const today = new Date(); today.setHours(0,0,0,0); const inputDate = new Date(dateString+'T00:00:00'); if (isNaN(inputDate)) return formatDisplayDate(dateString); const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const oneWeekFromToday = new Date(today); oneWeekFromToday.setDate(today.getDate() + 7); if (inputDate.getTime() === today.getTime()) { return "Hoje"; } if (inputDate.getTime() === tomorrow.getTime()) { return "Amanhã"; } if (inputDate > tomorrow && inputDate < oneWeekFromToday) { return `Próx. ${WEEKDAY_NAMES_PT[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
+            function formatRelativeDate(dateString) { const today = new Date(); today.setHours(0,0,0,0); const inputDate = new Date(dateString+'T00:00:00'); if (isNaN(inputDate)) return formatDisplayDate(dateString); const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const oneWeekFromToday = new Date(today); oneWeekFromToday.setDate(today.getDate() + 7); if (inputDate.getTime() === today.getTime()) { return "Hoje"; } if (inputDate.getTime() === tomorrow.getTime()) { return "Amanhã"; } if (inputDate > tomorrow && inputDate < oneWeekFromToday) { return `Próx. ${WEEKDAY_NAMES_PT[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
 
-            // --- Data Handling (Seem OK) ---
-            function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));} catch(e) { console.error("SAVE ERR:",e); alert("ERRO AO SALVAR OS DADOS!"); showFeedback('Falha ao salvar dados.', 'danger');} }
-            function loadData() { try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const parsedEntries = JSON.parse(sER); if(Array.isArray(parsedEntries)) { recordedEntries = parsedEntries.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '' }));} else { throw new Error("Stored entries not an array"); } } catch (parseErr) { console.error("Error parsing stored entries, resetting:", parseErr); sER = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } } else { recordedEntries = []; } recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } }); plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date)); const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); let lS = sSR ? JSON.parse(sSR) : {}; settings = { monthlyGoal: 70, goalHasBeenSet: false, ...lS }; if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; monthlyGoalInput.value = settings.monthlyGoal; console.log("Data loaded.");} catch(err) { console.error("Load Err:", err); recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { console.error("Error removing invalid storage items:", e);} alert("Erro ao carregar dados. O aplicativo foi resetado para o estado inicial."); showFeedback('Erro ao carregar, dados resetados.', 'danger');} }
+            function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));} catch(e) { console.error("SAVE ERR:",e); showFeedback('Falha ao salvar dados.', 'danger');} }
+            function loadData() { try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const parsedEntries = JSON.parse(sER); if(Array.isArray(parsedEntries)) { recordedEntries = parsedEntries.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '' }));} else { throw new Error("Stored entries not an array"); } } catch (parseErr) { console.error("Error parsing stored entries, resetting:", parseErr); sER = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } } else { recordedEntries = []; } recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } }); plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date)); const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); let lS = sSR ? JSON.parse(sSR) : {}; settings = { monthlyGoal: 70, goalHasBeenSet: false, ...lS }; if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; monthlyGoalInput.value = settings.monthlyGoal; console.log("Data loaded.");} catch(err) { console.error("Load Err:", err); recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { console.error("Error removing invalid storage items:", e);} showFeedback('Erro ao carregar, dados resetados.', 'danger');} }
 
-            // --- UI Interaction ---
             function promptForMonthlyGoal() { let gS=false; while(!gS){ const gI=prompt("Por favor, informe sua meta mensal de horas (ex: 70):", settings.monthlyGoal); if (gI===null){ gS=true; if (!settings.goalHasBeenSet) settings.goalHasBeenSet = true; saveData(); } else { const g = parseInt(gI,10); if (!isNaN(g)&&g>0) { settings.monthlyGoal=g; settings.goalHasBeenSet=true; monthlyGoalInput.value=g; saveData(); gS=true; updateAllDisplays(); showFeedback("Meta definida!","success"); } else { alert("Valor inválido. Por favor, insira um número positivo para a meta."); } } } }
             function setDateInputVisibility(visible) { isDateInputVisible=visible; if(visible){ recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent=(!recordDateInput.value || recordDateInput.value===getCurrentDateString())?"Hoje":formatDisplayDate(recordDateInput.value);}}
             changeDateBtn.addEventListener('click',()=>setDateInputVisibility(true));
@@ -450,12 +422,11 @@
                  recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false);
                  recordTagSelect.value = DEFAULT_TAG;
                  recordNotesInput.value = '';
-                 recordHoursInput.value=''; // Limpa o valor bruto também
+                 recordHoursInput.value='';
                  saveRecordBtn.textContent='Salvar Registro';
                  saveRecordBtn.classList.remove('editing');
                  currentEditingId=null;
              }
-            clearRecordFormBtn.addEventListener('click', clearRecordForm); // Attach event listener for clear button
 
             function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput.value?parseInt(recordIdInput.value, 10):Date.now(); const date=(isDateInputVisible||(recordDateInput.value&&recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hoursInput = recordHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const tag = recordTagSelect.value || DEFAULT_TAG; const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH); if (isNaN(hours) || hours <= 0){ alert("Formato de Tempo inválido (ex: 2:30, 1:15, 45, 130). O tempo deve ser positivo."); recordHoursInput.focus(); return; } if (!date){ alert("Data inválida."); return; } const newEntry = {id, date, hours, tag, notes}; const eI=recordedEntries.findIndex(entry => entry.id === id); if (eI > -1) {recordedEntries[eI]=newEntry;} else {recordedEntries.push(newEntry);} recordedEntries.sort((a,b) => new Date(b.date)-new Date(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('Registro salvo!','success');}
             function editRecordEntry(id) { const entry=recordedEntries.find(e => e.id === id); if(entry) { if(!recordCard.classList.contains('expanded')){toggleCard(recordCard);} currentEditingId=id; recordIdInput.value=entry.id; recordDateInput.value=entry.date; if(entry.date !== getCurrentDateString()){setDateInputVisibility(true);} else {setDateInputVisibility(false);} recordHoursInput.value=formatDecimalToTimeInput(entry.hours); recordTagSelect.value=entry.tag||DEFAULT_TAG; recordNotesInput.value=entry.notes||''; saveRecordBtn.textContent='Atualizar Registro'; saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput.focus();}}
@@ -469,15 +440,13 @@
             function handleGoalSave(){ const nG=parseInt(monthlyGoalInput.value,10);if(!isNaN(nG)&&nG>0){ settings.monthlyGoal=nG; settings.goalHasBeenSet=true; saveData(); updateAllDisplays(); showFeedback('Meta mensal atualizada!','success');}else{alert("Meta inválida. Use um número positivo.");monthlyGoalInput.value=settings.monthlyGoal;} }
             function handleClearAllData() { showConfirmationDialog('ATENÇÃO! TEM CERTEZA? Isto apagará TODOS os registros, planos e sua meta PERMANENTEMENTE. Esta ação é IRREVERSÍVEL!', () => { recordedEntries=[]; plannedEntries=[]; settings={ monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback('Todos os dados foram apagados com sucesso.', 'danger'); document.querySelectorAll('.card').forEach(c => { if(c.id!=='record-card'&&c.classList.contains('expanded')) toggleCard(c); else if(c.id==='record-card'&&!c.classList.contains('expanded')) toggleCard(c); }); }); }
 
-            // --- Dialogs and Feedback ---
             function showConfirmationDialog(message,onConfirm){dialogMessage.textContent=message;currentConfirmCallback=onConfirm;confirmationDialog.classList.add('visible'); dialogConfirmBtn.focus();}
             function hideConfirmationDialog(){confirmationDialog.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null;}, 300); }
             dialogConfirmBtn.addEventListener('click',()=>{ try { if(typeof currentConfirmCallback === 'function'){ currentConfirmCallback(); } } catch(e) { console.error("Error in confirmation callback:", e); } finally { hideConfirmationDialog(); } });
             dialogCancelBtn.addEventListener('click',hideConfirmationDialog); confirmationDialog.addEventListener('click',(e)=>{if(e.target===confirmationDialog){hideConfirmationDialog();}});
             function showFeedback(message, type='info'){
                 console.log(`Feedback[${type}]: ${message}`);
-                // Basic implementation - could be enhanced with a temporary message bar
-                 const feedbackElement = document.createElement('div');
+                const feedbackElement = document.createElement('div');
                  feedbackElement.textContent = message;
                  feedbackElement.style.position = 'fixed';
                  feedbackElement.style.bottom = '20px';
@@ -490,42 +459,17 @@
                  feedbackElement.style.fontSize = '0.95em';
                  feedbackElement.style.transition = 'opacity 0.5s ease, bottom 0.5s ease';
                  feedbackElement.style.opacity = '0';
-
                  switch (type) {
-                     case 'success':
-                         feedbackElement.style.backgroundColor = 'var(--success-color)';
-                         feedbackElement.style.color = 'var(--text-color)';
-                         break;
-                     case 'danger':
-                         feedbackElement.style.backgroundColor = 'var(--danger-color)';
-                         feedbackElement.style.color = 'var(--text-color)';
-                         break;
-                     case 'info':
-                     default:
-                         feedbackElement.style.backgroundColor = 'var(--primary-color)';
-                         feedbackElement.style.color = 'var(--text-color)';
-                         break;
+                     case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = 'var(--text-color)'; break;
+                     case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = 'var(--text-color)'; break;
+                     case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = 'var(--text-color)'; break;
                  }
-
                  document.body.appendChild(feedbackElement);
-                 setTimeout(() => {
-                    feedbackElement.style.opacity = '1';
-                    feedbackElement.style.bottom = '30px';
-                 }, 10); // Small delay to allow initial styles to apply for transition
-
-                setTimeout(() => {
-                    feedbackElement.style.opacity = '0';
-                    feedbackElement.style.bottom = '10px';
-                 }, 3500); // Start fading out after 3.5 seconds
-
-                setTimeout(() => {
-                     if (feedbackElement.parentNode) {
-                        feedbackElement.parentNode.removeChild(feedbackElement);
-                    }
-                }, 4000); // Remove from DOM after fade out (3500 + 500ms transition)
+                 setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '30px'; }, 10);
+                 setTimeout(() => { feedbackElement.style.opacity = '0'; feedbackElement.style.bottom = '10px'; }, 3500);
+                 setTimeout(() => { if (feedbackElement.parentNode) { feedbackElement.parentNode.removeChild(feedbackElement); } }, 4000);
              }
 
-            // --- Display Updates (Dashboard, Stats, History etc) ---
             function updateDashboard() {
                 const today=new Date(); const cM=today.getMonth(); const cY=today.getFullYear(); const sOW=getStartOfWeek(today); let mH=0; let wH=0;
                 recordedEntries.forEach(e => { const eD = new Date(e.date+'T00:00:00'); if(eD.getMonth() === cM && eD.getFullYear() === cY){ mH += e.hours; } if(e.date >= sOW && e.date <= getCurrentDateString()){ wH += e.hours; } });
@@ -542,9 +486,8 @@
             function renderHistory() { historyList.innerHTML = ''; const sT=historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt=''; const hasSearch = sT.length > 0; if(hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours||0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); const fHE = formatHoursExtensive(e.hours).toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.',',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || fHE.includes(sT));}); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"':''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`; if(recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses`;} else if (recordedEntries.length === 0) {lblTxt='';}} showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado para a busca' : `Nenhum registro recente (use a busca para mais antigos)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id=entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click',(e)=>{e.stopPropagation();editRecordEntry(entry.id);}); li.querySelector('.delete-btn').addEventListener('click',(e)=>{e.stopPropagation();deleteRecordEntry(entry.id);}); historyList.appendChild(li);}); }
             function renderPlanning() { planningList.innerHTML = ''; const tS=getCurrentDateString(); const fP=plannedEntries.filter(p=>p.date>=tS).sort((a,b)=>new Date(a.date)-new Date(b.date)); if(fP.length===0){planningListPlaceholder.classList.remove('hidden');return;} planningListPlaceholder.classList.add('hidden'); fP.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; const hD=formatHoursExtensive(plan.hours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hD}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); }); }
             function updateStatistics() { const cM=new Date().getMonth();const cY=new Date().getFullYear(); const eM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()===cM && d.getFullYear()===cY;}); let tH=0;const aD=new Set(); eM.forEach(e=>{tH+=e.hours;aD.add(e.date);}); const g=settings.monthlyGoal||70; const pP = settings.goalHasBeenSet ? (g > 0 ? Math.min(Math.round((tH/g)*100),100) : 0) : 0; const aH=aD.size>0?(tH/aD.size):0; const dAC=aD.size; statsMonthHours.textContent=formatHoursExtensive(tH); statsMonthGoalProgress.textContent=settings.goalHasBeenSet ? `${pP}%` : '--%'; statsMonthProgressBar.style.width=`${pP}%`;statsAvgHoursDay.textContent=formatHoursExtensive(aH); statsMonthDaysActive.textContent=dAC; }
-            function populateMonthSelector() { const aM=new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM=Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMSValue=getMonthYearString(new Date()); const cMSFormatted=formatMonthYearExtensive(cMSValue); let hCM=false; let didSelectOld = false; sM.forEach(mSValue=>{const o=document.createElement('option');const mSFormatted=formatMonthYearExtensive(mSValue);o.value=mSValue;o.textContent=mSFormatted;if(mSValue === oldSelectedValue){ o.selected = true; didSelectOld = true; } else if (mSValue===cMSValue && !didSelectOld){/* default to current month only if old value not present */ o.selected=true; } if (mSValue === cMSValue) { hCM = true; } chartMonthSelector.appendChild(o);}); if(!hCM){const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Mês Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); if (!didSelectOld) o.selected=true; } if(!chartMonthSelector.value && chartMonthSelector.options.length > 0) { // Ensure something is selected if possible chartMonthSelector.options[0].selected = true; } }
+            function populateMonthSelector() { const aM=new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM=Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMSValue=getMonthYearString(new Date()); const cMSFormatted=formatMonthYearExtensive(cMSValue); let hCM=false; let didSelectOld = false; sM.forEach(mSValue=>{const o=document.createElement('option');const mSFormatted=formatMonthYearExtensive(mSValue);o.value=mSValue;o.textContent=mSFormatted;if(mSValue === oldSelectedValue){ o.selected = true; didSelectOld = true; } else if (mSValue===cMSValue && !didSelectOld){ o.selected=true; } if (mSValue === cMSValue) { hCM = true; } chartMonthSelector.appendChild(o);}); if(!hCM){const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Mês Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); if (!didSelectOld) o.selected=true; } if(!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
 
-            // --- Chart Rendering ---
             function getAveragesForChart(year, monthIndex) {
                  const entriesThisYear = recordedEntries.filter(e => new Date(e.date+'T00:00:00').getFullYear() === year);
                  const entriesThisMonth = entriesThisYear.filter(e => new Date(e.date+'T00:00:00').getMonth() === monthIndex);
@@ -555,13 +498,13 @@
                  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
                  return {
                      avgDaily: activeDaysMonth.size > 0 ? totalHoursMonth / activeDaysMonth.size : 0,
-                     avgWeekly: daysInMonth >= 7 && totalHoursMonth > 0 ? (totalHoursMonth / daysInMonth) * 7 : 0, // Simple weekly avg based on daily proportion
-                     avgMonthly: monthsWithActivityYear.size > 0 ? totalHoursYear / monthsWithActivityYear.size : 0 // Avg for months *with activity* in the year
+                     avgWeekly: daysInMonth >= 7 && totalHoursMonth > 0 ? (totalHoursMonth / daysInMonth) * 7 : 0,
+                     avgMonthly: monthsWithActivityYear.size > 0 ? totalHoursYear / monthsWithActivityYear.size : 0
                  };
             }
 
-             function renderCharts(selectedMonthYearValue) {
-                 if (!selectedMonthYearValue) { console.warn("renderCharts called with no month selected"); return; }
+            function renderCharts(selectedMonthYearValue) {
+                 if (!selectedMonthYearValue) { return; }
                  try {
                      const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue);
                      const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number);
@@ -574,7 +517,6 @@
                      const chartLabels = Array.from({length: daysInSelectedMonth}, (_,i) => i + 1);
                      const averages = getAveragesForChart(year, monthIndex);
 
-                     // --- Annotation configuration ---
                      const annotations = {};
                      if (averages.avgDaily > 0) { annotations.avgDay = { type:'line', scaleID:'y', value: averages.avgDaily, borderColor: avgLineColor1, borderWidth: 1.5, borderDash: [6, 6], label:{ content:`Média Diária: ${formatHoursExtensive(averages.avgDaily, true)}`, display: true, position: 'end', color: avgLineColor1, backgroundColor: tooltipBgColor, font:{size:9}, yAdjust: -10 }}; }
                      if (averages.avgWeekly > 0) { annotations.avgWeek = { type: 'line', scaleID: 'y', value: averages.avgWeekly, borderColor: avgLineColor2, borderWidth: 1.5, borderDash: [10, 10], label:{ content:`Média Semanal (est.): ${formatHoursExtensive(averages.avgWeekly, true)}`, display: true, position: 'end', color: avgLineColor2, backgroundColor: tooltipBgColor, font:{size:9}, yAdjust: 2 }}; }
@@ -594,17 +536,12 @@
                                  x:{ title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}
                             },
                             plugins:{
-                                 // CORRECT place for annotation config
-                                annotation: {
-                                    drawTime: 'afterDatasetsDraw', // Draw labels on top
-                                    annotations: annotations
-                                },
+                                annotation: { drawTime: 'afterDatasetsDraw', annotations: annotations },
                                 title:{display:true, text:selectedMonthYearFormatted, color:textColor, font:{size:14,weight:'normal'}, padding:{bottom:15}},
                                 tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}`}},
                                 legend:{display:false}
                             }
                          }
-                         // REMOVED the incorrect ,plugins:[ChartAnnotation] from here
                     });
                  } catch(e) {
                      console.error("Chart render error:", e);
@@ -616,8 +553,6 @@
                  }
             }
 
-
-             // --- Main Update Function ---
             function updateAllDisplays() {
                 updateDashboard();
                 updateStatistics();
@@ -633,13 +568,12 @@
                 } else if (selectedMonthValue) {
                     const hasDataForSelectedMonth = recordedEntries.some(e => getMonthYearString(new Date(e.date + 'T00:00:00')) === selectedMonthValue);
                     if (hasDataForSelectedMonth) {
-                         renderCharts(selectedMonthValue); // Calls chart rendering
-                         chartNeedsUpdate = true; // Mark as updated
+                         renderCharts(selectedMonthValue);
+                         chartNeedsUpdate = true;
                     } else {
                         clearChartMsg = `Nenhum registro encontrado em ${formatMonthYearExtensive(selectedMonthValue)}.`;
                     }
                 } else if (chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) {
-                   // If no value selected but options exist, select the first and try rendering
                    chartMonthSelector.options[0].selected = true;
                    renderCharts(chartMonthSelector.value);
                    chartNeedsUpdate = true;
@@ -647,7 +581,6 @@
                    clearChartMsg = 'Nenhum dado registrado ainda.';
                 }
 
-                // Clear chart canvas if no data was rendered
                  if (!chartNeedsUpdate) {
                      if(monthlyHoursChartInstance) {
                          monthlyHoursChartInstance.destroy();
@@ -659,18 +592,16 @@
                  }
             }
 
-            // --- *** TIME INPUT FORMATTING *** ---
-             function formatTimeInputOnType(event) {
+            function formatTimeInputOnType(event) {
                 const input = event.target;
                 let value = input.value;
                 let originalCursorPos = input.selectionStart;
-                let numericValue = value.replace(/[^\d]/g, ''); // Remove all non-digits
+                let numericValue = value.replace(/[^\d]/g, '');
 
-                 // Limit length (e.g., to 4 digits for HHMM)
-                 numericValue = numericValue.substring(0, 4);
+                numericValue = numericValue.substring(0, 4);
 
                 let formattedValue = numericValue;
-                 let colonWasAdded = false;
+                let colonWasAdded = false;
 
                 if (numericValue.length > 2) {
                      const hoursPart = numericValue.substring(0, numericValue.length - 2);
@@ -681,19 +612,13 @@
                      }
                 }
 
-                 // Only update if the value actually changed to prevent loops and cursor jumps
-                 if (input.value !== formattedValue) {
+                if (input.value !== formattedValue) {
                      input.value = formattedValue;
-
-                    // Adjust cursor position
                      let newCursorPos = originalCursorPos;
-                    if (colonWasAdded && originalCursorPos >= formattedValue.indexOf(':') +1) {
-                        newCursorPos++; // Move cursor forward if colon was inserted before it
-                    }
-                     // Clamp cursor position to new value length
+                     if (colonWasAdded && originalCursorPos >= formattedValue.indexOf(':') +1) {
+                        newCursorPos++;
+                     }
                      newCursorPos = Math.min(newCursorPos, formattedValue.length);
-
-                    // Use requestAnimationFrame to set cursor after browser potentially updates it
                      requestAnimationFrame(() => {
                         input.setSelectionRange(newCursorPos, newCursorPos);
                     });
@@ -701,34 +626,43 @@
              }
             recordHoursInput.addEventListener('input', formatTimeInputOnType);
             planHoursInput.addEventListener('input', formatTimeInputOnType);
-            // --- END TIME INPUT FORMATTING ---
 
-
-            // --- Event Listeners (Misc) ---
-             recordHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue >= 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { // Handle invalid input on blur? e.target.value = ''; // Clear invalid input or maybe show error? // alert('Formato de tempo inválido'); } });
-            planHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue > 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; /* alert('Formato de tempo inválido'); */ } });
+            recordHoursInput.addEventListener('blur', (e) => {
+                 const decimalValue = parseTimeInputToDecimal(e.target.value);
+                 if (!isNaN(decimalValue) && decimalValue >= 0) {
+                    e.target.value = formatDecimalToTimeInput(decimalValue);
+                } else if (e.target.value.trim() !== '') {
+                     e.target.value = '';
+                }
+            });
+            planHoursInput.addEventListener('blur', (e) => {
+                 const decimalValue = parseTimeInputToDecimal(e.target.value);
+                 if (!isNaN(decimalValue) && decimalValue > 0) {
+                    e.target.value = formatDecimalToTimeInput(decimalValue);
+                } else if (e.target.value.trim() !== '') {
+                    e.target.value = '';
+                 }
+            });
             historySearchInput.addEventListener('input', () => { renderHistory(); });
             recordNotesInput.addEventListener('input', (e) => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); showFeedback(`Limite de ${NOTES_MAX_LENGTH} caracteres atingido.`,'info'); } });
             recordForm.addEventListener('submit', handleRecordSubmit);
             planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm);
             saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}});
-            chartMonthSelector.addEventListener('change', (event)=>{ const selectedMonth = event.target.value; updateAllDisplays(); /* Trigger full update which calls renderCharts if needed */ });
+            chartMonthSelector.addEventListener('change', (event)=>{ updateAllDisplays(); });
             clearAllDataBtn.addEventListener('click', handleClearAllData);
 
-            // --- Initialization ---
             function init() {
                 console.log(`Initializing PWT v${LOCAL_STORAGE_KEYS.ENTRIES.split('_v')[1]}...`);
                 loadData();
-                 if (!settings.goalHasBeenSet && recordedEntries.length > 0) { // Only prompt if no goal but data exists
+                 if (!settings.goalHasBeenSet && recordedEntries.length > 0) {
                      setTimeout(() => showFeedback("Lembre-se de definir sua meta mensal.", "info"), 1000);
                      setTimeout(promptForMonthlyGoal, 1500);
-                } else if (!settings.goalHasBeenSet) { // No goal, no data -> gently remind maybe later or just require via input
-                     // Optionally add a small delay/hint to set the goal
-                }
+                 } else if (!settings.goalHasBeenSet) {
+                 }
                  recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false);
                  clearRecordForm(); clearPlanForm();
                  document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) { toggleCard(card); } else { const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; } });
-                updateAllDisplays();
+                 updateAllDisplays();
                  console.log("Init complete.");
             }
 
