@@ -2,8 +2,8 @@
 
 Uma aplicação web simples, moderna e eficiente para ajudar pioneiros a registrar e acompanhar suas horas de serviço de campo diretamente no navegador, sem necessidade de instalação.
 
-(![image](https://github.com/user-attachments/assets/4af800c4-53ef-4a56-a651-43ccc294befb)
-)
+![image](https://github.com/user-attachments/assets/4af800c4-53ef-4a56-a651-43ccc294befb)
+
 
 ---
 
