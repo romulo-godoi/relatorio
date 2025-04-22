@@ -7,24 +7,23 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
-            /* Apple-Inspired Dark Theme */
             --system-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            --primary-color: #0A84FF; /* Apple Blue */
-            --secondary-color: #000000; /* Black background */
-            --card-bg: #1c1c1e; /* Dark Gray card background */
-            --input-bg: #2c2c2e; /* Slightly lighter input background */
-            --text-color: #ffffff; /* White text */
-            --text-color-secondary: rgba(235, 235, 245, 0.6); /* Lighter Gray for secondary text/labels */
-            --border-color: #3a3a3c; /* Subtle border/divider color */
+            --primary-color: #0A84FF;
+            --secondary-color: #000000;
+            --card-bg: #1c1c1e;
+            --input-bg: #2c2c2e;
+            --text-color: #ffffff;
+            --text-color-secondary: rgba(235, 235, 245, 0.6);
+            --border-color: #3a3a3c;
             --shadow-color: rgba(0, 0, 0, 0.2);
-            --danger-color: #FF453A; /* Apple Red */
-            --success-color: #30D158; /* Apple Green */
+            --danger-color: #FF453A;
+            --success-color: #30D158;
             --placeholder-color: rgba(235, 235, 245, 0.3);
             --dialog-backdrop: rgba(0, 0, 0, 0.7);
-            --accent-color-progress: #30D158; /* Green for progress bar */
+            --accent-color-progress: #30D158;
 
             --font-family: var(--system-font);
-            --border-radius: 10px; /* Apple-like radius */
+            --border-radius: 10px;
             --card-padding: 18px;
             --outer-padding: 15px;
             --transition-speed: 0.3s;
@@ -57,9 +56,7 @@
             align-items: center;
             text-align: center;
         }
-        .dashboard-item {
-            /* flex: 1; */ /* Distribute space evenly if more items */
-        }
+        .dashboard-item {}
         .dashboard-label {
             font-size: 0.85em;
             color: var(--text-color-secondary);
@@ -69,20 +66,19 @@
         .dashboard-value {
             font-size: 1.8em;
             font-weight: 600;
-            color: var(--primary-color); /* Use primary color for value */
+            color: var(--primary-color);
             line-height: 1.1;
         }
          .dashboard-value .unit {
-             font-size: 0.6em; /* Smaller unit 'h' */
+             font-size: 0.6em;
              font-weight: 500;
              color: var(--text-color-secondary);
              margin-left: 2px;
          }
 
-
         #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-        h1 { display: none; } /* Title moved to dashboard or implicit */
+        h1 { display: none; }
 
         .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
         .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
@@ -96,19 +92,17 @@
         .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
 
 
-        /* Form Styles */
         .form-group { margin-bottom: 16px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
         input[type="date"], input[type="number"], input[type="text"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
-         /* Style Select Dropdown Arrow */
          select {
              background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
              background-repeat: no-repeat;
              background-position: right 14px center;
-             background-size: 12px 12px; /* Adjust size if needed */
-             padding-right: 40px; /* Make space for arrow */
+             background-size: 12px 12px;
+             padding-right: 40px;
         }
-         select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); } /* Change arrow color on focus */
+         select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); }
 
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
         input::placeholder, textarea::placeholder { color: var(--placeholder-color); opacity: 1; }
@@ -124,7 +118,7 @@
         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; transform: translateY(-1px); } button.danger:active { background-color: #ff5a52; transform: translateY(0px); }
         .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; }
 
-        /* Stats */
+
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
         .stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
         .stat-value { font-size: 1.7em; font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; }
@@ -132,12 +126,12 @@
         .progress-bar-container { background-color: var(--border-color); border-radius: 5px; overflow: hidden; height: 8px; margin-top: 8px; }
         .progress-bar { background-color: var(--accent-color-progress); height: 100%; width: 0; transition: width var(--transition-speed) ease-out; }
 
-        /* History & Planning List */
+
         .data-list { list-style: none; padding: 0; max-height: 350px; overflow-y: auto; margin-top: 15px; }
-        .data-list li { background-color: transparent; border-bottom: 1px solid var(--border-color); padding: 14px var(--card-padding); /* Use card padding */ margin: 0; /* Reset margin */ display: flex; justify-content: space-between; align-items: flex-start; /* Align top */ flex-wrap: wrap; transition: background-color var(--transition-speed-fast) ease; }
+        .data-list li { background-color: transparent; border-bottom: 1px solid var(--border-color); padding: 14px var(--card-padding); margin: 0; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; transition: background-color var(--transition-speed-fast) ease; }
         .data-list li:last-child { border-bottom: none; }
         .data-list li:hover { background-color: rgba(255, 255, 255, 0.02); }
-        .entry-details { font-size: 0.95em; flex-grow: 1; margin-right: 10px; line-height: 1.4; padding-bottom: 5px; } /* Add padding bottom */
+        .entry-details { font-size: 0.95em; flex-grow: 1; margin-right: 10px; line-height: 1.4; padding-bottom: 5px; }
         .entry-details strong { color: var(--text-color); font-weight: 500; }
         .entry-details .hours { color: var(--primary-color); font-weight: 600; margin-left: 5px; margin-right: 5px; }
          .entry-details .tag-badge {
@@ -150,17 +144,15 @@
              margin-left: 8px;
              vertical-align: middle;
          }
-         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; /* Allow wrap */ overflow-wrap: break-word; } /* Allow wrapping, removed fixed width */
-         .entry-actions { flex-shrink: 0; /* Prevent buttons shrinking */ align-self: center; } /* Align buttons center vertically */
-        .entry-actions button, .plan-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; /* Align buttons inline */ width: auto; border-radius: 6px; }
-        .plan-actions button { margin-top: 5px; } /* Need margin for plans if wrap */
+         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; }
+         .entry-actions { flex-shrink: 0; align-self: center; }
+        .entry-actions button, .plan-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
+        .plan-actions button { margin-top: 5px; }
         .entry-actions button.secondary, .plan-actions button.secondary { background-color: #3a3a3c; }
 
 
-        /* Chart Container */
         .chart-container { position: relative; height: 250px; width: 100%; margin-top: 25px; }
 
-        /* Dialog */
         .dialog-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dialog-backdrop); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease; }
         .dialog-backdrop.visible { opacity: 1; visibility: visible; }
         .dialog-content { background-color: #2c2c2e; color: var(--text-color); padding: 25px; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 320px; transform: scale(0.95); transition: transform var(--transition-speed) ease; }
@@ -168,14 +160,13 @@
         .dialog-content p { margin-bottom: 25px; font-size: 1.05em; line-height: 1.5; }
         .dialog-actions button { width: calc(50% - 5px); margin-top: 0; padding: 10px; font-size: 1em;}
 
-        /* Helpers */
+
         .hidden { display: none !important; }
         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         .text-center { text-align: center; } .mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
     </style>
 </head>
 <body>
-    <!-- Dashboard Box -->
     <div id="dashboard-box">
          <div class="dashboard-item">
              <span class="dashboard-label">Horas na Semana</span>
@@ -188,9 +179,7 @@
     </div>
 
     <div id="app">
-        <!-- H1 Title Removed - Implicit -->
 
-        <!-- Card: Registrar Atividade -->
         <div class="card expanded" id="record-card">
              <div class="card-header">
                  <h2>Registrar Atividade</h2>
@@ -206,7 +195,6 @@
                         </label>
                         <input type="date" id="record-date" class="hidden">
                     </div>
-                     <!-- Horas e Tags lado a lado -->
                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                          <div class="form-group">
                              <label for="record-hours">Horas:</label>
@@ -236,79 +224,70 @@
             </div>
         </div>
 
-        <!-- Card: Planejar Horas -->
         <div class="card" id="plan-card">
              <div class="card-header">
                 <h2>Planejar Horas</h2>
                 <span class="toggle-icon">▼</span>
              </div>
              <div class="card-content">
-                <form id="plan-form"> /* ... Conteúdo do formulário inalterado ... */
-                     <input type="hidden" id="plan-id"> <div class="form-group"><label for="plan-date">Data Futura:</label><input type="date" id="plan-date" required></div> <div class="form-group"><label for="plan-hours">Horas Planejadas:</label><input type="number" id="plan-hours" step="0.25" min="0.25" required placeholder="Ex: 3"></div> <div class="text-center"> <button type="submit" id="save-plan-btn">Salvar Plano</button> <button type="button" id="clear-plan-form-btn" class="secondary">Limpar</button> </div> </form>
+                <form id="plan-form"> <input type="hidden" id="plan-id"> <div class="form-group"><label for="plan-date">Data Futura:</label><input type="date" id="plan-date" required></div> <div class="form-group"><label for="plan-hours">Horas Planejadas:</label><input type="number" id="plan-hours" step="0.25" min="0.25" required placeholder="Ex: 3"></div> <div class="text-center"> <button type="submit" id="save-plan-btn">Salvar Plano</button> <button type="button" id="clear-plan-form-btn" class="secondary">Limpar</button> </div> </form>
                 <div id="planning-list-container" class="mt-2">
                     <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px;">Próximos Planos:</h3>
-                    <ul id="planning-list" class="data-list"> /* ... Conteúdo da lista inalterado ... */ <li class="placeholder hidden">Nenhum planejamento futuro encontrado.</li> </ul>
+                    <ul id="planning-list" class="data-list"> <li class="placeholder hidden">Nenhum planejamento futuro encontrado.</li> </ul>
                 </div>
              </div>
         </div>
 
-        <!-- Card: Estatísticas e Progresso -->
         <div class="card" id="stats-card">
             <div class="card-header">
                 <h2>Resumo Mensal</h2>
                 <span class="toggle-icon">▼</span>
              </div>
-             <div class="card-content"> /* ... Conteúdo inalterado (meta, grid de estatísticas) ... */
+             <div class="card-content">
                 <div class="form-group" style="max-width: 200px; margin: 0 auto 25px auto; text-align:center;"> <label for="monthly-goal">Meta Mensal (Horas):</label> <input type="number" id="monthly-goal" min="1" step="1" value="70"> <button id="save-goal-btn" class="mt-1 secondary" style="width:100%; font-size:0.9em; padding: 8px 10px;">Definir Meta</button> </div> <div class="stats-grid"> <div class="stat-item"> <span id="stats-month-hours" class="stat-value">0</span> <span class="stat-label">Horas no Mês</span> </div> <div class="stat-item"> <span id="stats-month-goal-progress" class="stat-value">0%</span> <span class="stat-label">Progresso Meta</span> <div class="progress-bar-container"><div id="stats-month-progress-bar" class="progress-bar"></div></div> </div> <div class="stat-item"> <span id="stats-avg-hours-day" class="stat-value">0</span> <span class="stat-label">Média / Dia Ativo</span> </div> <div class="stat-item"> <span id="stats-month-days-active" class="stat-value">0</span> <span class="stat-label">Dias Ativos</span> </div> </div>
              </div>
         </div>
 
-        <!-- Card: Gráficos -->
         <div class="card" id="charts-card">
             <div class="card-header">
                  <h2>Gráfico de Horas</h2>
                  <span class="toggle-icon">▼</span>
              </div>
-             <div class="card-content"> /* ... Conteúdo inalterado (seletor de mês, canvas) ... */
+             <div class="card-content">
                  <div class="form-group"> <label for="chart-month-selector">Visualizar Mês:</label> <select id="chart-month-selector"></select> </div> <div class="chart-container"> <canvas id="monthlyHoursChart"></canvas> </div>
              </div>
         </div>
 
-        <!-- Card: Histórico Detalhado -->
         <div class="card" id="history-card">
             <div class="card-header">
                 <h2>Histórico de Registros</h2>
                 <span class="toggle-icon">▼</span>
             </div>
-             <div class="card-content"> /* ... Conteúdo inalterado (título da lista, ul) ... */
+             <div class="card-content">
                  <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px;">Registros Salvos:</h3> <ul id="history-list" class="data-list"> <li class="placeholder hidden">Nenhum registro encontrado.</li> </ul>
             </div>
         </div>
 
-        <!-- Card: Configurações -->
         <div class="card" id="settings-card">
             <div class="card-header">
                 <h2>Configurações</h2>
                 <span class="toggle-icon">▼</span>
             </div>
-            <div class="card-content"> /* ... Conteúdo inalterado (botão limpar, texto de aviso) ... */
+            <div class="card-content">
                 <div class="text-center"> <button id="clear-all-data-btn" class="danger">Limpar Todos os Dados</button> </div> <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;"> Atenção: Limpar os dados removerá permanentemente todos os seus registros, planos e meta deste navegador. Esta ação não pode ser desfeita. </p>
             </div>
         </div>
 
-    </div> <!-- /#app -->
+    </div>
 
-     <!-- Confirmation Dialog Structure -->
-    <div id="confirmation-dialog" class="dialog-backdrop"> /* ... Conteúdo inalterado ... */ <div class="dialog-content"> <p id="dialog-message">Você tem certeza?</p> <div class="dialog-actions"> <button id="dialog-confirm-btn" class="danger">Confirmar</button> <button id="dialog-cancel-btn" class="secondary">Cancelar</button> </div> </div> </div>
+    <div id="confirmation-dialog" class="dialog-backdrop"> <div class="dialog-content"> <p id="dialog-message">Você tem certeza?</p> <div class="dialog-actions"> <button id="dialog-confirm-btn" class="danger">Confirmar</button> <button id="dialog-cancel-btn" class="secondary">Cancelar</button> </div> </div> </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- DOM Elements ---
             const appElement = document.getElementById('app');
             const dashboardWeekHours = document.getElementById('dashboard-week-hours');
             const dashboardMonthHours = document.getElementById('dashboard-month-hours');
-            // Record Card
             const recordCard = document.getElementById('record-card');
             const recordForm = document.getElementById('record-form');
             const recordIdInput = document.getElementById('record-id');
@@ -317,39 +296,36 @@
             const displayDate = document.getElementById('display-date');
             const changeDateBtn = document.getElementById('change-date-btn');
             const recordHoursInput = document.getElementById('record-hours');
-            const recordTagSelect = document.getElementById('record-tag'); // New Tag Select
+            const recordTagSelect = document.getElementById('record-tag');
             const recordNotesInput = document.getElementById('record-notes');
             const saveRecordBtn = document.getElementById('save-record-btn');
             const clearRecordFormBtn = document.getElementById('clear-record-form-btn');
-             // Other elements (Plan, Stats, Charts, History, Settings, Dialog) - referenced same as before
-             const planCard = document.getElementById('plan-card');
-             const planForm = document.getElementById('plan-form');
-             const planIdInput = document.getElementById('plan-id');
-             const planDateInput = document.getElementById('plan-date');
-             const planHoursInput = document.getElementById('plan-hours');
-             const savePlanBtn = document.getElementById('save-plan-btn');
-             const clearPlanFormBtn = document.getElementById('clear-plan-form-btn');
-             const planningList = document.getElementById('planning-list');
-             const planningListPlaceholder = planningList.querySelector('.placeholder');
-             const monthlyGoalInput = document.getElementById('monthly-goal');
-             const saveGoalBtn = document.getElementById('save-goal-btn');
-             const statsMonthHours = document.getElementById('stats-month-hours');
-             const statsMonthGoalProgress = document.getElementById('stats-month-goal-progress');
-             const statsMonthProgressBar = document.getElementById('stats-month-progress-bar');
-             const statsAvgHoursDay = document.getElementById('stats-avg-hours-day');
-             const statsMonthDaysActive = document.getElementById('stats-month-days-active');
-             const chartMonthSelector = document.getElementById('chart-month-selector');
-             const monthlyHoursChartCtx = document.getElementById('monthlyHoursChart').getContext('2d');
-             const historyList = document.getElementById('history-list');
-             const historyListPlaceholder = historyList.querySelector('.placeholder');
-             const clearAllDataBtn = document.getElementById('clear-all-data-btn');
-             const confirmationDialog = document.getElementById('confirmation-dialog');
-             const dialogMessage = document.getElementById('dialog-message');
-             const dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
-             const dialogCancelBtn = document.getElementById('dialog-cancel-btn');
+            const planCard = document.getElementById('plan-card');
+            const planForm = document.getElementById('plan-form');
+            const planIdInput = document.getElementById('plan-id');
+            const planDateInput = document.getElementById('plan-date');
+            const planHoursInput = document.getElementById('plan-hours');
+            const savePlanBtn = document.getElementById('save-plan-btn');
+            const clearPlanFormBtn = document.getElementById('clear-plan-form-btn');
+            const planningList = document.getElementById('planning-list');
+            const planningListPlaceholder = planningList.querySelector('.placeholder');
+            const monthlyGoalInput = document.getElementById('monthly-goal');
+            const saveGoalBtn = document.getElementById('save-goal-btn');
+            const statsMonthHours = document.getElementById('stats-month-hours');
+            const statsMonthGoalProgress = document.getElementById('stats-month-goal-progress');
+            const statsMonthProgressBar = document.getElementById('stats-month-progress-bar');
+            const statsAvgHoursDay = document.getElementById('stats-avg-hours-day');
+            const statsMonthDaysActive = document.getElementById('stats-month-days-active');
+            const chartMonthSelector = document.getElementById('chart-month-selector');
+            const monthlyHoursChartCtx = document.getElementById('monthlyHoursChart').getContext('2d');
+            const historyList = document.getElementById('history-list');
+            const historyListPlaceholder = historyList.querySelector('.placeholder');
+            const clearAllDataBtn = document.getElementById('clear-all-data-btn');
+            const confirmationDialog = document.getElementById('confirmation-dialog');
+            const dialogMessage = document.getElementById('dialog-message');
+            const dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
+            const dialogCancelBtn = document.getElementById('dialog-cancel-btn');
 
-
-            // --- State & Data ---
             let recordedEntries = [];
             let plannedEntries = [];
             let settings = { monthlyGoal: 70 };
@@ -357,9 +333,8 @@
             let currentEditingId = null;
             let currentConfirmCallback = null;
             let isDateInputVisible = false;
-            const DEFAULT_TAG = "Casa em casa"; // Default tag value
+            const DEFAULT_TAG = "Casa em casa";
 
-            // Chart Colors
             const computedStyles = getComputedStyle(document.body);
             const textColor = computedStyles.getPropertyValue('--text-color').trim();
             const textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim();
@@ -368,171 +343,139 @@
             const primaryColor = computedStyles.getPropertyValue('--primary-color').trim();
 
             const LOCAL_STORAGE_KEYS = {
-                ENTRIES: 'pioneerTracker_entries_v4', // Incremented version for tag field
+                ENTRIES: 'pioneerTracker_entries_v4',
                 PLANS: 'pioneerTracker_plans_v1',
                 SETTINGS: 'pioneerTracker_settings_v1'
             };
 
-            // --- Functions ---
+            function getCurrentDateString() { const t=new Date();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
+            function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
+            function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
+            function getStartOfWeek(date = new Date()) { const dOW = date.getDay(); const diff = date.getDate() - dOW; const sOW = new Date(date.setDate(diff)); sOW.setHours(0,0,0,0); return `${sOW.getFullYear()}-${String(sOW.getMonth()+1).padStart(2,'0')}-${String(sOW.getDate()).padStart(2,'0')}`; }
 
-             // Date/Time Helpers
-             function getCurrentDateString() { const t=new Date();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
-             function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
-             function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
-             // Gets the date string for the start of the current week (Sunday)
-             function getStartOfWeek(date = new Date()) {
-                 const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, ...
-                 const diff = date.getDate() - dayOfWeek;
-                 const startOfWeek = new Date(date.setDate(diff));
-                 startOfWeek.setHours(0, 0, 0, 0); // Reset time part
-                 return `${startOfWeek.getFullYear()}-${String(startOfWeek.getMonth() + 1).padStart(2, '0')}-${String(startOfWeek.getDate()).padStart(2, '0')}`;
-             }
-
-
-            // Data Handling
-             function saveData() { /* ... (Same try/catch) ... */ try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); console.log("Data saved.");} catch(e) { console.error("SAVE ERR:",e); alert("ERRO AO SALVAR!");} }
-             function loadData() { /* ... (Same try/catch, adapted key) ... */
+            function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); console.log("Data saved.");} catch(e) { console.error("SAVE ERR:",e); alert("ERRO AO SALVAR!");} }
+            function loadData() {
                  try {
                     let storedEntriesRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
-                    // Basic check for old data (v3 - missing 'tag')
                      if (storedEntriesRaw) {
                          try {
                             const sampleEntry = JSON.parse(storedEntriesRaw)[0];
                              if (sampleEntry && !('tag' in sampleEntry)) {
                                 console.warn("Old data format (v3) detected, potentially missing tags. Assigning default.");
-                                // Assign default tag to entries missing it (basic migration)
                                 const entriesV3 = JSON.parse(storedEntriesRaw);
                                 recordedEntries = entriesV3.map(entry => ({...entry, tag: DEFAULT_TAG }));
-                                storedEntriesRaw = null; // Mark as processed
+                                storedEntriesRaw = null;
                              }
-                         } catch { // Handle potential JSON parsing errors here too
+                         } catch {
                               storedEntriesRaw = null; console.error("Error parsing sample entry for version check.");
                          }
                      }
 
-                     if (storedEntriesRaw) { // If not migrated or already v4
+                     if (storedEntriesRaw) {
                          recordedEntries = JSON.parse(storedEntriesRaw);
-                     } else if (!recordedEntries.length) { // If migration failed or no data
+                     } else if (!recordedEntries.length) {
                         recordedEntries = [];
                      }
 
                     recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                     // Load plans and settings (unchanged)
                      const storedPlans=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = storedPlans ? JSON.parse(storedPlans) : []; plannedEntries.sort((a,b) => new Date(a.date) - new Date(b.date));
                      const storedSettings=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings = storedSettings ? JSON.parse(storedSettings) : { monthlyGoal: 70 }; monthlyGoalInput.value = settings.monthlyGoal;
                      console.log("Data loaded.");
                  } catch (error) {
                      console.error("Load Error:", error);
                       recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70 };
-                      try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); localStorage.removeItem('pioneerTracker_entries_v3'); localStorage.removeItem('pioneerTracker_entries_v2'); } catch (e) {} // Clear old keys too
+                      try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); localStorage.removeItem('pioneerTracker_entries_v3'); localStorage.removeItem('pioneerTracker_entries_v2'); } catch (e) {}
                       alert("Erro ao carregar dados. Resetando.");
                  }
             }
 
+            function setDateInputVisibility(visible) { isDateInputVisible = visible; if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent = (recordDateInput.value === getCurrentDateString()) ? "Hoje" : formatDisplayDate(recordDateInput.value); } }
+            changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
 
-            // Date Input Toggle
-             function setDateInputVisibility(visible) { /* ... (Same) ... */ isDateInputVisible = visible; if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent = (recordDateInput.value === getCurrentDateString()) ? "Hoje" : formatDisplayDate(recordDateInput.value); } }
-             changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
+            function toggleCard(cardElement) { if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';} }
+            appElement.addEventListener('click', (event) => { const h=event.target.closest('.card-header');if(h){const c=h.closest('.card');if(c){toggleCard(c);}} });
+            document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
 
-
-            // Card Collapse/Expand Logic
-            function toggleCard(cardElement) { /* ... (Same) ... */ if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';} }
-            appElement.addEventListener('click', (event) => { /* ... (Same Delegation) ... */ const h=event.target.closest('.card-header');if(h){const c=h.closest('.card');if(c){toggleCard(c);}} });
-            document.querySelectorAll('.card-header').forEach(header => { /* ... (Same Keyboard Access) ... */ header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
-
-
-            // Record Form Handling (Added Tag)
-             function clearRecordForm() { /* ... (Added Tag reset) ... */
-                recordForm.reset(); recordIdInput.value=''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG; // Reset tag select
+            function clearRecordForm() {
+                recordForm.reset(); recordIdInput.value=''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG;
                 saveRecordBtn.textContent='Salvar Registro'; saveRecordBtn.classList.remove('editing'); currentEditingId=null;
             }
 
-            function handleRecordSubmit(event) { /* ... (Added Tag save) ... */
+            function handleRecordSubmit(event) {
                 event.preventDefault();
                  const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now();
                  const date = (isDateInputVisible || recordDateInput.value !== getCurrentDateString()) ? recordDateInput.value : getCurrentDateString();
                 const hours = parseFloat(recordHoursInput.value) || 0;
-                const tag = recordTagSelect.value || DEFAULT_TAG; // Get selected tag
+                const tag = recordTagSelect.value || DEFAULT_TAG;
                 const notes = recordNotesInput.value.trim();
 
                 if(hours <= 0){ alert("Insira Horas (> 0)."); return; } if (!date){ alert("Data inválida."); return; }
 
-                // Entry Object includes tag now
                 const newEntry = { id, date, hours, tag, notes };
 
                 const existingIndex = recordedEntries.findIndex(entry => entry.id === id);
                  if (existingIndex > -1) { recordedEntries[existingIndex] = newEntry; } else { recordedEntries.push(newEntry); }
                 recordedEntries.sort((a,b) => new Date(b.date)-new Date(a.date));
 
-                saveData(); clearRecordForm(); renderHistory(); updateAllDisplays(); // Updated function call
+                saveData(); clearRecordForm(); renderHistory(); updateAllDisplays();
                  showFeedback('Registro salvo!', 'success');
              }
 
-             function editRecordEntry(id) { /* ... (Added Tag population) ... */
+             function editRecordEntry(id) {
                  const entry = recordedEntries.find(e => e.id === id);
                  if (entry) {
                      if(!recordCard.classList.contains('expanded')){toggleCard(recordCard);}
                      currentEditingId = id; recordIdInput.value=entry.id; recordDateInput.value=entry.date;
                      if(entry.date !== getCurrentDateString()){setDateInputVisibility(true);} else {setDateInputVisibility(false);}
-                     recordHoursInput.value=entry.hours; recordTagSelect.value = entry.tag || DEFAULT_TAG; // Set tag select
+                     recordHoursInput.value=entry.hours; recordTagSelect.value = entry.tag || DEFAULT_TAG;
                      recordNotesInput.value = entry.notes || '';
                      saveRecordBtn.textContent='Atualizar Registro'; saveRecordBtn.classList.add('editing');
                      recordCard.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput.focus();
                  }
             }
 
-             function deleteRecordEntry(id) { /* ... (Calls updateAllDisplays) ... */
+            function deleteRecordEntry(id) {
                  showConfirmationDialog(`Tem certeza que deseja excluir este registro?`, () => {
                      recordedEntries = recordedEntries.filter(entry => entry.id !== id);
-                     saveData(); renderHistory(); updateAllDisplays(); // Updated function call
+                     saveData(); renderHistory(); updateAllDisplays();
                      showFeedback('Registro excluído.', 'info');
                     if(currentEditingId === id){ clearRecordForm(); }
                 });
             }
 
-            // Planning Form Handling (Unchanged)
-            function clearPlanForm(){ /* ... */ planForm.reset();planIdInput.value='';planDateInput.value='';savePlanBtn.textContent='Salvar Plano';currentEditingId=null; }
-            function handlePlanSubmit(event){ /* ... */ event.preventDefault();const id=planIdInput.value?parseInt(planIdInput.value,10):Date.now();const date=planDateInput.value;const pH=parseFloat(planHoursInput.value);const todayStr=getCurrentDateString();if(!date||!pH||pH<=0){alert("Preencha Data Futura e Horas (> 0).");return;} if(date<todayStr){alert("Data deve ser hoje ou futura.");return;} const nP={id,date,plannedHours:pH}; const eI=plannedEntries.findIndex(p=>p.id===id);if(eI>-1){plannedEntries[eI]=nP;}else{plannedEntries.push(nP);} plannedEntries.sort((a,b)=>new Date(a.date)-new Date(b.date));saveData();clearPlanForm();renderPlanning();showFeedback('Planejamento salvo!','success'); }
-            function editPlanEntry(id){ /* ... */ const plan=plannedEntries.find(p=>p.id===id);if(plan){if(!planCard.classList.contains('expanded')){toggleCard(planCard);} currentEditingId=id;planIdInput.value=plan.id;planDateInput.value=plan.date;planHoursInput.value=plan.plannedHours;savePlanBtn.textContent='Atualizar Plano';planCard.scrollIntoView({behavior:'smooth',block:'start'});planDateInput.focus();} }
-            function deletePlanEntry(id){ /* ... */ showConfirmationDialog(`Excluir planejamento?`,()=>{plannedEntries=plannedEntries.filter(p=>p.id!==id);saveData();renderPlanning();showFeedback('Planejamento excluído.','info');if(currentEditingId===id){clearPlanForm();}}); }
+            function clearPlanForm(){ planForm.reset();planIdInput.value='';planDateInput.value='';savePlanBtn.textContent='Salvar Plano';currentEditingId=null; }
+            function handlePlanSubmit(event){ event.preventDefault();const id=planIdInput.value?parseInt(planIdInput.value,10):Date.now();const date=planDateInput.value;const pH=parseFloat(planHoursInput.value);const todayStr=getCurrentDateString();if(!date||!pH||pH<=0){alert("Preencha Data Futura e Horas (> 0).");return;} if(date<todayStr){alert("Data deve ser hoje ou futura.");return;} const nP={id,date,plannedHours:pH}; const eI=plannedEntries.findIndex(p=>p.id===id);if(eI>-1){plannedEntries[eI]=nP;}else{plannedEntries.push(nP);} plannedEntries.sort((a,b)=>new Date(a.date)-new Date(b.date));saveData();clearPlanForm();renderPlanning();showFeedback('Planejamento salvo!','success'); }
+            function editPlanEntry(id){ const plan=plannedEntries.find(p=>p.id===id);if(plan){if(!planCard.classList.contains('expanded')){toggleCard(planCard);} currentEditingId=id;planIdInput.value=plan.id;planDateInput.value=plan.date;planHoursInput.value=plan.plannedHours;savePlanBtn.textContent='Atualizar Plano';planCard.scrollIntoView({behavior:'smooth',block:'start'});planDateInput.focus();} }
+            function deletePlanEntry(id){ showConfirmationDialog(`Excluir planejamento?`,()=>{plannedEntries=plannedEntries.filter(p=>p.id!==id);saveData();renderPlanning();showFeedback('Planejamento excluído.','info');if(currentEditingId===id){clearPlanForm();}}); }
 
-
-            // Settings Handling (Calls updateAllDisplays on clear)
-            function handleGoalSave(){ /* ... (Unchanged) ... */ const nG=parseInt(monthlyGoalInput.value,10);if(!isNaN(nG)&&nG>0){settings.monthlyGoal=nG;saveData();updateStatistics();showFeedback('Meta atualizada!','success');}else{alert("Meta inválida.");monthlyGoalInput.value=settings.monthlyGoal;} }
-             function handleClearAllData() { /* ... (Calls updateAllDisplays) ... */
+            function handleGoalSave(){ const nG=parseInt(monthlyGoalInput.value,10);if(!isNaN(nG)&&nG>0){settings.monthlyGoal=nG;saveData();updateStatistics();showFeedback('Meta atualizada!','success');}else{alert("Meta inválida.");monthlyGoalInput.value=settings.monthlyGoal;} }
+            function handleClearAllData() {
                  showConfirmationDialog('ATENÇÃO! Apagar TUDO? IRREVERSÍVEL!', () => {
                     recordedEntries = []; plannedEntries = []; settings = {monthlyGoal: 70}; monthlyGoalInput.value = settings.monthlyGoal;
-                    saveData(); clearRecordForm(); clearPlanForm(); renderHistory(); renderPlanning(); updateAllDisplays(); // Updated call
+                    saveData(); clearRecordForm(); clearPlanForm(); renderHistory(); renderPlanning(); updateAllDisplays();
                      showFeedback('Todos os dados apagados.', 'danger');
                      document.querySelectorAll('.card').forEach(c => { if(c.id!=='record-card'&&c.classList.contains('expanded')) toggleCard(c); else if(c.id==='record-card'&&!c.classList.contains('expanded')) toggleCard(c); });
                  });
              }
 
-
-            // Confirmation Dialog (Unchanged)
              function showConfirmationDialog(message,onConfirm){dialogMessage.textContent=message;currentConfirmCallback=onConfirm;confirmationDialog.classList.add('visible');} function hideConfirmationDialog(){confirmationDialog.classList.remove('visible');currentConfirmCallback=null;} dialogConfirmBtn.addEventListener('click',()=>{if(typeof currentConfirmCallback==='function'){currentConfirmCallback();} hideConfirmationDialog();}); dialogCancelBtn.addEventListener('click',hideConfirmationDialog); confirmationDialog.addEventListener('click',(e)=>{if(e.target===confirmationDialog){hideConfirmationDialog();}});
             function showFeedback(message,type='info'){console.log(`Feedback[${type}]:${message}`);}
 
-
-            // Dashboard Update
              function updateDashboard() {
                  const today = new Date();
                  const currentMonth = today.getMonth();
                  const currentYear = today.getFullYear();
-                 const startOfWeekStr = getStartOfWeek(today); // Get YYYY-MM-DD for start of week
+                 const startOfWeekStr = getStartOfWeek(today);
 
                  let monthHours = 0;
                  let weekHours = 0;
 
                  recordedEntries.forEach(entry => {
-                    const entryDate = new Date(entry.date + 'T00:00:00'); // Ensure proper date object comparison
-                     // Check for Month Total
+                    const entryDate = new Date(entry.date + 'T00:00:00');
                      if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) {
                         monthHours += entry.hours;
                     }
-                    // Check for Week Total (entry date >= start of week AND <= today)
-                     // Comparing date strings is generally safe for YYYY-MM-DD format
                      if (entry.date >= startOfWeekStr && entry.date <= getCurrentDateString()) {
                         weekHours += entry.hours;
                     }
@@ -542,13 +485,11 @@
                  dashboardWeekHours.innerHTML = `${weekHours.toFixed(1).replace('.',',')}<span class="unit">h</span>`;
              }
 
-
-            // Rendering Functions
-            function renderHistory() { // Added Tag display
+            function renderHistory() {
                 historyList.innerHTML=''; if(recordedEntries.length === 0){historyListPlaceholder.classList.remove('hidden'); return;} historyListPlaceholder.classList.add('hidden');
                 recordedEntries.forEach(entry=>{
                     const li = document.createElement('li'); li.dataset.id=entry.id;
-                     const tagDisplay = entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; // Show tag only if not default
+                     const tagDisplay = entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : '';
                      const notesPreview = entry.notes ? `<span class="notes-preview">${entry.notes}</span>` : '<span class="notes-preview" style="opacity: 0.5;">Sem notas</span>';
                     li.innerHTML = `
                          <div class="entry-details">
@@ -562,39 +503,34 @@
                      li.querySelector('.edit-btn').addEventListener('click',(e)=>{e.stopPropagation(); editRecordEntry(entry.id);}); li.querySelector('.delete-btn').addEventListener('click',(e)=>{e.stopPropagation(); deleteRecordEntry(entry.id);}); historyList.appendChild(li);
                  });
             }
-             function renderPlanning() { /* ... (Unchanged, slightly adjusted display already done) ... */
+             function renderPlanning() {
                  planningList.innerHTML = ''; const todayStr = getCurrentDateString(); const futurePlans = plannedEntries.filter(plan => plan.date >= todayStr).sort((a,b)=>new Date(a.date)-new Date(b.date)); if(futurePlans.length===0){planningListPlaceholder.classList.remove('hidden');return;} planningListPlaceholder.classList.add('hidden');
                  futurePlans.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${plan.plannedHours}h</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); });
             }
-            function updateStatistics() { /* ... (Stats calculation unchanged, visual already simplified) ... */
+            function updateStatistics() {
                 const cM=new Date().getMonth(); const cY=new Date().getFullYear(); const eM = recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()===cM && d.getFullYear()===cY;}); let tH=0;const aD=new Set(); eM.forEach(e=>{tH+=e.hours;aD.add(e.date);}); const g=settings.monthlyGoal||70; const pP=g>0?Math.min(Math.round((tH/g)*100),100):0; const aH=aD.size>0?(tH/aD.size).toFixed(1):0; const dAC=aD.size; statsMonthHours.textContent=tH.toFixed(1).replace('.',',');statsMonthGoalProgress.textContent=`${pP}%`;statsMonthProgressBar.style.width=`${pP}%`;statsAvgHoursDay.textContent=aH.replace('.',',');statsMonthDaysActive.textContent=dAC;
             }
-             function populateMonthSelector() { /* ... (Unchanged) ... */ const aM = new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM = Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMS=getMonthYearString(new Date());let hCM=false; sM.forEach(mS=>{const o=document.createElement('option');o.value=mS;o.textContent=mS;if(mS===cMS){o.selected=true;hCM=true;} chartMonthSelector.appendChild(o);}); if(!hCM && recordedEntries.length > 0){const o=document.createElement('option');o.value=cMS;o.textContent=`${cMS} (Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); o.selected=true;} else if (!hCM) { const o=document.createElement('option');o.value=cMS;o.textContent=`${cMS} (Atual)`; chartMonthSelector.appendChild(o); o.selected=true;} }
-             function renderCharts(selectedMonthYear) { /* ... (Chart rendering logic unchanged) ... */
+            function populateMonthSelector() { const aM = new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM = Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMS=getMonthYearString(new Date());let hCM=false; sM.forEach(mS=>{const o=document.createElement('option');o.value=mS;o.textContent=mS;if(mS===cMS){o.selected=true;hCM=true;} chartMonthSelector.appendChild(o);}); if(!hCM && recordedEntries.length > 0){const o=document.createElement('option');o.value=cMS;o.textContent=`${cMS} (Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); o.selected=true;} else if (!hCM) { const o=document.createElement('option');o.value=cMS;o.textContent=`${cMS} (Atual)`; chartMonthSelector.appendChild(o); o.selected=true;} }
+            function renderCharts(selectedMonthYear) {
                  const [sM, sY]=selectedMonthYear.split('/').map(Number); const eSM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()+1===sM && d.getFullYear()===sY;}); const dISM=new Date(sY, sM, 0).getDate(); const dH=Array(dISM).fill(0); eSM.forEach(e=>{dH[new Date(e.date+'T00:00:00').getDate()-1]+=e.hours;}); const lbls=Array.from({length: dISM}, (_,i)=>i+1); if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();}
                 monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'bar',data:{labels:lbls, datasets:[{label:`Horas Diárias (${selectedMonthYear})`, data:dH, backgroundColor:primaryColor, borderColor:primaryColor, borderWidth:0, borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true, title:{display:false},ticks:{color:textMutedColor,padding:10}, grid:{color:gridColor,drawBorder:false}}, x:{title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}}, plugins:{tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${ctx.parsed.y!==null?ctx.parsed.y.toFixed(1):0}h`}}, legend:{display:false}}}});
             }
 
-             // Combined Update Function
             function updateAllDisplays() {
                 updateDashboard();
                 updateStatistics();
-                populateMonthSelector(); // Needs to run before potential chart update
+                populateMonthSelector();
                  const selectedMonth = chartMonthSelector.value || getMonthYearString(new Date());
-                // Only render chart if month available AND there's data to show
                  if (selectedMonth && recordedEntries.length > 0) {
                     renderCharts(selectedMonth);
-                } else { // Clear chart and show message if no data for any month
+                } else {
                      if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy();
                     const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(recordedEntries.length === 0 ? `Registre suas horas para ver o gráfico.` : `Nenhum registro no mês selecionado.`, ctx.canvas.width / 2, ctx.canvas.height / 2 ); ctx.restore();
                 }
             }
 
-            // --- Event Listeners (Added Tag Select Logic) ---
-            // Event listeners for forms, goal, chart selector, clear button (unchanged logic, rely on updateAllDisplays)
-             recordForm.addEventListener('submit', handleRecordSubmit); clearRecordFormBtn.addEventListener('click', clearRecordForm); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); chartMonthSelector.addEventListener('change', (event)=>{ if(event.target.value) {renderCharts(event.target.value);} else { /* Handle no month selected if needed*/ updateAllDisplays();} }); clearAllDataBtn.addEventListener('click', handleClearAllData);
+            recordForm.addEventListener('submit', handleRecordSubmit); clearRecordFormBtn.addEventListener('click', clearRecordForm); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); chartMonthSelector.addEventListener('change', (event)=>{ if(event.target.value) {renderCharts(event.target.value);} else { updateAllDisplays();} }); clearAllDataBtn.addEventListener('click', handleClearAllData);
 
-            // --- Initialization ---
              function init() {
                 console.log("Initializing Pioneer Tracker v4...");
                 loadData();
@@ -603,13 +539,13 @@
                  clearRecordForm(); clearPlanForm();
                  renderHistory(); renderPlanning();
                  document.querySelectorAll('.card').forEach(card => { const sBE = (card.id === 'record-card'); if (card.classList.contains('expanded') !== sBE) { toggleCard(card); } else { const ic=card.querySelector('.toggle-icon'); if(ic) ic.textContent = sBE ? '▲' : '▼';} });
-                 updateAllDisplays(); // Single call to update everything
+                 updateAllDisplays();
                  console.log("Initialization complete.");
             }
 
             init();
 
-        }); // End DOMContentLoaded
+        });
     </script>
 
 </body>
