@@ -21,7 +21,6 @@
             --placeholder-color: rgba(235, 235, 245, 0.3);
             --dialog-backdrop: rgba(0, 0, 0, 0.7);
             --accent-color-progress: #30D158;
-
             --font-family: var(--system-font);
             --border-radius: 10px;
             --card-padding: 18px;
@@ -30,56 +29,15 @@
             --transition-speed-fast: 0.2s;
             --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { height: 100%; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: var(--font-family);
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            line-height: 1.5;
-            padding: var(--outer-padding);
-            overscroll-behavior-y: contain;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            font-size: 16px;
-        }
-
-        #dashboard-box {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 15px var(--card-padding);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            text-align: center;
-        }
-        .dashboard-item {}
-        .dashboard-label {
-            font-size: 0.85em;
-            color: var(--text-color-secondary);
-            margin-bottom: 4px;
-            display: block;
-        }
-        .dashboard-value {
-            font-size: 1.8em;
-            font-weight: 600;
-            color: var(--primary-color);
-            line-height: 1.1;
-        }
-         .dashboard-value .unit {
-             font-size: 0.6em;
-             font-weight: 500;
-             color: var(--text-color-secondary);
-             margin-left: 2px;
-         }
-
+        body { font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color); line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px; }
+        #dashboard-box { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 15px var(--card-padding); margin-bottom: 20px; display: flex; justify-content: space-around; align-items: center; text-align: center; }
+        .dashboard-label { font-size: 0.85em; color: var(--text-color-secondary); margin-bottom: 4px; display: block; }
+        .dashboard-value { font-size: 1.8em; font-weight: 600; color: var(--primary-color); line-height: 1.1; }
+        .dashboard-value .unit { font-size: 0.6em; font-weight: 500; color: var(--text-color-secondary); margin-left: 2px; }
         #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-
         h1 { display: none; }
-
         .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
         .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
         .card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
@@ -90,77 +48,54 @@
         .card.expanded .toggle-icon { transform: rotate(180deg); }
         .card-content { padding: 0 var(--card-padding) 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
         .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
-
-
         .form-group { margin-bottom: 16px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
-        input[type="date"], input[type="number"], input[type="text"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
-         select {
-             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
-             background-repeat: no-repeat;
-             background-position: right 14px center;
-             background-size: 12px 12px;
-             padding-right: 40px;
-        }
-         select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); }
+        input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
+         input[type="search"] { padding-right: 35px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 16px; }
+         input[type="search"]::-webkit-search-cancel-button{ appearance: none; height: 14px; width: 14px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>'); background-size: 14px 14px; cursor: pointer; }
 
+         select { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 14px center; background-size: 12px 12px; padding-right: 40px; }
+         select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
         input::placeholder, textarea::placeholder { color: var(--placeholder-color); opacity: 1; }
         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
-        input[type="number"] { -moz-appearance: textfield; }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         textarea { resize: vertical; min-height: 90px; }
-
         button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: calc(50% - 4px); }
         @media (min-width: 600px) { button { width: auto; } } button:last-child { margin-right: 0; }
         button:hover { background-color: #007aff; transform: translateY(-1px); } button:active { transform: translateY(0px); background-color: #3498ff; }
         button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; }
         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; transform: translateY(-1px); } button.danger:active { background-color: #ff5a52; transform: translateY(0px); }
         .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; }
-
-
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
         .stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
         .stat-value { font-size: 1.7em; font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; }
         .stat-label { font-size: 0.85em; color: var(--text-color-secondary); }
         .progress-bar-container { background-color: var(--border-color); border-radius: 5px; overflow: hidden; height: 8px; margin-top: 8px; }
         .progress-bar { background-color: var(--accent-color-progress); height: 100%; width: 0; transition: width var(--transition-speed) ease-out; }
-
-
-        .data-list { list-style: none; padding: 0; max-height: 350px; overflow-y: auto; margin-top: 15px; }
+        #history-controls { margin-bottom: 15px; display: flex; gap: 10px; }
+        .history-search-input { flex-grow: 1; }
+        #showing-results-label { font-size: 0.85em; color: var(--text-color-secondary); margin-top: 5px; display: block; text-align: right; padding-right: var(--card-padding); min-height: 1.2em;}
+        .data-list { list-style: none; padding: 0; max-height: 400px; overflow-y: auto; margin-top: 0; }
         .data-list li { background-color: transparent; border-bottom: 1px solid var(--border-color); padding: 14px var(--card-padding); margin: 0; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; transition: background-color var(--transition-speed-fast) ease; }
         .data-list li:last-child { border-bottom: none; }
         .data-list li:hover { background-color: rgba(255, 255, 255, 0.02); }
         .entry-details { font-size: 0.95em; flex-grow: 1; margin-right: 10px; line-height: 1.4; padding-bottom: 5px; }
         .entry-details strong { color: var(--text-color); font-weight: 500; }
         .entry-details .hours { color: var(--primary-color); font-weight: 600; margin-left: 5px; margin-right: 5px; }
-         .entry-details .tag-badge {
-             display: inline-block;
-             background-color: var(--input-bg);
-             color: var(--text-color-secondary);
-             font-size: 0.75em;
-             padding: 2px 6px;
-             border-radius: 5px;
-             margin-left: 8px;
-             vertical-align: middle;
-         }
-         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; }
+         .entry-details .tag-badge { display: inline-block; background-color: var(--input-bg); color: var(--text-color-secondary); font-size: 0.75em; padding: 2px 6px; border-radius: 5px; margin-left: 8px; vertical-align: middle; }
+         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 6em; overflow: hidden;}
          .entry-actions { flex-shrink: 0; align-self: center; }
         .entry-actions button, .plan-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
         .plan-actions button { margin-top: 5px; }
         .entry-actions button.secondary, .plan-actions button.secondary { background-color: #3a3a3c; }
-
-
         .chart-container { position: relative; height: 250px; width: 100%; margin-top: 25px; }
-
         .dialog-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dialog-backdrop); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease; }
         .dialog-backdrop.visible { opacity: 1; visibility: visible; }
         .dialog-content { background-color: #2c2c2e; color: var(--text-color); padding: 25px; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 320px; transform: scale(0.95); transition: transform var(--transition-speed) ease; }
         .dialog-backdrop.visible .dialog-content { transform: scale(1); }
         .dialog-content p { margin-bottom: 25px; font-size: 1.05em; line-height: 1.5; }
         .dialog-actions button { width: calc(50% - 5px); margin-top: 0; padding: 10px; font-size: 1em;}
-
-
         .hidden { display: none !important; }
         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         .text-center { text-align: center; } .mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
@@ -264,7 +199,13 @@
                 <span class="toggle-icon">▼</span>
             </div>
              <div class="card-content">
-                 <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px;">Registros Salvos:</h3> <ul id="history-list" class="data-list"> <li class="placeholder hidden">Nenhum registro encontrado.</li> </ul>
+                 <div id="history-controls">
+                    <input type="search" id="history-search-input" class="history-search-input" placeholder="Pesquisar no histórico...">
+                 </div>
+                 <ul id="history-list" class="data-list">
+                    <li class="placeholder hidden">Nenhum registro encontrado.</li>
+                 </ul>
+                 <span id="showing-results-label"></span>
             </div>
         </div>
 
@@ -319,7 +260,9 @@
             const chartMonthSelector = document.getElementById('chart-month-selector');
             const monthlyHoursChartCtx = document.getElementById('monthlyHoursChart').getContext('2d');
             const historyList = document.getElementById('history-list');
+            const historySearchInput = document.getElementById('history-search-input');
             const historyListPlaceholder = historyList.querySelector('.placeholder');
+             const showingResultsLabel = document.getElementById('showing-results-label');
             const clearAllDataBtn = document.getElementById('clear-all-data-btn');
             const confirmationDialog = document.getElementById('confirmation-dialog');
             const dialogMessage = document.getElementById('dialog-message');
@@ -334,6 +277,7 @@
             let currentConfirmCallback = null;
             let isDateInputVisible = false;
             const DEFAULT_TAG = "Casa em casa";
+             const HISTORY_MONTH_LIMIT = 3; // Show last 3 months by default
 
             const computedStyles = getComputedStyle(document.body);
             const textColor = computedStyles.getPropertyValue('--text-color').trim();
@@ -342,205 +286,149 @@
             const tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim();
             const primaryColor = computedStyles.getPropertyValue('--primary-color').trim();
 
+            const MONTH_NAMES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+
             const LOCAL_STORAGE_KEYS = {
                 ENTRIES: 'pioneerTracker_entries_v4',
                 PLANS: 'pioneerTracker_plans_v1',
                 SETTINGS: 'pioneerTracker_settings_v1'
             };
 
-            function getCurrentDateString() { const t=new Date();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
-            function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
-            function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
-            function getStartOfWeek(date = new Date()) { const dOW = date.getDay(); const diff = date.getDate() - dOW; const sOW = new Date(date.setDate(diff)); sOW.setHours(0,0,0,0); return `${sOW.getFullYear()}-${String(sOW.getMonth()+1).padStart(2,'0')}-${String(sOW.getDate()).padStart(2,'0')}`; }
+             function getCurrentDateString() { const t=new Date();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
+             function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
+             function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
+             function getStartOfWeek(date = new Date()) { const dOW = date.getDay(); const diff = date.getDate() - dOW; const sOW = new Date(date.setDate(diff)); sOW.setHours(0,0,0,0); return `${sOW.getFullYear()}-${String(sOW.getMonth()+1).padStart(2,'0')}-${String(sOW.getDate()).padStart(2,'0')}`; }
+             function getDateMonthsAgo(months) { const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0,0,0,0); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+             function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/')) return monthYearString; const [m, y] = monthYearString.split('/'); const monthIndex = parseInt(m, 10) - 1; return `${MONTH_NAMES_PT[monthIndex]} de ${y}`; }
+             function formatHoursExtensive(hoursDecimal) { const hours = Math.round(hoursDecimal || 0); return `${hours} ${hours === 1 ? 'hora' : 'horas'}`; }
 
-            function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); console.log("Data saved.");} catch(e) { console.error("SAVE ERR:",e); alert("ERRO AO SALVAR!");} }
+
+             function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); console.log("Data saved.");} catch(e) { console.error("SAVE ERR:",e); alert("ERRO AO SALVAR!");} }
             function loadData() {
-                 try {
-                    let storedEntriesRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
-                     if (storedEntriesRaw) {
-                         try {
-                            const sampleEntry = JSON.parse(storedEntriesRaw)[0];
-                             if (sampleEntry && !('tag' in sampleEntry)) {
-                                console.warn("Old data format (v3) detected, potentially missing tags. Assigning default.");
-                                const entriesV3 = JSON.parse(storedEntriesRaw);
-                                recordedEntries = entriesV3.map(entry => ({...entry, tag: DEFAULT_TAG }));
-                                storedEntriesRaw = null;
-                             }
-                         } catch {
-                              storedEntriesRaw = null; console.error("Error parsing sample entry for version check.");
-                         }
-                     }
+                try { let storedEntriesRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (storedEntriesRaw) { try { const sampleEntry = JSON.parse(storedEntriesRaw)[0]; if (sampleEntry && !('tag' in sampleEntry)) { console.warn("Old data format (v3) detected, potentially missing tags. Assigning default."); const entriesV3 = JSON.parse(storedEntriesRaw); recordedEntries = entriesV3.map(entry => ({...entry, tag: DEFAULT_TAG })); storedEntriesRaw = null; } } catch { storedEntriesRaw = null; console.error("Error parsing sample entry for version check."); } } if (storedEntriesRaw) { recordedEntries = JSON.parse(storedEntriesRaw); } else if (!recordedEntries.length) { recordedEntries = []; } recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); const storedPlans=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = storedPlans ? JSON.parse(storedPlans) : []; plannedEntries.sort((a,b) => new Date(a.date) - new Date(b.date)); const storedSettings=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings = storedSettings ? JSON.parse(storedSettings) : { monthlyGoal: 70 }; monthlyGoalInput.value = settings.monthlyGoal; console.log("Data loaded."); } catch (error) { console.error("Load Error:", error); recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70 }; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); localStorage.removeItem('pioneerTracker_entries_v3'); localStorage.removeItem('pioneerTracker_entries_v2'); } catch (e) {} alert("Erro ao carregar dados. Resetando."); }
+             }
 
-                     if (storedEntriesRaw) {
-                         recordedEntries = JSON.parse(storedEntriesRaw);
-                     } else if (!recordedEntries.length) {
-                        recordedEntries = [];
-                     }
+             function setDateInputVisibility(visible) { isDateInputVisible = visible; if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent = (recordDateInput.value === getCurrentDateString() || !recordDateInput.value) ? "Hoje" : formatDisplayDate(recordDateInput.value); } }
+             changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
 
-                    recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                     const storedPlans=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = storedPlans ? JSON.parse(storedPlans) : []; plannedEntries.sort((a,b) => new Date(a.date) - new Date(b.date));
-                     const storedSettings=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings = storedSettings ? JSON.parse(storedSettings) : { monthlyGoal: 70 }; monthlyGoalInput.value = settings.monthlyGoal;
-                     console.log("Data loaded.");
-                 } catch (error) {
-                     console.error("Load Error:", error);
-                      recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70 };
-                      try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); localStorage.removeItem('pioneerTracker_entries_v3'); localStorage.removeItem('pioneerTracker_entries_v2'); } catch (e) {}
-                      alert("Erro ao carregar dados. Resetando.");
-                 }
-            }
-
-            function setDateInputVisibility(visible) { isDateInputVisible = visible; if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent = (recordDateInput.value === getCurrentDateString()) ? "Hoje" : formatDisplayDate(recordDateInput.value); } }
-            changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
-
-            function toggleCard(cardElement) { if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';} }
+             function toggleCard(cardElement) { if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';} }
             appElement.addEventListener('click', (event) => { const h=event.target.closest('.card-header');if(h){const c=h.closest('.card');if(c){toggleCard(c);}} });
             document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
 
-            function clearRecordForm() {
-                recordForm.reset(); recordIdInput.value=''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG;
-                saveRecordBtn.textContent='Salvar Registro'; saveRecordBtn.classList.remove('editing'); currentEditingId=null;
-            }
-
+            function clearRecordForm() { recordForm.reset(); recordIdInput.value=''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG; saveRecordBtn.textContent='Salvar Registro'; saveRecordBtn.classList.remove('editing'); currentEditingId=null; }
             function handleRecordSubmit(event) {
-                event.preventDefault();
-                 const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now();
-                 const date = (isDateInputVisible || recordDateInput.value !== getCurrentDateString()) ? recordDateInput.value : getCurrentDateString();
-                const hours = parseFloat(recordHoursInput.value) || 0;
-                const tag = recordTagSelect.value || DEFAULT_TAG;
-                const notes = recordNotesInput.value.trim();
-
-                if(hours <= 0){ alert("Insira Horas (> 0)."); return; } if (!date){ alert("Data inválida."); return; }
-
-                const newEntry = { id, date, hours, tag, notes };
-
-                const existingIndex = recordedEntries.findIndex(entry => entry.id === id);
-                 if (existingIndex > -1) { recordedEntries[existingIndex] = newEntry; } else { recordedEntries.push(newEntry); }
-                recordedEntries.sort((a,b) => new Date(b.date)-new Date(a.date));
-
-                saveData(); clearRecordForm(); renderHistory(); updateAllDisplays();
-                 showFeedback('Registro salvo!', 'success');
-             }
-
+                 event.preventDefault(); const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || recordDateInput.value !== getCurrentDateString()) ? recordDateInput.value : getCurrentDateString(); const hours = parseFloat(recordHoursInput.value) || 0; const tag = recordTagSelect.value || DEFAULT_TAG; const notes = recordNotesInput.value.trim(); if(hours <= 0){ alert("Insira Horas (> 0)."); return; } if (!date){ alert("Data inválida."); return; } const newEntry = { id, date, hours, tag, notes }; const existingIndex = recordedEntries.findIndex(entry => entry.id === id); if (existingIndex > -1) { recordedEntries[existingIndex] = newEntry; } else { recordedEntries.push(newEntry); } recordedEntries.sort((a,b) => new Date(b.date)-new Date(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('Registro salvo!', 'success');
+            }
              function editRecordEntry(id) {
-                 const entry = recordedEntries.find(e => e.id === id);
-                 if (entry) {
-                     if(!recordCard.classList.contains('expanded')){toggleCard(recordCard);}
-                     currentEditingId = id; recordIdInput.value=entry.id; recordDateInput.value=entry.date;
-                     if(entry.date !== getCurrentDateString()){setDateInputVisibility(true);} else {setDateInputVisibility(false);}
-                     recordHoursInput.value=entry.hours; recordTagSelect.value = entry.tag || DEFAULT_TAG;
-                     recordNotesInput.value = entry.notes || '';
-                     saveRecordBtn.textContent='Atualizar Registro'; saveRecordBtn.classList.add('editing');
-                     recordCard.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput.focus();
-                 }
+                 const entry = recordedEntries.find(e => e.id === id); if (entry) { if(!recordCard.classList.contains('expanded')){toggleCard(recordCard);} currentEditingId = id; recordIdInput.value=entry.id; recordDateInput.value=entry.date; if(entry.date !== getCurrentDateString()){setDateInputVisibility(true);} else {setDateInputVisibility(false);} recordHoursInput.value=entry.hours; recordTagSelect.value = entry.tag || DEFAULT_TAG; recordNotesInput.value = entry.notes || ''; saveRecordBtn.textContent='Atualizar Registro'; saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput.focus(); }
             }
+            function deleteRecordEntry(id) { showConfirmationDialog(`Tem certeza que deseja excluir este registro?`, () => { recordedEntries = recordedEntries.filter(entry => entry.id !== id); saveData(); updateAllDisplays(); showFeedback('Registro excluído.', 'info'); if(currentEditingId === id){ clearRecordForm(); } }); }
 
-            function deleteRecordEntry(id) {
-                 showConfirmationDialog(`Tem certeza que deseja excluir este registro?`, () => {
-                     recordedEntries = recordedEntries.filter(entry => entry.id !== id);
-                     saveData(); renderHistory(); updateAllDisplays();
-                     showFeedback('Registro excluído.', 'info');
-                    if(currentEditingId === id){ clearRecordForm(); }
-                });
-            }
+             function clearPlanForm(){ planForm.reset();planIdInput.value='';planDateInput.value='';savePlanBtn.textContent='Salvar Plano';currentEditingId=null; }
+             function handlePlanSubmit(event){ event.preventDefault();const id=planIdInput.value?parseInt(planIdInput.value,10):Date.now();const date=planDateInput.value;const pH=parseFloat(planHoursInput.value);const todayStr=getCurrentDateString();if(!date||!pH||pH<=0){alert("Preencha Data Futura e Horas (> 0).");return;} if(date<todayStr){alert("Data deve ser hoje ou futura.");return;} const nP={id,date,plannedHours:pH}; const eI=plannedEntries.findIndex(p=>p.id===id);if(eI>-1){plannedEntries[eI]=nP;}else{plannedEntries.push(nP);} plannedEntries.sort((a,b)=>new Date(a.date)-new Date(b.date));saveData();clearPlanForm();renderPlanning();showFeedback('Planejamento salvo!','success'); }
+             function editPlanEntry(id){ const plan=plannedEntries.find(p=>p.id===id);if(plan){if(!planCard.classList.contains('expanded')){toggleCard(planCard);} currentEditingId=id;planIdInput.value=plan.id;planDateInput.value=plan.date;planHoursInput.value=plan.plannedHours;savePlanBtn.textContent='Atualizar Plano';planCard.scrollIntoView({behavior:'smooth',block:'start'});planDateInput.focus();} }
+             function deletePlanEntry(id){ showConfirmationDialog(`Excluir planejamento?`,()=>{plannedEntries=plannedEntries.filter(p=>p.id!==id);saveData();renderPlanning();showFeedback('Planejamento excluído.','info');if(currentEditingId===id){clearPlanForm();}}); }
 
-            function clearPlanForm(){ planForm.reset();planIdInput.value='';planDateInput.value='';savePlanBtn.textContent='Salvar Plano';currentEditingId=null; }
-            function handlePlanSubmit(event){ event.preventDefault();const id=planIdInput.value?parseInt(planIdInput.value,10):Date.now();const date=planDateInput.value;const pH=parseFloat(planHoursInput.value);const todayStr=getCurrentDateString();if(!date||!pH||pH<=0){alert("Preencha Data Futura e Horas (> 0).");return;} if(date<todayStr){alert("Data deve ser hoje ou futura.");return;} const nP={id,date,plannedHours:pH}; const eI=plannedEntries.findIndex(p=>p.id===id);if(eI>-1){plannedEntries[eI]=nP;}else{plannedEntries.push(nP);} plannedEntries.sort((a,b)=>new Date(a.date)-new Date(b.date));saveData();clearPlanForm();renderPlanning();showFeedback('Planejamento salvo!','success'); }
-            function editPlanEntry(id){ const plan=plannedEntries.find(p=>p.id===id);if(plan){if(!planCard.classList.contains('expanded')){toggleCard(planCard);} currentEditingId=id;planIdInput.value=plan.id;planDateInput.value=plan.date;planHoursInput.value=plan.plannedHours;savePlanBtn.textContent='Atualizar Plano';planCard.scrollIntoView({behavior:'smooth',block:'start'});planDateInput.focus();} }
-            function deletePlanEntry(id){ showConfirmationDialog(`Excluir planejamento?`,()=>{plannedEntries=plannedEntries.filter(p=>p.id!==id);saveData();renderPlanning();showFeedback('Planejamento excluído.','info');if(currentEditingId===id){clearPlanForm();}}); }
-
-            function handleGoalSave(){ const nG=parseInt(monthlyGoalInput.value,10);if(!isNaN(nG)&&nG>0){settings.monthlyGoal=nG;saveData();updateStatistics();showFeedback('Meta atualizada!','success');}else{alert("Meta inválida.");monthlyGoalInput.value=settings.monthlyGoal;} }
+             function handleGoalSave(){ const nG=parseInt(monthlyGoalInput.value,10);if(!isNaN(nG)&&nG>0){settings.monthlyGoal=nG;saveData();updateStatistics();showFeedback('Meta atualizada!','success');}else{alert("Meta inválida.");monthlyGoalInput.value=settings.monthlyGoal;} }
             function handleClearAllData() {
-                 showConfirmationDialog('ATENÇÃO! Apagar TUDO? IRREVERSÍVEL!', () => {
-                    recordedEntries = []; plannedEntries = []; settings = {monthlyGoal: 70}; monthlyGoalInput.value = settings.monthlyGoal;
-                    saveData(); clearRecordForm(); clearPlanForm(); renderHistory(); renderPlanning(); updateAllDisplays();
-                     showFeedback('Todos os dados apagados.', 'danger');
-                     document.querySelectorAll('.card').forEach(c => { if(c.id!=='record-card'&&c.classList.contains('expanded')) toggleCard(c); else if(c.id==='record-card'&&!c.classList.contains('expanded')) toggleCard(c); });
-                 });
+                showConfirmationDialog('ATENÇÃO! Apagar TUDO? IRREVERSÍVEL!', () => { recordedEntries = []; plannedEntries = []; settings = {monthlyGoal: 70}; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); renderHistory(); renderPlanning(); updateAllDisplays(); showFeedback('Todos os dados apagados.', 'danger'); document.querySelectorAll('.card').forEach(c => { if(c.id!=='record-card'&&c.classList.contains('expanded')) toggleCard(c); else if(c.id==='record-card'&&!c.classList.contains('expanded')) toggleCard(c); }); });
              }
 
-             function showConfirmationDialog(message,onConfirm){dialogMessage.textContent=message;currentConfirmCallback=onConfirm;confirmationDialog.classList.add('visible');} function hideConfirmationDialog(){confirmationDialog.classList.remove('visible');currentConfirmCallback=null;} dialogConfirmBtn.addEventListener('click',()=>{if(typeof currentConfirmCallback==='function'){currentConfirmCallback();} hideConfirmationDialog();}); dialogCancelBtn.addEventListener('click',hideConfirmationDialog); confirmationDialog.addEventListener('click',(e)=>{if(e.target===confirmationDialog){hideConfirmationDialog();}});
+            function showConfirmationDialog(message,onConfirm){dialogMessage.textContent=message;currentConfirmCallback=onConfirm;confirmationDialog.classList.add('visible');} function hideConfirmationDialog(){confirmationDialog.classList.remove('visible');currentConfirmCallback=null;} dialogConfirmBtn.addEventListener('click',()=>{if(typeof currentConfirmCallback==='function'){currentConfirmCallback();} hideConfirmationDialog();}); dialogCancelBtn.addEventListener('click',hideConfirmationDialog); confirmationDialog.addEventListener('click',(e)=>{if(e.target===confirmationDialog){hideConfirmationDialog();}});
             function showFeedback(message,type='info'){console.log(`Feedback[${type}]:${message}`);}
 
              function updateDashboard() {
-                 const today = new Date();
-                 const currentMonth = today.getMonth();
-                 const currentYear = today.getFullYear();
-                 const startOfWeekStr = getStartOfWeek(today);
-
-                 let monthHours = 0;
-                 let weekHours = 0;
-
-                 recordedEntries.forEach(entry => {
-                    const entryDate = new Date(entry.date + 'T00:00:00');
-                     if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) {
-                        monthHours += entry.hours;
-                    }
-                     if (entry.date >= startOfWeekStr && entry.date <= getCurrentDateString()) {
-                        weekHours += entry.hours;
-                    }
-                 });
-
-                dashboardMonthHours.innerHTML = `${monthHours.toFixed(1).replace('.',',')}<span class="unit">h</span>`;
-                 dashboardWeekHours.innerHTML = `${weekHours.toFixed(1).replace('.',',')}<span class="unit">h</span>`;
+                const today=new Date();const cM=today.getMonth();const cY=today.getFullYear();const sOW=getStartOfWeek(today);let mH=0;let wH=0; recordedEntries.forEach(e=>{const eD=new Date(e.date+'T00:00:00'); if(eD.getMonth()===cM && eD.getFullYear()===cY){mH+=e.hours;} if(e.date>=sOW && e.date<=getCurrentDateString()){wH+=e.hours;}}); dashboardMonthHours.innerHTML=`${mH.toFixed(1).replace('.',',')}<span class="unit">h</span>`; dashboardWeekHours.innerHTML=`${wH.toFixed(1).replace('.',',')}<span class="unit">h</span>`;
              }
 
-            function renderHistory() {
-                historyList.innerHTML=''; if(recordedEntries.length === 0){historyListPlaceholder.classList.remove('hidden'); return;} historyListPlaceholder.classList.add('hidden');
-                recordedEntries.forEach(entry=>{
-                    const li = document.createElement('li'); li.dataset.id=entry.id;
-                     const tagDisplay = entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : '';
-                     const notesPreview = entry.notes ? `<span class="notes-preview">${entry.notes}</span>` : '<span class="notes-preview" style="opacity: 0.5;">Sem notas</span>';
-                    li.innerHTML = `
-                         <div class="entry-details">
-                            <strong>${formatDisplayDate(entry.date)}:</strong>
-                            <span class="hours">${entry.hours}h</span>
-                             ${tagDisplay}
-                            ${notesPreview}
-                         </div>
-                         <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>
-                     `;
-                     li.querySelector('.edit-btn').addEventListener('click',(e)=>{e.stopPropagation(); editRecordEntry(entry.id);}); li.querySelector('.delete-btn').addEventListener('click',(e)=>{e.stopPropagation(); deleteRecordEntry(entry.id);}); historyList.appendChild(li);
-                 });
-            }
+            function renderHistory(entriesToShow = null) {
+                historyList.innerHTML = '';
+                const searchTerm = historySearchInput.value.trim().toLowerCase();
+                let results = [];
+                let labelText = '';
+
+                if (entriesToShow) {
+                    results = entriesToShow;
+                    labelText = `${results.length} resultado(s) para "${searchTerm}"`;
+                } else if (searchTerm) {
+                     results = recordedEntries.filter(entry => {
+                         const hoursRoundedStr = Math.round(entry.hours || 0).toString();
+                         const displayDateFormatted = formatDisplayDate(entry.date);
+                         return (
+                            displayDateFormatted.includes(searchTerm) ||
+                            entry.hours.toString().replace('.',',').includes(searchTerm) ||
+                            hoursRoundedStr.includes(searchTerm) ||
+                             (entry.tag || '').toLowerCase().includes(searchTerm) ||
+                            (entry.notes || '').toLowerCase().includes(searchTerm)
+                         );
+                     });
+                     labelText = `${results.length} resultado(s) encontrado(s)`;
+                } else {
+                    const threeMonthsAgo = getDateMonthsAgo(HISTORY_MONTH_LIMIT);
+                    results = recordedEntries.filter(entry => entry.date >= threeMonthsAgo);
+                    labelText = `Mostrando registros dos últimos ${HISTORY_MONTH_LIMIT} meses`;
+                    if(recordedEntries.length > 0 && results.length === 0) {
+                        labelText = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses (Use a busca para ver mais antigos)`;
+                    } else if (recordedEntries.length === 0) {
+                         labelText = ''; // No need for label if list is empty anyway
+                    }
+                }
+
+                 showingResultsLabel.textContent = labelText;
+
+                if (results.length === 0 && recordedEntries.length > 0 && !searchTerm) { // Added condition: only show this placeholder if default view is empty but data exists
+                      historyListPlaceholder.textContent = "Nenhum registro recente. Use a busca para ver mais antigos.";
+                      historyListPlaceholder.classList.remove('hidden');
+                 } else if (results.length === 0) {
+                     historyListPlaceholder.textContent = "Nenhum registro encontrado.";
+                     historyListPlaceholder.classList.remove('hidden');
+                } else {
+                     historyListPlaceholder.classList.add('hidden');
+                 }
+
+
+                results.forEach(entry => {
+                     const li = document.createElement('li'); li.dataset.id=entry.id;
+                    const tagDisplay = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : '';
+                    const notesPreview = entry.notes ? `<span class="notes-preview">${entry.notes}</span>` : '<span class="notes-preview" style="opacity: 0.5;">Sem notas</span>';
+                     const hoursDisplay = formatHoursExtensive(entry.hours);
+                    li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hoursDisplay}</span> ${tagDisplay} ${notesPreview} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`;
+                    li.querySelector('.edit-btn').addEventListener('click',(e)=>{e.stopPropagation(); editRecordEntry(entry.id);}); li.querySelector('.delete-btn').addEventListener('click',(e)=>{e.stopPropagation(); deleteRecordEntry(entry.id);}); historyList.appendChild(li);
+                });
+             }
+
              function renderPlanning() {
                  planningList.innerHTML = ''; const todayStr = getCurrentDateString(); const futurePlans = plannedEntries.filter(plan => plan.date >= todayStr).sort((a,b)=>new Date(a.date)-new Date(b.date)); if(futurePlans.length===0){planningListPlaceholder.classList.remove('hidden');return;} planningListPlaceholder.classList.add('hidden');
-                 futurePlans.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${plan.plannedHours}h</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); });
-            }
-            function updateStatistics() {
-                const cM=new Date().getMonth(); const cY=new Date().getFullYear(); const eM = recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()===cM && d.getFullYear()===cY;}); let tH=0;const aD=new Set(); eM.forEach(e=>{tH+=e.hours;aD.add(e.date);}); const g=settings.monthlyGoal||70; const pP=g>0?Math.min(Math.round((tH/g)*100),100):0; const aH=aD.size>0?(tH/aD.size).toFixed(1):0; const dAC=aD.size; statsMonthHours.textContent=tH.toFixed(1).replace('.',',');statsMonthGoalProgress.textContent=`${pP}%`;statsMonthProgressBar.style.width=`${pP}%`;statsAvgHoursDay.textContent=aH.replace('.',',');statsMonthDaysActive.textContent=dAC;
-            }
-            function populateMonthSelector() { const aM = new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM = Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMS=getMonthYearString(new Date());let hCM=false; sM.forEach(mS=>{const o=document.createElement('option');o.value=mS;o.textContent=mS;if(mS===cMS){o.selected=true;hCM=true;} chartMonthSelector.appendChild(o);}); if(!hCM && recordedEntries.length > 0){const o=document.createElement('option');o.value=cMS;o.textContent=`${cMS} (Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); o.selected=true;} else if (!hCM) { const o=document.createElement('option');o.value=cMS;o.textContent=`${cMS} (Atual)`; chartMonthSelector.appendChild(o); o.selected=true;} }
-            function renderCharts(selectedMonthYear) {
-                 const [sM, sY]=selectedMonthYear.split('/').map(Number); const eSM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()+1===sM && d.getFullYear()===sY;}); const dISM=new Date(sY, sM, 0).getDate(); const dH=Array(dISM).fill(0); eSM.forEach(e=>{dH[new Date(e.date+'T00:00:00').getDate()-1]+=e.hours;}); const lbls=Array.from({length: dISM}, (_,i)=>i+1); if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();}
-                monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'bar',data:{labels:lbls, datasets:[{label:`Horas Diárias (${selectedMonthYear})`, data:dH, backgroundColor:primaryColor, borderColor:primaryColor, borderWidth:0, borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true, title:{display:false},ticks:{color:textMutedColor,padding:10}, grid:{color:gridColor,drawBorder:false}}, x:{title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}}, plugins:{tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${ctx.parsed.y!==null?ctx.parsed.y.toFixed(1):0}h`}}, legend:{display:false}}}});
-            }
+                futurePlans.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; const hoursDisplay = formatHoursExtensive(plan.plannedHours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hoursDisplay}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); });
+             }
+             function updateStatistics() { const cM=new Date().getMonth(); const cY=new Date().getFullYear(); const eM = recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()===cM && d.getFullYear()===cY;}); let tH=0;const aD=new Set(); eM.forEach(e=>{tH+=e.hours;aD.add(e.date);}); const g=settings.monthlyGoal||70; const pP=g>0?Math.min(Math.round((tH/g)*100),100):0; const aH=aD.size>0?(tH/aD.size).toFixed(1):0; const dAC=aD.size; statsMonthHours.textContent=tH.toFixed(1).replace('.',',');statsMonthGoalProgress.textContent=`${pP}%`;statsMonthProgressBar.style.width=`${pP}%`;statsAvgHoursDay.textContent=aH.replace('.',',');statsMonthDaysActive.textContent=dAC; }
+            function populateMonthSelector() { const aM = new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM = Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMSValue=getMonthYearString(new Date()); const cMSFormatted=formatMonthYearExtensive(cMSValue); let hCM=false; sM.forEach(mSValue=>{const o=document.createElement('option');const mSFormatted=formatMonthYearExtensive(mSValue);o.value=mSValue;o.textContent=mSFormatted;if(mSValue===cMSValue){o.selected=true;hCM=true;} chartMonthSelector.appendChild(o);}); if(!hCM && recordedEntries.length > 0){const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); o.selected=true;} else if (!hCM) { const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.appendChild(o); o.selected=true;} }
+            function renderCharts(selectedMonthYearValue) {
+                 const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue); const [sM, sY]=selectedMonthYearValue.split('/').map(Number); const eSM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()+1===sM && d.getFullYear()===sY;}); const dISM=new Date(sY, sM, 0).getDate(); const dH=Array(dISM).fill(0); eSM.forEach(e=>{dH[new Date(e.date+'T00:00:00').getDate()-1]+=e.hours;}); const lbls=Array.from({length: dISM}, (_,i)=>i+1); if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();}
+                 monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'bar',data:{labels:lbls, datasets:[{label:`Horas Diárias (${selectedMonthYearFormatted})`, data:dH, backgroundColor:primaryColor, borderColor:primaryColor, borderWidth:0, borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true, title:{display:false},ticks:{color:textMutedColor,padding:10}, grid:{color:gridColor,drawBorder:false}}, x:{title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}}, plugins:{ title: { display: true, text: selectedMonthYearFormatted, color: textMutedColor, font: {size: 14, weight: 'normal'}, padding: {bottom: 15} }, tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}`}}, legend:{display:false}}}});
+             }
 
             function updateAllDisplays() {
-                updateDashboard();
-                updateStatistics();
-                populateMonthSelector();
-                 const selectedMonth = chartMonthSelector.value || getMonthYearString(new Date());
-                 if (selectedMonth && recordedEntries.length > 0) {
-                    renderCharts(selectedMonth);
-                } else {
-                     if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy();
-                    const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(recordedEntries.length === 0 ? `Registre suas horas para ver o gráfico.` : `Nenhum registro no mês selecionado.`, ctx.canvas.width / 2, ctx.canvas.height / 2 ); ctx.restore();
-                }
-            }
+                 updateDashboard(); updateStatistics(); populateMonthSelector();
+                 renderHistory();
+                 renderPlanning();
+                const selectedMonthValue = chartMonthSelector.value;
+                if (selectedMonthValue && recordedEntries.length > 0) {
+                    renderCharts(selectedMonthValue);
+                 } else {
+                    if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy();
+                     const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(recordedEntries.length === 0 ? `Registre suas horas para ver o gráfico.` : `Selecione um mês`, ctx.canvas.width / 2, ctx.canvas.height / 2 ); ctx.restore();
+                 }
+             }
+
+             historySearchInput.addEventListener('input', () => {
+                 renderHistory(); // Re-render history based on current search term
+             });
 
             recordForm.addEventListener('submit', handleRecordSubmit); clearRecordFormBtn.addEventListener('click', clearRecordForm); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); chartMonthSelector.addEventListener('change', (event)=>{ if(event.target.value) {renderCharts(event.target.value);} else { updateAllDisplays();} }); clearAllDataBtn.addEventListener('click', handleClearAllData);
 
              function init() {
-                console.log("Initializing Pioneer Tracker v4...");
-                loadData();
-                 recordDateInput.value = getCurrentDateString();
-                 setDateInputVisibility(false);
-                 clearRecordForm(); clearPlanForm();
-                 renderHistory(); renderPlanning();
-                 document.querySelectorAll('.card').forEach(card => { const sBE = (card.id === 'record-card'); if (card.classList.contains('expanded') !== sBE) { toggleCard(card); } else { const ic=card.querySelector('.toggle-icon'); if(ic) ic.textContent = sBE ? '▲' : '▼';} });
-                 updateAllDisplays();
-                 console.log("Initialization complete.");
+                 console.log("Initializing Pioneer Tracker v4.1..."); loadData(); recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); clearRecordForm(); clearPlanForm(); document.querySelectorAll('.card').forEach(card => { const sBE = (card.id === 'record-card'); if (card.classList.contains('expanded') !== sBE) { toggleCard(card); } else { const ic=card.querySelector('.toggle-icon'); if(ic) ic.textContent = sBE ? '▲' : '▼';} }); updateAllDisplays(); console.log("Initialization complete.");
             }
 
             init();
