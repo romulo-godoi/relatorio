@@ -338,7 +338,7 @@
             function clearPlanForm() { planForm.reset(); planIdInput.value = ''; planDateInput.value = ''; planHoursInput.value = ''; savePlanBtn.textContent = 'Salvar Plano'; currentEditingId=null; }
             function handlePlanSubmit(event){ event.preventDefault(); const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now(); const date = planDateInput.value; const hoursInput = planHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const todayStr = getCurrentDateString(); if (!date || isNaN(hours) || hours <= 0) { alert("Preencha a Data Futura e as Horas Planejadas (ex: 2:30, 45). Devem ser valores positivos."); planHoursInput.focus(); return; } if (date < todayStr) { alert("A data do planejamento deve ser hoje ou uma data futura."); planDateInput.focus(); return; } const nP = { id, date, hours }; const eI = plannedEntries.findIndex(p => p.id === id); if (eI > -1) { plannedEntries[eI] = nP; } else { plannedEntries.push(nP); } plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date)); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('Planejamento salvo!', 'success'); }
 
-            function markPlanAsDone(id) {
+             function markPlanAsDone(id) {
                 const planIndex = plannedEntries.findIndex(p => p.id === id);
                 if (planIndex === -1) {
                     console.error("Plano não encontrado para marcar como feito:", id);
@@ -346,20 +346,25 @@
                     return;
                 }
                 const plan = plannedEntries[planIndex];
+                const todayStr = getCurrentDateString();
+
+                // Decide a data do registro: data atual se feito ANTES, senão a data do plano.
+                const recordDate = todayStr < plan.date ? todayStr : plan.date;
+
                 const newRecordEntry = {
                     id: Date.now(),
-                    date: plan.date,
+                    date: recordDate, // Usa a data decidida
                     hours: plan.hours,
-                    tag: DEFAULT_TAG,
-                    notes: `Horas completadas do plano de ${formatDisplayDate(plan.date)}.`
+                    tag: DEFAULT_TAG, // Pode ser personalizado se necessário
+                    notes: `Horas completadas (plano original para ${formatDisplayDate(plan.date)}).` // Nota explicativa
                 };
 
                 recordedEntries.push(newRecordEntry);
-                recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-                plannedEntries.splice(planIndex, 1);
+                recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); // Mantém a ordenação
+                plannedEntries.splice(planIndex, 1); // Remove o plano concluído
 
                 saveData();
-                updateAllDisplays();
+                updateAllDisplays(); // Atualiza dashboard, histórico, etc.
                 showFeedback('Horas planejadas registradas!', 'success');
             }
 
@@ -371,7 +376,6 @@
             function showFeedback(message, type = 'info') { console.log(`Feedback[${type}]: ${message}`); const feedbackElement = document.createElement('div'); feedbackElement.textContent = message; feedbackElement.style.position = 'fixed'; feedbackElement.style.bottom = '20px'; feedbackElement.style.left = '50%'; feedbackElement.style.transform = 'translateX(-50%)'; feedbackElement.style.padding = '10px 20px'; feedbackElement.style.borderRadius = '8px'; feedbackElement.style.zIndex = '1100'; feedbackElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)'; feedbackElement.style.fontSize = '0.95em'; feedbackElement.style.transition = 'opacity 0.5s ease, bottom 0.5s ease'; feedbackElement.style.opacity = '0'; switch (type) { case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = 'var(--text-color)'; break; } document.body.appendChild(feedbackElement); setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '30px'; }, 10); setTimeout(() => { feedbackElement.style.opacity = '0'; feedbackElement.style.bottom = '10px'; }, 3500); setTimeout(() => { if (feedbackElement.parentNode) { feedbackElement.parentNode.removeChild(feedbackElement); } }, 4000); }
             function updateDashboard() { const today = new Date(); const cM = today.getMonth(); const cY = today.getFullYear(); const sOW = getStartOfWeek(today); let mH = 0; let wH = 0; recordedEntries.forEach(e => { const eD = new Date(e.date + 'T00:00:00'); if (eD.getMonth() === cM && eD.getFullYear() === cY) { mH += e.hours; } if (e.date >= sOW && e.date <= getCurrentDateString()) { wH += e.hours; } }); dashboardWeekHours.textContent = formatHoursExtensive(wH); const goal = settings.monthlyGoal || 70; const percent = goal > 0 ? Math.min(100, (mH / goal) * 100) : 0; dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(mH, goal); dashboardMonthTotal.innerHTML = `Mês: <strong>${formatHoursExtensive(mH)}</strong>`; const lastDay = new Date(cY, cM + 1, 0).getDate(); const todayDay = today.getDate(); const remainingDays = Math.max(0, lastDay - todayDay); const remainingHours = Math.max(0, goal - mH); let forecastText = ''; if (!settings.goalHasBeenSet) { forecastText = `<span>Defina sua meta mensal.</span>`; } else if (remainingHours <= 0) { forecastText = `<span>Meta Alcançada! 🎉</span>`; } else if (remainingDays <= 0) { forecastText = `<span>Meta não atingida este mês.</span>`; } else { let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours; let daysNeeded = remainingDays; let suggestion = ''; if (daysNeeded > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysNeeded = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; } else if (daysNeeded <= 0) { avgNeeded = remainingHours; daysNeeded = 1; } suggestion = `Tente ≈<strong>${formatHoursExtensive(avgNeeded, true)}</strong>/${daysNeeded > 1 ? 'dia' : 'dia'} por ${daysNeeded} ${daysNeeded === 1 ? 'dia' : 'dias'}.`; forecastText = `<span>Faltam ${formatHoursExtensive(remainingHours)}.</span><span>${suggestion}</span>`; } dashboardForecast.innerHTML = forecastText; updateDashboardPlannedDates(); }
             function updateProgressRing(cV, mV) { const p = mV > 0 ? Math.min(100, (cV / mV) * 100) : 0; const offset = progressRingCircumference * (1 - p / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); }
-
             function updateDashboardPlannedDates() {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
@@ -381,7 +385,7 @@
                 const overdueThreshold = 18; // 6 PM
 
                 const futurePlans = plannedEntries
-                    .filter(p => p.date >= todayStr) // Inclui planos de hoje
+                    .filter(p => p.date >= todayStr) // Inclui planos de hoje e futuros
                     .sort((a, b) => new Date(a.date) - new Date(b.date))
                     .slice(0, 3); // Limita a 3 próximos
 
@@ -429,26 +433,29 @@
                     dashboardPlannedDatesContainer.classList.add('hidden');
                 }
             }
-
-
             function renderHistory() { historyList.innerHTML = ''; const sT = historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt = ''; const hasSearch = sT.length > 0; if (hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours || 0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); const fHE = formatHoursExtensive(e.hours).toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.', ',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || fHE.includes(sT)); }); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"' : ''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`; if (recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses`; } else if (recordedEntries.length === 0) { lblTxt = ''; } } showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado para a busca' : `Nenhum registro recente (use a busca para mais antigos)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); }); }
             function renderPlanning() {
                  planningList.innerHTML = '';
                  const tS = getCurrentDateString();
-                 const fP = plannedEntries.filter(p => p.date >= tS).sort((a, b) => new Date(a.date) - new Date(b.date));
-                 if (fP.length === 0) {
+                 // Mostra todos os planos, ordenados por data (não filtra mais por >= tS aqui)
+                 const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                 if (allPlansSorted.length === 0) {
+                     planningListPlaceholder.textContent = 'Nenhum planejamento futuro ou passado.';
                      planningListPlaceholder.classList.remove('hidden');
                      return;
                  }
+
                  planningListPlaceholder.classList.add('hidden');
-                 fP.forEach(plan => {
+                 allPlansSorted.forEach(plan => {
                      const li = document.createElement('li');
                      li.dataset.id = plan.id;
                      const hD = formatHoursExtensive(plan.hours);
+                     const isPastPlan = plan.date < tS;
                      li.innerHTML = `
                         <div class="entry-details">
                             <strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong>
-                            <span class="hours">${hD}</span> Planejadas
+                            <span class="hours">${hD}</span> Planejadas ${isPastPlan ? '<span style="opacity: 0.7; margin-left: 5px;">(Data Passada)</span>' : ''}
                         </div>
                         <div class="plan-actions">
                             <button class="done-plan-btn success">Feito</button>
@@ -580,7 +587,8 @@
                     setTimeout(promptForMonthlyGoal, 500);
                 }
 
-                 setInterval(updateDashboardPlannedDates, 60 * 60 * 1000); // Atualiza a lista do dashboard a cada hora
+                 // Atualiza o dashboard a cada minuto para refletir o status de 'overdue' dos planos
+                 setInterval(updateDashboardPlannedDates, 60 * 1000);
 
 
                 console.log("Init complete.");
