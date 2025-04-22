@@ -17,10 +17,10 @@
             --border-color: #3a3a3c;
             --shadow-color: rgba(0, 0, 0, 0.2);
             --danger-color: #FF453A;
-            --success-color: #30D158;
+            --success-color: #30D158; /* Softer Green */
             --placeholder-color: rgba(235, 235, 245, 0.3);
             --dialog-backdrop: rgba(0, 0, 0, 0.7);
-            --progress-track-color: #3a3a3c;
+            --progress-track-color: #38383a; /* Slightly lighter track */
             --progress-bar-color: var(--success-color);
 
             --font-family: var(--system-font);
@@ -35,69 +35,16 @@
         html, body { height: 100%; -webkit-tap-highlight-color: transparent; }
         body { font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color); line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px; }
 
-        #dashboard-box {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 20px var(--card-padding);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            text-align: center;
-            gap: 20px;
-        }
-        .dashboard-item {
-             position: relative;
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-             justify-content: center;
-        }
-        .dashboard-item--progress {
-            width: 100px; /* Adjust size as needed */
-            height: 100px;
-        }
-        .progress-ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg); /* Start from top */
-        }
-        .progress-ring__circle {
-            fill: none;
-            stroke-width: 7; /* Stroke width */
-            transition: stroke-dashoffset 0.5s ease-out;
-        }
-        .progress-ring__bg {
-            stroke: var(--progress-track-color);
-        }
-        .progress-ring__fg {
-            stroke: var(--progress-bar-color);
-            stroke-linecap: round; /* Optional: Rounded ends */
-        }
-         /* Centered text within progress circle */
-         .dashboard-item--progress .dashboard-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-         }
-         .dashboard-item--progress .dashboard-value {
-             font-size: 1.5em; /* Slightly smaller to fit circle */
-             color: var(--text-color); /* White text inside */
-             margin-bottom: 0;
-         }
-         .dashboard-item--progress .dashboard-label {
-              margin-top: 2px;
-              margin-bottom: 0;
-              font-size: 0.7em;
-         }
-
+        #dashboard-box { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 20px var(--card-padding); margin-bottom: 20px; display: flex; justify-content: space-around; align-items: center; text-align: center; gap: 20px; }
+        .dashboard-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .dashboard-item--progress { width: 90px; height: 90px; } /* Adjusted size */
+        .progress-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+        .progress-ring__circle { fill: none; stroke-width: 5; /* Thinner stroke */ transition: stroke-dashoffset 0.5s ease-out; }
+        .progress-ring__bg { stroke: var(--progress-track-color); }
+        .progress-ring__fg { stroke: var(--progress-bar-color); stroke-linecap: round; }
+        .dashboard-item--progress .dashboard-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
+        .dashboard-item--progress .dashboard-value { font-size: 1.3em; /* Adjusted font size */ color: var(--text-color); margin-bottom: 0; }
+        .dashboard-item--progress .dashboard-label { margin-top: 2px; margin-bottom: 0; font-size: 0.65em; /* Smaller label */ }
         .dashboard-label { font-size: 0.85em; color: var(--text-color-secondary); margin-bottom: 4px; display: block; }
         .dashboard-value { font-size: 1.8em; font-weight: 600; color: var(--primary-color); line-height: 1.1; }
         .dashboard-value .unit { font-size: 0.6em; font-weight: 500; color: var(--text-color-secondary); margin-left: 2px; }
@@ -149,7 +96,7 @@
         .entry-details strong { color: var(--text-color); font-weight: 500; }
         .entry-details .hours { color: var(--primary-color); font-weight: 600; margin-left: 5px; margin-right: 5px; }
          .entry-details .tag-badge { display: inline-block; background-color: var(--input-bg); color: var(--text-color-secondary); font-size: 0.75em; padding: 2px 6px; border-radius: 5px; margin-left: 8px; vertical-align: middle; }
-         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 4.5em; /* Limit height to ~3 lines */ overflow: hidden; }
+         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 4.5em; overflow: hidden; }
          .entry-actions { flex-shrink: 0; align-self: center; }
         .entry-actions button, .plan-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
         .plan-actions button { margin-top: 5px; }
@@ -175,7 +122,7 @@
          <div class="dashboard-item dashboard-item--progress">
             <svg viewBox="0 0 36 36" class="progress-ring">
                  <circle class="progress-ring__circle progress-ring__bg" cx="18" cy="18" r="15.9155"></circle>
-                 <circle id="progress-ring-fg" class="progress-ring__circle progress-ring__fg" cx="18" cy="18" r="15.9155"></circle>
+                 <circle id="progress-ring-fg" class="progress-ring__circle progress-ring__fg" cx="18" cy="18" r="15.9155" stroke-dasharray="100 100" stroke-dashoffset="100"></circle>
             </svg>
             <div class="dashboard-content">
                 <span id="dashboard-month-hours" class="dashboard-value">0<span class="unit">h</span></span>
@@ -203,8 +150,8 @@
                     </div>
                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                          <div class="form-group">
-                             <label for="record-hours">Horas:</label>
-                             <input type="number" id="record-hours" step="0.25" min="0" required placeholder="Ex: 2.5">
+                             <label for="record-hours">Horas (HH:MM):</label>
+                             <input type="text" inputmode="numeric" id="record-hours" required placeholder="Ex: 3:30" pattern="^\d{1,3}(:\d{1,2})?$">
                          </div>
                         <div class="form-group">
                             <label for="record-tag">Modalidade:</label>
@@ -342,14 +289,14 @@
 
             let recordedEntries = [];
             let plannedEntries = [];
-            let settings = { monthlyGoal: 70, goalHasBeenSet: false }; // Default + flag
+            let settings = { monthlyGoal: 70, goalHasBeenSet: false };
             let monthlyHoursChartInstance = null;
             let currentEditingId = null;
             let currentConfirmCallback = null;
             let isDateInputVisible = false;
             const DEFAULT_TAG = "Casa em casa";
             const HISTORY_MONTH_LIMIT = 3;
-             const NOTES_MAX_LENGTH = 300;
+            const NOTES_MAX_LENGTH = 300;
             const progressRingRadius = progressRingFg.r.baseVal.value;
             const progressRingCircumference = 2 * Math.PI * progressRingRadius;
 
@@ -363,106 +310,74 @@
             const MONTH_NAMES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
 
             const LOCAL_STORAGE_KEYS = {
-                ENTRIES: 'pioneerTracker_entries_v4.1', // Version bump for notes length
+                ENTRIES: 'pioneerTracker_entries_v5',
                 PLANS: 'pioneerTracker_plans_v1',
-                SETTINGS: 'pioneerTracker_settings_v1.1' // Version bump for goal set flag
+                SETTINGS: 'pioneerTracker_settings_v1.1'
             };
 
-             function getCurrentDateString() { const t=new Date();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
-             function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
-             function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
-             function getStartOfWeek(date = new Date()) { const dOW = date.getDay(); const diff = date.getDate() - dOW; const sOW = new Date(date.setDate(diff)); sOW.setHours(0,0,0,0); return `${sOW.getFullYear()}-${String(sOW.getMonth()+1).padStart(2,'0')}-${String(sOW.getDate()).padStart(2,'0')}`; }
-             function getDateMonthsAgo(months) { const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0,0,0,0); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-             function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/')) return monthYearString; const [m, y] = monthYearString.split('/'); const monthIndex = parseInt(m, 10) - 1; if (monthIndex < 0 || monthIndex > 11) return monthYearString; return `${MONTH_NAMES_PT[monthIndex]} de ${y}`; }
-             function formatHoursExtensive(hoursDecimal) { const hours = Math.round(hoursDecimal || 0); return `${hours} ${hours === 1 ? 'hora' : 'horas'}`; }
+            function getCurrentDateString() { const t=new Date();return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
+            function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
+            function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
+            function getStartOfWeek(date = new Date()) { const dOW = date.getDay(); const diff = date.getDate() - dOW; const sOW = new Date(date.setDate(diff)); sOW.setHours(0,0,0,0); return `${sOW.getFullYear()}-${String(sOW.getMonth()+1).padStart(2,'0')}-${String(sOW.getDate()).padStart(2,'0')}`; }
+            function getDateMonthsAgo(months) { const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0,0,0,0); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+            function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/')) return monthYearString; const [m, y] = monthYearString.split('/'); const monthIndex = parseInt(m, 10) - 1; if (monthIndex < 0 || monthIndex > 11) return monthYearString; return `${MONTH_NAMES_PT[monthIndex]} de ${y}`; }
+            function formatHoursExtensive(hoursDecimal) { if (isNaN(hoursDecimal)) return '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; if (hours > 0) { result += `${hours} ${hours === 1 ? 'hora' : 'horas'}`; } if (minutes > 0) { result += `${hours > 0 ? ' e ' : ''}${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`; } if (!result) { result = '0 horas'; } return result; }
+             function formatDecimalToTimeInput(decimalHours) { if (isNaN(decimalHours) || decimalHours <= 0) return ""; const totalMinutes = Math.round((decimalHours || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; return `${hours}:${String(minutes).padStart(2, '0')}`; }
+             function parseTimeInputToDecimal(timeString) { if (!timeString) return 0; const timeRegex = /^(\d{1,3})(?:[:](\d{1,2}))?$/; const match = timeString.trim().match(timeRegex); if (!match) return NaN; const hours = parseInt(match[1], 10); const minutes = parseInt(match[2] || '0', 10); if (isNaN(hours) || isNaN(minutes) || minutes >= 60) return NaN; return hours + (minutes / 60); }
 
-             function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); console.log("Data saved.");} catch(e) { console.error("SAVE ERR:",e); alert("ERRO AO SALVAR!");} }
-             function loadData() {
-                try { let storedEntriesRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (storedEntriesRaw) { try { const sampleEntry = JSON.parse(storedEntriesRaw)[0]; if (sampleEntry && !('tag' in sampleEntry)) { console.warn("Old data format (v3) detected. Migrating."); const entriesV3 = JSON.parse(storedEntriesRaw); recordedEntries = entriesV3.map(entry => ({...entry, tag: DEFAULT_TAG, notes: entry.notes ? entry.notes.substring(0, NOTES_MAX_LENGTH) : '' })); storedEntriesRaw = null; } else { recordedEntries = JSON.parse(storedEntriesRaw); recordedEntries.forEach(e => e.notes = e.notes?.substring(0, NOTES_MAX_LENGTH)); /* Enforce length on load */ } } catch { storedEntriesRaw = null; console.error("Error parsing sample entry."); recordedEntries = []; } } else { recordedEntries = []; } recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); const storedPlans=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = storedPlans ? JSON.parse(storedPlans) : []; plannedEntries.sort((a,b) => new Date(a.date) - new Date(b.date)); const storedSettingsRaw=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); let loadedSettings = storedSettingsRaw ? JSON.parse(storedSettingsRaw) : {}; settings = { monthlyGoal: 70, goalHasBeenSet: false, ...loadedSettings }; if(isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; monthlyGoalInput.value = settings.monthlyGoal; console.log("Data loaded."); } catch (error) { console.error("Load Error:", error); recordedEntries=[]; plannedEntries=[]; settings={ monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); localStorage.removeItem('pioneerTracker_entries_v4'); localStorage.removeItem('pioneerTracker_settings_v1'); } catch (e) {} alert("Erro ao carregar dados. Resetando."); }
-             }
+            function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));} catch(e) { console.error("SAVE ERR:",e); alert("ERRO AO SALVAR!");} }
+            function loadData() { try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const sE=JSON.parse(sER)[0]; if (sE && !('tag' in sE)) { console.warn("Old format"); const eV3 = JSON.parse(sER); recordedEntries = eV3.map(e=>({...e,tag:DEFAULT_TAG,notes:e.notes?.substring(0, NOTES_MAX_LENGTH)||''})); sER=null;} else { recordedEntries = JSON.parse(sER); recordedEntries.forEach(e=>e.notes = e.notes?.substring(0, NOTES_MAX_LENGTH));}} catch{ sER = null; recordedEntries=[];}} else {recordedEntries=[];} recordedEntries.sort((a,b)=>new Date(b.date)-new Date(a.date)); const sP=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries=sP?JSON.parse(sP):[]; plannedEntries.sort((a,b)=>new Date(a.date)-new Date(b.date)); const sSR=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); let lS=sSR?JSON.parse(sSR):{}; settings={monthlyGoal:70,goalHasBeenSet:false,...lS}; if(isNaN(settings.monthlyGoal)||settings.monthlyGoal<=0)settings.monthlyGoal=70; if(typeof settings.goalHasBeenSet!=='boolean')settings.goalHasBeenSet=false; monthlyGoalInput.value=settings.monthlyGoal; console.log("Data loaded.");} catch(err) { console.error("Load Err:",err); recordedEntries=[];plannedEntries=[];settings={monthlyGoal:70,goalHasBeenSet:false}; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES);localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS);localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS);localStorage.removeItem('pioneerTracker_entries_v4.1'); localStorage.removeItem('pioneerTracker_settings_v1'); } catch(e){} alert("Erro ao carregar dados. Resetando.");} }
 
-             function promptForMonthlyGoal() {
-                let goalSet = false;
-                while (!goalSet) {
-                     const goalInput = prompt("Por favor, informe sua meta mensal de horas (ex: 70):", settings.monthlyGoal);
-                    if (goalInput === null) { // User cancelled
-                         goalSet = true; // Exit loop, keep default or previously saved
-                         if (!settings.goalHasBeenSet) settings.goalHasBeenSet = true; // Mark as set even if cancelled
-                         saveData();
-                    } else {
-                         const goal = parseInt(goalInput, 10);
-                         if (!isNaN(goal) && goal > 0) {
-                             settings.monthlyGoal = goal;
-                             settings.goalHasBeenSet = true;
-                            monthlyGoalInput.value = goal;
-                            saveData();
-                            goalSet = true;
-                            updateAllDisplays(); // Update UI with new goal
-                            showFeedback("Meta mensal definida!", "success");
-                         } else {
-                            alert("Valor inválido. Por favor, insira um número positivo para a meta de horas.");
-                         }
-                    }
-                 }
-             }
+             function promptForMonthlyGoal() { let gS=false; while(!gS){ const gI=prompt("Por favor, informe sua meta mensal de horas (ex: 70):", settings.monthlyGoal); if (gI===null){ gS=true; if (!settings.goalHasBeenSet) settings.goalHasBeenSet = true; saveData(); } else { const g = parseInt(gI,10); if (!isNaN(g)&&g>0) { settings.monthlyGoal=g; settings.goalHasBeenSet=true; monthlyGoalInput.value=g; saveData(); gS=true; updateAllDisplays(); showFeedback("Meta definida!","success"); } else { alert("Valor inválido."); } } } }
 
+            function setDateInputVisibility(visible) { isDateInputVisible=visible; if(visible){ recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent=(!recordDateInput.value || recordDateInput.value===getCurrentDateString())?"Hoje":formatDisplayDate(recordDateInput.value);}}
+            changeDateBtn.addEventListener('click',()=>setDateInputVisibility(true));
 
-             function setDateInputVisibility(visible) { isDateInputVisible = visible; if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent = (!recordDateInput.value || recordDateInput.value === getCurrentDateString()) ? "Hoje" : formatDisplayDate(recordDateInput.value); } }
-             changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
-
-             function toggleCard(cardElement) { if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';} }
-            appElement.addEventListener('click', (event) => { const h=event.target.closest('.card-header');if(h){const c=h.closest('.card');if(c){toggleCard(c);}} });
+            function toggleCard(cardElement){ if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';}}
+            appElement.addEventListener('click', (event) => { const h=event.target.closest('.card-header');if(h){const c=h.closest('.card');if(c){toggleCard(c);}}});
             document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
 
-            function clearRecordForm() { recordForm.reset(); recordIdInput.value=''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG; recordNotesInput.value = ''; saveRecordBtn.textContent='Salvar Registro'; saveRecordBtn.classList.remove('editing'); currentEditingId=null; }
-             function handleRecordSubmit(event) { event.preventDefault(); const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString(); const hours = parseFloat(recordHoursInput.value) || 0; const tag = recordTagSelect.value || DEFAULT_TAG; const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH); if(hours <= 0){ alert("Insira Horas (> 0)."); return; } if (!date){ alert("Data inválida."); return; } const newEntry = { id, date, hours, tag, notes }; const existingIndex = recordedEntries.findIndex(entry => entry.id === id); if (existingIndex > -1) { recordedEntries[existingIndex] = newEntry; } else { recordedEntries.push(newEntry); } recordedEntries.sort((a,b) => new Date(b.date)-new Date(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('Registro salvo!', 'success'); }
-            function editRecordEntry(id) { const entry = recordedEntries.find(e => e.id === id); if (entry) { if(!recordCard.classList.contains('expanded')){toggleCard(recordCard);} currentEditingId = id; recordIdInput.value=entry.id; recordDateInput.value=entry.date; if(entry.date !== getCurrentDateString()){setDateInputVisibility(true);} else {setDateInputVisibility(false);} recordHoursInput.value=entry.hours; recordTagSelect.value = entry.tag || DEFAULT_TAG; recordNotesInput.value = entry.notes || ''; saveRecordBtn.textContent='Atualizar Registro'; saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput.focus(); } }
-            function deleteRecordEntry(id) { showConfirmationDialog(`Tem certeza que deseja excluir este registro?`, () => { recordedEntries = recordedEntries.filter(entry => entry.id !== id); saveData(); updateAllDisplays(); showFeedback('Registro excluído.', 'info'); if(currentEditingId === id){ clearRecordForm(); } }); }
+             function clearRecordForm() { recordForm.reset(); recordIdInput.value=''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG; recordNotesInput.value = ''; recordHoursInput.value=''; saveRecordBtn.textContent='Salvar Registro'; saveRecordBtn.classList.remove('editing'); currentEditingId=null; }
+            function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput.value?parseInt(recordIdInput.value, 10):Date.now(); const date=(isDateInputVisible||(recordDateInput.value&&recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hoursInput = recordHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const tag = recordTagSelect.value || DEFAULT_TAG; const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH); if (isNaN(hours) || hours <= 0){ alert("Formato de Horas inválido (use HH:MM ou H). Deve ser maior que zero."); return; } if (!date){ alert("Data inválida."); return; } const newEntry = {id, date, hours, tag, notes}; const eI=recordedEntries.findIndex(entry => entry.id === id); if (eI > -1) {recordedEntries[eI]=newEntry;} else {recordedEntries.push(newEntry);} recordedEntries.sort((a,b) => new Date(b.date)-new Date(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('Registro salvo!','success');}
+             function editRecordEntry(id) { const entry=recordedEntries.find(e => e.id === id); if(entry) { if(!recordCard.classList.contains('expanded')){toggleCard(recordCard);} currentEditingId=id; recordIdInput.value=entry.id; recordDateInput.value=entry.date; if(entry.date !== getCurrentDateString()){setDateInputVisibility(true);} else {setDateInputVisibility(false);} recordHoursInput.value=formatDecimalToTimeInput(entry.hours); recordTagSelect.value=entry.tag||DEFAULT_TAG; recordNotesInput.value=entry.notes||''; saveRecordBtn.textContent='Atualizar Registro'; saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({behavior:'smooth',block:'start'}); recordHoursInput.focus();}}
+             function deleteRecordEntry(id) { showConfirmationDialog(`Tem certeza que deseja excluir este registro?`, () => { const index = recordedEntries.findIndex(e => e.id === id); if (index > -1) { recordedEntries.splice(index, 1); saveData(); updateAllDisplays(); showFeedback('Registro excluído.','info'); if(currentEditingId === id) {clearRecordForm();}} else { console.warn("Entry not found for deletion:", id);} }); }
 
              function clearPlanForm(){ planForm.reset();planIdInput.value='';planDateInput.value='';savePlanBtn.textContent='Salvar Plano';currentEditingId=null; }
              function handlePlanSubmit(event){ event.preventDefault();const id=planIdInput.value?parseInt(planIdInput.value,10):Date.now();const date=planDateInput.value;const pH=parseFloat(planHoursInput.value);const todayStr=getCurrentDateString();if(!date||!pH||pH<=0){alert("Preencha Data Futura e Horas (> 0).");return;} if(date<todayStr){alert("Data deve ser hoje ou futura.");return;} const nP={id,date,plannedHours:pH}; const eI=plannedEntries.findIndex(p=>p.id===id);if(eI>-1){plannedEntries[eI]=nP;}else{plannedEntries.push(nP);} plannedEntries.sort((a,b)=>new Date(a.date)-new Date(b.date));saveData();clearPlanForm();renderPlanning();showFeedback('Planejamento salvo!','success'); }
              function editPlanEntry(id){ const plan=plannedEntries.find(p=>p.id===id);if(plan){if(!planCard.classList.contains('expanded')){toggleCard(planCard);} currentEditingId=id;planIdInput.value=plan.id;planDateInput.value=plan.date;planHoursInput.value=plan.plannedHours;savePlanBtn.textContent='Atualizar Plano';planCard.scrollIntoView({behavior:'smooth',block:'start'});planDateInput.focus();} }
              function deletePlanEntry(id){ showConfirmationDialog(`Excluir planejamento?`,()=>{plannedEntries=plannedEntries.filter(p=>p.id!==id);saveData();renderPlanning();showFeedback('Planejamento excluído.','info');if(currentEditingId===id){clearPlanForm();}}); }
 
-             function handleGoalSave(){ const nG=parseInt(monthlyGoalInput.value,10);if(!isNaN(nG)&&nG>0){ settings.monthlyGoal=nG; settings.goalHasBeenSet = true; saveData(); updateStatistics(); updateDashboard(); showFeedback('Meta atualizada!','success');}else{alert("Meta inválida.");monthlyGoalInput.value=settings.monthlyGoal;} }
-             function handleClearAllData() { showConfirmationDialog('ATENÇÃO! Apagar TUDO? IRREVERSÍVEL!', () => { recordedEntries=[]; plannedEntries=[]; settings={ monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback('Todos os dados apagados.', 'danger'); document.querySelectorAll('.card').forEach(c => { if(c.id!=='record-card'&&c.classList.contains('expanded')) toggleCard(c); else if(c.id==='record-card'&&!c.classList.contains('expanded')) toggleCard(c); }); }); }
+             function handleGoalSave(){ const nG=parseInt(monthlyGoalInput.value,10);if(!isNaN(nG)&&nG>0){ settings.monthlyGoal=nG; settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); showFeedback('Meta atualizada!','success');}else{alert("Meta inválida.");monthlyGoalInput.value=settings.monthlyGoal;} }
+            function handleClearAllData() { showConfirmationDialog('ATENÇÃO! Apagar TUDO? IRREVERSÍVEL!', () => { recordedEntries=[]; plannedEntries=[]; settings={ monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback('Todos os dados apagados.', 'danger'); document.querySelectorAll('.card').forEach(c => { if(c.id!=='record-card'&&c.classList.contains('expanded')) toggleCard(c); else if(c.id==='record-card'&&!c.classList.contains('expanded')) toggleCard(c); }); }); }
 
-             function showConfirmationDialog(message,onConfirm){dialogMessage.textContent=message;currentConfirmCallback=onConfirm;confirmationDialog.classList.add('visible');} function hideConfirmationDialog(){confirmationDialog.classList.remove('visible');currentConfirmCallback=null;}
+             function showConfirmationDialog(message,onConfirm){dialogMessage.textContent=message;currentConfirmCallback=onConfirm;confirmationDialog.classList.add('visible');}
+             function hideConfirmationDialog(){confirmationDialog.classList.remove('visible'); currentConfirmCallback=null; setTimeout(() => {currentConfirmCallback = null;}, 300); /* Delay clearing callback */ }
             dialogConfirmBtn.addEventListener('click',()=>{ try { if(typeof currentConfirmCallback === 'function'){ currentConfirmCallback(); } } catch(e) { console.error("Error in confirmation callback:", e); } finally { hideConfirmationDialog(); } });
             dialogCancelBtn.addEventListener('click',hideConfirmationDialog); confirmationDialog.addEventListener('click',(e)=>{if(e.target===confirmationDialog){hideConfirmationDialog();}});
             function showFeedback(message,type='info'){console.log(`Feedback[${type}]:${message}`);}
 
-            function updateDashboard() {
-                const today=new Date();const cM=today.getMonth();const cY=today.getFullYear();const sOW=getStartOfWeek(today);let mH=0;let wH=0; recordedEntries.forEach(e=>{const eD=new Date(e.date+'T00:00:00'); if(eD.getMonth()===cM && eD.getFullYear()===cY){mH+=e.hours;} if(e.date>=sOW && e.date<=getCurrentDateString()){wH+=e.hours;}}); dashboardMonthHours.innerHTML=`${mH.toFixed(1).replace('.',',')}<span class="unit">h</span>`; dashboardWeekHours.innerHTML=`${wH.toFixed(1).replace('.',',')}<span class="unit">h</span>`; updateProgressRing(mH, settings.monthlyGoal);
+            function updateDashboard() { const today=new Date();const cM=today.getMonth();const cY=today.getFullYear();const sOW=getStartOfWeek(today);let mH=0;let wH=0; recordedEntries.forEach(e=>{const eD=new Date(e.date+'T00:00:00'); if(eD.getMonth()===cM && eD.getFullYear()===cY){mH+=e.hours;} if(e.date>=sOW && e.date<=getCurrentDateString()){wH+=e.hours;}}); dashboardMonthHours.innerHTML=`${mH.toFixed(1).replace('.',',')}<span class="unit">h</span>`; dashboardWeekHours.innerHTML=`${wH.toFixed(1).replace('.',',')}<span class="unit">h</span>`; updateProgressRing(mH, settings.monthlyGoal); }
+            function updateProgressRing(cV,mV) { const p=mV>0?Math.min(100,(cV/mV)*100):0; const offset=progressRingCircumference * (1 - p / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); }
+
+            function renderHistory() {
+                historyList.innerHTML = ''; const sT=historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt=''; const hasSearch = sT.length > 0; if(hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours||0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.',',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || formatHoursExtensive(e.hours).toLowerCase().includes(sT));}); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"':''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Últimos ${HISTORY_MONTH_LIMIT} meses`; if(recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum nos últimos ${HISTORY_MONTH_LIMIT} meses`;} else if (recordedEntries.length === 0) {lblTxt='';}} showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado' : `Nenhum recente (use busca)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id=entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click',(e)=>{e.stopPropagation();editRecordEntry(entry.id);}); li.querySelector('.delete-btn').addEventListener('click',(e)=>{e.stopPropagation();deleteRecordEntry(entry.id);}); historyList.appendChild(li);});
              }
 
-            function updateProgressRing(currentValue, maxValue) {
-                const percent = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0;
-                const offset = progressRingCircumference * (1 - percent / 100);
-                progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`;
-                progressRingFg.style.strokeDashoffset = offset;
-            }
+            function renderPlanning() { planningList.innerHTML = ''; const tS=getCurrentDateString(); const fP=plannedEntries.filter(p=>p.date>=tS).sort((a,b)=>new Date(a.date)-new Date(b.date)); if(fP.length===0){planningListPlaceholder.classList.remove('hidden');return;} planningListPlaceholder.classList.add('hidden'); fP.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; const hD=formatHoursExtensive(plan.plannedHours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hD}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); }); }
+            function updateStatistics() { const cM=new Date().getMonth();const cY=new Date().getFullYear(); const eM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()===cM && d.getFullYear()===cY;}); let tH=0;const aD=new Set(); eM.forEach(e=>{tH+=e.hours;aD.add(e.date);}); const g=settings.monthlyGoal||70; const pP=g>0?Math.min(Math.round((tH/g)*100),100):0; const aH=aD.size>0?(tH/aD.size).toFixed(1):0; const dAC=aD.size; statsMonthHours.textContent=tH.toFixed(1).replace('.',',');statsMonthGoalProgress.textContent=`${pP}%`;statsMonthProgressBar.style.width=`${pP}%`;statsAvgHoursDay.textContent=aH.replace('.',',');statsMonthDaysActive.textContent=dAC; }
+             function populateMonthSelector() { const aM=new Set(); recordedEntries.forEach(e=>{aM.add(getMonthYearString(new Date(e.date+'T00:00:00')));}); const sM=Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMSValue=getMonthYearString(new Date()); const cMSFormatted=formatMonthYearExtensive(cMSValue); let hCM=false; sM.forEach(mSValue=>{const o=document.createElement('option');const mSFormatted=formatMonthYearExtensive(mSValue);o.value=mSValue;o.textContent=mSFormatted;if(mSValue===cMSValue){o.selected=true;hCM=true;} chartMonthSelector.appendChild(o);}); if(!hCM && recordedEntries.length > 0){const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); o.selected=true;} else if (!hCM) { const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.appendChild(o); o.selected=true;} }
+             function renderCharts(sMYV) { const sMYF=formatMonthYearExtensive(sMYV); const [sM, sY]=sMYV.split('/').map(Number); const eSM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()+1===sM && d.getFullYear()===sY;}); const dISM=new Date(sY, sM, 0).getDate(); const dH=Array(dISM).fill(0); eSM.forEach(e=>{dH[new Date(e.date+'T00:00:00').getDate()-1]+=e.hours;}); const lbls=Array.from({length: dISM}, (_,i)=>i+1); if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();} monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'bar',data:{labels:lbls, datasets:[{label:`Horas Diárias (${sMYF})`, data:dH, backgroundColor:primaryColor, borderColor:primaryColor, borderWidth:0, borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true, title:{display:false},ticks:{color:textMutedColor,padding:10}, grid:{color:gridColor,drawBorder:false}}, x:{title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}}, plugins:{ title:{display:true, text:sMYF, color:textMutedColor, font:{size:14,weight:'normal'}, padding:{bottom:15}}, tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}`}}, legend:{display:false}}}}); }
 
-             function renderHistory(entriesToShow = null) {
-                 historyList.innerHTML = ''; const searchTerm = historySearchInput.value.trim().toLowerCase(); let results = []; let labelText = ''; if (entriesToShow) { results = entriesToShow; labelText = `${results.length} resultado(s) para "${searchTerm}"`; } else if (searchTerm) { results = recordedEntries.filter(entry => { const hoursRoundedStr = Math.round(entry.hours || 0).toString(); const displayDateFormatted = formatDisplayDate(entry.date); return (displayDateFormatted.includes(searchTerm) || entry.hours.toString().replace('.',',').includes(searchTerm) || hoursRoundedStr.includes(searchTerm) || (entry.tag || '').toLowerCase().includes(searchTerm) || (entry.notes || '').toLowerCase().includes(searchTerm)); }); labelText = `${results.length} resultado(s) encontrado(s)`; } else { const threeMonthsAgo = getDateMonthsAgo(HISTORY_MONTH_LIMIT); results = recordedEntries.filter(entry => entry.date >= threeMonthsAgo); labelText = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`; if(recordedEntries.length > 0 && results.length === 0) { labelText = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses (Use a busca)`; } else if (recordedEntries.length === 0) { labelText = ''; } } showingResultsLabel.textContent = labelText; if (results.length === 0 && recordedEntries.length > 0 && !searchTerm) { historyListPlaceholder.textContent = "Nenhum recente. Use busca."; historyListPlaceholder.classList.remove('hidden'); } else if (results.length === 0) { historyListPlaceholder.textContent = "Nenhum registro encontrado."; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } results.forEach(entry => { const li = document.createElement('li'); li.dataset.id=entry.id; const tagDisplay = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; const notesPreview = entry.notes ? `<span class="notes-preview">${entry.notes}</span>` : '<span class="notes-preview" style="opacity: 0.5;">Sem notas</span>'; const hoursDisplay = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hoursDisplay}</span> ${tagDisplay} ${notesPreview} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click',(e)=>{e.stopPropagation(); editRecordEntry(entry.id);}); li.querySelector('.delete-btn').addEventListener('click',(e)=>{e.stopPropagation(); deleteRecordEntry(entry.id);}); historyList.appendChild(li); });
-             }
-
-            function renderPlanning() { planningList.innerHTML = ''; const todayStr = getCurrentDateString(); const futurePlans = plannedEntries.filter(plan => plan.date >= todayStr).sort((a,b)=>new Date(a.date)-new Date(b.date)); if(futurePlans.length===0){planningListPlaceholder.classList.remove('hidden');return;} planningListPlaceholder.classList.add('hidden'); futurePlans.forEach(plan=>{const li=document.createElement('li');li.dataset.id=plan.id; const hoursDisplay = formatHoursExtensive(plan.plannedHours); li.innerHTML=`<div class="entry-details"> <strong>${formatDisplayDate(plan.date)}:</strong> <span class="hours">${hoursDisplay}</span> Planejadas </div> <div class="plan-actions"> <button class="edit-plan-btn secondary">Editar</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.edit-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();editPlanEntry(plan.id);}); li.querySelector('.delete-plan-btn').addEventListener('click',(e)=>{e.stopPropagation();deletePlanEntry(plan.id);}); planningList.appendChild(li); }); }
-            function updateStatistics() { const cM=new Date().getMonth(); const cY=new Date().getFullYear(); const eM = recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()===cM && d.getFullYear()===cY;}); let tH=0;const aD=new Set(); eM.forEach(e=>{tH+=e.hours;aD.add(e.date);}); const g=settings.monthlyGoal||70; const pP=g>0?Math.min(Math.round((tH/g)*100),100):0; const aH=aD.size>0?(tH/aD.size).toFixed(1):0; const dAC=aD.size; statsMonthHours.textContent=tH.toFixed(1).replace('.',',');statsMonthGoalProgress.textContent=`${pP}%`;statsMonthProgressBar.style.width=`${pP}%`;statsAvgHoursDay.textContent=aH.replace('.',',');statsMonthDaysActive.textContent=dAC; }
-             function populateMonthSelector() { const aM = new Set(); recordedEntries.forEach(e => {aM.add(getMonthYearString(new Date(e.date + 'T00:00:00')));}); const sM = Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/');const[mB,yB]=b.split('/'); return new Date(yB,mB-1)-new Date(yA,mA-1);}); chartMonthSelector.innerHTML=''; if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent='Nenhum dado';chartMonthSelector.appendChild(o);chartMonthSelector.disabled=true;return;} chartMonthSelector.disabled=false;const cMSValue=getMonthYearString(new Date()); const cMSFormatted=formatMonthYearExtensive(cMSValue); let hCM=false; sM.forEach(mSValue=>{const o=document.createElement('option');const mSFormatted=formatMonthYearExtensive(mSValue);o.value=mSValue;o.textContent=mSFormatted;if(mSValue===cMSValue){o.selected=true;hCM=true;} chartMonthSelector.appendChild(o);}); if(!hCM && recordedEntries.length > 0){const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); o.selected=true;} else if (!hCM) { const o=document.createElement('option');o.value=cMSValue;o.textContent=`${cMSFormatted} (Atual)`; chartMonthSelector.appendChild(o); o.selected=true;} }
-             function renderCharts(selectedMonthYearValue) { const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue); const [sM, sY]=selectedMonthYearValue.split('/').map(Number); const eSM=recordedEntries.filter(e=>{const d=new Date(e.date+'T00:00:00'); return d.getMonth()+1===sM && d.getFullYear()===sY;}); const dISM=new Date(sY, sM, 0).getDate(); const dH=Array(dISM).fill(0); eSM.forEach(e=>{dH[new Date(e.date+'T00:00:00').getDate()-1]+=e.hours;}); const lbls=Array.from({length: dISM}, (_,i)=>i+1); if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();} monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'bar',data:{labels:lbls, datasets:[{label:`Horas Diárias (${selectedMonthYearFormatted})`, data:dH, backgroundColor:primaryColor, borderColor:primaryColor, borderWidth:0, borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true, title:{display:false},ticks:{color:textMutedColor,padding:10}, grid:{color:gridColor,drawBorder:false}}, x:{title:{display:false},ticks:{color:textMutedColor}, grid:{display:false}}}, plugins:{ title: { display: true, text: selectedMonthYearFormatted, color: textMutedColor, font: {size: 14, weight: 'normal'}, padding: {bottom: 15} }, tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:false,padding:10,cornerRadius:6,callbacks:{label:ctx=>`Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}`}}, legend:{display:false}}}}); }
-
-            function updateAllDisplays() {
-                 updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning(); const selectedMonthValue = chartMonthSelector.value; if (selectedMonthValue && recordedEntries.length > 0) { try { const hasDataForMonth = recordedEntries.some(e => getMonthYearString(new Date(e.date + 'T00:00:00')) === selectedMonthValue); if(hasDataForMonth) renderCharts(selectedMonthValue); else throw new Error("No data"); } catch(e){ if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(`Nenhum registro em ${formatMonthYearExtensive(selectedMonthValue)}.`, ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore();} } else { if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(recordedEntries.length === 0 ? `Registre suas horas.` : `Selecione um mês`, ctx.canvas.width / 2, ctx.canvas.height / 2 ); ctx.restore(); }
+             function updateAllDisplays() {
+                 updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning(); const sMV = chartMonthSelector.value; let chartNeedsUpdate = false; let clearChartMsg = 'Selecione um mês'; if (recordedEntries.length === 0) clearChartMsg = 'Registre suas horas.'; if (sMV) { const hasData = recordedEntries.some(e => getMonthYearString(new Date(e.date + 'T00:00:00')) === sMV); if (hasData) { try { renderCharts(sMV); chartNeedsUpdate = true; } catch(e){ console.error("Chart render error:", e); } } else { clearChartMsg = `Nenhum registro em ${formatMonthYearExtensive(sMV)}.`; } } if (!chartNeedsUpdate) { if(monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } const ctx=monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=textMutedColor; ctx.font="14px " + computedStyles.fontFamily; ctx.fillText(clearChartMsg, ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore(); }
             }
 
             historySearchInput.addEventListener('input', () => { renderHistory(); });
              recordNotesInput.addEventListener('input', (e) => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); } });
-            recordForm.addEventListener('submit', handleRecordSubmit); clearRecordFormBtn.addEventListener('click', clearRecordForm); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); chartMonthSelector.addEventListener('change', (event)=>{ updateAllDisplays(); }); clearAllDataBtn.addEventListener('click', handleClearAllData);
+            recordHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue)) { e.target.value = formatDecimalToTimeInput(decimalValue); } }); // Format on blur
+            recordForm.addEventListener('submit', handleRecordSubmit); clearRecordFormBtn.addEventListener('click', clearRecordForm); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress',(e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); chartMonthSelector.addEventListener('change', ()=>{ updateAllDisplays(); }); clearAllDataBtn.addEventListener('click', handleClearAllData);
 
-            function init() {
-                 console.log("Initializing Pioneer Tracker v4.1..."); loadData(); if (!settings.goalHasBeenSet) { setTimeout(promptForMonthlyGoal, 100); } recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); clearRecordForm(); clearPlanForm(); document.querySelectorAll('.card').forEach(card => { const sBE = (card.id === 'record-card'); if (card.classList.contains('expanded') !== sBE) { toggleCard(card); } else { const ic=card.querySelector('.toggle-icon'); if(ic) ic.textContent = sBE ? '▲' : '▼';} }); updateAllDisplays(); console.log("Initialization complete.");
-             }
+             function init() { console.log(`Initializing PWT v${LOCAL_STORAGE_KEYS.ENTRIES.split('_v')[1]}...`); loadData(); if (!settings.goalHasBeenSet) { setTimeout(promptForMonthlyGoal, 100); } recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); clearRecordForm(); clearPlanForm(); document.querySelectorAll('.card').forEach(card => { const sBE=(card.id==='record-card'); if (card.classList.contains('expanded')!==sBE){toggleCard(card);}else{ const ic=card.querySelector('.toggle-icon'); if(ic)ic.textContent=sBE?'▲':'▼';}}); updateAllDisplays(); console.log("Init complete."); }
 
             init();
 
