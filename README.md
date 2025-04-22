@@ -69,7 +69,7 @@ Contribuições são bem-vindas! Se você encontrar algum bug, tiver sugestões 
 
 ## 📄 Licença
 
-Distribuído sob a licença MIT. Veja o link para mais informações: [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
+Distribuído sob a Apache License 2.0. Veja o link para mais informações: [https://www.apache.org/licenses/LICENSE-2.0)
 
 ---
 
