@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Relatório de Serviço</title>
+    <!-- Incluir Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.28.0/locale/pt-BR/index.js"></script>
+
+    <style>
+        /* --- Reset & Base Styles --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px; /* Base font size */
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.5;
+            background-color: #f0f2f5; /* Light gray background, common in modern UIs */
+            color: #1c1e21; /* Dark text color */
+            padding-bottom: 80px; /* Space for potential footer/nav */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Layout & Container --- */
+        .container {
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 1.5rem 1rem;
+            background-color: #ffffff;
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        /* --- Typography --- */
+        h1, h2 {
+            color: #007aff; /* Apple-like blue */
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #3c3c43; /* Slightly muted text */
+        }
+
+        /* --- Form Elements --- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="date"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #c7c7cc; /* Light gray border */
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f8f9fa; /* Slightly off-white input background */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            appearance: none; /* Remove default styling */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #007aff; /* Blue border on focus */
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical; /* Allow vertical resize */
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            background-color: #007aff; /* Apple blue button */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+            text-align: center;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #005ecb; /* Darker blue on hover */
+        }
+
+        button[type="submit"]:active {
+            transform: scale(0.98); /* Slight shrink on click */
+        }
+
+        /* --- Entries List --- */
+        #entries-list {
+            margin-top: 1.5rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .entry-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap; /* Wrap on smaller screens if needed */
+        }
+
+        .entry-details {
+            flex-grow: 1;
+            margin-right: 1rem; /* Space before delete button */
+        }
+
+        .entry-date {
+            font-weight: 600;
+            color: #3c3c43;
+        }
+
+        .entry-hours {
+            color: #007aff;
+            font-weight: 500;
+        }
+
+        .entry-notes {
+            margin-top: 0.5rem;
+            color: #6c757d; /* Muted color for notes */
+            font-size: 0.9rem;
+            white-space: pre-wrap; /* Preserve line breaks */
+            word-break: break-word;
+        }
+
+        .entry-delete-btn {
+            background-color: #ff3b30; /* Apple red */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            flex-shrink: 0; /* Prevent button from shrinking too much */
+            align-self: center; /* Vertically center button */
+        }
+
+        .entry-delete-btn:hover {
+            background-color: #d9362e;
+        }
+
+        /* --- Statistics --- */
+        #stats-area {
+            background-color: #e9ecef; /* Light background for stats section */
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        #stats-area p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #3c3c43;
+        }
+
+        #stats-area p strong {
+            font-weight: 600;
+            color: #1c1e21;
+        }
+
+        /* --- Chart Area --- */
+        #chart-container {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f8f9fa; /* Slightly different background for contrast */
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* --- Message Area --- */
+        .message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            display: none; /* Hidden by default */
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+
+        /* --- Empty State --- */
+        .empty-state {
+            text-align: center;
+            color: #6c757d;
+            margin-top: 1rem;
+            padding: 1rem;
+            font-style: italic;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 600px) {
+            html {
+                font-size: 15px; /* Slightly smaller base font on small screens */
+            }
+            .container {
+                margin: 0.5rem;
+                padding: 1rem 0.8rem;
+                border-radius: 0; /* Full width feel */
+                box-shadow: none;
+            }
+            h1 {
+                font-size: 1.6rem;
+                margin-bottom: 1.5rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .entry-item {
+                 flex-direction: column; /* Stack details and button vertically */
+                 align-items: flex-start;
+            }
+            .entry-delete-btn {
+                 margin-top: 0.75rem; /* Add space when stacked */
+                 align-self: flex-end; /* Keep button to the right */
+            }
+             button[type="submit"] {
+                 padding: 0.8rem 1rem;
+                 font-size: 1rem;
+             }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Relatório de Serviço Pioneiro</h1>
+
+        <div id="message-area" class="message"></div>
+
+        <!-- Seção de Entrada de Dados -->
+        <form id="entry-form">
+            <h2>Nova Atividade</h2>
+            <div class="form-group">
+                <label for="entry-date">Data:</label>
+                <input type="date" id="entry-date" required>
+            </div>
+            <div class="form-group">
+                <label for="entry-duration">Duração (horas):</label>
+                <input type="number" id="entry-duration" step="0.25" min="0.25" placeholder="Ex: 1.5 para 1h 30min" required>
+            </div>
+            <div class="form-group">
+                <label for="entry-notes">Observações (opcional):</label>
+                <textarea id="entry-notes" placeholder="Publicações deixadas, revisitas, estudos..."></textarea>
+            </div>
+            <button type="submit">Registrar Atividade</button>
+        </form>
+
+        <!-- Seção de Estatísticas -->
+        <section id="stats-section">
+            <h2>Estatísticas (Mês Atual)</h2>
+            <div id="stats-area">
+                <p>Carregando estatísticas...</p>
+                <!-- Stats serão preenchidas pelo JS -->
+            </div>
+        </section>
+
+         <!-- Seção do Gráfico -->
+         <section id="chart-section">
+            <h2>Horas por Dia (Últimos 30 dias)</h2>
+            <div id="chart-container">
+                <canvas id="hours-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Seção de Registros -->
+        <section id="entries-section">
+            <h2>Registros Recentes</h2>
+            <ul id="entries-list">
+                <!-- Entradas serão preenchidas pelo JS -->
+                <li class="empty-state">Nenhuma atividade registrada ainda.</li>
+            </ul>
+        </section>
+
+    </div> <!-- /container -->
+
+    <script>
+        // Aguarda o DOM estar completamente carregado
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Constantes e Variáveis Globais ---
+            const form = document.getElementById('entry-form');
+            const dateInput = document.getElementById('entry-date');
+            const durationInput = document.getElementById('entry-duration');
+            const notesInput = document.getElementById('entry-notes');
+            const entriesList = document.getElementById('entries-list');
+            const statsArea = document.getElementById('stats-area');
+            const chartCanvas = document.getElementById('hours-chart');
+            const messageArea = document.getElementById('message-area');
+            const COOKIE_NAME = 'pioneerServiceEntries';
+            let entries = []; // Array para guardar os objetos de entrada
+            let hoursChart = null; // Variável para guardar a instância do Chart
+
+            // --- Funções Utilitárias ---
+
+            // Funções para manipulação de Cookies
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                // Codificar o valor para segurança e compatibilidade
+                const encodedValue = encodeURIComponent(JSON.stringify(value));
+                document.cookie = name + "=" + (encodedValue || "") + expires + "; path=/; SameSite=Lax"; // SameSite=Lax é uma boa prática
+            }
+
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for (let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) {
+                        const value = c.substring(nameEQ.length, c.length);
+                        try {
+                            // Decodificar e fazer parse do JSON
+                            return JSON.parse(decodeURIComponent(value));
+                        } catch (e) {
+                            console.error("Erro ao parsear cookie:", e);
+                            return null; // Retorna null se o cookie estiver mal formatado
+                        }
+                    }
+                }
+                return null; // Retorna null se o cookie não for encontrado
+            }
+
+            function eraseCookie(name) {
+                document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            }
+
+            // Formatar Data (DD/MM/AAAA)
+            function formatDate(dateString) {
+                const date = new Date(dateString + 'T00:00:00'); // Adiciona T00:00:00 para evitar problemas de fuso horário na formatação
+                 if (isNaN(date.getTime())) return "Data inválida"; // Check for invalid date
+                 // Intl.DateTimeFormat é mais robusto para formatação localizada
+                return new Intl.DateTimeFormat('pt-BR').format(date);
+            }
+
+             // Mostrar mensagem (sucesso ou erro)
+             function showMessage(text, type = 'success') {
+                messageArea.textContent = text;
+                messageArea.className = `message ${type}`; // Define a classe para estilização (success/error)
+                messageArea.style.display = 'block'; // Torna a mensagem visível
+
+                // Esconder a mensagem após 3 segundos
+                setTimeout(() => {
+                    messageArea.style.display = 'none';
+                    messageArea.textContent = '';
+                    messageArea.className = 'message';
+                }, 3000);
+            }
+
+
+            // --- Funções Principais ---
+
+            // Carregar entradas do Cookie
+            function loadEntries() {
+                const savedEntries = getCookie(COOKIE_NAME);
+                if (savedEntries && Array.isArray(savedEntries)) {
+                    // Garantir que todos os dados carregados são válidos
+                    entries = savedEntries.filter(entry => entry && entry.id && entry.date && typeof entry.duration === 'number');
+                    // Ordenar por data (mais recente primeiro) ao carregar
+                    entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+                } else {
+                    entries = []; // Inicializa vazio se não houver cookie ou for inválido
+                }
+                 // Log de depuração (opcional)
+                // console.log("Entradas carregadas:", entries);
+            }
+
+            // Salvar entradas no Cookie
+            function saveEntries() {
+                setCookie(COOKIE_NAME, entries, 365 * 5); // Salvar por 5 anos
+                 // Log de depuração (opcional)
+                 // console.log("Entradas salvas:", entries);
+            }
+
+             // Renderizar a lista de entradas no HTML
+            function renderEntries() {
+                entriesList.innerHTML = ''; // Limpa a lista atual
+
+                if (entries.length === 0) {
+                    entriesList.innerHTML = '<li class="empty-state">Nenhuma atividade registrada ainda.</li>';
+                    return;
+                }
+
+                entries.forEach(entry => {
+                    const li = document.createElement('li');
+                    li.classList.add('entry-item');
+                    li.dataset.id = entry.id; // Adiciona ID ao elemento para fácil remoção
+
+                    li.innerHTML = `
+                        <div class="entry-details">
+                            <span class="entry-date">${formatDate(entry.date)}</span> -
+                            <span class="entry-hours">${entry.duration.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} horas</span>
+                            ${entry.notes ? `<p class="entry-notes">${escapeHtml(entry.notes)}</p>` : ''}
+                        </div>
+                        <button class="entry-delete-btn" aria-label="Excluir registro de ${formatDate(entry.date)}">Excluir</button>
+                    `;
+                    entriesList.appendChild(li);
+                });
+            }
+
+             // Função para escapar HTML e prevenir XSS
+            function escapeHtml(unsafe) {
+                if (typeof unsafe !== 'string') return unsafe;
+                return unsafe
+                    .replace(/&/g, "&")
+                    .replace(/</g, "<")
+                    .replace(/>/g, ">")
+                    .replace(/"/g, """)
+                    .replace(/'/g, "'");
+            }
+
+            // Adicionar uma nova entrada
+            function addEntry(date, duration, notes) {
+                // Validação básica
+                if (!date || !duration || isNaN(duration) || duration <= 0) {
+                   showMessage('Por favor, preencha a data e uma duração válida (maior que zero).', 'error');
+                   return;
+                }
+
+                 const newEntry = {
+                    id: Date.now(), // ID único simples baseado no timestamp
+                    date: date,
+                    duration: parseFloat(duration), // Garante que seja número
+                    notes: notes.trim() // Remove espaços extras
+                };
+
+                entries.unshift(newEntry); // Adiciona no início para aparecer primeiro
+                // Re-ordena para garantir (caso a ordem importe muito, mas unshift geralmente mantém a ordem inversa de adição)
+                entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                saveEntries(); // Salva no cookie
+                renderEntries(); // Atualiza a lista visual
+                updateStats(); // Atualiza as estatísticas
+                renderChart(); // Atualiza o gráfico
+                showMessage('Atividade registrada com sucesso!', 'success');
+
+                // Limpa o formulário
+                form.reset();
+                dateInput.valueAsDate = new Date(); // Pré-preenche com a data atual para o próximo registro
+
+            }
+
+            // Deletar uma entrada
+            function deleteEntry(id) {
+                const entryId = parseInt(id, 10); // Garante que o ID é número
+                 if (isNaN(entryId)){
+                     console.error("ID inválido para exclusão:", id);
+                     return;
+                 }
+
+                 // Filtra mantendo apenas as entradas que NÃO têm o ID correspondente
+                entries = entries.filter(entry => entry.id !== entryId);
+
+                saveEntries(); // Salva a lista atualizada
+                renderEntries(); // Atualiza a lista visual
+                updateStats(); // Atualiza as estatísticas
+                renderChart(); // Atualiza o gráfico
+                showMessage('Atividade excluída.', 'success');
+            }
+
+            // Calcular e mostrar estatísticas
+            function updateStats() {
+                const now = new Date();
+                const currentMonth = now.getMonth(); // 0 = Janeiro, 11 = Dezembro
+                const currentYear = now.getFullYear();
+
+                // Filtra entradas para o mês e ano atuais
+                const entriesThisMonth = entries.filter(entry => {
+                    const entryDate = new Date(entry.date + 'T00:00:00'); // Evita problemas de fuso
+                    return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear;
+                });
+
+                // Calcula o total de horas no mês
+                const totalHoursMonth = entriesThisMonth.reduce((sum, entry) => sum + entry.duration, 0);
+
+                // Calcula o número de dias trabalhados no mês (dias únicos com registro)
+                const daysWorked = new Set(entriesThisMonth.map(entry => entry.date)).size;
+
+                // Calcula a média de horas por dia trabalhado
+                const averageHoursPerDay = daysWorked > 0 ? totalHoursMonth / daysWorked : 0;
+
+                // Atualiza o HTML da área de estatísticas
+                 statsArea.innerHTML = `
+                    <p>Total de Horas (Mês ${currentMonth + 1}/${currentYear}): <strong>${totalHoursMonth.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} h</strong></p>
+                    <p>Dias com Atividade no Mês: <strong>${daysWorked}</strong></p>
+                    <p>Média por Dia de Atividade: <strong>${averageHoursPerDay.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} h/dia</strong></p>
+                 `;
+            }
+
+            // Renderizar o gráfico de horas
+            function renderChart() {
+                const ctx = chartCanvas.getContext('2d');
+
+                // Destruir gráfico anterior se existir (necessário ao atualizar)
+                 if (hoursChart) {
+                    hoursChart.destroy();
+                }
+
+                // Preparar dados para o gráfico (últimos 30 dias)
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Zera hora para comparação de dias
+                const thirtyDaysAgo = new Date(today);
+                thirtyDaysAgo.setDate(today.getDate() - 30);
+
+                 // Agrupar horas por dia
+                const hoursPerDay = {};
+                // Inicializar os últimos 30 dias com 0 horas
+                for (let d = new Date(thirtyDaysAgo); d <= today; d.setDate(d.getDate() + 1)) {
+                    const dateString = d.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                    hoursPerDay[dateString] = 0;
+                }
+
+                // Filtrar e somar horas dos últimos 30 dias
+                entries.forEach(entry => {
+                     const entryDate = new Date(entry.date + 'T00:00:00');
+                     entryDate.setHours(0,0,0,0); // Garante comparação de dia
+
+                     if (entryDate >= thirtyDaysAgo && entryDate <= today) {
+                        const dateString = entry.date; // Já está em YYYY-MM-DD
+                         if (hoursPerDay.hasOwnProperty(dateString)) {
+                             hoursPerDay[dateString] += entry.duration;
+                        }
+                         // Caso uma entrada tenha uma data fora do range inicializado (improvável, mas seguro)
+                        // else { hoursPerDay[dateString] = entry.duration; }
+                     }
+                });
+
+                 // Ordenar as datas para o gráfico
+                const sortedDates = Object.keys(hoursPerDay).sort();
+
+                 // Criar labels (datas formatadas) e data (horas) para o Chart.js
+                const labels = sortedDates.map(dateStr => new Date(dateStr + 'T00:00:00')); // Usar objetos Date para time scale
+                const data = sortedDates.map(dateStr => hoursPerDay[dateStr]);
+
+
+                 // Configurações do Chart.js
+                const config = {
+                    type: 'bar', // Gráfico de barras
+                    data: {
+                        labels: labels, // Datas no eixo X
+                        datasets: [{
+                            label: 'Horas Registradas',
+                            data: data, // Horas no eixo Y
+                            backgroundColor: 'rgba(0, 122, 255, 0.6)', // Azul Apple com transparência
+                            borderColor: 'rgba(0, 122, 255, 1)',
+                            borderWidth: 1,
+                            borderRadius: 4, // Bordas arredondadas nas barras
+                        }]
+                    },
+                    options: {
+                         responsive: true, // Torna o gráfico responsivo
+                         maintainAspectRatio: true, // Mantem proporção (pode ajustar se necessário)
+                        scales: {
+                            x: {
+                                type: 'time', // Eixo de tempo
+                                time: {
+                                     unit: 'day', // Mostrar por dia
+                                     tooltipFormat: 'P', // Formato date-fns para tooltip (ex: 15/03/2023)
+                                     displayFormats: {
+                                        day: 'dd/MM' // Formato para exibir no eixo
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Data'
+                                },
+                                ticks: {
+                                     source: 'auto', // Deixa o Chart.js decidir quantos ticks mostrar
+                                     maxRotation: 45,
+                                     minRotation: 0
+                                }
+                            },
+                            y: {
+                                beginAtZero: true, // Eixo Y começa no zero
+                                title: {
+                                    display: true,
+                                    text: 'Horas'
+                                }
+                            }
+                        },
+                        plugins: {
+                             legend: {
+                                 display: false // Esconde a legenda (só temos 1 dataset)
+                             },
+                             tooltip: {
+                                 backgroundColor: 'rgba(0, 0, 0, 0.7)', // Tooltip escuro
+                                 titleFont: { weight: 'bold' },
+                                 callbacks: {
+                                    // Formata o título do tooltip (Data)
+                                    title: function(tooltipItems) {
+                                        const date = new Date(tooltipItems[0].parsed.x);
+                                        return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                                    },
+                                    // Formata o label do tooltip (Horas)
+                                    label: function(tooltipItem) {
+                                         return `Horas: ${tooltipItem.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                                    }
+                                 }
+                            }
+                        },
+                        // Adaptação para o date-fns com localização pt-BR
+                        adapters: {
+                           date: {
+                               locale: dateFns.locale.ptBR,
+                           }
+                        }
+                    }
+                 };
+
+                // Cria a nova instância do gráfico
+                 hoursChart = new Chart(ctx, config);
+
+            }
+
+            // --- Event Listeners ---
+
+            // Submit do formulário
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Previne recarregamento da página
+                addEntry(dateInput.value, durationInput.value, notesInput.value);
+            });
+
+             // Deleção de entrada (usando delegação de eventos)
+            entriesList.addEventListener('click', (event) => {
+                // Verifica se o clique foi no botão de deletar
+                 if (event.target.classList.contains('entry-delete-btn')) {
+                     const listItem = event.target.closest('li.entry-item'); // Encontra o item da lista pai
+                    if (listItem && listItem.dataset.id) {
+                         // Pede confirmação antes de excluir
+                        if (confirm('Tem certeza que deseja excluir esta atividade?')) {
+                            deleteEntry(listItem.dataset.id);
+                        }
+                     }
+                 }
+             });
+
+
+            // --- Inicialização ---
+            function initializeApp() {
+                 // Pré-preenche o campo data com a data atual
+                dateInput.valueAsDate = new Date();
+
+                 loadEntries(); // Carrega dados do cookie
+                renderEntries(); // Mostra as entradas na tela
+                updateStats(); // Calcula e mostra estatísticas
+                renderChart(); // Desenha o gráfico inicial
+            }
+
+            initializeApp(); // Inicia a aplicação!
+
+        }); // Fim do DOMContentLoaded
+    </script>
+
+</body>
+</html>
