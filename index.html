@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registro de Campo Pioneiro</title>
+
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Theme Color for Browser UI -->
+    <meta name="theme-color" content="#0A84FF">
+
+    <!-- Apple Touch Icon (optional but recommended) -->
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     <style>
@@ -648,6 +658,20 @@
             chartMonthSelector.addEventListener('change', (event)=>{ updateAllDisplays(); });
             clearAllDataBtn.addEventListener('click', handleClearAllData);
 
+            // --- PWA Service Worker Registration ---
+            function registerServiceWorker() {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('./service-worker.js')
+                        .then((reg) => {
+                            console.log('Service Worker registered successfully. Scope:', reg.scope);
+                        }).catch((error) => {
+                            console.error('Service Worker registration failed:', error);
+                        });
+                }
+            }
+            // --- End PWA Registration ---
+
+
             function init() {
                 console.log(`Initializing PWT v${LOCAL_STORAGE_KEYS.ENTRIES.split('_v')[1]}...`);
                 loadData();
@@ -658,6 +682,7 @@
                  clearRecordForm(); clearPlanForm();
                  document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) { toggleCard(card); } else { const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; } });
                  updateAllDisplays();
+                 registerServiceWorker(); // Register the SW after initial setup
                  console.log("Init complete.");
             }
 
