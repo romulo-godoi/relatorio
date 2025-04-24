@@ -42,13 +42,13 @@
         html, body { height: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
         body { font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color); line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px; }
 
-        /* Adiciona data-translate-key aos elementos HTML onde for necessário */
-        [data-translate-key]::before,
-        [data-translate-key]::after { content: attr(data-translate-key); /* Placeholder visual até JS carregar */ }
+        /* Placeholder visual (opcional) */
+        [data-translate-key]::before { content: ""; } /* Remover o texto da chave antes do JS carregar */
 
-        #loading-indicator { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; color: white; font-size: 1.2em;}
+        #loading-indicator { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; color: white; font-size: 1.2em; transition: opacity 0.3s ease-out;}
+        #loading-indicator.hidden { opacity: 0; pointer-events: none; }
 
-        /* O restante do CSS continua igual */
+
         #dashboard-box { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 15px var(--card-padding); margin-bottom: 20px; display: flex; justify-content: space-around; align-items: flex-start; text-align: center; gap: 15px; }
         .dashboard-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; }
         .dashboard-item--progress { width: 90px; height: 90px; flex-shrink: 0; margin-top: 5px; }
@@ -138,21 +138,20 @@
         .hidden { display: none !important; }
         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         .text-center { text-align: center; } .mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
-
     </style>
 </head>
 <body>
     <!-- Loading Indicator -->
-    <div id="loading-indicator">Loading...</div>
+    <div id="loading-indicator">Loading...</div> <!-- Placeholder text -->
 
     <!-- Dashboard -->
     <div id="dashboard-box">
          <div class="dashboard-item" style="align-items: flex-start; text-align: left;">
              <span class="dashboard-label" data-translate-key="dashboard.weekHoursLabel"></span>
-             <span id="dashboard-week-hours" class="dashboard-value">0 horas</span>
+             <span id="dashboard-week-hours" class="dashboard-value">0</span> <!-- Content updated by JS -->
               <div id="dashboard-summary" style="margin-top: 12px;">
-                 <span id="dashboard-month-total">Mês: <strong>0 horas</strong></span>
-                 <span id="dashboard-forecast">Meta: ...</span>
+                 <span id="dashboard-month-total"></span> <!-- Content updated by JS -->
+                 <span id="dashboard-forecast"></span> <!-- Content updated by JS -->
              </div>
              <div class="hidden" id="dashboard-planned-dates">
                 <span class="dashboard-label" data-translate-key="dashboard.plannedTripsLabel"></span>
@@ -184,7 +183,7 @@
                     <input type="hidden" id="record-id">
                     <div class="form-group">
                         <label for="record-date" id="date-label">
-                             <span data-translate-key="recordCard.dateLabel"></span>: <strong id="display-date">Hoje</strong>
+                             <span data-translate-key="recordCard.dateLabel"></span>: <strong id="display-date"></strong><!-- JS -->
                             <button type="button" class="change-date-button" id="change-date-btn" data-translate-key="recordCard.changeDateButton"></button>
                         </label>
                         <input type="date" id="record-date" class="hidden">
@@ -197,13 +196,13 @@
                         <div class="form-group">
                             <label for="record-tag" data-translate-key="recordCard.tagLabel"></label>
                             <select id="record-tag">
-                                <!-- Options will be populated by JS -->
+                                <!-- Options populated by JS -->
                             </select>
                         </div>
                      </div>
                     <div class="form-group">
-                        <label for="record-notes" data-translate-key="recordCard.notesLabel"></label>
-                        <textarea id="record-notes" rows="3" maxlength="300" data-translate-key="recordCard.notesPlaceholder" data-translate-attr="placeholder"></textarea>
+                        <label for="record-notes" id="record-notes-label" data-translate-key="recordCard.notesLabel"></label> <!-- Add id for easy access -->
+                        <textarea id="record-notes" rows="3" data-translate-key="recordCard.notesPlaceholder" data-translate-attr="placeholder"></textarea> <!-- Remove hardcoded maxlength here, set in JS -->
                     </div>
                     <div class="text-center" style="margin-top: 20px;">
                         <button type="submit" id="save-record-btn" data-translate-key="recordCard.saveButton"></button>
@@ -235,6 +234,7 @@
                     </div>
                 </form>
                 <div id="planning-list-container" class="mt-2">
+                    <!-- List title changed for simplicity, actual text set via JS-->
                     <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);" data-translate-key="planCard.listTitle"></h3>
                     <ul id="planning-list" class="data-list">
                         <li class="placeholder hidden" style="padding-left: var(--card-padding);"></li> <!-- Text set by JS -->
@@ -288,7 +288,7 @@
                      <label for="chart-month-selector" data-translate-key="chartsCard.monthSelectorLabel"></label>
                      <select id="chart-month-selector"></select>
                  </div>
-                 <p id="chart-total-hours-display" class="chart-summary-text"></p>
+                 <p id="chart-total-hours-display" class="chart-summary-text"></p> <!-- JS Updates -->
                  <div class="chart-container">
                      <canvas id="monthlyHoursChart"></canvas>
                  </div>
@@ -305,9 +305,9 @@
                  <div id="history-controls">
                     <input type="search" id="history-search-input" class="history-search-input" data-translate-key="historyCard.searchPlaceholder" data-translate-attr="placeholder">
                  </div>
-                 <span id="showing-results-label"></span>
+                 <span id="showing-results-label"></span> <!-- JS Updates -->
                  <ul id="history-list" class="data-list">
-                    <li class="placeholder hidden" style="padding-left: var(--card-padding);"></li> <!-- Text set by JS -->
+                    <li class="placeholder hidden" style="padding-left: var(--card-padding);"></li> <!-- JS Updates -->
                  </ul>
             </div>
         </div>
@@ -322,7 +322,7 @@
                 <div class="text-center">
                     <button id="clear-all-data-btn" class="danger" data-translate-key="settingsCard.clearDataButton"></button>
                 </div>
-                 <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="settingsCard.clearDataWarning"></p>
+                 <p id="settings-warning-text" style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="settingsCard.clearDataWarning"></p>
             </div>
         </div>
     </div>
@@ -330,7 +330,7 @@
     <!-- Diálogo de Confirmação -->
     <div id="confirmation-dialog" class="dialog-backdrop">
         <div class="dialog-content">
-            <p id="dialog-message"></p> <!-- Text set by JS -->
+            <p id="dialog-message"></p> <!-- JS Updates -->
             <div class="dialog-actions">
                 <button id="dialog-confirm-btn" class="danger" data-translate-key="dialog.confirmButton"></button>
                 <button id="dialog-cancel-btn" class="secondary" data-translate-key="dialog.cancelButton"></button>
@@ -339,7 +339,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => { // Make the main listener async
 
             // --- i18n Setup ---
             let translations = {};
@@ -352,41 +352,114 @@
                 "Telefone": "tags.phone",
                 "Outro": "tags.other"
              };
+            const DEFAULT_TAG_VALUE = "Casa em casa"; // Internal value remains consistent
 
-            // Helper to get nested values from translation object using dot notation
+            // Helper to get nested values safely
             function getNestedValue(obj, key) {
-                return key.split('.').reduce((acc, part) => acc && acc[part], obj);
+                try {
+                    return key.split('.').reduce((acc, part) => acc && acc[part], obj);
+                } catch (e) {
+                    console.error(`Error accessing key "${key}" in`, obj, e);
+                    return undefined;
+                }
             }
 
-            // Translation function
+            // Translation function (defined globally accessible within this scope)
             function t(key, variables = {}) {
-                 const langObj = translations[currentLang] || translations['en']; // Fallback to English
-                 let translation = getNestedValue(langObj, key);
-
-                 if (!translation) {
-                    console.warn(`Translation missing for key "${key}" in language "${currentLang}"`);
-                     const fallbackLangObj = translations['en'];
-                     translation = getNestedValue(fallbackLangObj, key);
-                     if (!translation) {
-                         return `[MISSING: ${key}]`; // Return key if totally missing
-                    }
+                 const langObj = translations[currentLang] || translations['en']; // Fallback to English if current lang missing
+                 if (!langObj) {
+                     console.error(`Language object not found for ${currentLang} or fallback 'en'. Key: ${key}`);
+                     return `[NO LANG: ${key}]`;
                  }
 
-                 // Replace placeholders like {count}
+                 let translation = getNestedValue(langObj, key);
+
+                 if (translation === undefined) {
+                     console.warn(`Translation missing for key "${key}" in language "${currentLang}"`);
+                     const fallbackLangObj = translations['en'];
+                     if (fallbackLangObj) {
+                         translation = getNestedValue(fallbackLangObj, key);
+                     }
+                     if (translation === undefined) {
+                         return `[MISSING: ${key}]`; // Return key if totally missing
+                     }
+                 }
+
+                 // Replace placeholders like {count}, {term}, {maxLength} etc.
                  for (const placeholder in variables) {
-                    if (Object.hasOwnProperty.call(variables, placeholder)) {
-                        translation = translation.replace(`{${placeholder}}`, variables[placeholder]);
+                    // Use hasOwnProperty to avoid iterating over prototype properties
+                    if (Object.prototype.hasOwnProperty.call(variables, placeholder)) {
+                        // Regex to replace all occurrences of the placeholder globally
+                        const regex = new RegExp(`\\{${placeholder}\\}`, 'g');
+                        translation = translation.replace(regex, variables[placeholder]);
                     }
                  }
                  return translation;
             }
 
+            // Moved OUTSIDE initializeApp to be accessible by other functions defined outside
+             function applyStaticTranslations() {
+                 document.querySelectorAll('[data-translate-key]').forEach(element => {
+                     const key = element.getAttribute('data-translate-key');
+                     const attr = element.getAttribute('data-translate-attr') || 'textContent'; // Default to textContent
 
-             // --- Original Variable Declarations ---
-            let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal,
+                    // Ensure translation happens only after `t` is ready
+                     if (typeof t === 'function') {
+                         const translation = t(key);
+                         // Only update if translation is valid (not undefined or the missing key placeholder)
+                         if (translation && !translation.startsWith('[MISSING:') && !translation.startsWith('[NO LANG:')) {
+                             if (attr === 'textContent') {
+                                 element.textContent = translation;
+                             } else if (attr === 'placeholder' || attr === 'title' || attr === 'value') {
+                                 element.setAttribute(attr, translation);
+                             } else {
+                                 // Default or handle other attributes if needed
+                                 element.textContent = translation;
+                             }
+                         } else {
+                              console.warn(`Skipping application of missing/invalid translation for key: ${key}`);
+                          }
+                     }
+                 });
+
+                 // Translate tag options dynamically
+                 if (recordTagSelect && typeof t === 'function') {
+                     recordTagSelect.innerHTML = ''; // Clear existing static options
+                     Object.keys(tagKeyMapping).forEach(internalValue => {
+                         const option = document.createElement('option');
+                         option.value = internalValue; // Use internal value for saving
+                         option.textContent = t(tagKeyMapping[internalValue] || 'tags.noTag'); // Display translated text
+                         if (internalValue === DEFAULT_TAG_VALUE) {
+                             option.selected = true; // Select the default
+                         }
+                         recordTagSelect.appendChild(option);
+                     });
+                 } else {
+                     console.warn("recordTagSelect or t function not ready for dynamic options");
+                 }
+                 // Translate page title
+                 if (typeof t === 'function') {
+                     document.title = t('appTitle');
+                 }
+                 // Update html lang attribute
+                 document.documentElement.lang = currentLang;
+
+                // Specifically set label for notes with length after translation
+                const notesLabelElement = document.getElementById('record-notes-label');
+                if (notesLabelElement && typeof t === 'function') {
+                     notesLabelElement.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH });
+                     // Also set the maxlength attribute on the textarea itself
+                     recordNotesInput.maxLength = NOTES_MAX_LENGTH;
+                 }
+             }
+
+
+             // --- Variable Declarations ---
+             // ... (keep all variable declarations as before)
+             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal,
                 dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg,
                 recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate,
-                changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, saveRecordBtn,
+                changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn,
                 planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn,
                 clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn,
                 statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay,
@@ -406,15 +479,13 @@
             let deferredInstallPrompt = null;
             let progressRingRadius = 0;
             let progressRingCircumference = 0;
-            let MONTH_NAMES = []; // Will be loaded from translation
-            let WEEKDAY_NAMES = []; // Will be loaded from translation
+             let MONTH_NAMES = []; // Loaded from translation
+             let WEEKDAY_NAMES = []; // Loaded from translation
 
-             // --- Original Constants and Utilities (many will be modified) ---
-            const DEFAULT_TAG_VALUE = "Casa em casa"; // Internal value remains consistent
+            // --- Constants and Base Utilities ---
             const HISTORY_MONTH_LIMIT = 3;
-            const NOTES_MAX_LENGTH = 300;
+            const NOTES_MAX_LENGTH = 300; // Keep the number constant
             const MIN_HOURS_PER_DAY_FORECAST = 1.0;
-            // Removed hardcoded MONTH_NAMES_PT and WEEKDAY_NAMES_PT
             const LOCAL_STORAGE_KEYS = {
                 ENTRIES: 'pioneerTracker_entries_v5.1',
                 PLANS: 'pioneerTracker_plans_v1.1',
@@ -422,850 +493,371 @@
             };
 
 
-            // --- Original Functions (MODIFIED FOR I18N) ---
+             // --- Core Functions (modified for i18n where needed) ---
 
-            function getCurrentDateString() { /* No changes needed */ const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
-            function formatDisplayDate(dateString) { /* Uses system default which varies, consider fixed Intl.DateTimeFormat if consistency needed*/ if (!dateString || !dateString.includes('-')) return dateString; try { const [y, m, d] = dateString.split('-'); const date = new Date(y, m-1, d); return date.toLocaleDateString(currentLang, { day: '2-digit', month: '2-digit', year: 'numeric'}); } catch(e) { console.warn("Could not format date", dateString); return dateString; } }
-            function getMonthYearString(date) { /* No changes needed */ const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
-            function getStartOfWeek(date = new Date()) { /* No changes needed */ const d = new Date(date); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek; const sOW = new Date(d.setDate(diff)); sOW.setHours(0, 0, 0, 0); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
-            function getDateMonthsAgo(months) { /* No changes needed */ const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0, 0, 0, 0); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+             function getCurrentDateString() { /* No changes */ const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
+
+             function formatDisplayDate(dateString) {
+                 if (!dateString || !dateString.includes('-')) return dateString;
+                 try {
+                    // Try to parse the date string consistently
+                    const [y, m, d] = dateString.split('-').map(Number);
+                    // Create date using UTC to avoid timezone shifts from the T00:00:00 hack
+                    const date = new Date(Date.UTC(y, m - 1, d));
+                     // Use Intl.DateTimeFormat for more reliable locale-specific formatting
+                     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                    return new Intl.DateTimeFormat(currentLang, options).format(date);
+                 } catch (e) {
+                     console.warn("Could not format date using Intl:", dateString, e);
+                     // Fallback to simpler, non-locale specific format
+                     const [y, m, d] = dateString.split('-');
+                     return `${d}/${m}/${y}`;
+                 }
+             }
+
+            function getMonthYearString(date) { /* No changes */ const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
+            function getStartOfWeek(date = new Date()) { /* No changes */ const d = new Date(date); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); const sOW = new Date(d.setDate(diff)); sOW.setHours(0, 0, 0, 0); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
+            function getDateMonthsAgo(months) { /* No changes */ const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0, 0, 0, 0); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
 
             function formatMonthYearExtensive(monthYearString) {
-                 if (!monthYearString || !monthYearString.includes('/')) return monthYearString;
+                 if (!monthYearString || !monthYearString.includes('/') || !Array.isArray(MONTH_NAMES) || MONTH_NAMES.length < 12) {
+                    return monthYearString; // Return input if data is invalid
+                 }
                  const [m, y] = monthYearString.split('/');
                  const monthIndex = parseInt(m, 10) - 1;
-                 if (monthIndex < 0 || monthIndex > 11 || !MONTH_NAMES || MONTH_NAMES.length < 12) return monthYearString;
-                 // Uses MONTH_NAMES loaded from translations
-                 return `${MONTH_NAMES[monthIndex]} ${y}`;
-            }
+                 if (monthIndex < 0 || monthIndex > 11) return monthYearString;
+                 return `${MONTH_NAMES[monthIndex]} ${y}`; // Uses MONTH_NAMES from translation
+             }
 
             function formatHoursExtensive(hoursDecimal, short = false) {
-                 if (isNaN(hoursDecimal) || hoursDecimal < 0) return short ? t('units.hours', { count: 0 }).replace(" 0","0") : t('units.hours', { count: 0 });
+                 if (isNaN(hoursDecimal) || hoursDecimal < 0) {
+                     // Use t() for zero case explicitly
+                     const zeroHourStr = t(short ? 'units.hours_short' : 'units.hours', {count: 0});
+                     return zeroHourStr.replace(" 0","0"); // Attempt to remove space before 0 if lang string has it
+                 }
                  const totalMinutes = Math.round((hoursDecimal || 0) * 60);
                  const hours = Math.floor(totalMinutes / 60);
                  const minutes = totalMinutes % 60;
                  let result = '';
-                // Get units from translation
-                 const hUnit = short ? "h" : ` ${t(hours === 1 ? 'units.hour' : 'units.hours')}`;
-                 const mUnit = short ? "m" : ` ${t(minutes === 1 ? 'units.minute' : 'units.minutes')}`;
+
+                 const hKey = hours === 1 ? 'units.hour' : 'units.hours';
+                 const mKey = minutes === 1 ? 'units.minute' : 'units.minutes';
+                 const hKeyShort = hours === 1 ? 'units.hour_short' : 'units.hours_short';
+                 const mKeyShort = minutes === 1 ? 'units.minute_short' : 'units.minutes_short';
+
+                 const hUnit = short ? t(hKeyShort) : ` ${t(hKey)}`;
+                 const mUnit = short ? t(mKeyShort) : ` ${t(mKey)}`;
                  const connector = short ? " " : ` ${t('units.andConnector')} `;
 
-                if (hours > 0) { result += `${hours}${hUnit}`; }
+                 if (hours > 0) { result += `${hours}${hUnit}`; }
                  if (minutes > 0) { result += `${hours > 0 ? connector : ''}${minutes}${mUnit}`; }
-                // Handle zero case explicitly using translations
-                 if (!result && hoursDecimal === 0) { result = short ? `0${hUnit}` : `0 ${t('units.hours')}`; }
-                 else if (!result && minutes > 0) { result = `${minutes}${mUnit}`; }
 
-                 return result || (short ? `0h` : `0 ${t('units.hours')}`);
+                 // Handle total zero case again after processing
+                 if (result === '' && totalMinutes === 0) {
+                      const zeroHourStr = t(short ? 'units.hours_short' : 'units.hours', {count: 0});
+                      result = zeroHourStr.replace(" 0","0");
+                 }
+                 // If only minutes resulted in '', it should still be covered by the 'minutes > 0' check.
+                 // Return result, or fallback one last time
+                 return result || (short ? '0h' : `0 ${t('units.hours')}`);
             }
 
-             function formatDecimalToTimeInput(decimalHours) { /* No translation needed */ if (isNaN(decimalHours) || decimalHours <= 0) return ""; const totalMinutes = Math.round((decimalHours || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; return `${hours}:${String(minutes).padStart(2, '0')}`; }
-             function parseTimeInputToDecimal(timeString) { /* No translation needed */ if (!timeString) return 0; const trimmed = timeString.trim(); if (!trimmed) return 0; const colonMatch = trimmed.match(/^(\d{1,3}):(\d{1,2})$/); if (colonMatch) { const hours = parseInt(colonMatch[1], 10); const minutes = parseInt(colonMatch[2], 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } const numberMatch = trimmed.match(/^(\d+)$/); if (numberMatch) { const numStr = numberMatch[1]; const numVal = parseInt(numStr, 10); if (isNaN(numVal)) return NaN; if (numStr.length <= 2) { if (numVal < 60) return numVal / 60; } if (numStr.length >= 3) { const potentialHoursStr = numStr.slice(0, -2); const potentialMinutesStr = numStr.slice(-2); const hours = parseInt(potentialHoursStr, 10); const minutes = parseInt(potentialMinutesStr, 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } return NaN; } return NaN; }
+
+             function formatDecimalToTimeInput(decimalHours) { /* No changes */ if (isNaN(decimalHours) || decimalHours <= 0) return ""; const totalMinutes = Math.round((decimalHours || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; return `${hours}:${String(minutes).padStart(2, '0')}`; }
+             function parseTimeInputToDecimal(timeString) { /* No changes */ if (!timeString) return 0; const trimmed = timeString.trim(); if (!trimmed) return 0; const colonMatch = trimmed.match(/^(\d{1,3}):(\d{1,2})$/); if (colonMatch) { const hours = parseInt(colonMatch[1], 10); const minutes = parseInt(colonMatch[2], 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } const numberMatch = trimmed.match(/^(\d+)$/); if (numberMatch) { const numStr = numberMatch[1]; const numVal = parseInt(numStr, 10); if (isNaN(numVal)) return NaN; if (numStr.length <= 2) { if (numVal < 60) return numVal / 60; } if (numStr.length >= 3) { const potentialHoursStr = numStr.slice(0, -2); const potentialMinutesStr = numStr.slice(-2); const hours = parseInt(potentialHoursStr, 10); const minutes = parseInt(potentialMinutesStr, 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } return NaN; } return NaN; }
 
             function formatRelativeDate(dateString) {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                 const inputDate = new Date(dateString + 'T00:00:00');
-                if (isNaN(inputDate) || !WEEKDAY_NAMES || WEEKDAY_NAMES.length < 7) return formatDisplayDate(dateString);
+                 const today = new Date(); today.setHours(0, 0, 0, 0);
+                 const inputDate = new Date(dateString + 'T00:00:00Z'); // Assume input is local, use Z for UTC internally? Maybe stick to T00:00:00 for consistency with other uses.
+                 if (isNaN(inputDate.valueOf()) || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length < 7) return formatDisplayDate(dateString);
 
-                const tomorrow = new Date(today);
-                tomorrow.setDate(today.getDate() + 1);
-                const oneWeekFromToday = new Date(today);
-                oneWeekFromToday.setDate(today.getDate() + 7);
+                const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+                const oneWeekFromToday = new Date(today); oneWeekFromToday.setDate(today.getDate() + 7);
 
-                if (inputDate.getTime() === today.getTime()) { return t('dates.today'); }
-                if (inputDate.getTime() === tomorrow.getTime()) { return t('dates.tomorrow'); }
-                // Use WEEKDAY_NAMES from translations
+                 // Compare date parts directly to avoid timezone issues if inputDate isn't UTC
+                 const inputY = inputDate.getFullYear(), inputM = inputDate.getMonth(), inputD = inputDate.getDate();
+                 const todayY = today.getFullYear(), todayM = today.getMonth(), todayD = today.getDate();
+                 const tomorrowY = tomorrow.getFullYear(), tomorrowM = tomorrow.getMonth(), tomorrowD = tomorrow.getDate();
+
+                 if (inputY === todayY && inputM === todayM && inputD === todayD) return t('dates.today');
+                 if (inputY === tomorrowY && inputM === tomorrowM && inputD === tomorrowD) return t('dates.tomorrow');
+
                  if (inputDate > tomorrow && inputDate < oneWeekFromToday) { return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`; }
 
                 return formatDisplayDate(dateString);
-            }
+             }
 
-             function saveData() { /* No translation needed */ try { localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); } catch (e) { console.error("SAVE ERR:", e); showFeedback('feedback.saveError', 'danger'); } } // Uses key
-             function loadData() { /* Minor modification for tags */ try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const parsedEntries = JSON.parse(sER); if (Array.isArray(parsedEntries)) { recordedEntries = parsedEntries.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })); } else { throw new Error("Stored entries not an array"); } } catch (parseErr) { console.error("Error parsing stored entries, resetting:", parseErr); sER = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } } else { recordedEntries = []; } recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } }); plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date)); const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); let lS = sSR ? JSON.parse(sSR) : {}; settings = { monthlyGoal: 70, goalHasBeenSet: false, ...lS }; if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; console.log("Data loaded."); } catch (err) { console.error("Load Err:", err); recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { console.error("Error removing invalid storage items:", e); } showFeedback('feedback.loadError', 'danger'); } } // Uses key
-            function triggerInstallPromptIfAvailable(context = 'Contexto não especificado') { /* No translation needed */ if (deferredInstallPrompt && settings.goalHasBeenSet) { console.log(`Tentando exibir prompt de instalação (${context})...`); setTimeout(() => { deferredInstallPrompt.prompt(); deferredInstallPrompt.userChoice.then((choiceResult) => { if (choiceResult.outcome === 'accepted') { console.log('Usuário aceitou instalar o app'); } else { console.log('Usuário recusou instalar o app'); } deferredInstallPrompt = null; }).catch(err => { console.error("Erro ao processar userChoice do prompt:", err); deferredInstallPrompt = null; }); }, 300); } else if (!settings.goalHasBeenSet) { console.log(`Prompt de instalação não exibido pois a meta ainda não foi definida (${context}).`); } else { console.log(`Prompt de instalação não disponível no momento (${context}).`); } }
+             function saveData() { try { localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); } catch (e) { console.error("SAVE ERR:", e); showFeedback('feedback.saveError', 'danger'); } }
+             function loadData() { try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const parsedEntries = JSON.parse(sER); if (Array.isArray(parsedEntries)) { recordedEntries = parsedEntries.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })); } else { throw new Error("Stored entries not an array"); } } catch (parseErr) { console.error("Error parsing stored entries, resetting:", parseErr); sER = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } } else { recordedEntries = []; } recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } }); plannedEntries.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')); const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); let lS = sSR ? JSON.parse(sSR) : {}; settings = { monthlyGoal: 70, goalHasBeenSet: false, ...lS }; if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; console.log("Data loaded."); } catch (err) { console.error("Load Err:", err); recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { console.error("Error removing invalid storage items:", e); } showFeedback('feedback.loadError', 'danger'); } }
+            function triggerInstallPromptIfAvailable(context = 'Contexto não especificado') { /* No changes */ if (deferredInstallPrompt && settings.goalHasBeenSet) { console.log(`Tentando exibir prompt de instalação (${context})...`); setTimeout(() => { deferredInstallPrompt.prompt(); deferredInstallPrompt.userChoice.then((choiceResult) => { if (choiceResult.outcome === 'accepted') { console.log('Usuário aceitou instalar o app'); } else { console.log('Usuário recusou instalar o app'); } deferredInstallPrompt = null; }).catch(err => { console.error("Erro ao processar userChoice do prompt:", err); deferredInstallPrompt = null; }); }, 300); } else if (!settings.goalHasBeenSet) { console.log(`Prompt de instalação não exibido pois a meta ainda não foi definida (${context}).`); } else { console.log(`Prompt de instalação não disponível no momento (${context}).`); } }
 
-            function promptForMonthlyGoal() { // Uses translated prompt
+             function promptForMonthlyGoal() {
                  let gS=false;
-                 const promptMessage = t('statsCard.goalLabel') + " (ex: 70):"; // Combine translated label
+                 // Create the prompt message using translation
+                 const promptMessage = t('statsCard.goalLabel'); // Should include "(Hours)"
                  while(!gS){
                      const gI=prompt(promptMessage, settings.monthlyGoal);
-                     if (gI===null){ gS=true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); applyTranslations(); updateAllDisplays(); console.log("Usuário cancelou a definição inicial da meta."); } } // Apply translations after maybe changing state
-                     else { const g = parseInt(gI,10); if (!isNaN(g) && g > 0) { settings.monthlyGoal=g; settings.goalHasBeenSet=true; monthlyGoalInput.value=g; saveData(); gS=true; applyTranslations(); updateAllDisplays(); showFeedback("feedback.goalSetSuccess", "success"); triggerInstallPromptIfAvailable('Após definir meta inicial'); } else { alert(t("feedback.invalidGoalValue")); } } // Use translated alert
+                     if (gI === null){ // User cancelled
+                         gS=true;
+                         if (!settings.goalHasBeenSet) { // Only trigger update if first time cancel
+                             settings.goalHasBeenSet = true; // Mark as interacted
+                             saveData();
+                             updateAllDisplays(); // Update UI to reflect possible change in forecast
+                             console.log("User cancelled initial goal setting.");
+                         }
+                     } else { // User entered something
+                         const g = parseInt(gI, 10);
+                         if (!isNaN(g) && g > 0) { // Valid input
+                             settings.monthlyGoal=g; settings.goalHasBeenSet=true;
+                             monthlyGoalInput.value=g; // Update input field
+                             saveData();
+                             gS=true;
+                             updateAllDisplays(); // Reflect new goal in stats & dashboard
+                             showFeedback("feedback.goalSetSuccess", "success");
+                             triggerInstallPromptIfAvailable('Após definir meta inicial');
+                         } else { // Invalid input
+                             alert(t("feedback.invalidGoalValue"));
+                         }
+                     }
                  }
-            }
+             }
 
-            function setDateInputVisibility(visible) { isDateInputVisible=visible; if(visible){ recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent=(!recordDateInput.value || recordDateInput.value===getCurrentDateString()) ? t('dates.today') : formatDisplayDate(recordDateInput.value);}} // Use translated "Today"
-            function toggleCard(cardElement){ /* No translation needed */ if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';}}
+
+             function setDateInputVisibility(visible) { isDateInputVisible=visible; if(visible){ recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent=(!recordDateInput.value || recordDateInput.value===getCurrentDateString()) ? t('dates.today') : formatDisplayDate(recordDateInput.value);}}
+            function toggleCard(cardElement){ /* No changes */ if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';}}
 
             function clearRecordForm() {
                 recordForm.reset();
                 recordIdInput.value = '';
                 recordDateInput.value = getCurrentDateString();
                 setDateInputVisibility(false);
-                recordTagSelect.value = DEFAULT_TAG_VALUE; // Use internal value
-                recordNotesInput.value = '';
-                recordHoursInput.value = '';
-                // Set button text using translation
-                 saveRecordBtn.textContent = t('recordCard.saveButton');
-                 saveRecordBtn.classList.remove('editing'); // Visual cue if it was there
-                currentEditingId = null;
-            }
-
-            function handleRecordSubmit(event) {
-                event.preventDefault();
-                const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now();
-                const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString();
-                const hoursInput = recordHoursInput.value;
-                const hours = parseTimeInputToDecimal(hoursInput);
-                const tag = recordTagSelect.value || DEFAULT_TAG_VALUE; // Save the internal value
-                const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH);
-
-                 if (isNaN(hours) || hours <= 0) { alert(t('feedback.invalidTimeFormat')); recordHoursInput.focus(); return; } // Translated alert
-                 if (!date) { alert(t('feedback.invalidDate')); return; } // Translated alert
-
-                 const newEntry = { id, date, hours, tag, notes };
-                const eI = recordedEntries.findIndex(entry => entry.id === id);
-                 if (eI > -1) { recordedEntries[eI] = newEntry; }
-                 else { recordedEntries.push(newEntry); }
-                recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-                saveData();
-                clearRecordForm(); // Already handles button text reset
-                applyTranslations(); // Reapply translations as some elements might have changed
-                updateAllDisplays();
-                showFeedback('feedback.recordSavedSuccess', 'success'); // Use key
-             }
-
-            function editRecordEntry(id) {
-                 const entry = recordedEntries.find(e => e.id === id);
-                 if (entry) {
-                     if (!recordCard.classList.contains('expanded')) { toggleCard(recordCard); }
-                    currentEditingId = id;
-                    recordIdInput.value = entry.id;
-                    recordDateInput.value = entry.date;
-                    setDateInputVisibility(entry.date !== getCurrentDateString()); // Uses translated 'Today'
-                    recordHoursInput.value = formatDecimalToTimeInput(entry.hours);
-                    recordTagSelect.value = entry.tag || DEFAULT_TAG_VALUE; // Set internal value
-                    recordNotesInput.value = entry.notes || '';
-                     // Update button text to 'Update Record' translated
-                     saveRecordBtn.textContent = t('recordCard.updateButton');
-                     saveRecordBtn.classList.add('editing'); // Maybe use this for styling?
-                    recordCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    recordHoursInput.focus();
-                 }
-            }
-
-             function deleteRecordEntry(id) {
-                showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'), () => { // Use translated message
-                    const index = recordedEntries.findIndex(e => e.id === id);
-                     if (index > -1) {
-                        recordedEntries.splice(index, 1);
-                        saveData();
-                        applyTranslations(); // Reapply needed if dynamic lists change
-                        updateAllDisplays();
-                        showFeedback('feedback.recordDeletedSuccess', 'info'); // Use key
-                        if (currentEditingId === id) {
-                            clearRecordForm(); // Reset form and button text
-                        }
-                    } else {
-                        console.warn("Entry not found for deletion:", id);
-                    }
-                 });
-            }
-
-             function clearPlanForm() {
-                 planForm.reset();
-                 planIdInput.value = '';
-                 planDateInput.value = '';
-                 planHoursInput.value = '';
-                 savePlanBtn.textContent = t('planCard.saveButton'); // Reset button text
+                 if (recordTagSelect) recordTagSelect.value = DEFAULT_TAG_VALUE; // Reset select to internal default
+                 recordNotesInput.value = '';
+                 recordHoursInput.value = '';
+                 if (saveRecordBtn) saveRecordBtn.textContent = t('recordCard.saveButton');
+                 saveRecordBtn?.classList.remove('editing'); // Use optional chaining
                  currentEditingId=null;
             }
 
-            function handlePlanSubmit(event){
-                event.preventDefault();
-                 const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now();
-                 const date = planDateInput.value;
-                 const hoursInput = planHoursInput.value;
-                 const hours = parseTimeInputToDecimal(hoursInput);
-                 const todayStr = getCurrentDateString();
+            function handleRecordSubmit(event) { /* Use translated alerts/feedback */ event.preventDefault(); const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString(); const hoursInput = recordHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const tag = recordTagSelect.value || DEFAULT_TAG_VALUE; const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH); if (isNaN(hours) || hours <= 0) { alert(t('feedback.invalidTimeFormat', { example: "2:30, 1:15, 45, 130" })); recordHoursInput.focus(); return; } if (!date) { alert(t('feedback.invalidDate')); return; } const newEntry = { id, date, hours, tag, notes }; const eI = recordedEntries.findIndex(entry => entry.id === id); if (eI > -1) { recordedEntries[eI] = newEntry; } else { recordedEntries.push(newEntry); } recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess', 'success'); }
 
-                if (!date || isNaN(hours) || hours <= 0) { alert(t('feedback.planFormInvalid')); planHoursInput.focus(); return; } // Translated alert
-                 if (date < todayStr) { alert(t('feedback.planDatePastError')); planDateInput.focus(); return; } // Translated alert
+            function editRecordEntry(id) { /* Update button text with translation */ const entry = recordedEntries.find(e => e.id === id); if (entry) { if (!recordCard.classList.contains('expanded')) { toggleCard(recordCard); } currentEditingId = id; recordIdInput.value = entry.id; recordDateInput.value = entry.date; setDateInputVisibility(entry.date !== getCurrentDateString()); recordHoursInput.value = formatDecimalToTimeInput(entry.hours); recordTagSelect.value = entry.tag || DEFAULT_TAG_VALUE; recordNotesInput.value = entry.notes || ''; saveRecordBtn.textContent = t('recordCard.updateButton'); saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); recordHoursInput.focus(); } }
+            function deleteRecordEntry(id) { /* Use translated confirm message */ showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'), () => { const index = recordedEntries.findIndex(e => e.id === id); if (index > -1) { recordedEntries.splice(index, 1); saveData(); updateAllDisplays(); showFeedback('feedback.recordDeletedSuccess', 'info'); if (currentEditingId === id) { clearRecordForm(); } } else { console.warn("Entry not found for deletion:", id); } }); }
 
-                 const nP = { id, date, hours };
-                const eI = plannedEntries.findIndex(p => p.id === id);
-                if (eI > -1) { plannedEntries[eI] = nP; } else { plannedEntries.push(nP); }
-                plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
-                saveData();
-                clearPlanForm(); // Resets button text
-                applyTranslations();
-                updateAllDisplays();
-                showFeedback('feedback.planSavedSuccess', 'success'); // Use key
-             }
+            function clearPlanForm() { /* Reset button text with translation */ planForm.reset(); planIdInput.value = ''; planDateInput.value = ''; planHoursInput.value = ''; if (savePlanBtn) savePlanBtn.textContent = t('planCard.saveButton'); currentEditingId=null; }
+            function handlePlanSubmit(event){ /* Use translated alerts/feedback */ event.preventDefault(); const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now(); const date = planDateInput.value; const hoursInput = planHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const todayStr = getCurrentDateString(); if (!date || isNaN(hours) || hours <= 0) { alert(t('feedback.planFormInvalid', {example: "2:30, 45"})); planHoursInput.focus(); return; } if (date < todayStr) { alert(t('feedback.planDatePastError')); planDateInput.focus(); return; } const nP = { id, date, hours }; const eI = plannedEntries.findIndex(p => p.id === id); if (eI > -1) { plannedEntries[eI] = nP; } else { plannedEntries.push(nP); } plannedEntries.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('feedback.planSavedSuccess', 'success'); }
+            function markPlanAsDone(id) { /* Use translated feedback/notes */ const planIndex = plannedEntries.findIndex(p => p.id === id); if (planIndex === -1) { console.error("Plano não encontrado para marcar como feito:", id); showFeedback('feedback.planNotFound', 'danger'); return; } const plan = plannedEntries[planIndex]; const todayStr = getCurrentDateString(); const recordDate = todayStr < plan.date ? todayStr : plan.date; const autoNote = t('recordCard.autoNoteFromPlan', { date: formatDisplayDate(plan.date), hours: formatHoursExtensive(plan.hours)}); const newRecordEntry = { id: Date.now(), date: recordDate, hours: plan.hours, tag: DEFAULT_TAG_VALUE, notes: autoNote }; recordedEntries.push(newRecordEntry); recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); plannedEntries.splice(planIndex, 1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess', 'success'); }
+            function deletePlanEntry(id){ /* Use translated confirm/feedback */ showConfirmationDialog(t('dialog.confirmDeletePlanMessage'),()=>{ plannedEntries=plannedEntries.filter(p=>p.id!==id); saveData(); updateAllDisplays(); showFeedback('feedback.planDeletedSuccess','info'); if(currentEditingId===id){ clearPlanForm(); } }); }
+            function handleGoalSave(){ /* Use translated feedback/alerts */ const nG=parseInt(monthlyGoalInput.value,10); if(!isNaN(nG) && nG>0){ settings.monthlyGoal=nG; settings.goalHasBeenSet=true; saveData(); updateAllDisplays(); showFeedback('feedback.goalUpdateSuccess','success'); triggerInstallPromptIfAvailable('Após atualizar meta no card'); }else{ alert(t('feedback.invalidGoalValue')); monthlyGoalInput.value=settings.monthlyGoal; } }
+            function handleClearAllData() { /* Use translated confirm/feedback */ showConfirmationDialog(t('dialog.confirmClearAllDataMessage'), () => { recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback('feedback.clearAllDataSuccess', 'danger'); document.querySelectorAll('.card').forEach(c => { if (c.id !== 'record-card' && c.classList.contains('expanded')) toggleCard(c); else if (c.id === 'record-card' && !c.classList.contains('expanded')) toggleCard(c); }); }); }
+            function showConfirmationDialog(message, onConfirm) { /* Receives translated msg */ dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog.classList.add('visible'); dialogConfirmBtn?.focus(); }
+            function hideConfirmationDialog() { /* No changes */ confirmationDialog.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300); }
 
-            function markPlanAsDone(id) {
-                const planIndex = plannedEntries.findIndex(p => p.id === id);
-                if (planIndex === -1) {
-                    console.error("Plano não encontrado para marcar como feito:", id);
-                    showFeedback('feedback.planNotFound', 'danger'); // Use key
-                    return;
-                }
-                const plan = plannedEntries[planIndex];
-                const todayStr = getCurrentDateString();
-                const recordDate = todayStr < plan.date ? todayStr : plan.date;
-                const newRecordEntry = {
-                    id: Date.now(),
-                    date: recordDate,
-                    hours: plan.hours,
-                     tag: DEFAULT_TAG_VALUE, // Use internal default
-                    // Consider translating this note or making it key-based if needed multi-lingually
-                    notes: `[AUTO] ${formatHoursExtensive(plan.hours)} from plan ${formatDisplayDate(plan.date)}.`
-                };
-                recordedEntries.push(newRecordEntry);
-                recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-                plannedEntries.splice(planIndex, 1);
-                saveData();
-                applyTranslations();
-                updateAllDisplays();
-                showFeedback('feedback.planMarkedDoneSuccess', 'success'); // Use key
-            }
+             function showFeedback(messageKey, type = 'info', variables = {}) {
+                 let message = t(messageKey, variables); // Get translated message
+                // Sometimes alert is needed before UI is fully ready or for blocking action
+                if(type === 'alert-danger') { alert(`❌ ${message}`); return; }
+                 if(type === 'alert-info') { alert(`ℹ️ ${message}`); return; }
 
-             function deletePlanEntry(id){
-                 showConfirmationDialog(t('dialog.confirmDeletePlanMessage'),()=>{ // Translated confirm message
-                     plannedEntries = plannedEntries.filter(p => p.id !== id);
-                    saveData();
-                    applyTranslations();
-                    updateAllDisplays();
-                    showFeedback('feedback.planDeletedSuccess','info'); // Use key
-                    if(currentEditingId===id){ clearPlanForm(); }
-                 });
-            }
-
-            function handleGoalSave(){
-                 const nG = parseInt(monthlyGoalInput.value, 10);
-                if(!isNaN(nG) && nG > 0){
-                    settings.monthlyGoal=nG;
-                    settings.goalHasBeenSet=true;
-                    saveData();
-                    applyTranslations();
-                    updateAllDisplays();
-                    showFeedback('feedback.goalUpdateSuccess','success'); // Use key
-                    triggerInstallPromptIfAvailable('Após atualizar meta no card');
-                 }else{
-                    alert(t('feedback.invalidGoalValue')); // Use key
-                    monthlyGoalInput.value=settings.monthlyGoal;
-                 }
-            }
-
-            function handleClearAllData() {
-                 showConfirmationDialog(t('dialog.confirmClearAllDataMessage'), () => { // Use key
-                    recordedEntries = []; plannedEntries = [];
-                    settings = { monthlyGoal: 70, goalHasBeenSet: false };
-                    monthlyGoalInput.value = settings.monthlyGoal;
-                    saveData();
-                    clearRecordForm(); clearPlanForm();
-                    applyTranslations();
-                    updateAllDisplays();
-                    showFeedback('feedback.clearAllDataSuccess', 'danger'); // Use key
-                    document.querySelectorAll('.card').forEach(c => { if (c.id !== 'record-card' && c.classList.contains('expanded')) toggleCard(c); else if (c.id === 'record-card' && !c.classList.contains('expanded')) toggleCard(c); });
-                 });
-            }
-
-            function showConfirmationDialog(message, onConfirm) { // Message now comes potentially translated
-                 dialogMessage.textContent = message; // Directly set the translated message
-                currentConfirmCallback = onConfirm;
-                confirmationDialog.classList.add('visible');
-                 dialogConfirmBtn.focus();
-             }
-            function hideConfirmationDialog() { /* No translation needed */ confirmationDialog.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300); }
-
-            function showFeedback(messageKey, type = 'info') { // Takes key instead of message
-                 const message = t(messageKey); // Translate the key
-                 console.log(`Feedback[${type}]: ${message}`); // Log translated message
-                const feedbackElement = document.createElement('div');
+                 console.log(`Feedback[${type}]: ${message}`);
+                 const feedbackElement = document.createElement('div');
                  feedbackElement.textContent = message;
-                // Style the feedback element as before...
-                feedbackElement.style.position = 'fixed'; feedbackElement.style.bottom = '20px'; feedbackElement.style.left = '50%'; feedbackElement.style.transform = 'translateX(-50%)'; feedbackElement.style.padding = '10px 20px'; feedbackElement.style.borderRadius = '8px'; feedbackElement.style.zIndex = '1100'; feedbackElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)'; feedbackElement.style.fontSize = '0.95em'; feedbackElement.style.transition = 'opacity 0.5s ease, bottom 0.5s ease'; feedbackElement.style.opacity = '0'; switch (type) { case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = 'var(--text-color)'; break; }
+                 // Style the feedback element as before...
+                 feedbackElement.style.position = 'fixed'; feedbackElement.style.bottom = '20px'; feedbackElement.style.left = '50%'; feedbackElement.style.transform = 'translateX(-50%)'; feedbackElement.style.padding = '10px 20px'; feedbackElement.style.borderRadius = '8px'; feedbackElement.style.zIndex = '1100'; feedbackElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)'; feedbackElement.style.fontSize = '0.95em'; feedbackElement.style.transition = 'opacity 0.5s ease, bottom 0.5s ease'; feedbackElement.style.opacity = '0'; switch (type) { case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = 'var(--text-color)'; break; }
                  document.body.appendChild(feedbackElement);
-                setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '30px'; }, 10);
+                 setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '30px'; }, 10);
                  setTimeout(() => { feedbackElement.style.opacity = '0'; feedbackElement.style.bottom = '10px'; }, 3500);
-                 setTimeout(() => { if (feedbackElement.parentNode) { feedbackElement.parentNode.removeChild(feedbackElement); } }, 4000);
+                 setTimeout(() => { feedbackElement.parentNode?.removeChild(feedbackElement); }, 4000);
              }
 
-            function updateDashboard() {
-                 const today = new Date();
-                 const cM = today.getMonth();
-                 const cY = today.getFullYear();
-                 const sOW = getStartOfWeek(today);
-                 let mH = 0; let wH = 0;
-                 recordedEntries.forEach(e => { const eD = new Date(e.date + 'T00:00:00'); if (eD.getMonth() === cM && eD.getFullYear() === cY) { mH += e.hours; } if (e.date >= sOW && e.date <= getCurrentDateString()) { wH += e.hours; } });
+             function updateDashboard() { /* Use translated units/labels */ const today = new Date(); const cM = today.getMonth(); const cY = today.getFullYear(); const sOW = getStartOfWeek(today); let mH = 0; let wH = 0; recordedEntries.forEach(e => { const eD = new Date(e.date + 'T00:00:00'); if (eD.getMonth() === cM && eD.getFullYear() === cY) { mH += e.hours; } if (e.date >= sOW && e.date <= getCurrentDateString()) { wH += e.hours; } }); if(dashboardWeekHours) dashboardWeekHours.textContent = formatHoursExtensive(wH); const goal = settings.monthlyGoal || 70; const percent = goal > 0 ? Math.min(100, (mH / goal) * 100) : 0; if(dashboardMonthPercentage) dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(mH, goal); if(dashboardMonthTotal) dashboardMonthTotal.innerHTML = `${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(mH)}</strong>`; const lastDay = new Date(cY, cM + 1, 0).getDate(); const todayDay = today.getDate(); const remainingDays = Math.max(0, lastDay - todayDay); const remainingHours = Math.max(0, goal - mH); let forecastText = ''; if (!settings.goalHasBeenSet) { forecastText = `<span>${t('dashboard.setGoalPrompt')}</span>`; } else if (remainingHours <= 0) { forecastText = `<span>${t('dashboard.goalMet')}</span>`; } else if (remainingDays <= 0) { forecastText = `<span>${t('dashboard.goalNotMetMonthEnd')}</span>`; } else { let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours; let daysNeeded = remainingDays; let suggestion = ''; if (daysNeeded > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysNeeded = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; } else if (daysNeeded <= 0) { avgNeeded = remainingHours; daysNeeded = 1; } const daysSuffix = t(daysNeeded === 1 ? 'dashboard.forecastSuffixDaysSingular' : 'dashboard.forecastSuffixDaysPlural'); suggestion = `${t('dashboard.attemptPrefix')}<strong>${formatHoursExtensive(avgNeeded, true)}</strong>/${daysSuffix} ${t('dashboard.perDay')} ${daysNeeded} ${daysSuffix}.`; forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHours)}.</span><span>${suggestion}</span>`; } if(dashboardForecast) dashboardForecast.innerHTML = forecastText; updateDashboardPlannedDates(); } // Moved below usage
+            function updateProgressRing(cV, mV) { /* No changes */ const p = mV > 0 ? Math.min(100, (cV / mV) * 100) : 0; const offset = progressRingCircumference * (1 - p / 100); if(progressRingFg) { progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); } }
 
-                dashboardWeekHours.textContent = formatHoursExtensive(wH); // Use translated units
-                 const goal = settings.monthlyGoal || 70;
-                 const percent = goal > 0 ? Math.min(100, (mH / goal) * 100) : 0;
-                 dashboardMonthPercentage.textContent = `${Math.round(percent)}%`;
-                 updateProgressRing(mH, goal);
-                 // Use translated "Month:" label
-                 dashboardMonthTotal.innerHTML = `${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(mH)}</strong>`;
+             function updateDashboardPlannedDates() { /* Use translated suffix */ const today = new Date(); today.setHours(0, 0, 0, 0); const todayStr = getCurrentDateString(); const now = new Date(); const currentHour = now.getHours(); const overdueThreshold = 18; const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')).slice(0, 3); const pastUncompletedPlans = plannedEntries.filter(p => { const planDate = new Date(p.date + 'T00:00:00'); return planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); }).sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')).slice(0, 3 - futurePlans.length); const displayPlans = [...pastUncompletedPlans, ...futurePlans].slice(0,3).sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')); if (dashboardPlanList) dashboardPlanList.innerHTML = ''; if (displayPlans.length > 0) { dashboardPlannedDatesContainer?.classList.remove('hidden'); displayPlans.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; let mainText = `<strong>${formatRelativeDate(plan.date)}:</strong> ${formatHoursExtensive(plan.hours)}`; li.innerHTML = mainText; const planDate = new Date(plan.date + 'T00:00:00'); let isOverdue = false; if (planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold)) { isOverdue = true; } if (isOverdue) { const warningSpan = document.createElement('span'); warningSpan.textContent = ` ${t('dashboard.overduePlanSuffix')}`; warningSpan.classList.add('plan-warning'); li.appendChild(warningSpan); } dashboardPlanList?.appendChild(li); }); } else { dashboardPlannedDatesContainer?.classList.add('hidden'); } }
+            function renderHistory() { /* Uses translated strings heavily */ if (!historyList) return; historyList.innerHTML = ''; const sT = historySearchInput?.value.trim().toLowerCase() || ''; let res = []; let lblTxt = ''; const hasSearch = sT.length > 0; const lowerCaseTranslatedTagToInternal = {}; Object.keys(tagKeyMapping).forEach(internalTag => { const translated = t(tagKeyMapping[internalTag] || 'tags.noTag').toLowerCase(); lowerCaseTranslatedTagToInternal[translated] = internalTag; }); const defaultTagInternal = DEFAULT_TAG_VALUE; const defaultTagTranslatedLower = t(tagKeyMapping[defaultTagInternal] || 'tags.houseToHouse').toLowerCase(); if (hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours || 0).toString(); const dspDt = formatDisplayDate(e.date).toLowerCase(); const notes = (e.notes || '').toLowerCase(); const tagInternal = e.tag || defaultTagInternal; const tagTranslated = t(tagKeyMapping[tagInternal] || `tags.${tagInternal.toLowerCase()}`).toLowerCase(); const fHE = formatHoursExtensive(e.hours).toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.', ',').includes(sT) || hrStr.includes(sT) || tagTranslated.includes(sT) || notes.includes(sT) || fHE.includes(sT) || tagInternal.toLowerCase().includes(sT) ); }); const resultsKey = res.length === 1 ? 'historyCard.resultsCountSingular' : 'historyCard.resultsCountPlural'; const resultsKeyForTerm = res.length === 1 ? 'historyCard.resultsCountForTermSingular' : 'historyCard.resultsCountForTermPlural'; lblTxt = sT ? t(resultsKeyForTerm, {count: res.length, term: sT}) : t(resultsKey, {count: res.length}); } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); if (recordedEntries.length > 0 && res.length === 0) { lblTxt = t('historyCard.noRecordsLastMonths', {limit: HISTORY_MONTH_LIMIT}); } else if (recordedEntries.length > 0) { lblTxt = t('historyCard.showingLastMonths', {limit: HISTORY_MONTH_LIMIT}); } else { lblTxt = ''; } } if(showingResultsLabel) showingResultsLabel.textContent = lblTxt; if (res.length === 0) { let placeholderKey = 'historyCard.listPlaceholderNoRecords'; if (recordedEntries.length > 0) { placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent'; } if (historyListPlaceholder) { historyListPlaceholder.textContent = t(placeholderKey); historyListPlaceholder.classList.remove('hidden'); } } else { historyListPlaceholder?.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagInternal = entry.tag || DEFAULT_TAG_VALUE; const tagTranslated = t(tagKeyMapping[tagInternal] || 'tags.noTag'); const tagDisp = `<span class="tag-badge" ${tagInternal === DEFAULT_TAG_VALUE ? 'style="opacity:0.6;"' : ''}>${tagTranslated}</span>`; const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">${t('common.editButton')}</button> <button class="delete-btn danger">${t('common.deleteButton')}</button> </div>`; li.querySelector('.edit-btn')?.addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn')?.addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); }); }
+            function renderPlanning() { /* Use translated texts */ if (!planningList) return; planningList.innerHTML = ''; const tS = getCurrentDateString(); const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')); if (allPlansSorted.length === 0) { if (planningListPlaceholder) { planningListPlaceholder.textContent = t('planCard.listPlaceholderNoPastOrFuture'); planningListPlaceholder.classList.remove('hidden'); } return; } planningListPlaceholder?.classList.add('hidden'); allPlansSorted.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const hD = formatHoursExtensive(plan.hours); const isPastPlan = plan.date < tS; const pastDateText = isPastPlan ? `<span style="opacity: 0.7; margin-left: 5px;">${t('planCard.pastDateSuffix')}</span>` : ''; li.innerHTML = ` <div class="entry-details"> <strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong> <span class="hours">${hD}</span> ${pastDateText} </div> <div class="plan-actions"> <button class="done-plan-btn success">${t('planCard.markDoneButton')}</button> <button class="delete-plan-btn danger">${t('common.deleteButton')}</button> </div>`; li.querySelector('.done-plan-btn')?.addEventListener('click', (e) => { e.stopPropagation(); markPlanAsDone(plan.id); }); li.querySelector('.delete-plan-btn')?.addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id); }); planningList.appendChild(li); }); }
+            function updateStatistics() { /* Uses translated formats */ const cM = new Date().getMonth(); const cY = new Date().getFullYear(); const eM = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === cM && d.getFullYear() === cY; }); let tH = 0; const aD = new Set(); eM.forEach(e => { tH += e.hours; aD.add(e.date); }); const g = settings.monthlyGoal || 70; const pP = settings.goalHasBeenSet ? (g > 0 ? Math.min(Math.round((tH / g) * 100), 100) : 0) : 0; const aH = aD.size > 0 ? (tH / aD.size) : 0; const dAC = aD.size; if(statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(tH); if(statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${pP}%` : '--%'; if(statsMonthProgressBar) statsMonthProgressBar.style.width = `${pP}%`; if(statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(aH); if(statsMonthDaysActive) statsMonthDaysActive.textContent = dAC; /* Labels handled by applyStatic */ }
+            function populateMonthSelector() { /* Use translated names/suffix */ if(!chartMonthSelector) return; const aM = new Set(); recordedEntries.forEach(e => { aM.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const sM = Array.from(aM).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = ''; if (sM.length === 0) { const o = document.createElement('option'); o.value = ''; o.textContent = t('chartsCard.noDataOption'); chartMonthSelector.appendChild(o); chartMonthSelector.disabled = true; return; } chartMonthSelector.disabled = false; const cMSValue = getMonthYearString(new Date()); const cMSFormatted = formatMonthYearExtensive(cMSValue); let hCM = false; let didSelectOld = false; sM.forEach(mSValue => { const o = document.createElement('option'); const mSFormatted = formatMonthYearExtensive(mSValue); o.value = mSValue; o.textContent = mSFormatted; if (mSValue === oldSelectedValue) { o.selected = true; didSelectOld = true; } else if (mSValue === cMSValue && !didSelectOld) { o.selected = true; } if (mSValue === cMSValue) { hCM = true; } chartMonthSelector.appendChild(o); }); if (!hCM && Array.isArray(MONTH_NAMES) && MONTH_NAMES.length > 0) { const o = document.createElement('option'); o.value = cMSValue; o.textContent = `${cMSFormatted} ${t('chartsCard.currentMonthSuffix')}`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); if (!didSelectOld) o.selected = true; } if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
+            function renderCharts(selectedMonthYearValue) { /* Use translated text/formats */ if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (!selectedMonthYearValue) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; } try { const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number); const monthIndex = selectedMonth - 1; const year = selectedYear; const entriesSelectedMonth = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === monthIndex && d.getFullYear() === year; }); if (entriesSelectedMonth.length === 0) { clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYearValue) })); return; } let totalHoursMonth = 0; const hoursByTag = {}; entriesSelectedMonth.forEach(entry => { const tagInternal = entry.tag || DEFAULT_TAG_VALUE; const hours = entry.hours || 0; totalHoursMonth += hours; hoursByTag[tagInternal] = (hoursByTag[tagInternal] || 0) + hours; }); if (chartTotalHoursDisplay) { chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHoursMonth)}</strong>`; } const chartLabels = Object.keys(hoursByTag).map(internalTag => t(tagKeyMapping[internalTag] || 'tags.noTag')); const chartDataValues = Object.values(hoursByTag); const backgroundColors = chartLabels.map((_, index) => chartColors[index % chartColors.length]); monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'pie', data: { labels: chartLabels, datasets: [{ data: chartDataValues, backgroundColor: backgroundColors, borderColor: computedStyles?.getPropertyValue('--card-bg')?.trim() || '#1c1c1e', borderWidth: 1.5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6, callbacks: { label: function(context) { const label = context.label || ''; const value = context.parsed || 0; const percentage = totalHoursMonth > 0 ? ((value / totalHoursMonth) * 100).toFixed(1) : 0; return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`; } } }, legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } } } } }); } catch (e) { console.error("Chart render error:", e); clearChartWithMessage(t('chartsCard.renderErrorMessage')); } }
+            function clearChartWithMessage(message) { /* Receives translated msg */ if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (chartTotalHoursDisplay) { chartTotalHoursDisplay.textContent = ''; } const ctx = monthlyHoursChartCtx; if (ctx) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + (computedStyles?.fontFamily || 'sans-serif'); ctx.fillText(message, ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); } else { console.error("Canvas context not found for clearing message.") } }
 
-                 const lastDay = new Date(cY, cM + 1, 0).getDate();
-                 const todayDay = today.getDate();
-                 const remainingDays = Math.max(0, lastDay - todayDay);
-                 const remainingHours = Math.max(0, goal - mH);
-                 let forecastText = '';
+            function updateAllDisplays() { /* Calls applyStaticTranslations */ if (!translations[currentLang]) { console.warn("Translations not ready, delaying updateAllDisplays"); return; } applyStaticTranslations(); updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning(); const selectedMonthValue = chartMonthSelector?.value; if (!chartMonthSelector?.disabled && selectedMonthValue) { renderCharts(selectedMonthValue); } else if (!chartMonthSelector?.disabled && chartMonthSelector?.options.length > 0 && chartMonthSelector.options[0].value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.options[0].value); } else { clearChartWithMessage(t(recordedEntries.length === 0 ? 'chartsCard.noDataYetMessage' : 'chartsCard.selectMonthMessage')); } }
+            function formatTimeInputOnType(event) { /* No changes */ const input = event.target; let value = input.value; let originalCursorPos = input.selectionStart; let numericValue = value.replace(/[^\d]/g, ''); numericValue = numericValue.substring(0, 4); let formattedValue = numericValue; let colonWasAdded = false; if (numericValue.length > 2) { const hoursPart = numericValue.substring(0, numericValue.length - 2); const minutesPart = numericValue.substring(numericValue.length - 2); formattedValue = `${hoursPart}:${minutesPart}`; if (value.length < formattedValue.length && value.indexOf(':') === -1) { colonWasAdded = true; } } if (input.value !== formattedValue) { input.value = formattedValue; let newCursorPos = originalCursorPos; if (colonWasAdded && originalCursorPos >= formattedValue.indexOf(':') + 1) { newCursorPos++; } newCursorPos = Math.min(newCursorPos, formattedValue.length); requestAnimationFrame(() => { input.setSelectionRange(newCursorPos, newCursorPos); }); } }
+            function registerServiceWorker() { /* No changes */ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./service-worker.js').then((reg) => { console.log('Service Worker registered successfully. Scope:', reg.scope); }).catch((error) => { console.error('Service Worker registration failed:', error); }); } }
 
-                if (!settings.goalHasBeenSet) { forecastText = `<span>${t('dashboard.setGoalPrompt')}</span>`; }
-                 else if (remainingHours <= 0) { forecastText = `<span>${t('dashboard.goalMet')}</span>`; }
-                 else if (remainingDays <= 0) { forecastText = `<span>${t('dashboard.goalNotMetMonthEnd')}</span>`; }
-                 else {
-                     let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours;
-                     let daysNeeded = remainingDays;
-                     let suggestion = '';
-                     if (daysNeeded > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysNeeded = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; }
-                     else if (daysNeeded <= 0) { avgNeeded = remainingHours; daysNeeded = 1; }
-                     // Translate forecast suggestion parts
-                     const daysSuffix = t(daysNeeded === 1 ? 'dashboard.forecastSuffixDaysSingular' : 'dashboard.forecastSuffixDaysPlural');
-                     suggestion = `${t('dashboard.attemptPrefix')}<strong>${formatHoursExtensive(avgNeeded, true)}</strong>/${daysSuffix} ${t('dashboard.perDay')} ${daysNeeded} ${daysSuffix}.`;
-                     forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHours)}.</span><span>${suggestion}</span>`;
-                 }
-                 dashboardForecast.innerHTML = forecastText;
-                 updateDashboardPlannedDates(); // Needs update for relative dates
-             }
 
-             function updateProgressRing(cV, mV) { /* No translation needed */ const p = mV > 0 ? Math.min(100, (cV / mV) * 100) : 0; const offset = progressRingCircumference * (1 - p / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); }
+            // --- MAIN INITIALIZATION ---
+             // Moved this block outside the main async function, but ensure `t` and other helpers are available
+             const loadingIndicator = document.getElementById('loading-indicator');
+             if(loadingIndicator) loadingIndicator.classList.remove('hidden'); // Show loading
 
-            function updateDashboardPlannedDates() {
-                 const today = new Date(); today.setHours(0, 0, 0, 0);
-                 const todayStr = getCurrentDateString();
-                 const now = new Date(); const currentHour = now.getHours(); const overdueThreshold = 18;
-                 const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 3);
-                 const pastUncompletedPlans = plannedEntries.filter(p => { const planDate = new Date(p.date + 'T00:00:00'); return planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); }).sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 3 - futurePlans.length);
-                 const displayPlans = [...pastUncompletedPlans, ...futurePlans].slice(0,3).sort((a, b) => new Date(a.date) - new Date(b.date));
 
-                 dashboardPlanList.innerHTML = ''; // Clear previous entries
-                 if (displayPlans.length > 0) {
-                     dashboardPlannedDatesContainer.classList.remove('hidden');
-                     displayPlans.forEach(plan => {
-                         const li = document.createElement('li'); li.dataset.id = plan.id;
-                         // Use translated relative date and hours format
-                         let mainText = `<strong>${formatRelativeDate(plan.date)}:</strong> ${formatHoursExtensive(plan.hours)}`;
-                         li.innerHTML = mainText;
-                         const planDate = new Date(plan.date + 'T00:00:00');
-                         let isOverdue = false; if (planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold)) { isOverdue = true; }
-                         if (isOverdue) {
-                             const warningSpan = document.createElement('span');
-                             warningSpan.textContent = ` ${t('dashboard.overduePlanSuffix')}`; // Translated suffix
-                             warningSpan.classList.add('plan-warning');
-                             li.appendChild(warningSpan);
-                         }
-                         dashboardPlanList.appendChild(li);
-                     });
+             try {
+                 const response = await fetch('translations.json');
+                 if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
+                 translations = await response.json();
+
+                const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0];
+                const browserLocale = navigator.language || navigator.userLanguage || 'en';
+
+                 // Check full locale (e.g., pt-BR), then base lang (e.g., pt), then fallback to 'en'
+                if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) {
+                     currentLang = browserLocale;
+                 } else if (translations[browserLang] && supportedLanguages.includes(browserLang)) {
+                     currentLang = browserLang;
+                 } else if (translations['en']){ // Explicitly check if 'en' exists before fallback
+                     currentLang = 'en';
                  } else {
-                     dashboardPlannedDatesContainer.classList.add('hidden');
-                 }
-            }
+                      // Critical failure - no translations found, not even English
+                     throw new Error("Default language 'en' missing in translations.json");
+                  }
+                 console.log("Selected language:", currentLang);
 
-             function renderHistory() {
-                 historyList.innerHTML = '';
-                 const sT = historySearchInput.value.trim().toLowerCase();
-                 let res = []; let lblTxt = ''; const hasSearch = sT.length > 0;
-
-                 // Prepare a reverse mapping from translated tags (lowercase) back to internal value
-                 const lowerCaseTranslatedTagToInternal = {};
-                 Object.keys(tagKeyMapping).forEach(internalTag => {
-                    const translated = t(tagKeyMapping[internalTag]).toLowerCase();
-                    lowerCaseTranslatedTagToInternal[translated] = internalTag;
-                 });
-                const defaultTagInternal = DEFAULT_TAG_VALUE;
-                 const defaultTagTranslatedLower = t(tagKeyMapping[defaultTagInternal] || 'tags.houseToHouse').toLowerCase(); // Handle potential missing key
-
-                if (hasSearch) {
-                    res = recordedEntries.filter(e => {
-                         const hrStr = Math.round(e.hours || 0).toString();
-                         const dspDt = formatDisplayDate(e.date).toLowerCase(); // Use formatted date for searching
-                         const notes = (e.notes || '').toLowerCase();
-                         const tagInternal = e.tag || defaultTagInternal;
-                        const tagTranslated = t(tagKeyMapping[tagInternal] || `tags.${tagInternal.toLowerCase()}`).toLowerCase(); // Translate tag for searching
-                         const fHE = formatHoursExtensive(e.hours).toLowerCase(); // Search translated format
-
-                        return (
-                            dspDt.includes(sT) || // Search formatted date
-                             e.hours.toString().replace('.', ',').includes(sT) || // Search raw hours with comma
-                             hrStr.includes(sT) || // Search rounded hours string
-                             tagTranslated.includes(sT) || // Search translated tag
-                             notes.includes(sT) || // Search notes
-                             fHE.includes(sT) || // Search full hours string
-                            // Bonus: Allow searching the internal tag value (in lowercase)
-                             tagInternal.toLowerCase().includes(sT)
-                        );
-                    });
-                     // Translated result count message
-                     const resultsKey = res.length === 1 ? 'historyCard.resultsCountSingular' : 'historyCard.resultsCountPlural';
-                     const resultsKeyForTerm = res.length === 1 ? 'historyCard.resultsCountForTermSingular' : 'historyCard.resultsCountForTermPlural';
-                     lblTxt = sT ? t(resultsKeyForTerm, {count: res.length, term: sT}) : t(resultsKey, {count: res.length});
-                 } else {
-                     const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT);
-                     res = recordedEntries.filter(e => e.date >= tMA);
-                     // Translated labels for no search
-                     if (recordedEntries.length > 0 && res.length === 0) {
-                         lblTxt = t('historyCard.noRecordsLastMonths', {limit: HISTORY_MONTH_LIMIT});
-                     } else if (recordedEntries.length > 0) {
-                         lblTxt = t('historyCard.showingLastMonths', {limit: HISTORY_MONTH_LIMIT});
-                     } else { lblTxt = ''; } // No records at all
-                 }
-                 showingResultsLabel.textContent = lblTxt;
-
-                if (res.length === 0) {
-                     // Translated placeholder texts
-                     let placeholderKey = 'historyCard.listPlaceholderNoRecords'; // Default if no records ever
-                     if (recordedEntries.length > 0) { // If there are records, but none match/recent
-                         placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent';
-                     }
-                     historyListPlaceholder.textContent = t(placeholderKey);
-                     historyListPlaceholder.classList.remove('hidden');
-                 } else {
-                     historyListPlaceholder.classList.add('hidden');
-                 }
-
-                res.forEach(entry => {
-                    const li = document.createElement('li'); li.dataset.id = entry.id;
-                     const tagInternal = entry.tag || DEFAULT_TAG_VALUE;
-                    // Get translated tag for display
-                    const tagTranslated = t(tagKeyMapping[tagInternal] || 'tags.noTag');
-                     const tagDisp = `<span class="tag-badge" ${tagInternal === DEFAULT_TAG_VALUE ? 'style="opacity:0.6;"' : ''}>${tagTranslated}</span>`;
-                     // Get translated 'No notes' text
-                    const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`;
-                     const hrsDisp = formatHoursExtensive(entry.hours); // Translated hours
-
-                    li.innerHTML = `
-                        <div class="entry-details">
-                            <strong>${formatDisplayDate(entry.date)}:</strong>
-                            <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev}
-                        </div>
-                        <div class="entry-actions">
-                             <button class="edit-btn secondary">${t('common.editButton')}</button>
-                             <button class="delete-btn danger">${t('common.deleteButton')}</button>
-                         </div>`;
-                     li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); });
-                     li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); });
-                     historyList.appendChild(li);
-                 });
-             }
-
-             function renderPlanning() {
-                 planningList.innerHTML = '';
-                 const tS = getCurrentDateString();
-                 const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                 if (allPlansSorted.length === 0) {
-                     // Translated placeholder
-                     planningListPlaceholder.textContent = t('planCard.listPlaceholderNoPastOrFuture');
-                     planningListPlaceholder.classList.remove('hidden');
-                     return;
-                 }
-
-                planningListPlaceholder.classList.add('hidden');
-                allPlansSorted.forEach(plan => {
-                     const li = document.createElement('li'); li.dataset.id = plan.id;
-                     const hD = formatHoursExtensive(plan.hours); // Translated hours
-                     const isPastPlan = plan.date < tS;
-                     const pastDateText = isPastPlan ? `<span style="opacity: 0.7; margin-left: 5px;">${t('planCard.pastDateSuffix')}</span>` : ''; // Translated suffix
-
-                     li.innerHTML = `
-                        <div class="entry-details">
-                             <strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong>
-                             <span class="hours">${hD}</span> ${pastDateText}
-                        </div>
-                         <div class="plan-actions">
-                             <button class="done-plan-btn success">${t('planCard.markDoneButton')}</button>
-                             <button class="delete-plan-btn danger">${t('common.deleteButton')}</button>
-                         </div>`;
-                     li.querySelector('.done-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); markPlanAsDone(plan.id); });
-                     li.querySelector('.delete-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id); });
-                     planningList.appendChild(li);
-                 });
-             }
-
-            function updateStatistics() {
-                 const cM = new Date().getMonth(); const cY = new Date().getFullYear();
-                 const eM = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === cM && d.getFullYear() === cY; });
-                 let tH = 0; const aD = new Set(); eM.forEach(e => { tH += e.hours; aD.add(e.date); });
-                 const g = settings.monthlyGoal || 70; const pP = settings.goalHasBeenSet ? (g > 0 ? Math.min(Math.round((tH / g) * 100), 100) : 0) : 0;
-                 const aH = aD.size > 0 ? (tH / aD.size) : 0; const dAC = aD.size;
-
-                statsMonthHours.textContent = formatHoursExtensive(tH); // Translated units
-                statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${pP}%` : '--%';
-                 statsMonthProgressBar.style.width = `${pP}%`;
-                 statsAvgHoursDay.textContent = formatHoursExtensive(aH); // Translated units
-                 statsMonthDaysActive.textContent = dAC;
-                 // Labels are handled by applyStaticTranslations
-             }
-
-            function populateMonthSelector() {
-                 const aM = new Set(); recordedEntries.forEach(e => { aM.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); });
-                 const sM = Array.from(aM).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); });
-                 const oldSelectedValue = chartMonthSelector.value;
-                 chartMonthSelector.innerHTML = ''; // Clear existing options
-
-                 if (sM.length === 0) {
-                     const o = document.createElement('option');
-                     o.value = '';
-                     o.textContent = t('chartsCard.noDataOption'); // Translated option
-                     chartMonthSelector.appendChild(o);
-                     chartMonthSelector.disabled = true;
-                     return;
-                 }
-
-                chartMonthSelector.disabled = false;
-                 const cMSValue = getMonthYearString(new Date());
-                 const cMSFormatted = formatMonthYearExtensive(cMSValue); // Translated format
-                 let hCM = false; let didSelectOld = false;
-
-                 sM.forEach(mSValue => {
-                     const o = document.createElement('option');
-                     const mSFormatted = formatMonthYearExtensive(mSValue); // Translated format
-                     o.value = mSValue; o.textContent = mSFormatted;
-                     if (mSValue === oldSelectedValue) { o.selected = true; didSelectOld = true; }
-                     else if (mSValue === cMSValue && !didSelectOld) { o.selected = true; }
-                     if (mSValue === cMSValue) { hCM = true; }
-                     chartMonthSelector.appendChild(o);
-                 });
-
-                if (!hCM) { // Add current month if not present in data
-                     const o = document.createElement('option');
-                     o.value = cMSValue;
-                     // Add translated "(Current Month)" suffix
-                     o.textContent = `${cMSFormatted} ${t('chartsCard.currentMonthSuffix')}`;
-                     chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild);
-                     if (!didSelectOld) o.selected = true;
-                 }
-
-                if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) {
-                     chartMonthSelector.options[0].selected = true;
-                 }
-             }
-
-            function renderCharts(selectedMonthYearValue) {
-                 if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; }
-
-                if (!selectedMonthYearValue) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; } // Translated msg
-
-                 try {
-                     const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number);
-                     const monthIndex = selectedMonth - 1; const year = selectedYear;
-                     const entriesSelectedMonth = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === monthIndex && d.getFullYear() === year; });
-
-                     if (entriesSelectedMonth.length === 0) {
-                         // Translated message with month name
-                         clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYearValue) }));
-                         return;
-                     }
-
-                    let totalHoursMonth = 0; const hoursByTag = {};
-                    entriesSelectedMonth.forEach(entry => {
-                         const tagInternal = entry.tag || DEFAULT_TAG_VALUE; // Use internal value for aggregation
-                         const hours = entry.hours || 0; totalHoursMonth += hours;
-                         hoursByTag[tagInternal] = (hoursByTag[tagInternal] || 0) + hours;
-                    });
-
-                    if (chartTotalHoursDisplay) { // Translated Total Label
-                        chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHoursMonth)}</strong>`;
-                    }
-
-                    // Translate labels for the chart using the internal value as the key lookup
-                     const chartLabels = Object.keys(hoursByTag).map(internalTag => t(tagKeyMapping[internalTag] || 'tags.noTag'));
-                     const chartDataValues = Object.values(hoursByTag);
-                     const backgroundColors = chartLabels.map((_, index) => chartColors[index % chartColors.length]);
-
-                    monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: chartLabels, // Use translated labels
-                            datasets: [{
-                                data: chartDataValues,
-                                backgroundColor: backgroundColors,
-                                borderColor: computedStyles.getPropertyValue('--card-bg').trim() || '#1c1c1e',
-                                borderWidth: 1.5 }]
-                        },
-                        options: {
-                            responsive: true, maintainAspectRatio: false,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                     text: t('chartsCard.percentageDistributionTitle'), // Translated title
-                                     color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 }
-                                },
-                                tooltip: {
-                                    backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor,
-                                    displayColors: true, padding: 10, cornerRadius: 6,
-                                    callbacks: {
-                                        label: function(context) {
-                                            const label = context.label || ''; // Already translated label
-                                            const value = context.parsed || 0;
-                                            const percentage = totalHoursMonth > 0 ? ((value / totalHoursMonth) * 100).toFixed(1) : 0;
-                                            // Use translated hour format
-                                            return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`;
-                                        }
-                                    }
-                                },
-                                legend: {
-                                    position: 'bottom', align: 'center',
-                                    labels: { color: textMutedColor, boxWidth: 12, padding: 15 }
-                                }
-                            }
+                 // Load language-specific date/time names using the loaded 't' function
+                 MONTH_NAMES = t('dates.monthNames');
+                 WEEKDAY_NAMES = t('dates.weekdaysShort');
+                  // Basic validation if they loaded correctly
+                 if (!Array.isArray(MONTH_NAMES) || MONTH_NAMES.length !== 12 || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length !== 7) {
+                      console.error("Failed to load valid month/weekday names for language:", currentLang);
+                       // Potentially force fallback to English date names if 'en' exists
+                       if(currentLang !== 'en' && translations['en']) {
+                           MONTH_NAMES = getNestedValue(translations['en'], 'dates.monthNames');
+                           WEEKDAY_NAMES = getNestedValue(translations['en'], 'dates.weekdaysShort');
+                            console.warn("Falling back to English month/weekday names.");
+                       } else {
+                            // Still couldn't load, maybe use browser default (less consistent)
+                             MONTH_NAMES = [...Array(12).keys()].map(i => new Date(2000, i, 1).toLocaleDateString(currentLang, { month: 'long' }));
+                             WEEKDAY_NAMES = [...Array(7).keys()].map(i => new Date(2000, 0, i+1).toLocaleDateString(currentLang, { weekday: 'short' }));
+                             console.warn("Falling back to browser default month/weekday names.");
                         }
-                    });
+                   }
 
-                 } catch (e) {
-                     console.error("Chart render error:", e);
-                     clearChartWithMessage(t('chartsCard.renderErrorMessage')); // Translated error
-                 }
-            }
 
-            function clearChartWithMessage(message) { // Message now comes translated
-                if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; }
-                if (chartTotalHoursDisplay) { chartTotalHoursDisplay.textContent = ''; } // Clear total text too
-                const ctx = monthlyHoursChartCtx;
-                 if (ctx) {
-                     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save();
-                     ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor;
-                     ctx.font = "14px " + (computedStyles?.fontFamily || 'sans-serif');
-                     ctx.fillText(message, ctx.canvas.width / 2, ctx.canvas.height / 2); // Show translated message
-                     ctx.restore();
-                 } else { console.error("Canvas context not found for clearing message.") }
+             } catch (error) {
+                 console.error('Error loading or processing translations:', error);
+                 if (loadingIndicator) loadingIndicator.textContent = 'Error loading translations!'; // Inform user
+                  // Keep app minimally functional or display fatal error
+                 alert("Could not load language data. The application might not work correctly.");
+                  return; // Stop further execution if translations are essential
              }
 
-
-            // Apply static translations from data-translate-key attributes
-            function applyStaticTranslations() {
-                document.querySelectorAll('[data-translate-key]').forEach(element => {
-                     const key = element.getAttribute('data-translate-key');
-                     const translation = t(key);
-                     const attr = element.getAttribute('data-translate-attr') || 'textContent'; // Default to textContent
-
-                    if (attr === 'textContent') {
-                        // Avoid replacing entire nodes if possible, target text directly
-                        if (element.childNodes.length === 1 && element.childNodes[0].nodeType === Node.TEXT_NODE) {
-                            element.textContent = translation;
-                        } else {
-                            // More complex structure, try to find and replace smartly or just set textContent
-                            element.textContent = translation; // Simpler approach for now
-                        }
-                     } else if (attr === 'placeholder' || attr === 'title' || attr === 'value') {
-                         element.setAttribute(attr, translation);
-                     } else {
-                         // Handle specific cases if needed, e.g., aria-label
-                         element.textContent = translation;
-                     }
-                });
-
-                // Translate tag options dynamically
-                if (recordTagSelect) {
-                    recordTagSelect.innerHTML = ''; // Clear existing static options
-                    Object.keys(tagKeyMapping).forEach(internalValue => {
-                        const option = document.createElement('option');
-                         option.value = internalValue; // Use internal value for saving
-                         option.textContent = t(tagKeyMapping[internalValue]); // Display translated text
-                         if (internalValue === DEFAULT_TAG_VALUE) {
-                             option.selected = true; // Select the default
-                         }
-                         recordTagSelect.appendChild(option);
-                     });
-                }
-                // Translate page title
-                 document.title = t('appTitle');
-                 // Update html lang attribute
-                document.documentElement.lang = currentLang;
-             }
-
-            // --- Function to Update All Displays ---
-            function updateAllDisplays() {
-                 if (!translations[currentLang]) {
-                     console.warn("Translations not ready, delaying updateAllDisplays");
-                     return; // Don't update if translations aren't loaded
-                 }
-                 applyStaticTranslations(); // Ensure static elements are updated (important after loading data or changing language)
-
-                 updateDashboard(); // Uses translated strings/formats
-                 updateStatistics(); // Uses translated strings/formats (Labels handled by applyStatic)
-                 populateMonthSelector(); // Uses translated strings/formats
-                 renderHistory(); // Uses translated strings/formats
-                 renderPlanning(); // Uses translated strings/formats
-
-                 const selectedMonthValue = chartMonthSelector.value;
-                 if (!chartMonthSelector.disabled && selectedMonthValue) {
-                     renderCharts(selectedMonthValue); // Uses translated strings/formats
-                 } else if (!chartMonthSelector.disabled && chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) {
-                     // Auto-select and render first month if available and none selected
-                     chartMonthSelector.options[0].selected = true;
-                     renderCharts(chartMonthSelector.options[0].value);
-                 } else {
-                     clearChartWithMessage(t(recordedEntries.length === 0 ? 'chartsCard.noDataYetMessage' : 'chartsCard.selectMonthMessage'));
-                 }
-             }
-
-            function formatTimeInputOnType(event) { /* No translation needed */ const input = event.target; let value = input.value; let originalCursorPos = input.selectionStart; let numericValue = value.replace(/[^\d]/g, ''); numericValue = numericValue.substring(0, 4); let formattedValue = numericValue; let colonWasAdded = false; if (numericValue.length > 2) { const hoursPart = numericValue.substring(0, numericValue.length - 2); const minutesPart = numericValue.substring(numericValue.length - 2); formattedValue = `${hoursPart}:${minutesPart}`; if (value.length < formattedValue.length && value.indexOf(':') === -1) { colonWasAdded = true; } } if (input.value !== formattedValue) { input.value = formattedValue; let newCursorPos = originalCursorPos; if (colonWasAdded && originalCursorPos >= formattedValue.indexOf(':') + 1) { newCursorPos++; } newCursorPos = Math.min(newCursorPos, formattedValue.length); requestAnimationFrame(() => { input.setSelectionRange(newCursorPos, newCursorPos); }); } }
-            function registerServiceWorker() { /* No translation needed */ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./service-worker.js').then((reg) => { console.log('Service Worker registered successfully. Scope:', reg.scope); }).catch((error) => { console.error('Service Worker registration failed:', error); }); } }
-
-             // --- MAIN INITIALIZATION ---
-             async function initializeApp() {
-                 // Show loading indicator immediately
-                const loadingIndicator = document.getElementById('loading-indicator');
-                loadingIndicator.style.display = 'flex';
-
-                 try {
-                     const response = await fetch('translations.json');
-                     if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
-                     translations = await response.json();
-
-                    // Determine language
-                    const browserLang = (navigator.language || navigator.userLanguage || 'en').split('-')[0]; // Get base lang 'en' from 'en-US'
-                     const browserLocale = navigator.language || navigator.userLanguage || 'en';
-                    if (translations[browserLocale]) {
-                        currentLang = browserLocale;
-                    } else if (translations[browserLang]) {
-                        currentLang = browserLang;
-                     } else {
-                        currentLang = 'en'; // Fallback
-                    }
-                    console.log("Selected language:", currentLang);
-
-                    // Load language-specific date/time names AFTER translations are loaded
-                    MONTH_NAMES = t('dates.monthNames');
-                    WEEKDAY_NAMES = t('dates.weekdaysShort');
-
-                 } catch (error) {
-                     console.error('Error loading translations:', error);
-                     // Keep currentLang as 'en' (default)
-                     // Attempt to load 'en' directly from potential cache or just fail gracefully
-                     translations = { en: { appTitle: "Pioneer Log (Error Loading Lang)" } }; // Basic fallback
-                     alert("Error loading language file. Using English fallback.");
-                 } finally {
-                    // Hide loading indicator
-                    loadingIndicator.style.display = 'none';
-                 }
-
-                 // --- Capture DOM Elements (as before) ---
-                 appElement = document.getElementById('app');
-                 // ... (capture all other elements as in the previous version)
-                dashboardWeekHours = document.getElementById('dashboard-week-hours');
-                dashboardMonthPercentage = document.getElementById('dashboard-month-percentage');
-                dashboardMonthTotal = document.getElementById('dashboard-month-total');
-                dashboardForecast = document.getElementById('dashboard-forecast');
-                dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates');
-                dashboardPlanList = document.getElementById('dashboard-plan-list');
-                progressRingFg = document.getElementById('progress-ring-fg');
-                recordCard = document.getElementById('record-card');
-                recordForm = document.getElementById('record-form');
-                recordIdInput = document.getElementById('record-id');
-                recordDateInput = document.getElementById('record-date');
-                dateLabel = document.getElementById('date-label');
-                displayDate = document.getElementById('display-date');
-                changeDateBtn = document.getElementById('change-date-btn');
-                recordHoursInput = document.getElementById('record-hours');
-                recordTagSelect = document.getElementById('record-tag');
-                recordNotesInput = document.getElementById('record-notes');
-                saveRecordBtn = document.getElementById('save-record-btn');
-                planCard = document.getElementById('plan-card');
-                planForm = document.getElementById('plan-form');
-                planIdInput = document.getElementById('plan-id');
-                planDateInput = document.getElementById('plan-date');
-                planHoursInput = document.getElementById('plan-hours');
-                savePlanBtn = document.getElementById('save-plan-btn');
-                clearPlanFormBtn = document.getElementById('clear-plan-form-btn');
-                planningList = document.getElementById('planning-list');
-                planningListPlaceholder = planningList.querySelector('.placeholder');
-                monthlyGoalInput = document.getElementById('monthly-goal');
-                saveGoalBtn = document.getElementById('save-goal-btn');
-                statsMonthHours = document.getElementById('stats-month-hours');
-                statsMonthGoalProgress = document.getElementById('stats-month-goal-progress');
-                statsMonthProgressBar = document.getElementById('stats-month-progress-bar');
-                statsAvgHoursDay = document.getElementById('stats-avg-hours-day');
-                statsMonthDaysActive = document.getElementById('stats-month-days-active');
-                chartMonthSelector = document.getElementById('chart-month-selector');
-                monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d');
-                historyList = document.getElementById('history-list');
-                historySearchInput = document.getElementById('history-search-input');
-                historyListPlaceholder = historyList.querySelector('.placeholder');
-                showingResultsLabel = document.getElementById('showing-results-label');
-                clearAllDataBtn = document.getElementById('clear-all-data-btn');
-                confirmationDialog = document.getElementById('confirmation-dialog');
-                dialogMessage = document.getElementById('dialog-message');
-                dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
-                dialogCancelBtn = document.getElementById('dialog-cancel-btn');
-                chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
+             // --- Capture DOM Elements ---
+              appElement = document.getElementById('app');
+              dashboardWeekHours = document.getElementById('dashboard-week-hours');
+              dashboardMonthPercentage = document.getElementById('dashboard-month-percentage');
+              dashboardMonthTotal = document.getElementById('dashboard-month-total');
+              dashboardForecast = document.getElementById('dashboard-forecast');
+              dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates');
+              dashboardPlanList = document.getElementById('dashboard-plan-list');
+              progressRingFg = document.getElementById('progress-ring-fg');
+              recordCard = document.getElementById('record-card');
+              recordForm = document.getElementById('record-form');
+              recordIdInput = document.getElementById('record-id');
+              recordDateInput = document.getElementById('record-date');
+              dateLabel = document.getElementById('date-label');
+              displayDate = document.getElementById('display-date');
+              changeDateBtn = document.getElementById('change-date-btn');
+              recordHoursInput = document.getElementById('record-hours');
+              recordTagSelect = document.getElementById('record-tag');
+              recordNotesInput = document.getElementById('record-notes');
+              recordNotesLabel = document.getElementById('record-notes-label');
+              saveRecordBtn = document.getElementById('save-record-btn');
+              planCard = document.getElementById('plan-card');
+              planForm = document.getElementById('plan-form');
+              planIdInput = document.getElementById('plan-id');
+              planDateInput = document.getElementById('plan-date');
+              planHoursInput = document.getElementById('plan-hours');
+              savePlanBtn = document.getElementById('save-plan-btn');
+              clearPlanFormBtn = document.getElementById('clear-plan-form-btn');
+              planningList = document.getElementById('planning-list');
+              planningListPlaceholder = planningList.querySelector('.placeholder');
+              monthlyGoalInput = document.getElementById('monthly-goal');
+              saveGoalBtn = document.getElementById('save-goal-btn');
+              statsMonthHours = document.getElementById('stats-month-hours');
+              statsMonthGoalProgress = document.getElementById('stats-month-goal-progress');
+              statsMonthProgressBar = document.getElementById('stats-month-progress-bar');
+              statsAvgHoursDay = document.getElementById('stats-avg-hours-day');
+              statsMonthDaysActive = document.getElementById('stats-month-days-active');
+              chartMonthSelector = document.getElementById('chart-month-selector');
+              monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d');
+              historyList = document.getElementById('history-list');
+              historySearchInput = document.getElementById('history-search-input');
+              historyListPlaceholder = historyList.querySelector('.placeholder');
+              showingResultsLabel = document.getElementById('showing-results-label');
+              clearAllDataBtn = document.getElementById('clear-all-data-btn');
+              confirmationDialog = document.getElementById('confirmation-dialog');
+              dialogMessage = document.getElementById('dialog-message');
+              dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
+              dialogCancelBtn = document.getElementById('dialog-cancel-btn');
+              chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
 
 
-                // --- Get Computed Styles (as before) ---
-                computedStyles = getComputedStyle(document.body);
-                textColor = computedStyles.getPropertyValue('--text-color').trim();
-                textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim();
-                tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim();
-                chartColors = [ computedStyles.getPropertyValue('--chart-color-1').trim() || '#0A84FF', computedStyles.getPropertyValue('--chart-color-2').trim() || '#30D158', computedStyles.getPropertyValue('--chart-color-3').trim() || '#FF9F0A', computedStyles.getPropertyValue('--chart-color-4').trim() || '#AF52DE', computedStyles.getPropertyValue('--chart-color-5').trim() || '#5E5CE6', computedStyles.getPropertyValue('--chart-color-6').trim() || '#FF69B4', computedStyles.getPropertyValue('--chart-color-7').trim() || '#32CD32', computedStyles.getPropertyValue('--chart-color-8').trim() || '#FFD700' ];
+             // --- Get Computed Styles ---
+             computedStyles = getComputedStyle(document.body);
+             textColor = computedStyles.getPropertyValue('--text-color').trim();
+             textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim();
+             tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim();
+             chartColors = [ computedStyles.getPropertyValue('--chart-color-1').trim() || '#0A84FF', computedStyles.getPropertyValue('--chart-color-2').trim() || '#30D158', computedStyles.getPropertyValue('--chart-color-3').trim() || '#FF9F0A', computedStyles.getPropertyValue('--chart-color-4').trim() || '#AF52DE', computedStyles.getPropertyValue('--chart-color-5').trim() || '#5E5CE6', computedStyles.getPropertyValue('--chart-color-6').trim() || '#FF69B4', computedStyles.getPropertyValue('--chart-color-7').trim() || '#32CD32', computedStyles.getPropertyValue('--chart-color-8').trim() || '#FFD700' ];
+
+             // --- Check Contexts & Calculate Circumference ---
+              if(!monthlyHoursChartCtx) { console.error("Canvas context not found!"); }
+              if (!chartTotalHoursDisplay) { console.warn("Total hours display element not found."); }
+              if(progressRingFg && progressRingFg.r?.baseVal?.value) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; } else { console.warn("Progress ring not fully initialized."); }
+
+              // --- Load Saved Data ---
+              loadData(); // Load user data AFTER translations might be ready, before UI updates
+              monthlyGoalInput.value = settings.monthlyGoal;
 
 
-                // --- Check Contexts & Calculate Circumference (as before) ---
-                 if(!monthlyHoursChartCtx) { console.error("Canvas context not found!"); if(chartsCardContent) { chartsCardContent.innerHTML = "<p>Error loading chart.</p>"; } }
-                 if (!chartTotalHoursDisplay) { console.warn("Total hours display element not found."); }
-                 if(progressRingFg && progressRingFg.r?.baseVal?.value) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; } else { console.warn("Progress ring not fully initialized."); }
-
-                 // --- Load Saved Data (as before) ---
-                 loadData(); // Must be called BEFORE first updateAllDisplays
-                 monthlyGoalInput.value = settings.monthlyGoal; // Set value after loading
-
-
-                // --- Setup Event Listeners (as before) ---
-                 appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header'); if (header) { const card = header.closest('.card'); if (card) { toggleCard(card); } } });
-                 document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
-                 changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
-                 recordHoursInput.addEventListener('input', formatTimeInputOnType);
-                 planHoursInput.addEventListener('input', formatTimeInputOnType);
-                 recordHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue >= 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
-                 planHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue > 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
-                 recordNotesInput.addEventListener('input', (e) => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: NOTES_MAX_LENGTH }); } }); // Translated feedback
-                 historySearchInput.addEventListener('input', () => renderHistory());
-                 recordForm.addEventListener('submit', handleRecordSubmit);
-                 planForm.addEventListener('submit', handlePlanSubmit);
-                 clearPlanFormBtn.addEventListener('click', clearPlanForm);
-                 saveGoalBtn.addEventListener('click', handleGoalSave);
-                 monthlyGoalInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); monthlyGoalInput.blur(); } });
-                 chartMonthSelector.addEventListener('change', updateAllDisplays); // It will trigger a render with translations
-                 clearAllDataBtn.addEventListener('click', handleClearAllData);
-                 dialogConfirmBtn.addEventListener('click', () => { try { if (typeof currentConfirmCallback === 'function') { currentConfirmCallback(); } } catch (e) { console.error("Error in confirmation callback:", e); } finally { hideConfirmationDialog(); } });
-                 dialogCancelBtn.addEventListener('click', hideConfirmationDialog);
-                 confirmationDialog.addEventListener('click', (e) => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
-                 window.addEventListener('beforeinstallprompt', (e) => { console.log('`beforeinstallprompt` event fired.'); e.preventDefault(); deferredInstallPrompt = e; });
+             // --- Setup Event Listeners ---
+              // Make sure elements exist before adding listeners (optional chaining)
+              appElement?.addEventListener('click', (event) => { const header = event.target.closest('.card-header'); if (header) { const card = header.closest('.card'); if (card) { toggleCard(card); } } });
+              document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
+              changeDateBtn?.addEventListener('click', () => setDateInputVisibility(true));
+              recordHoursInput?.addEventListener('input', formatTimeInputOnType);
+              planHoursInput?.addEventListener('input', formatTimeInputOnType);
+              recordHoursInput?.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue >= 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
+              planHoursInput?.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue > 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
+              recordNotesInput?.addEventListener('input', (e) => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: NOTES_MAX_LENGTH }); } });
+              historySearchInput?.addEventListener('input', () => renderHistory());
+              recordForm?.addEventListener('submit', handleRecordSubmit);
+              planForm?.addEventListener('submit', handlePlanSubmit);
+              clearPlanFormBtn?.addEventListener('click', clearPlanForm);
+              saveGoalBtn?.addEventListener('click', handleGoalSave);
+              monthlyGoalInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); monthlyGoalInput.blur(); } });
+              chartMonthSelector?.addEventListener('change', updateAllDisplays);
+              clearAllDataBtn?.addEventListener('click', handleClearAllData);
+              dialogConfirmBtn?.addEventListener('click', () => { try { if (typeof currentConfirmCallback === 'function') { currentConfirmCallback(); } } catch (e) { console.error("Error in confirmation callback:", e); } finally { hideConfirmationDialog(); } });
+              dialogCancelBtn?.addEventListener('click', hideConfirmationDialog);
+              confirmationDialog?.addEventListener('click', (e) => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
+              window.addEventListener('beforeinstallprompt', (e) => { console.log('`beforeinstallprompt` event fired.'); e.preventDefault(); deferredInstallPrompt = e; });
 
 
-                // --- Initialize UI State ---
-                // Set default date input value and initial visibility
-                recordDateInput.value = getCurrentDateString();
-                setDateInputVisibility(false); // Applies initial translation for 'Today'
+             // --- Initialize UI State ---
+             if(recordDateInput) recordDateInput.value = getCurrentDateString();
+             setDateInputVisibility(false); // Applies initial 'Today' translation
+             // applyStaticTranslations(); // This will be called by updateAllDisplays
+             clearRecordForm();
+             clearPlanForm();
 
-                // Apply static translations first, THEN clear forms (so button text gets translated)
-                applyStaticTranslations();
-                clearRecordForm();
-                clearPlanForm();
+             // --- Set initial card states ---
+              document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) { toggleCard(card); } else { const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; } });
 
-                // Set initial card states (as before)
-                 document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) { toggleCard(card); } else { const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; } });
+             // --- Perform Initial Full UI Update ---
+             updateAllDisplays();
 
-                // --- Perform Initial Full UI Update (includes chart render) ---
-                updateAllDisplays();
+             // --- Final Setup ---
+              registerServiceWorker();
+              if (!settings.goalHasBeenSet) { setTimeout(promptForMonthlyGoal, 500); } // Use translated prompt if needed
+              setInterval(updateDashboardPlannedDates, 60 * 1000);
 
-                 // --- Register SW & Prompt for Goal (as before) ---
-                 registerServiceWorker();
-                 if (!settings.goalHasBeenSet) { setTimeout(promptForMonthlyGoal, 500); } // Uses translated prompt
-                 setInterval(updateDashboardPlannedDates, 60 * 1000);
+             // Hide loading indicator after everything is set up
+             if(loadingIndicator) loadingIndicator.classList.add('hidden');
 
-                console.log("App initialized with i18n support.");
-            }
+              console.log("App initialization complete with i18n.");
 
-            // --- START THE APP ---
-            initializeApp(); // Call the async initialization function
 
-        }); // End DOMContentLoaded
+        }); // End DOMContentLoaded Async Listener
     </script>
 </body>
 </html>
