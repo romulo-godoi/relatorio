@@ -2,8 +2,8 @@
   "pt-BR": {
     "appTitle": "Registro de Campo Pioneiro",
     "dashboardWeekHoursLabel": "Horas nesta semana",
-    "dashboardHoursUnit": "horas",
-    "dashboardHoursUnitSingular": "hora",
+    "dashboardHoursUnit": " horas",  // <-- ESPAÇO
+    "dashboardHoursUnitSingular": " hora", // <-- ESPAÇO
     "dashboardMonthLabel": "Mês",
     "dashboardForecastLabel": "Meta",
     "dashboardGoalNotSet": "Defina sua meta mensal.",
@@ -68,7 +68,7 @@
     "historyEntryNoNotes": "Sem notas",
     "historyEditButton": "Editar",
     "historyDeleteButton": "Excluir",
-    "planningEntryLabel": "Planejadas",
+    "planningEntryLabel": "Planificadas",
     "planningEntryPastDate": "(Data Passada)",
     "planningDoneButton": "Feito",
     "planningDeleteButton": "Excluir",
@@ -113,14 +113,14 @@
     "today": "Hoje",
     "tomorrow": "Amanhã",
     "nextWeekday": "Próx. {weekday}",
-    "hoursFormat": "{hours}{hSuffix}{connector}{minutes}{mSuffix}",
-    "hoursSuffix": "horas",
-    "hoursSuffixSingular": "hora",
-    "minutesSuffix": "minutos",
-    "minutesSuffixSingular": "minuto",
-    "connectorAnd": " e ",
-    "hoursShortSuffix": "h",
-    "minutesShortSuffix": "m",
+    "hoursFormat": "{hours}{hSuffix}{connector}{minutes}{mSuffix}", // O formato não muda
+    "hoursSuffix": " horas",           // <-- ESPAÇO ADICIONADO
+    "hoursSuffixSingular": " hora",    // <-- ESPAÇO ADICIONADO
+    "minutesSuffix": " minutos",      // <-- ESPAÇO ADICIONADO
+    "minutesSuffixSingular": " minuto", // <-- ESPAÇO ADICIONADO
+    "connectorAnd": " e ",              // <-- ESPAÇOS GARANTIDOS
+    "hoursShortSuffix": "h",            // Mantido sem espaço inicial
+    "minutesShortSuffix": "m",          // Mantido sem espaço inicial
     "chartAvgDailyLabel": "Média Diária: {value}",
     "chartAvgWeeklyLabel": "Média Semanal (est.): {value}",
     "chartAvgMonthlyLabel": "Média Mensal (no ano): {value}",
@@ -131,8 +131,8 @@
   "en": {
     "appTitle": "Pioneer Field Record",
     "dashboardWeekHoursLabel": "Hours this week",
-    "dashboardHoursUnit": "hours",
-    "dashboardHoursUnitSingular": "hour",
+    "dashboardHoursUnit": " hours",   // <-- SPACE ADDED
+    "dashboardHoursUnitSingular": " hour", // <-- SPACE ADDED
     "dashboardMonthLabel": "Month",
     "dashboardForecastLabel": "Goal",
     "dashboardGoalNotSet": "Set your monthly goal.",
@@ -243,11 +243,11 @@
     "tomorrow": "Tomorrow",
     "nextWeekday": "Next {weekday}",
     "hoursFormat": "{hours}{hSuffix}{connector}{minutes}{mSuffix}",
-    "hoursSuffix": "hours",
-    "hoursSuffixSingular": "hour",
-    "minutesSuffix": "minutes",
-    "minutesSuffixSingular": "minute",
-    "connectorAnd": " and ",
+    "hoursSuffix": " hours",            // <-- SPACE ADDED
+    "hoursSuffixSingular": " hour",     // <-- SPACE ADDED
+    "minutesSuffix": " minutes",       // <-- SPACE ADDED
+    "minutesSuffixSingular": " minute",  // <-- SPACE ADDED
+    "connectorAnd": " and ",           // <-- SPACES ENSURED
     "hoursShortSuffix": "h",
     "minutesShortSuffix": "m",
     "chartAvgDailyLabel": "Daily Avg: {value}",
@@ -260,8 +260,8 @@
   "es": {
     "appTitle": "Registro de Campo del Precursor",
     "dashboardWeekHoursLabel": "Horas esta semana",
-    "dashboardHoursUnit": "horas",
-    "dashboardHoursUnitSingular": "hora",
+    "dashboardHoursUnit": " horas",   // <-- ESPACIO
+    "dashboardHoursUnitSingular": " hora", // <-- ESPACIO
     "dashboardMonthLabel": "Mes",
     "dashboardForecastLabel": "Meta",
     "dashboardGoalNotSet": "Establece tu meta mensual.",
@@ -372,11 +372,11 @@
     "tomorrow": "Mañana",
     "nextWeekday": "Próx. {weekday}",
     "hoursFormat": "{hours}{hSuffix}{connector}{minutes}{mSuffix}",
-    "hoursSuffix": "horas",
-    "hoursSuffixSingular": "hora",
-    "minutesSuffix": "minutos",
-    "minutesSuffixSingular": "minuto",
-    "connectorAnd": " y ",
+    "hoursSuffix": " horas",            // <-- ESPACIO AÑADIDO
+    "hoursSuffixSingular": " hora",     // <-- ESPACIO AÑADIDO
+    "minutesSuffix": " minutos",       // <-- ESPACIO AÑADIDO
+    "minutesSuffixSingular": " minuto",  // <-- ESPACIO AÑADIDO
+    "connectorAnd": " y ",            // <-- ESPACIOS GARANTIZADOS
     "hoursShortSuffix": "h",
     "minutesShortSuffix": "m",
     "chartAvgDailyLabel": "Promedio Diario: {value}",
