@@ -1,0 +1,871 @@
+/* --- Variáveis Globais --- */
+:root {
+    --system-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --primary-color: #0A84FF;
+    --secondary-color: #000000; /* Fundo principal (preto) */
+    --card-bg: #1c1c1e;         /* Fundo dos cards */
+    --input-bg: #2c2c2e;        /* Fundo dos inputs */
+    --text-color: #ffffff;         /* Texto principal (branco) */
+    --text-color-secondary: rgba(235, 235, 245, 0.6); /* Texto secundário (cinza claro semitransparente) */
+    --border-color: #3a3a3c;       /* Cor das bordas/separadores */
+    --shadow-color: rgba(0, 0, 0, 0.2); /* Sombra (sutil) */
+    --danger-color: #FF453A;       /* Cor de perigo (vermelho) */
+    --success-color: #30D158;      /* Cor de sucesso (verde) */
+    --placeholder-color: rgba(235, 235, 245, 0.3); /* Cor do placeholder */
+    --dialog-backdrop: rgba(0, 0, 0, 0.7); /* Fundo do dialog (escuro semitransparente) */
+    --progress-track-color: #38383a; /* Cor do fundo da barra/anel de progresso */
+    --progress-bar-color: var(--success-color); /* Cor da barra/anel de progresso */
+    --avg-line-color-1: #FF9F0A; /* Laranja para média 1 */
+    --avg-line-color-2: #AF52DE; /* Roxo para média 2 */
+    --avg-line-color-3: #5E5CE6; /* Azul/Indigo para média 3 */
+    --font-family: var(--system-font);
+    --border-radius: 10px;
+    --card-padding: 18px;        /* Preenchimento interno dos cards (base mobile) */
+    --outer-padding: 15px;       /* Preenchimento externo do body (base mobile) */
+    --transition-speed: 0.3s;
+    --transition-speed-fast: 0.1s;
+    --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
+}
+
+/* --- Reset e Base --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html, body {
+    height: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* Remove highlight azul no toque (iOS) */
+}
+body {
+    font-family: var(--font-family);
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    padding: var(--outer-padding); /* Usa a variável para padding */
+    overscroll-behavior-y: contain; /* Previne pull-to-refresh em PWAs */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px; /* Tamanho base (ajustado em media query) */
+}
+h1 {
+    display: none; /* Esconde o H1 visualmente, mas mantém para semântica */
+}
+
+
+/* --- Dashboard --- */
+#dashboard-box {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 15px var(--card-padding);
+    margin-bottom: 20px; /* Espaço abaixo do dashboard */
+    display: flex;
+    flex-wrap: wrap; /* Permite que itens quebrem linha em telas pequenas */
+    justify-content: space-around; /* Distribui itens com espaço */
+    align-items: flex-start; /* Alinha itens ao topo */
+    text-align: center;
+    gap: 15px; /* Espaçamento entre itens do dashboard */
+}
+.dashboard-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinha conteúdo ao topo dentro do item */
+    flex: 1; /* Tenta ocupar espaço igual */
+    min-width: 150px; /* Largura mínima para cada item antes de quebrar */
+}
+.dashboard-item--progress { /* Estilos específicos para o anel de progresso */
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0; /* Não encolhe tanto */
+    flex-grow: 0;   /* Não cresce tanto */
+    margin-top: 5px;
+}
+.progress-ring {
+    position: absolute; /* Fica sobreposto aos círculos */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg); /* Começa o progresso do topo */
+}
+.progress-ring__circle {
+    fill: none; /* Sem preenchimento */
+    stroke-width: 5; /* Espessura da linha */
+    transition: stroke-dashoffset 0.5s ease-out; /* Animação suave do progresso */
+}
+.progress-ring__bg {
+    stroke: var(--progress-track-color); /* Cor do fundo do anel */
+}
+.progress-ring__fg {
+    stroke: var(--progress-bar-color); /* Cor do progresso (verde) */
+    stroke-linecap: round; /* Terminação arredondada */
+    /* stroke-dasharray e stroke-dashoffset definidos via JS */
+}
+.dashboard-item--progress .dashboard-content {
+    position: absolute; /* Centraliza o texto dentro do anel */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#dashboard-month-percentage {
+    font-size: 1.6em;
+    color: var(--text-color);
+    margin-bottom: 0;
+    font-weight: 600;
+}
+.dashboard-item--progress .dashboard-label {
+    margin-top: 2px;
+    margin-bottom: 0;
+    font-size: 0.65em;
+}
+.dashboard-label {
+    font-size: 0.85em;
+    color: var(--text-color-secondary);
+    margin-bottom: 4px;
+    display: block; /* Garante que o label fique acima do valor */
+}
+.dashboard-value {
+    font-size: 1.4em;
+    font-weight: 500;
+    color: var(--primary-color);
+    line-height: 1.2;
+    margin-bottom: 5px;
+}
+.dashboard-value .unit { /* Para unidades como 'h', 'min' se necessário */
+    font-size: 0.6em;
+    font-weight: 500;
+    color: var(--text-color-secondary);
+    margin-left: 2px;
+}
+#dashboard-summary {
+    margin-top: 12px;
+    font-size: 0.85em;
+    color: var(--text-color-secondary);
+    line-height: 1.35;
+    text-align: left; /* Alinha o resumo à esquerda */
+    width: 100%; /* Ocupa toda a largura do item do dashboard */
+}
+#dashboard-summary strong {
+    color: var(--text-color);
+    font-weight: 500;
+}
+#dashboard-summary span { /* Garante que cada linha do resumo fique separada */
+    display: block;
+    margin-bottom: 3px;
+}
+/* Estilos para a lista de datas planejadas no dashboard */
+#dashboard-planned-dates .dashboard-label {
+    margin-bottom: 8px;
+    margin-top: 15px; /* Espaço acima da lista */
+}
+#dashboard-plan-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-size: 0.8em;
+    line-height: 1.4;
+    color: var(--text-color-secondary);
+    width: 100%;
+    max-height: 60px; /* Limita altura (ajustado no desktop) */
+    overflow: hidden; /* Esconde o excesso */
+}
+#dashboard-plan-list li {
+    margin-bottom: 3px;
+    white-space: nowrap; /* Impede quebra de linha */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+}
+#dashboard-plan-list li strong {
+    color: var(--text-color);
+}
+#dashboard-plan-list .plan-warning, .plan-past-date-indicator {
+    font-size: 0.9em;
+    margin-left: 5px;
+    opacity: 0.7;
+}
+#dashboard-plan-list .plan-warning {
+    font-style: italic; /* Estilo para avisos de atraso */
+}
+
+/* --- App Container & Cards --- */
+#app {
+    max-width: 700px; /* Largura máxima base (mobile/tablet) */
+    margin: 0 auto; /* Centraliza */
+    display: flex;
+    flex-direction: column; /* Empilha os cards verticalmente */
+    gap: 12px; /* Espaço entre os cards */
+}
+.card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden; /* Garante que o conteúdo não vaze antes de expandir */
+    transition: box-shadow var(--transition-speed) ease;
+}
+.card-header {
+    display: flex;
+    justify-content: space-between; /* Título à esquerda, ícone à direita */
+    align-items: center;
+    padding: 15px var(--card-padding); /* Usa variável para padding */
+    cursor: pointer; /* Indica que é clicável */
+    transition: background-color var(--transition-speed-fast) ease;
+    position: relative; /* Para o pseudo-elemento ::after */
+}
+/* Linha separadora sutil no header quando o card está fechado */
+.card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: var(--card-padding);
+    right: var(--card-padding);
+    height: 1px;
+    background-color: var(--border-color);
+    opacity: 1;
+    transition: opacity var(--transition-speed-fast) ease;
+}
+.card.expanded .card-header::after {
+    opacity: 0; /* Esconde a linha quando expandido */
+}
+/* Efeito hover sutil no header quando fechado */
+.card:not(.expanded) .card-header:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+.card-header h2 {
+    color: var(--text-color);
+    margin-bottom: 0;
+    font-size: 1.15em;
+    font-weight: 600;
+    pointer-events: none; /* Para o clique passar para o header */
+}
+.toggle-icon { /* Ícone de expandir/recolher */
+    font-size: 0.8em; /* Tamanho do ícone (texto ▲/▼) */
+    font-weight: bold;
+    transition: transform var(--transition-speed) ease; /* Animação de rotação */
+    color: var(--text-color-secondary);
+    margin-left: 10px; /* Espaço do título */
+    width: 20px; height: 20px; /* Tamanho fixo para alinhar */
+    display: inline-flex; align-items: center; justify-content: center;
+    pointer-events: none; /* Para o clique passar para o header */
+    /* O texto (▲/▼) é definido via JS */
+}
+.card.expanded .toggle-icon {
+    transform: rotate(180deg); /* Gira o ícone quando expandido */
+}
+.card-content {
+    padding: 0 var(--card-padding) 0 var(--card-padding); /* Padding horizontal, vertical 0 */
+    max-height: 0; /* Começa escondido */
+    opacity: 0; /* Começa invisível */
+    overflow: hidden; /* Esconde conteúdo */
+    border-top: 1px solid var(--border-color); /* Linha divisória */
+    transition: var(--content-transition); /* Transição definida na variável */
+    margin-top: -1px; /* Para sobrepor a borda com o header */
+}
+.card.expanded .card-content {
+    padding-top: var(--card-padding); /* Adiciona padding vertical quando expandido */
+    padding-bottom: calc(var(--card-padding) + 5px); /* Padding extra no final */
+    max-height: 1500px; /* Altura máxima grande o suficiente */
+    opacity: 1; /* Torna visível */
+    margin-top: 0; /* Restaura margem */
+    overflow: visible; /* Permite que elementos como dropdowns ou sombras saiam do card */
+    /* IMPORTANTE: 'overflow: visible' pode causar problemas se o conteúdo for MUITO grande inesperadamente. Ajuste 'max-height' se necessário. */
+}
+
+/* --- Formulários --- */
+.form-group {
+    margin-bottom: 16px; /* Espaço entre campos do formulário */
+}
+label {
+    display: block; /* Label fica em linha própria */
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color-secondary);
+    font-size: 0.9em;
+}
+/* Estilos base para inputs, textarea e select */
+input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select {
+    width: 100%; /* Ocupa largura total */
+    padding: 11px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1em; /* Tamanho de fonte padrão do body */
+    font-family: var(--font-family);
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    appearance: none; /* Remove estilos padrão do navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+/* Garante que números em inputs de tempo fiquem alinhados */
+input[type="text"].time-input {
+    font-variant-numeric: tabular-nums;
+}
+/* Estilo para input de busca com ícone */
+input[type="search"] {
+    padding-right: 35px; /* Espaço para o ícone */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px 16px;
+}
+/* Estilo para o botão 'x' de limpar busca (Webkit) */
+input[type="search"]::-webkit-search-cancel-button{
+    appearance: none;
+    height: 14px;
+    width: 14px;
+    /* Ícone 'x' SVG embutido */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>');
+    background-size: 14px 14px;
+    cursor: pointer;
+}
+/* Estilo para Select com ícone de seta */
+select {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 12px 12px;
+    padding-right: 40px; /* Espaço para a seta */
+}
+/* Muda a cor da seta do Select no foco */
+select:focus {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); /* Cor primária como fill */
+}
+/* Ícone do calendário no input date (Webkit) */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8); /* Deixa o ícone mais claro no fundo escuro */
+    cursor: pointer;
+}
+/* Estilo do Placeholder */
+input::placeholder, textarea::placeholder {
+    color: var(--placeholder-color);
+    opacity: 1; /* Garante visibilidade */
+}
+/* Estilo de Foco para inputs, textarea, select */
+input:focus, textarea:focus, select:focus {
+    outline: none; /* Remove outline padrão */
+    border-color: var(--primary-color); /* Borda na cor primária */
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); /* Sombra sutil azul */
+}
+/* Remove setas de number input */
+input[type="number"] { -moz-appearance: textfield; }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Textarea básico */
+textarea {
+    resize: vertical; /* Permite redimensionar verticalmente */
+    min-height: 90px;
+}
+/* --- Botões --- */
+button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 11px 22px; /* Padding generoso */
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease;
+    display: inline-block;
+    margin-right: 8px; /* Espaço à direita (ajustado em contextos específicos) */
+    margin-top: 10px;  /* Espaço acima */
+    width: auto;       /* Largura automática por padrão */
+    transform: scale(1); /* Estado normal */
+    filter: brightness(1); /* Estado normal */
+    -webkit-user-select: none; /* Impede seleção de texto no botão */
+    user-select: none;
+}
+button:last-child {
+     margin-right: 0; /* Remove margem do último botão em um grupo */
+}
+button:hover {
+    filter: brightness(1.15); /* Levemente mais claro no hover */
+}
+button:active {
+    transform: scale(0.95); /* Efeito de pressionar */
+    filter: brightness(0.8); /* Levemente mais escuro */
+    transition-duration: 0.05s; /* Transição rápida no active */
+}
+/* Botão Secundário (cinza) */
+button.secondary {
+    background-color: var(--input-bg);
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+}
+button.secondary:hover {
+    background-color: #3a3a3c; /* Tom de cinza mais escuro no hover */
+    filter: none; /* Remove filtro de brilho */
+}
+button.secondary:active {
+    background-color: #48484a;
+    transform: scale(0.96); /* Menos intenso que o botão primário */
+    filter: brightness(1);
+}
+/* Botão de Sucesso (verde) */
+button.success {
+    background-color: var(--success-color);
+    color: var(--text-color);
+}
+button.success:hover {
+    filter: brightness(1.15);
+}
+button.success:active {
+    transform: scale(0.95);
+    filter: brightness(0.8);
+}
+/* Botão de Perigo (vermelho) */
+button.danger {
+    background-color: var(--danger-color);
+    color: var(--text-color);
+}
+button.danger:hover {
+    /* background-color: #ff3b30; /* Tom ligeiramente diferente no hover */
+    filter: brightness(1.15);
+}
+button.danger:active {
+    /* background-color: #E0352D; /* Tom mais escuro no active */
+    transform: scale(0.96);
+    filter: brightness(0.85);
+}
+
+/* Ajustes específicos para botões dentro dos formulários */
+#record-form .text-center button, #plan-form .text-center button {
+    width: auto;
+    margin-right: 8px;
+}
+ #record-form .text-center button:last-child {
+     margin-right: 0;
+ }
+
+/* Botão "Alterar data" */
+.change-date-button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 5px 0;
+    margin-left: 5px;
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    margin-top: 0;
+    font-weight: normal; /* Geralmente é normal */
+    display: inline; /* Para ficar na mesma linha do label */
+}
+.change-date-button:hover {
+    text-decoration: underline;
+    filter: none; /* Remove filtro de brilho herdado */
+}
+.change-date-button:active {
+    transform: scale(0.95);
+    filter: brightness(0.8);
+}
+
+/* --- Estatísticas --- */
+.stats-grid {
+    display: grid;
+    /* Cria colunas que tentam ter 140px, mas podem crescer */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; /* Espaço entre itens do grid */
+    text-align: center;
+    margin-top: 10px;
+}
+.stat-item {
+    background-color: var(--input-bg); /* Fundo dos itens de stat */
+    padding: 16px 12px;
+    border-radius: 8px;
+}
+.stat-value {
+    font-size: 1.7em; /* Tamanho grande para o valor */
+    font-weight: 600;
+    color: var(--text-color);
+    display: block; /* Garante linha própria */
+    margin-bottom: 2px;
+}
+.stat-label {
+    font-size: 0.85em;
+    color: var(--text-color-secondary);
+}
+/* Barra de progresso dentro das stats */
+.progress-bar-container {
+    background-color: var(--border-color); /* Fundo da barra */
+    border-radius: 5px;
+    overflow: hidden;
+    height: 8px;
+    margin-top: 8px;
+}
+.progress-bar {
+    background-color: var(--progress-bar-color); /* Cor da barra (verde) */
+    height: 100%;
+    width: 0; /* Começa em 0, atualizado via JS */
+    transition: width var(--transition-speed) ease-out; /* Animação suave */
+}
+
+/* --- Histórico & Listas (Planejamento) --- */
+#history-controls {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    /* Padding removido, pois o card-content já tem */
+    /* padding: 0 var(--card-padding); */
+}
+.history-search-input {
+    flex-grow: 1; /* Input de busca ocupa espaço disponível */
+}
+#showing-results-label { /* Label "Mostrando X resultados..." */
+    font-size: 0.85em;
+    color: var(--text-color-secondary);
+    margin-top: 5px;
+    display: block;
+    text-align: right;
+    /* Padding removido, card-content já tem */
+    /* padding: 0 var(--card-padding) 5px var(--card-padding); */
+    min-height: 1.2em; /* Garante espaço mesmo quando vazio */
+}
+/* Estilo base para listas de dados (histórico, planejamento) */
+.data-list {
+    list-style: none;
+    padding: 0; /* Remove padding padrão da lista */
+    max-height: 400px; /* Altura máxima com scroll (ajustada no desktop) */
+    overflow-y: auto; /* Scroll vertical se necessário */
+    margin-top: 0; /* Remove margem padrão */
+     /* border-top: 1px solid var(--border-color); Adiciona borda superior */
+}
+.data-list li {
+    background-color: transparent; /* Fundo transparente por padrão */
+    border-bottom: 1px solid var(--border-color); /* Linha separadora */
+    padding: 14px var(--card-padding); /* Padding interno */
+    margin: 0; /* Remove margem padrão */
+    display: flex;
+    justify-content: space-between; /* Detalhes à esquerda, ações à direita */
+    align-items: flex-start; /* Alinha ao topo */
+    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
+    transition: background-color var(--transition-speed-fast) ease;
+}
+.data-list li:last-child {
+    border-bottom: none; /* Remove borda do último item */
+}
+/* Efeito hover sutil nos itens da lista */
+.data-list li:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+.entry-details { /* Div com data, horas, tag, notas */
+    font-size: 0.95em;
+    flex-grow: 1; /* Ocupa espaço disponível */
+    margin-right: 10px; /* Espaço antes dos botões */
+    line-height: 1.4;
+    padding-bottom: 5px; /* Espaço inferior se quebrar linha */
+    word-wrap: break-word; /* Permite que palavras longas (notas) quebrem */
+    overflow-wrap: break-word;
+}
+.entry-details strong { /* Data */
+    color: var(--text-color);
+    font-weight: 500;
+}
+.entry-details .hours { /* Horas */
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.entry-details .tag-badge { /* Badge da Tag (Carrinho, etc.) */
+    display: inline-block;
+    background-color: var(--input-bg); /* Mesmo fundo dos inputs */
+    color: var(--text-color-secondary);
+    font-size: 0.75em;
+    padding: 2px 6px;
+    border-radius: 5px;
+    margin-left: 8px;
+    vertical-align: middle; /* Alinha com o texto */
+}
+.entry-details .notes-preview { /* Preview das notas */
+    color: var(--text-color-secondary);
+    font-size: 0.9em;
+    display: block; /* Fica em linha própria */
+    margin-top: 5px;
+    white-space: normal; /* Permite quebra de linha normal */
+    overflow-wrap: break-word;
+    max-height: 4.5em; /* Limita altura (aprox. 3 linhas) */
+    overflow: hidden; /* Esconde o resto */
+}
+/* Contêiner dos botões de ação (Editar/Excluir/Feito) */
+.entry-actions, .plan-actions {
+    flex-shrink: 0; /* Não encolhe */
+    align-self: center; /* Centraliza verticalmente os botões */
+}
+/* Estilo para botões dentro das listas (menores) */
+.entry-actions button, .plan-actions button {
+    padding: 6px 10px;
+    font-size: 0.85em;
+    margin-left: 5px;
+    margin-top: 5px; /* Margem superior para quando quebrar linha */
+    width: auto; /* Largura automática */
+    border-radius: 6px;
+}
+/* Garante que os botões de plano tenham a mesma margem superior */
+.plan-actions button {
+    margin-top: 5px;
+}
+/* Fundo específico para botões secundários nas listas */
+.entry-actions button.secondary, .plan-actions button.secondary {
+    background-color: #3a3a3c; /* Cinza mais escuro */
+}
+
+/* --- Gráficos --- */
+.chart-container {
+    position: relative; /* Necessário para Chart.js responsivo */
+    height: 280px; /* Altura base (mobile) */
+    width: 100%;
+    margin-top: 25px; /* Espaço acima do gráfico */
+}
+
+/* --- Dialog --- */
+.dialog-backdrop {
+    position: fixed; /* Cobre a tela toda */
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: var(--dialog-backdrop); /* Fundo escuro semitransparente */
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    z-index: 1000; /* Fica acima de outros elementos */
+    opacity: 0; /* Começa invisível */
+    visibility: hidden; /* Começa inacessível */
+    transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease;
+}
+.dialog-backdrop.visible { /* Classe adicionada via JS */
+    opacity: 1;
+    visibility: visible;
+}
+.dialog-content {
+    background-color: #2c2c2e; /* Fundo do conteúdo do dialog */
+    color: var(--text-color);
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4); /* Sombra mais pronunciada */
+    text-align: center;
+    max-width: 90%; /* Limita largura em telas muito pequenas */
+    width: 320px; /* Largura base (ajustada no desktop) */
+    transform: scale(0.95); /* Efeito de "zoom in" */
+    transition: transform var(--transition-speed) ease;
+}
+.dialog-backdrop.visible .dialog-content {
+    transform: scale(1); /* Anima para o tamanho normal */
+}
+.dialog-content p { /* Mensagem do dialog */
+    margin-bottom: 25px;
+    font-size: 1.05em;
+    line-height: 1.5;
+}
+.dialog-actions button { /* Botões do dialog (Confirmar/Cancelar) */
+    width: calc(50% - 5px); /* Divide o espaço com um pequeno gap */
+    margin-top: 0; /* Remove margem superior padrão */
+    padding: 10px;
+    font-size: 1em;
+}
+
+/* --- Utilitários --- */
+.hidden { display: none !important; }
+.visually-hidden { /* Esconde visualmente, mas acessível a leitores de tela */
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.text-center { text-align: center; }
+.mt-1 { margin-top: 10px; }
+.mt-2 { margin-top: 20px; }
+
+/* =================================== */
+/* === Responsive Styles (Desktop) === */
+/* =================================== */
+
+/* Tablet e Maiores (768px+) */
+@media (min-width: 768px) {
+    /* Ajustes Globais */
+    :root {
+        --card-padding: 20px; /* Padding interno dos cards um pouco maior */
+        --outer-padding: 25px; /* Padding externo do body um pouco maior */
+    }
+    body {
+        font-size: 17px; /* Fonte base ligeiramente maior */
+    }
+
+    /* Container Principal */
+    #app {
+        max-width: 900px; /* Container mais largo */
+        gap: 15px; /* Aumenta espaço entre cards */
+    }
+
+    /* Dashboard */
+    #dashboard-box {
+        padding: 20px var(--card-padding); /* Mais padding no dashboard */
+        align-items: center; /* Alinha verticalmente os itens melhor */
+        gap: 25px; /* Aumenta espaço entre itens */
+        flex-wrap: nowrap; /* Impede que os itens quebrem linha */
+    }
+    /* Faz o primeiro item (horas/resumo) ocupar mais espaço */
+    .dashboard-item:first-child {
+        flex: 2; /* Permite crescer mais que os outros */
+        min-width: 250px; /* Largura mínima maior */
+    }
+    /* Anel de progresso ligeiramente maior */
+    .dashboard-item--progress {
+        width: 100px;
+        height: 100px;
+    }
+    #dashboard-month-percentage {
+        font-size: 1.8em;
+    }
+    .dashboard-label { font-size: 0.9em; }
+    .dashboard-value { font-size: 1.5em; }
+    #dashboard-summary { font-size: 0.9em; }
+    #dashboard-plan-list { font-size: 0.85em; max-height: 80px; } /* Permite mais itens visíveis */
+
+    /* Formulário de Registro: Tempo e Tag Lado a Lado */
+    #record-form .time-tag-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+        gap: 15px; /* Espaço entre colunas */
+    }
+     /* Garante que a margem padrão do form-group não afete o grid */
+    #record-form .time-tag-grid .form-group {
+        margin-bottom: 0;
+    }
+    /* Adiciona margem de volta abaixo do grid */
+    #record-form .time-tag-grid + .form-group { /* O próximo form-group (notas) */
+         margin-top: 16px;
+    }
+
+    /* Formulário de Planejamento: Data e Horas Lado a Lado */
+    #plan-form .plan-inputs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Duas colunas */
+        gap: 15px;
+        align-items: end; /* Alinha a base dos inputs/labels */
+    }
+    /* Remove margem inferior dos itens do grid */
+    #plan-form .plan-inputs-grid .form-group {
+         margin-bottom: 0;
+    }
+     /* Adiciona margem de volta abaixo do grid, antes dos botões */
+     #plan-form .plan-inputs-grid + .text-center {
+          margin-top: 25px;
+     }
+
+    /* Estatísticas */
+    .stats-grid {
+        /* Pode ajustar minmax se necessário: minmax(160px, 1fr) */
+        gap: 15px; /* Aumenta espaço */
+    }
+    .stat-value { font-size: 1.9em; }
+    .stat-label { font-size: 0.9em; }
+    /* Layout do grupo de definir meta (horizontal) */
+     #stats-card .card-content > .form-group {
+        /* Afeta o PRIMEIRO form-group dentro do content, que é o da meta */
+        display: flex;
+        align-items: center; /* Alinha label, input e botão verticalmente */
+        gap: 10px;
+        max-width: 400px; /* Limita a largura */
+        margin: 0 auto 25px auto !important; /* Força margem e centraliza, sobrescrevendo inline style se houver */
+        text-align: left !important; /* Sobrescreve text-align: center do inline style se houver */
+    }
+     #stats-card .card-content > .form-group label {
+         margin-bottom: 0; /* Remove margem abaixo do label */
+         flex-shrink: 0; /* Impede que o label encolha */
+    }
+    #stats-card .card-content > .form-group input[type="number"] {
+        flex-grow: 1; /* Input ocupa espaço restante */
+    }
+     #stats-card .card-content > .form-group button {
+        margin-top: 0; /* Remove margem superior do botão */
+        flex-shrink: 0; /* Impede que o botão encolha */
+        width: auto !important; /* Sobrescreve width:100% do inline style se houver */
+        font-size: 1em !important; /* Tamanho padrão do botão */
+        padding: 11px 22px !important; /* Padding padrão */
+    }
+
+
+    /* Gráfico */
+    .chart-container {
+        height: 320px; /* Gráfico mais alto */
+    }
+
+    /* Listas */
+     /* Remove padding dos controles, pois o card já tem */
+     #history-controls { padding: 0; }
+    .data-list {
+        max-height: 500px; /* Mais espaço para as listas */
+    }
+    .data-list li {
+         padding: 16px var(--card-padding); /* Mais padding nos itens */
+         flex-wrap: nowrap; /* Impede quebra de linha nos itens */
+         align-items: center; /* Melhora alinhamento vertical */
+    }
+    .entry-details { font-size: 1em; } /* Tamanho padrão para detalhes */
+    /* Mostra menos das notas por padrão em desktop (ver linha completa no hover talvez) */
+    .entry-details .notes-preview {
+        max-height: 1.5em; /* Aprox. 1 linha */
+        display: inline;  /* Tenta ficar na mesma linha da tag, se couber */
+        margin-left: 8px;
+        margin-top: 0;
+    }
+    .entry-actions, .plan-actions {
+         white-space: nowrap; /* Mantém botões na mesma linha */
+    }
+    .entry-actions button, .plan-actions button {
+         margin-top: 0; /* Remove margem superior dos botões */
+    }
+
+    /* Dialog */
+    .dialog-content {
+        width: 400px; /* Dialog mais largo */
+    }
+}
+
+/* Desktop Maior (1200px+) */
+@media (min-width: 1200px) {
+    /* Ajustes adicionais para telas bem largas */
+    #app {
+        max-width: 1100px; /* Container ainda mais largo */
+    }
+
+    #dashboard-box {
+        gap: 35px; /* Mais espaço entre itens do dashboard */
+    }
+
+    /* Anel de progresso ligeiramente maior */
+    .dashboard-item--progress {
+        width: 110px;
+        height: 110px;
+    }
+    #dashboard-month-percentage {
+        font-size: 2em;
+    }
+
+    /* Gráfico ainda mais alto */
+    .chart-container {
+        height: 350px;
+    }
+
+    /* Opcional: Aumentar fontes ainda mais */
+    /*
+    body {
+        font-size: 18px;
+    }
+    .card-header h2 {
+        font-size: 1.25em;
+    }
+    */
+}
