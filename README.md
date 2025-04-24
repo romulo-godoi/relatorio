@@ -2,7 +2,7 @@
 
 A simple, modern, and efficient web application to help pioneers log and track their field service hours directly in the browser, without the need for installation. 
 
-Available in English, Portuguese and Spanish 🇬🇧🇧🇷🇪🇸 
+Available in English, Portuguese and Spanish 🇬🇧 🇧🇷 🇪🇸 
 
 ![image](https://github.com/user-attachments/assets/4af800c4-53ef-4a56-a651-43ccc294befb)
 
