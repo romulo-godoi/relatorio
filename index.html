@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Registro de Campo Pioneiro</title>
+    <title>Loading...</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0A84FF">
     <link rel="apple-touch-icon" href="icon-192x192.png">
@@ -53,7 +53,7 @@
         .dashboard-label { font-size: 0.85em; color: var(--text-color-secondary); margin-bottom: 4px; display: block; }
         .dashboard-value { font-size: 1.4em; font-weight: 500; color: var(--primary-color); line-height: 1.2; margin-bottom: 5px; }
         .dashboard-value .unit { font-size: 0.6em; font-weight: 500; color: var(--text-color-secondary); margin-left: 2px; }
-        #dashboard-summary { margin-top: 12px; font-size: 0.85em; color: var(--text-color-secondary); line-height: 1.35; }
+        #dashboard-summary { margin-top: 12px; font-size: 0.85em; color: var(--text-color-secondary); line-height: 1.35; text-align: left; width: 100%;}
         #dashboard-summary strong { color: var(--text-color); font-weight: 500; }
         #dashboard-summary span { display: block; margin-bottom: 3px;}
         #dashboard-planned-dates .dashboard-label { margin-bottom: 8px; margin-top: 15px; }
@@ -61,6 +61,7 @@
          #dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
          #dashboard-plan-list li strong { color: var(--text-color); }
          #dashboard-plan-list .plan-warning { font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic; }
+         .plan-past-date-indicator { font-size: 0.9em; opacity: 0.7; margin-left: 5px;}
         #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
         h1 { display: none; }
         .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
@@ -133,15 +134,16 @@
 <body>
     <div id="dashboard-box">
          <div class="dashboard-item" style="align-items: flex-start; text-align: left;">
-             <span class="dashboard-label">Horas nesta semana</span>
-             <span id="dashboard-week-hours" class="dashboard-value">0 horas</span>
+             <span class="dashboard-label" data-translate-key="dashboardWeekHoursLabel">Horas nesta semana</span>
+             <span id="dashboard-week-hours" class="dashboard-value">0 hours</span>
               <div id="dashboard-summary" style="margin-top: 12px;">
-                 <span id="dashboard-month-total">Mês: <strong>0 horas</strong></span>
-                 <span id="dashboard-forecast">Meta: ...</span>
+                 <span id="dashboard-month-total"><span data-translate-key="dashboardMonthLabel">Mês</span>: <strong>0 hours</strong></span>
+                 <span id="dashboard-forecast"><span data-translate-key="dashboardForecastLabel">Meta</span>: ...</span>
              </div>
              <div class="hidden" id="dashboard-planned-dates">
-                <span class="dashboard-label" style="margin-top: 15px;">Saídas de campo planejadas</span>
-                <ul id="dashboard-plan-list"></ul>
+                <span class="dashboard-label" style="margin-top: 15px;" data-translate-key="dashboardPlannedDatesLabel">Saídas de campo planejadas</span>
+                <ul id="dashboard-plan-list">
+                </ul>
              </div>
          </div>
          <div class="dashboard-item dashboard-item--progress">
@@ -151,15 +153,15 @@
             </svg>
             <div class="dashboard-content">
                 <span id="dashboard-month-percentage" class="dashboard-value">0%</span>
-                <span class="dashboard-label">Meta Mês</span>
+                <span class="dashboard-label" data-translate-key="dashboardMonthGoalLabel">Meta Mês</span>
              </div>
          </div>
     </div>
 
     <div id="app">
         <div class="card expanded" id="record-card">
-             <div class="card-header">
-                 <h2>Registrar Atividade</h2>
+             <div class="card-header" role="button" tabindex="0">
+                 <h2 data-translate-key="recordActivityTitle">Registrar Atividade</h2>
                  <span class="toggle-icon">▲</span>
              </div>
             <div class="card-content">
@@ -167,99 +169,270 @@
                     <input type="hidden" id="record-id">
                     <div class="form-group">
                         <label for="record-date" id="date-label">
-                             Data: <strong id="display-date">Hoje</strong>
-                            <button type="button" class="change-date-button" id="change-date-btn">(Alterar)</button>
+                             <span data-translate-key="recordDateLabel">Data</span>: <strong id="display-date" data-translate-key="displayDateToday">Hoje</strong>
+                            <button type="button" class="change-date-button" id="change-date-btn" data-translate-key="changeDateButton">(Alterar)</button>
                         </label>
                         <input type="date" id="record-date" class="hidden">
                     </div>
                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                          <div class="form-group">
-                             <label for="record-hours">Tempo:</label>
-                             <input type="text" inputmode="numeric" id="record-hours" class="time-input" required placeholder="Ex: 2:30 ou 130">
+                             <label for="record-hours" data-translate-key="recordTimeLabel">Tempo:</label>
+                             <input type="text" inputmode="numeric" id="record-hours" class="time-input" required data-translate-placeholder-key="recordTimePlaceholder">
                          </div>
                         <div class="form-group">
-                            <label for="record-tag">Modalidade:</label>
+                            <label for="record-tag" data-translate-key="recordModeLabel">Modalidade:</label>
                             <select id="record-tag">
-                                <option value="Casa em casa" selected>Casa em casa</option>
-                                <option value="Carrinho">Carrinho</option>
-                                <option value="Cartas">Cartas</option>
-                                <option value="Telefone">Telefone</option>
-                                <option value="Outro">Outro</option>
+                                <option value="Casa em casa" selected data-translate-key="recordTagOptionHouseToHouse">Casa em casa</option>
+                                <option value="Carrinho" data-translate-key="recordTagOptionCart">Carrinho</option>
+                                <option value="Cartas" data-translate-key="recordTagOptionLetters">Cartas</option>
+                                <option value="Telefone" data-translate-key="recordTagOptionPhone">Telefone</option>
+                                <option value="Outro" data-translate-key="recordTagOptionOther">Outro</option>
                             </select>
                         </div>
                      </div>
                     <div class="form-group">
-                        <label for="record-notes">Notas / Observações (max 300):</label>
-                        <textarea id="record-notes" rows="3" maxlength="300" placeholder="Descreva a atividade..."></textarea>
+                        <label for="record-notes" data-translate-key="recordNotesLabel">Notas / Observações (max 300):</label>
+                        <textarea id="record-notes" rows="3" maxlength="300" data-translate-placeholder-key="recordNotesPlaceholder"></textarea>
                     </div>
                     <div class="text-center" style="margin-top: 20px;">
-                        <button type="submit" id="save-record-btn">Salvar Registro</button>
+                        <button type="submit" id="save-record-btn" data-translate-key="saveRecordButton">Salvar Registro</button>
                     </div>
                 </form>
             </div>
         </div>
+
         <div class="card" id="plan-card">
-             <div class="card-header">
-                <h2>Planejar Horas</h2>
+             <div class="card-header" role="button" tabindex="0">
+                <h2 data-translate-key="planHoursTitle">Planejar Horas</h2>
                 <span class="toggle-icon">▼</span>
              </div>
              <div class="card-content">
-                <form id="plan-form"> <input type="hidden" id="plan-id"> <div class="form-group"><label for="plan-date">Data Futura:</label><input type="date" id="plan-date" required></div> <div class="form-group"><label for="plan-hours">Horas Planejadas (HH:MM):</label> <input type="text" inputmode="numeric" id="plan-hours" class="time-input" required placeholder="Ex: 3:00 ou 130"></div> <div class="text-center"> <button type="submit" id="save-plan-btn">Salvar Plano</button> <button type="button" id="clear-plan-form-btn" class="secondary">Limpar</button> </div> </form>
+                 <form id="plan-form">
+                    <input type="hidden" id="plan-id">
+                    <div class="form-group">
+                      <label for="plan-date" data-translate-key="planDateLabel">Data Futura:</label>
+                      <input type="date" id="plan-date" required>
+                    </div>
+                    <div class="form-group">
+                       <label for="plan-hours" data-translate-key="planHoursLabel">Horas Planejadas (HH:MM):</label>
+                       <input type="text" inputmode="numeric" id="plan-hours" class="time-input" required data-translate-placeholder-key="planHoursPlaceholder">
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" id="save-plan-btn" data-translate-key="savePlanButton">Salvar Plano</button>
+                      <button type="button" id="clear-plan-form-btn" class="secondary" data-translate-key="clearPlanFormButton">Limpar</button>
+                    </div>
+                </form>
                 <div id="planning-list-container" class="mt-2">
-                    <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);">Próximos Planos (Interno):</h3>
-                    <ul id="planning-list" class="data-list"> <li class="placeholder hidden" style="padding-left: var(--card-padding);">Nenhum planejamento futuro.</li> </ul>
+                    <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);" data-translate-key="planningListTitle">Próximos Planos (Interno):</h3>
+                    <ul id="planning-list" class="data-list">
+                        <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="planningListPlaceholder">Nenhum planejamento futuro.</li>
+                    </ul>
                 </div>
              </div>
         </div>
+
         <div class="card" id="stats-card">
-            <div class="card-header">
-                <h2>Resumo Mensal Detalhado</h2>
+            <div class="card-header" role="button" tabindex="0">
+                <h2 data-translate-key="detailedSummaryTitle">Resumo Mensal Detalhado</h2>
                 <span class="toggle-icon">▼</span>
              </div>
              <div class="card-content">
-                <div class="form-group" style="max-width: 200px; margin: 0 auto 25px auto; text-align:center;"> <label for="monthly-goal">Meta Mensal (Horas):</label> <input type="number" id="monthly-goal" min="1" step="1" value="70"> <button id="save-goal-btn" class="mt-1 secondary" style="width:100%; font-size:0.9em; padding: 8px 10px;">Definir Meta</button> </div> <div class="stats-grid"> <div class="stat-item"> <span id="stats-month-hours" class="stat-value">0</span> <span class="stat-label">Horas no Mês</span> </div> <div class="stat-item"> <span id="stats-month-goal-progress" class="stat-value">0%</span> <span class="stat-label">Progresso Meta</span> <div class="progress-bar-container"><div id="stats-month-progress-bar" class="progress-bar"></div></div> </div> <div class="stat-item"> <span id="stats-avg-hours-day" class="stat-value">0</span> <span class="stat-label">Média / Dia Ativo</span> </div> <div class="stat-item"> <span id="stats-month-days-active" class="stat-value">0</span> <span class="stat-label">Dias Ativos</span> </div> </div>
+                 <div class="form-group" style="max-width: 200px; margin: 0 auto 25px auto; text-align:center;">
+                   <label for="monthly-goal" data-translate-key="monthlyGoalLabel">Meta Mensal (Horas):</label>
+                   <input type="number" id="monthly-goal" min="1" step="1" value="70">
+                   <button id="save-goal-btn" class="mt-1 secondary" style="width:100%; font-size:0.9em; padding: 8px 10px;" data-translate-key="setGoalButton">Definir Meta</button>
+                 </div>
+                 <div class="stats-grid">
+                    <div class="stat-item">
+                        <span id="stats-month-hours" class="stat-value">0</span>
+                        <span class="stat-label" data-translate-key="statsMonthHoursLabel">Horas no Mês</span>
+                    </div>
+                    <div class="stat-item">
+                        <span id="stats-month-goal-progress" class="stat-value">0%</span>
+                        <span class="stat-label" data-translate-key="statsGoalProgressLabel">Progresso Meta</span>
+                        <div class="progress-bar-container"><div id="stats-month-progress-bar" class="progress-bar"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <span id="stats-avg-hours-day" class="stat-value">0</span>
+                        <span class="stat-label" data-translate-key="statsAvgHoursDayLabel">Média / Dia Ativo</span>
+                    </div>
+                    <div class="stat-item">
+                        <span id="stats-month-days-active" class="stat-value">0</span>
+                        <span class="stat-label" data-translate-key="statsMonthDaysActiveLabel">Dias Ativos</span>
+                    </div>
+                 </div>
              </div>
         </div>
+
         <div class="card" id="charts-card">
-            <div class="card-header">
-                 <h2>Gráfico de Horas</h2>
+            <div class="card-header" role="button" tabindex="0">
+                 <h2 data-translate-key="hoursChartTitle">Gráfico de Horas</h2>
                  <span class="toggle-icon">▼</span>
              </div>
              <div class="card-content">
-                 <div class="form-group"> <label for="chart-month-selector">Visualizar Mês:</label> <select id="chart-month-selector"></select> </div> <div class="chart-container"> <canvas id="monthlyHoursChart"></canvas> </div>
+                 <div class="form-group">
+                    <label for="chart-month-selector" data-translate-key="viewMonthLabel">Visualizar Mês:</label>
+                    <select id="chart-month-selector">
+                    </select>
+                 </div>
+                 <div class="chart-container">
+                    <canvas id="monthlyHoursChart"></canvas>
+                 </div>
              </div>
         </div>
+
         <div class="card" id="history-card">
-            <div class="card-header">
-                <h2>Histórico de Registros</h2>
+            <div class="card-header" role="button" tabindex="0">
+                <h2 data-translate-key="historyTitle">Histórico de Registros</h2>
                 <span class="toggle-icon">▼</span>
             </div>
              <div class="card-content">
                  <div id="history-controls">
-                    <input type="search" id="history-search-input" class="history-search-input" placeholder="Pesquisar notas, tags, datas...">
+                    <input type="search" id="history-search-input" class="history-search-input" data-translate-placeholder-key="historySearchPlaceholder">
                  </div>
                  <span id="showing-results-label"></span>
                  <ul id="history-list" class="data-list">
-                    <li class="placeholder hidden" style="padding-left: var(--card-padding);">Nenhum registro encontrado.</li>
+                    <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="historyNoRecordsYet">Nenhum registro encontrado.</li>
                  </ul>
             </div>
         </div>
+
         <div class="card" id="settings-card">
-            <div class="card-header">
-                <h2>Configurações</h2>
+            <div class="card-header" role="button" tabindex="0">
+                <h2 data-translate-key="settingsTitle">Configurações</h2>
                 <span class="toggle-icon">▼</span>
             </div>
             <div class="card-content">
-                <div class="text-center"> <button id="clear-all-data-btn" class="danger">Limpar Todos os Dados</button> </div> <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;"> Atenção: Limpar os dados removerá permanentemente todos os seus registros, planos e meta deste navegador. Esta ação não pode ser desfeita. </p>
+                <div class="text-center">
+                  <button id="clear-all-data-btn" class="danger" data-translate-key="clearAllDataButton">Limpar Todos os Dados</button>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="clearDataWarning">
+                 Atenção: Limpar os dados removerá permanentemente todos os seus registros, planos e meta deste navegador. Esta ação não pode ser desfeita.
+                </p>
             </div>
         </div>
     </div>
 
-    <div id="confirmation-dialog" class="dialog-backdrop"> <div class="dialog-content"> <p id="dialog-message">Você tem certeza?</p> <div class="dialog-actions"> <button id="dialog-confirm-btn" class="danger">Confirmar</button> <button id="dialog-cancel-btn" class="secondary">Cancelar</button> </div> </div> </div>
+    <div id="confirmation-dialog" class="dialog-backdrop">
+      <div class="dialog-content">
+         <p id="dialog-message" data-translate-key="dialogConfirmMessage">Você tem certeza?</p>
+         <div class="dialog-actions">
+            <button id="dialog-confirm-btn" class="danger" data-translate-key="dialogConfirmButton">Confirmar</button>
+            <button id="dialog-cancel-btn" class="secondary" data-translate-key="dialogCancelButton">Cancelar</button>
+         </div>
+       </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
+            // ----- Configurações de Internacionalização (i18n) -----
+            const i18n = {
+                translations: {},
+                supportedLanguages: ['pt-BR', 'en'],
+                defaultLanguage: 'en',
+                currentLanguage: 'en',
+                translationsUrl: './translations.json',
+
+                detectLanguage() {
+                    const fullBrowserLang = navigator.language || navigator.userLanguage || this.defaultLanguage;
+                    const baseBrowserLang = fullBrowserLang.split('-')[0];
+
+                    if (this.supportedLanguages.includes(fullBrowserLang)) {
+                        this.currentLanguage = fullBrowserLang;
+                    } else if (this.supportedLanguages.includes(baseBrowserLang)) {
+                        this.currentLanguage = baseBrowserLang;
+                    } else if (this.supportedLanguages.some(lang => lang.startsWith(baseBrowserLang))) {
+                        this.currentLanguage = this.supportedLanguages.find(lang => lang.startsWith(baseBrowserLang));
+                    } else if (this.supportedLanguages.includes(this.defaultLanguage)) {
+                        this.currentLanguage = this.defaultLanguage;
+                    } else if (this.supportedLanguages.length > 0) {
+                        this.currentLanguage = this.supportedLanguages[0];
+                    } else {
+                        this.currentLanguage = this.defaultLanguage;
+                    }
+                    console.log(`Browser language: ${fullBrowserLang}, Using language: ${this.currentLanguage}`);
+                    document.documentElement.lang = this.currentLanguage;
+                },
+
+                async loadTranslations() {
+                    try {
+                        const response = await fetch(this.translationsUrl);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}, ao buscar ${this.translationsUrl}`);
+                        }
+                        this.translations = await response.json();
+                        console.log('Translations loaded successfully.');
+                        this.translations[this.defaultLanguage] = this.translations[this.defaultLanguage] || {};
+                        this.translations[this.currentLanguage] = this.translations[this.currentLanguage] || this.translations[this.defaultLanguage];
+                    } catch (error) {
+                        console.error('Error loading translations:', error);
+                        this.translations[this.defaultLanguage] = this.translations[this.defaultLanguage] || {};
+                        this.translations[this.currentLanguage] = this.translations[this.currentLanguage] || this.translations[this.defaultLanguage];
+                        showFeedback(`Error loading translations: ${error.message}. Falling back to ${this.currentLanguage}.`, 'danger');
+                    }
+                },
+
+                t(key, replacements = {}) {
+                    const langTranslations = this.translations[this.currentLanguage]
+                                             || this.translations[this.defaultLanguage]
+                                             || {};
+                    let translation = langTranslations[key] || key;
+
+                    if (Array.isArray(translation)) {
+                        return translation;
+                    }
+
+                    if (typeof translation === 'string') {
+                        for (const placeholder in replacements) {
+                           const regex = new RegExp(`\\{${placeholder}\\}`, 'g');
+                           translation = translation.replace(regex, replacements[placeholder]);
+                        }
+                    } else {
+                        console.warn(`Translation for key "${key}" is not a string or array:`, translation);
+                        translation = key;
+                    }
+                    return translation;
+                },
+
+                applyTranslationsToDOM() {
+                    document.querySelectorAll('[data-translate-key]').forEach(element => {
+                        const key = element.getAttribute('data-translate-key');
+                        const translation = this.t(key);
+                        if (typeof translation === 'string' && translation.includes('<') && translation.includes('>')) {
+                            element.innerHTML = translation;
+                        } else {
+                            element.textContent = translation;
+                        }
+                    });
+                    document.querySelectorAll('[data-translate-placeholder-key]').forEach(element => {
+                        const key = element.getAttribute('data-translate-placeholder-key');
+                        element.placeholder = this.t(key);
+                    });
+                    document.querySelectorAll('[data-translate-title-key]').forEach(element => {
+                        const key = element.getAttribute('data-translate-title-key');
+                        element.title = this.t(key);
+                    });
+                    document.title = this.t('appTitle');
+                    document.querySelectorAll('.toggle-icon').forEach(icon => {
+                         const card = icon.closest('.card');
+                         const isExpanded = card ? card.classList.contains('expanded') : false;
+                         icon.textContent = isExpanded ? this.t('toggleIconCollapse') : this.t('toggleIconExpand');
+                     });
+                    const tagSelect = document.getElementById('record-tag');
+                    if(tagSelect) {
+                         tagSelect.querySelectorAll('option[data-translate-key]').forEach(option => {
+                             const key = option.getAttribute('data-translate-key');
+                             option.textContent = this.t(key);
+                         });
+                         const defaultTagKey = "recordTagOptionHouseToHouse";
+                         const defaultTagValue = i18n.t(defaultTagKey);
+                         tagSelect.value = defaultTagValue;
+                    }
+                }
+            };
+
+            // ----- Variáveis Globais e Seletores de Elementos -----
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal,
                 dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg,
                 recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate,
@@ -284,317 +457,374 @@
             let progressRingRadius = 0;
             let progressRingCircumference = 0;
 
-            const DEFAULT_TAG = "Casa em casa";
+            // ----- Constantes -----
             const HISTORY_MONTH_LIMIT = 3;
             const NOTES_MAX_LENGTH = 300;
             const MIN_HOURS_PER_DAY_FORECAST = 1.0;
-            const MONTH_NAMES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
-            const WEEKDAY_NAMES_PT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
             const LOCAL_STORAGE_KEYS = {
-                ENTRIES: 'pioneerTracker_entries_v5.1',
-                PLANS: 'pioneerTracker_plans_v1.1',
-                SETTINGS: 'pioneerTracker_settings_v1.1'
+                ENTRIES: 'pioneerTracker_entries_v5.2',
+                PLANS: 'pioneerTracker_plans_v1.2',
+                SETTINGS: 'pioneerTracker_settings_v1.2'
             };
+
+            // ----- Funções Utilitárias -----
+            function replacePlaceholders(text, replacements) {
+                let result = text;
+                if(typeof text !== 'string') return text;
+                for (const placeholder in replacements) {
+                    const regex = new RegExp(`\\{${placeholder}\\}`, 'g');
+                    result = result.replace(regex, replacements[placeholder]);
+                }
+                return result;
+            }
 
             function getCurrentDateString() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
             function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; }
             function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
-            function getStartOfWeek(date = new Date()) { const d = new Date(date); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek; const sOW = new Date(d.setDate(diff)); sOW.setHours(0, 0, 0, 0); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
+            function getStartOfWeek(date = new Date()) { const d = new Date(date); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); const sOW = new Date(d.setDate(diff)); sOW.setHours(0, 0, 0, 0); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
             function getDateMonthsAgo(months) { const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0, 0, 0, 0); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
-            function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/')) return monthYearString; const [m, y] = monthYearString.split('/'); const monthIndex = parseInt(m, 10) - 1; if (monthIndex < 0 || monthIndex > 11) return monthYearString; return `${MONTH_NAMES_PT[monthIndex]} de ${y}`; }
-            function formatHoursExtensive(hoursDecimal, short = false) { if (isNaN(hoursDecimal) || hoursDecimal < 0) return short ? '0h' : '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; const hSuffix = short ? 'h' : ` ${hours === 1 ? 'hora' : 'horas'}`; const mSuffix = short ? 'm' : ` ${minutes === 1 ? 'minuto' : 'minutos'}`; if (hours > 0) { result += `${hours}${hSuffix}`; } if (minutes > 0) { result += `${hours > 0 ? (short ? ' ' : ' e ') : ''}${minutes}${mSuffix}`; } if (!result && hoursDecimal === 0) { result = short ? '0h' : '0 horas'; } else if (!result && minutes > 0) { result = `${minutes}${mSuffix}`; } return result; }
+
+            function formatMonthYearExtensive(monthYearString) {
+                if (!monthYearString || !monthYearString.includes('/')) return monthYearString;
+                const [m, y] = monthYearString.split('/');
+                const monthIndex = parseInt(m, 10) - 1;
+                if (monthIndex < 0 || monthIndex > 11) return monthYearString;
+                const monthNames = i18n.t('monthNames');
+                if (!Array.isArray(monthNames) || monthNames.length !== 12) {
+                    console.warn("Month names not available or invalid in translation.");
+                    return `${m}/${y}`;
+                }
+                return `${monthNames[monthIndex]} ${y}`;
+            }
+
+            function formatHoursExtensive(hoursDecimal, short = false) {
+                const zeroSuffix = short ? `0${i18n.t('hoursShortSuffix')}` : `0 ${i18n.t('hoursSuffix')}`;
+                if (isNaN(hoursDecimal) || hoursDecimal < 0) return zeroSuffix;
+                const totalMinutes = Math.round((hoursDecimal || 0) * 60);
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                if (hours === 0 && minutes === 0) return zeroSuffix;
+                const hSuffixKey = short ? 'hoursShortSuffix' : (hours === 1 ? 'hoursSuffixSingular' : 'hoursSuffix');
+                const mSuffixKey = short ? 'minutesShortSuffix' : (minutes === 1 ? 'minutesSuffixSingular' : 'minutesSuffix');
+                const hSuffix = i18n.t(hSuffixKey);
+                const mSuffix = i18n.t(mSuffixKey);
+                const connector = (hours > 0 && minutes > 0 && !short) ? i18n.t('connectorAnd') : ' ';
+                const formatString = i18n.t('hoursFormat');
+                const replacements = { hours: hours > 0 ? hours.toString() : '', hSuffix: hours > 0 ? hSuffix : '', connector: (hours > 0 && minutes > 0) ? connector : '', minutes: minutes > 0 ? minutes.toString() : '', mSuffix: minutes > 0 ? mSuffix : '' };
+                let result = replacePlaceholders(formatString, replacements);
+                result = result.replace(/\s+/g, ' ').trim();
+                return result || zeroSuffix;
+            }
+
+            function parseTimeInputToDecimal(timeString) {
+                 if (!timeString) return 0;
+                 const trimmed = String(timeString).trim();
+                 if (!trimmed) return 0;
+                 const colonMatch = trimmed.match(/^(\d{1,3}):(\d{1,2})$/);
+                 if (colonMatch) {
+                     const hours = parseInt(colonMatch[1], 10); const minutes = parseInt(colonMatch[2], 10);
+                     if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); }
+                     else { return NaN; }
+                 }
+                 const numberMatch = trimmed.match(/^(\d+)$/);
+                 if (numberMatch) {
+                     const numStr = numberMatch[1]; const numVal = parseInt(numStr, 10);
+                     if (isNaN(numVal)) return NaN;
+                     if (numStr.length <= 2) {
+                         if (numVal >= 0 && numVal < 60) { return numVal / 60; }
+                         else if (numVal >= 60) { return numVal / 60; }
+                         else { return NaN; }
+                     } else if (numStr.length >= 3 && numStr.length <= 4) {
+                         const potentialHoursStr = numStr.slice(0, -2); const potentialMinutesStr = numStr.slice(-2);
+                         const hours = parseInt(potentialHoursStr, 10); const minutes = parseInt(potentialMinutesStr, 10);
+                         if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); }
+                         else { return NaN; }
+                     } else { return NaN; }
+                 }
+                 return NaN;
+            }
             function formatDecimalToTimeInput(decimalHours) { if (isNaN(decimalHours) || decimalHours <= 0) return ""; const totalMinutes = Math.round((decimalHours || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; return `${hours}:${String(minutes).padStart(2, '0')}`; }
-            function parseTimeInputToDecimal(timeString) { if (!timeString) return 0; const trimmed = timeString.trim(); if (!trimmed) return 0; const colonMatch = trimmed.match(/^(\d{1,3}):(\d{1,2})$/); if (colonMatch) { const hours = parseInt(colonMatch[1], 10); const minutes = parseInt(colonMatch[2], 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } const numberMatch = trimmed.match(/^(\d+)$/); if (numberMatch) { const numStr = numberMatch[1]; const numVal = parseInt(numStr, 10); if (isNaN(numVal)) return NaN; if (numStr.length <= 2) { if (numVal < 60) return numVal / 60; } if (numStr.length >= 3) { const potentialHoursStr = numStr.slice(0, -2); const potentialMinutesStr = numStr.slice(-2); const hours = parseInt(potentialHoursStr, 10); const minutes = parseInt(potentialMinutesStr, 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } return NaN; } return NaN; }
-            function formatRelativeDate(dateString) { const today = new Date(); today.setHours(0, 0, 0, 0); const inputDate = new Date(dateString + 'T00:00:00'); if (isNaN(inputDate)) return formatDisplayDate(dateString); const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const oneWeekFromToday = new Date(today); oneWeekFromToday.setDate(today.getDate() + 7); if (inputDate.getTime() === today.getTime()) { return "Hoje"; } if (inputDate.getTime() === tomorrow.getTime()) { return "Amanhã"; } if (inputDate > tomorrow && inputDate < oneWeekFromToday) { return `Próx. ${WEEKDAY_NAMES_PT[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
-            function saveData() { try { localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); } catch (e) { console.error("SAVE ERR:", e); showFeedback('Falha ao salvar dados.', 'danger'); } }
-            function loadData() { try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const parsedEntries = JSON.parse(sER); if (Array.isArray(parsedEntries)) { recordedEntries = parsedEntries.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '' })); } else { throw new Error("Stored entries not an array"); } } catch (parseErr) { console.error("Error parsing stored entries, resetting:", parseErr); sER = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } } else { recordedEntries = []; } recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } }); plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date)); const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); let lS = sSR ? JSON.parse(sSR) : {}; settings = { monthlyGoal: 70, goalHasBeenSet: false, ...lS }; if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; console.log("Data loaded."); } catch (err) { console.error("Load Err:", err); recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { console.error("Error removing invalid storage items:", e); } showFeedback('Erro ao carregar, dados resetados.', 'danger'); } }
-            function triggerInstallPromptIfAvailable(context = 'Contexto não especificado') {
+
+            function formatRelativeDate(dateString) {
+                const today = new Date(); today.setHours(0, 0, 0, 0);
+                const inputDate = new Date(dateString + 'T00:00:00');
+                if (isNaN(inputDate)) return formatDisplayDate(dateString);
+                const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+                const oneWeekFromToday = new Date(today); oneWeekFromToday.setDate(today.getDate() + 7);
+                const weekdayNames = i18n.t('weekdayNamesShort');
+                if (!Array.isArray(weekdayNames) || weekdayNames.length !== 7) { console.warn("Weekday names not available/invalid for relative date formatting."); return formatDisplayDate(dateString); }
+                if (inputDate.getTime() === today.getTime()) return i18n.t('today');
+                if (inputDate.getTime() === tomorrow.getTime()) return i18n.t('tomorrow');
+                if (inputDate > tomorrow && inputDate <= oneWeekFromToday) { const weekday = weekdayNames[inputDate.getDay()]; return i18n.t('nextWeekday', { weekday: weekday }); }
+                return formatDisplayDate(dateString);
+            }
+
+            function getDefaultTag() { return i18n.t('recordTagOptionHouseToHouse'); }
+
+            // ----- Persistência -----
+            function saveData() {
+                try { localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); }
+                catch (e) { console.error("Error saving data to localStorage:", e); showFeedback(i18n.t('feedbackDataSaveFailed'), 'danger'); }
+            }
+            function loadData() {
+                try {
+                    let storedEntriesRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
+                    if (storedEntriesRaw) {
+                        try { const parsedEntries = JSON.parse(storedEntriesRaw); if (Array.isArray(parsedEntries)) { recordedEntries = parsedEntries.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag })); } else { throw new Error("Stored entries data is not an array"); } }
+                        catch (parseErr) { console.error("Error parsing stored entries, resetting entries:", parseErr); storedEntriesRaw = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); }
+                    } else { recordedEntries = []; }
+                    recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00'));
+
+                    const storedPlansRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS);
+                    plannedEntries = storedPlansRaw ? JSON.parse(storedPlansRaw) : [];
+                    if (!Array.isArray(plannedEntries)) { console.error("Stored plans data is not an array, resetting plans."); plannedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); }
+                    plannedEntries = plannedEntries.map(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } p.hours = Number(p.hours) || 0; return p; }).filter(p => p.hours > 0);
+                    plannedEntries.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'));
+
+                    const storedSettingsRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS);
+                    let loadedSettings = storedSettingsRaw ? JSON.parse(storedSettingsRaw) : {};
+                    settings = { monthlyGoal: 70, goalHasBeenSet: false, ...loadedSettings };
+                    settings.monthlyGoal = Number(settings.monthlyGoal);
+                    if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) { settings.monthlyGoal = 70; }
+                    if (typeof settings.goalHasBeenSet !== 'boolean') { settings.goalHasBeenSet = !!settings.monthlyGoal; }
+                    console.log("Data loaded from localStorage.");
+                } catch (err) {
+                    console.error("Error loading data from localStorage:", err);
+                    recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false };
+                    try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { console.error("Error removing invalid storage items:", e); }
+                    showFeedback(i18n.t('feedbackLoadError'), 'danger');
+                }
+            }
+
+            // ----- Instalação PWA -----
+            function triggerInstallPromptIfAvailable(context = 'Context not specified') {
                 if (deferredInstallPrompt && settings.goalHasBeenSet) {
-                    console.log(`Tentando exibir prompt de instalação (${context})...`);
+                    console.log(`Attempting to show install prompt (${context})...`);
                     setTimeout(() => {
                         deferredInstallPrompt.prompt();
-                        deferredInstallPrompt.userChoice.then((choiceResult) => {
-                            if (choiceResult.outcome === 'accepted') { console.log('Usuário aceitou instalar o app'); } else { console.log('Usuário recusou instalar o app'); }
-                            deferredInstallPrompt = null;
-                        }).catch(err => { console.error("Erro ao processar userChoice do prompt:", err); deferredInstallPrompt = null; });
-                    }, 300);
-                } else if (!settings.goalHasBeenSet) { console.log(`Prompt de instalação não exibido pois a meta ainda não foi definida (${context}).`); }
-                 else { console.log(`Prompt de instalação não disponível no momento (${context}).`); }
+                        deferredInstallPrompt.userChoice.then((choiceResult) => { if (choiceResult.outcome === 'accepted') { console.log('User accepted the install prompt'); } else { console.log('User dismissed the install prompt'); } deferredInstallPrompt = null; })
+                        .catch(err => { console.error("Error processing prompt userChoice:", err); deferredInstallPrompt = null; });
+                    }, 500);
+                } else if (!settings.goalHasBeenSet) { console.log(`Install prompt not shown: Goal not set yet (${context}).`); }
+                else { console.log(`Install prompt not available at this time (${context}).`); }
             }
+
+            // ----- UI e Manipulação do DOM -----
             function promptForMonthlyGoal() {
-                 let gS=false;
-                 while(!gS){
-                     const gI=prompt("Por favor, informe sua meta mensal de horas (ex: 70):", settings.monthlyGoal);
-                     if (gI===null){ gS=true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); console.log("Usuário cancelou a definição inicial da meta."); } }
-                     else { const g = parseInt(gI,10); if (!isNaN(g) && g > 0) { settings.monthlyGoal=g; settings.goalHasBeenSet=true; monthlyGoalInput.value=g; saveData(); gS=true; updateAllDisplays(); showFeedback("Meta definida!", "success"); triggerInstallPromptIfAvailable('Após definir meta inicial'); } else { alert("Valor inválido. Por favor, insira um número positivo para a meta."); } }
-                 }
-            }
-            function setDateInputVisibility(visible) { isDateInputVisible=visible; if(visible){ recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); } else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); displayDate.textContent=(!recordDateInput.value || recordDateInput.value===getCurrentDateString())?"Hoje":formatDisplayDate(recordDateInput.value);}}
-            function toggleCard(cardElement){ if(!cardElement)return;const iE=cardElement.classList.contains('expanded');cardElement.classList.toggle('expanded',!iE);const ic=cardElement.querySelector('.toggle-icon');if(ic){ic.textContent=!iE?'▲':'▼';}}
-            function clearRecordForm() { recordForm.reset(); recordIdInput.value = ''; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = DEFAULT_TAG; recordNotesInput.value = ''; recordHoursInput.value = ''; saveRecordBtn.textContent = 'Salvar Registro'; saveRecordBtn.classList.remove('editing'); currentEditingId=null; }
-            function handleRecordSubmit(event) { event.preventDefault(); const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString(); const hoursInput = recordHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const tag = recordTagSelect.value || DEFAULT_TAG; const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH); if (isNaN(hours) || hours <= 0) { alert("Formato de Tempo inválido (ex: 2:30, 1:15, 45, 130). O tempo deve ser positivo."); recordHoursInput.focus(); return; } if (!date) { alert("Data inválida."); return; } const newEntry = { id, date, hours, tag, notes }; const eI = recordedEntries.findIndex(entry => entry.id === id); if (eI > -1) { recordedEntries[eI] = newEntry; } else { recordedEntries.push(newEntry); } recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('Registro salvo!', 'success'); }
-            function editRecordEntry(id) { const entry = recordedEntries.find(e => e.id === id); if (entry) { if (!recordCard.classList.contains('expanded')) { toggleCard(recordCard); } currentEditingId = id; recordIdInput.value = entry.id; recordDateInput.value = entry.date; setDateInputVisibility(entry.date !== getCurrentDateString()); recordHoursInput.value = formatDecimalToTimeInput(entry.hours); recordTagSelect.value = entry.tag || DEFAULT_TAG; recordNotesInput.value = entry.notes || ''; saveRecordBtn.textContent = 'Atualizar Registro'; saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); recordHoursInput.focus(); } }
-            function deleteRecordEntry(id) { showConfirmationDialog(`Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.`, () => { const index = recordedEntries.findIndex(e => e.id === id); if (index > -1) { recordedEntries.splice(index, 1); saveData(); updateAllDisplays(); showFeedback('Registro excluído.', 'info'); if (currentEditingId === id) { clearRecordForm(); } } else { console.warn("Entry not found for deletion:", id); } }); }
-            function clearPlanForm() { planForm.reset(); planIdInput.value = ''; planDateInput.value = ''; planHoursInput.value = ''; savePlanBtn.textContent = 'Salvar Plano'; currentEditingId=null; }
-            function handlePlanSubmit(event){ event.preventDefault(); const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now(); const date = planDateInput.value; const hoursInput = planHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const todayStr = getCurrentDateString(); if (!date || isNaN(hours) || hours <= 0) { alert("Preencha a Data Futura e as Horas Planejadas (ex: 2:30, 45). Devem ser valores positivos."); planHoursInput.focus(); return; } if (date < todayStr) { alert("A data do planejamento deve ser hoje ou uma data futura."); planDateInput.focus(); return; } const nP = { id, date, hours }; const eI = plannedEntries.findIndex(p => p.id === id); if (eI > -1) { plannedEntries[eI] = nP; } else { plannedEntries.push(nP); } plannedEntries.sort((a, b) => new Date(a.date) - new Date(b.date)); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('Planejamento salvo!', 'success'); }
-
-             function markPlanAsDone(id) {
-                const planIndex = plannedEntries.findIndex(p => p.id === id);
-                if (planIndex === -1) {
-                    console.error("Plano não encontrado para marcar como feito:", id);
-                    showFeedback('Erro ao encontrar o plano.', 'danger');
-                    return;
+                let goalSet = false;
+                while (!goalSet) {
+                    const goalInput = prompt(i18n.t('feedbackGoalPrompt'), settings.monthlyGoal);
+                    if (goalInput === null) { goalSet = true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); console.log("User cancelled initial goal setting, using default goal."); } }
+                    else { const goalValue = parseInt(goalInput, 10); if (!isNaN(goalValue) && goalValue > 0) { settings.monthlyGoal = goalValue; settings.goalHasBeenSet = true; monthlyGoalInput.value = goalValue; saveData(); goalSet = true; updateAllDisplays(); showFeedback(i18n.t('feedbackGoalSet'), "success"); triggerInstallPromptIfAvailable('After setting initial goal'); } else { alert(i18n.t('feedbackGoalInvalid')); } }
                 }
-                const plan = plannedEntries[planIndex];
-                const todayStr = getCurrentDateString();
-
-                // Decide a data do registro: data atual se feito ANTES, senão a data do plano.
-                const recordDate = todayStr < plan.date ? todayStr : plan.date;
-
-                const newRecordEntry = {
-                    id: Date.now(),
-                    date: recordDate, // Usa a data decidida
-                    hours: plan.hours,
-                    tag: DEFAULT_TAG, // Pode ser personalizado se necessário
-                    notes: `Horas completadas (plano original para ${formatDisplayDate(plan.date)}).` // Nota explicativa
-                };
-
-                recordedEntries.push(newRecordEntry);
-                recordedEntries.sort((a, b) => new Date(b.date) - new Date(a.date)); // Mantém a ordenação
-                plannedEntries.splice(planIndex, 1); // Remove o plano concluído
-
-                saveData();
-                updateAllDisplays(); // Atualiza dashboard, histórico, etc.
-                showFeedback('Horas planejadas registradas!', 'success');
             }
 
-            function deletePlanEntry(id){ showConfirmationDialog(`Tem certeza que deseja excluir este planejamento?`,()=>{ plannedEntries=plannedEntries.filter(p=>p.id!==id); saveData(); updateAllDisplays(); showFeedback('Planejamento excluído.','info'); if(currentEditingId===id){ clearPlanForm(); } }); }
-            function handleGoalSave(){ const nG=parseInt(monthlyGoalInput.value,10); if(!isNaN(nG) && nG>0){ settings.monthlyGoal=nG; settings.goalHasBeenSet=true; saveData(); updateAllDisplays(); showFeedback('Meta mensal atualizada!','success'); triggerInstallPromptIfAvailable('Após atualizar meta no card'); }else{ alert("Meta inválida. Use um número positivo."); monthlyGoalInput.value=settings.monthlyGoal; } }
-            function handleClearAllData() { showConfirmationDialog('ATENÇÃO! TEM CERTEZA? Isto apagará TODOS os registros, planos e sua meta PERMANENTEMENTE. Esta ação é IRREVERSÍVEL!', () => { recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback('Todos os dados foram apagados com sucesso.', 'danger'); document.querySelectorAll('.card').forEach(c => { if (c.id !== 'record-card' && c.classList.contains('expanded')) toggleCard(c); else if (c.id === 'record-card' && !c.classList.contains('expanded')) toggleCard(c); }); }); }
-            function showConfirmationDialog(message, onConfirm) { dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog.classList.add('visible'); dialogConfirmBtn.focus(); }
-            function hideConfirmationDialog() { confirmationDialog.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300); }
-            function showFeedback(message, type = 'info') { console.log(`Feedback[${type}]: ${message}`); const feedbackElement = document.createElement('div'); feedbackElement.textContent = message; feedbackElement.style.position = 'fixed'; feedbackElement.style.bottom = '20px'; feedbackElement.style.left = '50%'; feedbackElement.style.transform = 'translateX(-50%)'; feedbackElement.style.padding = '10px 20px'; feedbackElement.style.borderRadius = '8px'; feedbackElement.style.zIndex = '1100'; feedbackElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)'; feedbackElement.style.fontSize = '0.95em'; feedbackElement.style.transition = 'opacity 0.5s ease, bottom 0.5s ease'; feedbackElement.style.opacity = '0'; switch (type) { case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = 'var(--text-color)'; break; case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = 'var(--text-color)'; break; } document.body.appendChild(feedbackElement); setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '30px'; }, 10); setTimeout(() => { feedbackElement.style.opacity = '0'; feedbackElement.style.bottom = '10px'; }, 3500); setTimeout(() => { if (feedbackElement.parentNode) { feedbackElement.parentNode.removeChild(feedbackElement); } }, 4000); }
-            function updateDashboard() { const today = new Date(); const cM = today.getMonth(); const cY = today.getFullYear(); const sOW = getStartOfWeek(today); let mH = 0; let wH = 0; recordedEntries.forEach(e => { const eD = new Date(e.date + 'T00:00:00'); if (eD.getMonth() === cM && eD.getFullYear() === cY) { mH += e.hours; } if (e.date >= sOW && e.date <= getCurrentDateString()) { wH += e.hours; } }); dashboardWeekHours.textContent = formatHoursExtensive(wH); const goal = settings.monthlyGoal || 70; const percent = goal > 0 ? Math.min(100, (mH / goal) * 100) : 0; dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(mH, goal); dashboardMonthTotal.innerHTML = `Mês: <strong>${formatHoursExtensive(mH)}</strong>`; const lastDay = new Date(cY, cM + 1, 0).getDate(); const todayDay = today.getDate(); const remainingDays = Math.max(0, lastDay - todayDay); const remainingHours = Math.max(0, goal - mH); let forecastText = ''; if (!settings.goalHasBeenSet) { forecastText = `<span>Defina sua meta mensal.</span>`; } else if (remainingHours <= 0) { forecastText = `<span>Meta Alcançada! 🎉</span>`; } else if (remainingDays <= 0) { forecastText = `<span>Meta não atingida este mês.</span>`; } else { let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours; let daysNeeded = remainingDays; let suggestion = ''; if (daysNeeded > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysNeeded = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; } else if (daysNeeded <= 0) { avgNeeded = remainingHours; daysNeeded = 1; } suggestion = `Tente ≈<strong>${formatHoursExtensive(avgNeeded, true)}</strong>/${daysNeeded > 1 ? 'dia' : 'dia'} por ${daysNeeded} ${daysNeeded === 1 ? 'dia' : 'dias'}.`; forecastText = `<span>Faltam ${formatHoursExtensive(remainingHours)}.</span><span>${suggestion}</span>`; } dashboardForecast.innerHTML = forecastText; updateDashboardPlannedDates(); }
-            function updateProgressRing(cV, mV) { const p = mV > 0 ? Math.min(100, (cV / mV) * 100) : 0; const offset = progressRingCircumference * (1 - p / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); }
+            function setDateInputVisibility(visible) {
+                isDateInputVisible = visible;
+                if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); }
+                else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); const dateValue = recordDateInput.value; const isToday = !dateValue || dateValue === getCurrentDateString(); displayDate.textContent = isToday ? i18n.t('displayDateToday') : formatDisplayDate(dateValue); }
+            }
+
+            function toggleCard(cardElement) {
+                if (!cardElement) return; const isExpanded = cardElement.classList.contains('expanded'); cardElement.classList.toggle('expanded', !isExpanded); const icon = cardElement.querySelector('.toggle-icon');
+                if (icon) { icon.textContent = !isExpanded ? i18n.t('toggleIconCollapse') : i18n.t('toggleIconExpand'); }
+            }
+
+            function clearRecordForm() {
+                recordForm.reset(); recordIdInput.value = ''; currentEditingId = null; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = getDefaultTag(); recordNotesInput.value = ''; recordHoursInput.value = ''; saveRecordBtn.textContent = i18n.t('saveRecordButton'); saveRecordBtn.classList.remove('editing');
+            }
+
+            function handleRecordSubmit(event) {
+                event.preventDefault(); const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString(); const hoursInput = recordHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const tag = recordTagSelect.value || getDefaultTag(); const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH);
+                if (isNaN(hours) || hours <= 0) { alert(i18n.t('feedbackTimeInvalid')); recordHoursInput.focus(); return; }
+                if (!date) { alert(i18n.t('feedbackDateInvalid')); if(!isDateInputVisible) setDateInputVisibility(true); recordDateInput.focus(); return; }
+                const newEntry = { id, date, hours, tag, notes }; const existingIndex = recordedEntries.findIndex(entry => entry.id === id);
+                if (existingIndex > -1) { recordedEntries[existingIndex] = newEntry; } else { recordedEntries.push(newEntry); }
+                recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackRecordSaved'), 'success');
+            }
+
+            function editRecordEntry(id) {
+                const entry = recordedEntries.find(e => e.id === id);
+                if (entry) { if (!recordCard.classList.contains('expanded')) { toggleCard(recordCard); } currentEditingId = id; recordIdInput.value = entry.id; recordDateInput.value = entry.date; setDateInputVisibility(entry.date !== getCurrentDateString()); recordHoursInput.value = formatDecimalToTimeInput(entry.hours); recordTagSelect.value = entry.tag || getDefaultTag(); recordNotesInput.value = entry.notes || ''; saveRecordBtn.textContent = i18n.t('updateRecordButton'); saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => recordHoursInput.focus(), 300); }
+            }
+
+            function deleteRecordEntry(id) {
+                showConfirmationDialog(i18n.t('feedbackDeleteRecordConfirm'), () => { const index = recordedEntries.findIndex(e => e.id === id); if (index > -1) { recordedEntries.splice(index, 1); saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackRecordDeleted'), 'info'); if (currentEditingId === id) { clearRecordForm(); } } else { console.warn("Record entry not found for deletion:", id); } });
+            }
+
+            function clearPlanForm() {
+                planForm.reset(); planIdInput.value = ''; currentEditingId = null; planDateInput.value = ''; planHoursInput.value = ''; savePlanBtn.textContent = i18n.t('savePlanButton');
+            }
+
+            function handlePlanSubmit(event) {
+                event.preventDefault(); const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now(); const date = planDateInput.value; const hoursInput = planHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const todayStr = getCurrentDateString();
+                if (!date || isNaN(hours) || hours <= 0) { alert(i18n.t('feedbackPlanInvalid')); if (!date) planDateInput.focus(); else planHoursInput.focus(); return; }
+                if (date < todayStr) { alert(i18n.t('feedbackPlanDatePast')); planDateInput.focus(); return; }
+                const newPlan = { id, date, hours }; const existingIndex = plannedEntries.findIndex(p => p.id === id);
+                if (existingIndex > -1) { plannedEntries[existingIndex] = newPlan; } else { plannedEntries.push(newPlan); }
+                plannedEntries.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanSaved'), 'success');
+            }
+
+            function markPlanAsDone(id) {
+                const planIndex = plannedEntries.findIndex(p => p.id === id); if (planIndex === -1) { console.error("Plan not found to mark as done:", id); showFeedback(i18n.t('feedbackPlanNotFound'), 'danger'); return; } const plan = plannedEntries[planIndex]; const todayStr = getCurrentDateString(); const recordDate = new Date(plan.date + 'T00:00:00') < new Date(todayStr + 'T00:00:00') ? plan.date : todayStr; const newRecordEntry = { id: Date.now(), date: recordDate, hours: plan.hours, tag: getDefaultTag(), notes: i18n.t('planNoteFromPastPlan', { date: formatDisplayDate(plan.date) }) };
+                recordedEntries.push(newRecordEntry); recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); plannedEntries.splice(planIndex, 1); saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanMarkedDone'), 'success');
+            }
+
+            function deletePlanEntry(id) {
+                showConfirmationDialog(i18n.t('feedbackDeletePlanConfirm'), () => { const initialLength = plannedEntries.length; plannedEntries = plannedEntries.filter(p => p.id !== id); if (plannedEntries.length < initialLength) { saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanDeleted'), 'info'); if (currentEditingId === id) { clearPlanForm(); } } else { console.warn("Plan entry not found for deletion:", id); } });
+            }
+
+            function handleGoalSave() {
+                const newGoal = parseInt(monthlyGoalInput.value, 10); if (!isNaN(newGoal) && newGoal > 0) { if(settings.monthlyGoal !== newGoal) { settings.monthlyGoal = newGoal; settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackGoalUpdated'), 'success'); triggerInstallPromptIfAvailable('After updating goal in settings card'); } } else { alert(i18n.t('feedbackGoalInvalid')); monthlyGoalInput.value = settings.monthlyGoal; }
+            }
+
+            function handleClearAllData() {
+                showConfirmationDialog(i18n.t('feedbackClearAllConfirm'), () => { recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackDataCleared'), 'danger'); document.querySelectorAll('.card').forEach(c => { const shouldBeExpanded = (c.id === 'record-card'); if (c.classList.contains('expanded') !== shouldBeExpanded) { toggleCard(c); } }); });
+            }
+
+            function showConfirmationDialog(message, onConfirm) {
+                dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog.classList.add('visible'); dialogConfirmBtn.focus();
+            }
+
+            function hideConfirmationDialog() {
+                confirmationDialog.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300);
+            }
+
+            function showFeedback(message, type = 'info') {
+                console.log(`Feedback[${type}]: ${message}`); const feedbackElement = document.createElement('div'); feedbackElement.textContent = message; feedbackElement.style.position = 'fixed'; feedbackElement.style.bottom = '-50px'; feedbackElement.style.left = '50%'; feedbackElement.style.transform = 'translateX(-50%)'; feedbackElement.style.padding = '10px 20px'; feedbackElement.style.borderRadius = '8px'; feedbackElement.style.zIndex = '1100'; feedbackElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)'; feedbackElement.style.fontSize = '0.95em'; feedbackElement.style.textAlign = 'center'; feedbackElement.style.maxWidth = '90%'; feedbackElement.style.transition = 'opacity 0.4s ease, bottom 0.4s ease'; feedbackElement.style.opacity = '0';
+                switch (type) { case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = '#ffffff'; break; case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = '#ffffff'; break; case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = '#ffffff'; break; } document.body.appendChild(feedbackElement);
+                setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '20px'; }, 10);
+                setTimeout(() => { feedbackElement.style.opacity = '0'; feedbackElement.style.bottom = '-50px'; }, 3500);
+                setTimeout(() => { if (feedbackElement.parentNode) { feedbackElement.parentNode.removeChild(feedbackElement); } }, 4000);
+            }
+
+            function updateDashboard() {
+                const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); const startOfWeekStr = getStartOfWeek(today); const todayStr = getCurrentDateString(); let monthHours = 0; let weekHours = 0;
+                recordedEntries.forEach(entry => { const entryDate = new Date(entry.date + 'T00:00:00'); if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) { monthHours += entry.hours; } if (entry.date >= startOfWeekStr && entry.date <= todayStr) { weekHours += entry.hours; } });
+                dashboardWeekHours.textContent = formatHoursExtensive(weekHours);
+                const goal = settings.monthlyGoal; const percent = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0; dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(monthHours, goal);
+                dashboardMonthTotal.querySelector('strong').textContent = formatHoursExtensive(monthHours);
+                const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); const todayDayOfMonth = today.getDate(); const remainingDays = Math.max(0, lastDayOfMonth - todayDayOfMonth); const remainingHours = Math.max(0, goal - monthHours); let forecastText = ''; const forecastLabelSpan = `<span data-translate-key="dashboardForecastLabel">${i18n.t('dashboardForecastLabel')}</span>: `;
+                if (!settings.goalHasBeenSet) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalNotSet'); } else if (remainingHours <= 0) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalReached'); } else if (remainingDays <= 0 && monthHours < goal) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalNotReached'); } else { let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours; let daysToReachGoal = remainingDays; if (daysToReachGoal > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysToReachGoal = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; } else if (daysToReachGoal <= 0) { avgNeeded = remainingHours; daysToReachGoal = 1; } const neededText = i18n.t('dashboardForecastNeeded', { remainingHours: formatHoursExtensive(remainingHours) }); const suggestion = i18n.t('dashboardForecastSuggestion', { avgNeeded: formatHoursExtensive(avgNeeded, true), daysUnit: daysToReachGoal === 1 ? i18n.t('day') : i18n.t('days'), daysNeeded: daysToReachGoal, daysPlural: daysToReachGoal === 1 ? i18n.t('day') : i18n.t('days') }); forecastText = `<span>${forecastLabelSpan}${neededText}</span><span>${suggestion}</span>`; } dashboardForecast.innerHTML = forecastText;
+                updateDashboardPlannedDates();
+            }
+
+            function updateProgressRing(currentValue, maxValue) {
+                const percentage = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0; const offset = progressRingCircumference * (1 - percentage / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset);
+            }
+
             function updateDashboardPlannedDates() {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const todayStr = getCurrentDateString();
-                const now = new Date();
-                const currentHour = now.getHours();
-                const overdueThreshold = 18; // 6 PM
-
-                const futurePlans = plannedEntries
-                    .filter(p => p.date >= todayStr) // Inclui planos de hoje e futuros
-                    .sort((a, b) => new Date(a.date) - new Date(b.date))
-                    .slice(0, 3); // Limita a 3 próximos
-
-                const pastUncompletedPlans = plannedEntries
-                    .filter(p => {
-                        const planDate = new Date(p.date + 'T00:00:00');
-                        return planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold);
-                    })
-                    .sort((a, b) => new Date(a.date) - new Date(b.date))
-                    .slice(0, 3 - futurePlans.length); // Preenche com planos passados se houver espaço
-
-                 const displayPlans = [...pastUncompletedPlans, ...futurePlans].slice(0,3); // Combina e limita
-                 displayPlans.sort((a, b) => new Date(a.date) - new Date(b.date)); // Ordena a lista final
-
-
+                const today = new Date(); today.setHours(0, 0, 0, 0); const todayStr = getCurrentDateString(); const now = new Date(); const currentHour = now.getHours(); const overdueThreshold = 18;
+                const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a,b)=>new Date(a.date)-new Date(b.date));
+                const pastUncompletedPlans = plannedEntries.filter(p => { const planDate = new Date(p.date + 'T00:00:00'); return planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); }).sort((a, b) => new Date(a.date) - new Date(b.date));
+                const displayPlans = [...futurePlans, ...pastUncompletedPlans].reduce((acc, current) => { if (!acc.some(item => item.id === current.id)) { acc.push(current); } return acc; }, []).sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')).slice(0, 3);
                 dashboardPlanList.innerHTML = '';
+                if (displayPlans.length > 0) { dashboardPlannedDatesContainer.classList.remove('hidden'); displayPlans.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const planDate = new Date(plan.date + 'T00:00:00'); const isOverdue = planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); li.innerHTML = i18n.t('dashboardPlannedDateEntry', { relativeDate: formatRelativeDate(plan.date), hours: formatHoursExtensive(plan.hours, true) }); if (isOverdue) { const warningSpan = document.createElement('span'); warningSpan.textContent = i18n.t('dashboardPlannedOverdue'); warningSpan.classList.add('plan-warning'); li.appendChild(warningSpan); } dashboardPlanList.appendChild(li); }); }
+                else { dashboardPlannedDatesContainer.classList.add('hidden'); }
+            }
 
-                if (displayPlans.length > 0) {
-                    dashboardPlannedDatesContainer.classList.remove('hidden');
-                    displayPlans.forEach(plan => {
-                        const li = document.createElement('li');
-                        li.dataset.id = plan.id;
+            function renderHistory() {
+                historyList.innerHTML = ''; const searchTerm = historySearchInput.value.trim().toLowerCase(); let results = []; let resultsLabelText = ''; const hasSearch = searchTerm.length > 0; const defaultTag = getDefaultTag();
+                if (hasSearch) { results = recordedEntries.filter(entry => { const entryDateFormatted = formatDisplayDate(entry.date).toLowerCase(); const entryDateISO = entry.date.toLowerCase(); const entryHoursStr = String(entry.hours || 0).replace('.', ','); const entryHoursRounded = Math.round(entry.hours || 0).toString(); const entryHoursFormatted = formatHoursExtensive(entry.hours).toLowerCase(); const entryTag = (entry.tag || '').toLowerCase(); const entryNotes = (entry.notes || '').toLowerCase(); return entryDateFormatted.includes(searchTerm) || entryDateISO.includes(searchTerm) || entryHoursStr.includes(searchTerm) || entryHoursRounded.includes(searchTerm) || entryHoursFormatted.includes(searchTerm) || entryTag.includes(searchTerm) || entryNotes.includes(searchTerm); }); const searchTermText = i18n.t('historyShowingResultsTerm', { term: searchTerm }); resultsLabelText = i18n.t('historyShowingResultsLabel', { count: results.length, searchTerm: searchTermText }); }
+                else { const dateLimit = getDateMonthsAgo(HISTORY_MONTH_LIMIT); results = recordedEntries.filter(entry => entry.date >= dateLimit); if (recordedEntries.length > 0 && results.length === 0) { resultsLabelText = i18n.t('historyNoRecentData', { months: HISTORY_MONTH_LIMIT }); } else if (recordedEntries.length > 0) { resultsLabelText = i18n.t('historyShowingLastMonthsLabel', { months: HISTORY_MONTH_LIMIT }); } else { resultsLabelText = ''; } }
+                showingResultsLabel.textContent = resultsLabelText;
+                if (results.length === 0) { let placeholderKey = 'historyNoRecordsYet'; if (recordedEntries.length > 0) { placeholderKey = hasSearch ? 'historyPlaceholderSearch' : 'historyPlaceholderRecent'; } historyListPlaceholder.textContent = i18n.t(placeholderKey, { months: HISTORY_MONTH_LIMIT }); historyListPlaceholder.classList.remove('hidden'); }
+                else { historyListPlaceholder.classList.add('hidden'); }
+                results.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisplay = entry.tag && entry.tag !== defaultTag ? `<span class="tag-badge">${entry.tag}</span>` : ''; const notesPreviewText = entry.notes ? entry.notes.replace(/\n/g, ' ') : i18n.t('historyEntryNoNotes'); const notesPreviewClass = entry.notes ? "notes-preview" : "notes-preview"; const notesPreview = `<span class="${notesPreviewClass}">${notesPreviewText}</span>`; const hoursDisplay = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(entry.date)}:</strong><span class="hours">${hoursDisplay}</span>${tagDisplay}${notesPreview}</div><div class="entry-actions"><button class="edit-btn secondary" data-translate-key="historyEditButton">${i18n.t('historyEditButton')}</button><button class="delete-btn danger" data-translate-key="historyDeleteButton">${i18n.t('historyDeleteButton')}</button></div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); });
+            }
 
-                        let mainText = `<strong>${formatRelativeDate(plan.date)}:</strong> ${formatHoursExtensive(plan.hours)}`;
-                        li.innerHTML = mainText;
+            function renderPlanning() {
+                planningList.innerHTML = ''; const todayStr = getCurrentDateString(); const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'));
+                if (allPlansSorted.length === 0) { planningListPlaceholder.textContent = i18n.t('planningListPastPlaceholder'); planningListPlaceholder.classList.remove('hidden'); return; }
+                planningListPlaceholder.classList.add('hidden');
+                allPlansSorted.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const hoursDisplay = formatHoursExtensive(plan.hours); const isPastPlan = plan.date < todayStr; li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong><span class="hours">${hoursDisplay}</span> ${i18n.t('planningEntryLabel')}${isPastPlan ? `<span class="plan-past-date-indicator">${i18n.t('planningEntryPastDate')}</span>` : ''}</div><div class="plan-actions"><button class="done-plan-btn success" data-translate-key="planningDoneButton">${i18n.t('planningDoneButton')}</button><button class="delete-plan-btn danger" data-translate-key="planningDeleteButton">${i18n.t('planningDeleteButton')}</button></div>`; li.querySelector('.done-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); markPlanAsDone(plan.id); }); li.querySelector('.delete-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id); }); planningList.appendChild(li); });
+            }
 
-                        const planDate = new Date(plan.date + 'T00:00:00');
-                        let isOverdue = false;
-                         if (planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold)) {
-                             isOverdue = true;
-                         }
+            function updateStatistics() {
+                const currentMonth = new Date().getMonth(); const currentYear = new Date().getFullYear(); const entriesThisMonth = recordedEntries.filter(entry => { const entryDate = new Date(entry.date + 'T00:00:00'); return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear; }); let totalHoursThisMonth = 0; const activeDaysThisMonth = new Set(); entriesThisMonth.forEach(entry => { totalHoursThisMonth += entry.hours; activeDaysThisMonth.add(entry.date); }); const goal = settings.monthlyGoal; const progressPercentage = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursThisMonth / goal) * 100), 100) : 0) : 0; const averageHoursPerActiveDay = activeDaysThisMonth.size > 0 ? (totalHoursThisMonth / activeDaysThisMonth.size) : 0; const daysActiveCount = activeDaysThisMonth.size;
+                statsMonthHours.textContent = formatHoursExtensive(totalHoursThisMonth); statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${progressPercentage}%` : '--%'; statsMonthProgressBar.style.width = `${progressPercentage}%`; statsAvgHoursDay.textContent = formatHoursExtensive(averageHoursPerActiveDay); statsMonthDaysActive.textContent = daysActiveCount;
+            }
 
+            function populateMonthSelector() {
+                const availableMonths = new Set(); recordedEntries.forEach(e => availableMonths.add(getMonthYearString(new Date(e.date + 'T00:00:00')))); const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = '';
+                if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = i18n.t('chartNoData'); chartMonthSelector.appendChild(option); chartMonthSelector.disabled = true; return; }
+                chartMonthSelector.disabled = false; const currentMonthYearValue = getMonthYearString(new Date()); const currentMonthYearFormatted = formatMonthYearExtensive(currentMonthYearValue); let hasCurrentMonth = sortedMonths.includes(currentMonthYearValue); let didSelectOld = false;
+                sortedMonths.forEach(monthYearValue => { const option = document.createElement('option'); option.value = monthYearValue; option.textContent = formatMonthYearExtensive(monthYearValue); if (monthYearValue === oldSelectedValue) { option.selected = true; didSelectOld = true; } else if (monthYearValue === currentMonthYearValue && !didSelectOld) { option.selected = true; } chartMonthSelector.appendChild(option); });
+                if (!hasCurrentMonth) { const option = document.createElement('option'); option.value = currentMonthYearValue; option.textContent = `${currentMonthYearFormatted} ${i18n.t('chartCurrentMonth')}`; chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); if (!didSelectOld) option.selected = true; }
+                if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; }
+            }
 
-                        if (isOverdue) {
-                            const warningSpan = document.createElement('span');
-                            warningSpan.textContent = ' (Concluído ou reagendar?)';
-                            warningSpan.classList.add('plan-warning');
-                             // Adiciona como um nó separado para evitar problemas com innerHTML
-                            li.appendChild(warningSpan);
-                         }
+            function getAveragesForChart(year, monthIndex) {
+                const entriesThisYear = recordedEntries.filter(e => new Date(e.date + 'T00:00:00').getFullYear() === year); const entriesThisMonth = entriesThisYear.filter(e => new Date(e.date + 'T00:00:00').getMonth() === monthIndex); let totalHoursMonth = 0; const activeDaysMonth = new Set(); entriesThisMonth.forEach(e => { totalHoursMonth += e.hours; activeDaysMonth.add(e.date); }); let totalHoursYear = 0; const monthsWithActivityYear = new Set(); entriesThisYear.forEach(e => { totalHoursYear += e.hours; monthsWithActivityYear.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+                return { avgDaily: activeDaysMonth.size > 0 ? totalHoursMonth / activeDaysMonth.size : 0, avgWeekly: daysInMonth >= 7 && totalHoursMonth > 0 ? (totalHoursMonth / daysInMonth) * 7 : 0, avgMonthly: monthsWithActivityYear.size > 0 ? totalHoursYear / monthsWithActivityYear.size : 0 };
+            }
 
-                        dashboardPlanList.appendChild(li);
-                    });
-                } else {
-                    dashboardPlannedDatesContainer.classList.add('hidden');
+            function renderCharts(selectedMonthYearValue) {
+                if (!selectedMonthYearValue) { if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = `14px ${computedStyles.fontFamily}`; ctx.fillText(i18n.t('feedbackChartSelectMonth'), ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); return; }
+                try {
+                    const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue); const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number); const monthIndex = selectedMonth - 1; const year = selectedYear; const entriesSelectedMonth = recordedEntries.filter(e => { const d=new Date(e.date+'T00:00:00'); return d.getMonth()===monthIndex && d.getFullYear()===year; }); const daysInSelectedMonth = new Date(year, monthIndex + 1, 0).getDate(); const dailyHoursData = Array(daysInSelectedMonth).fill(0); entriesSelectedMonth.forEach(e => { dailyHoursData[new Date(e.date+'T00:00:00').getDate()-1] += e.hours; }); const chartLabels = Array.from({ length: daysInSelectedMonth }, (_, i) => i + 1); const averages = getAveragesForChart(year, monthIndex);
+                    const annotations = {}; let pluginOptions = {};
+                    if (window.ChartAnnotation) { if (averages.avgDaily > 0) annotations.avgDay = { type: 'line', scaleID: 'y', value: averages.avgDaily, borderColor: avgLineColor1, borderWidth: 1.5, borderDash: [6, 6], label: { content: i18n.t('chartAvgDailyLabel', {value:formatHoursExtensive(averages.avgDaily,true)}), display: true, position: 'end', color: avgLineColor1, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: -10 }}; if (averages.avgWeekly > 0) annotations.avgWeek = { type: 'line', scaleID: 'y', value: averages.avgWeekly, borderColor: avgLineColor2, borderWidth: 1.5, borderDash: [10, 10], label: { content: i18n.t('chartAvgWeeklyLabel', {value:formatHoursExtensive(averages.avgWeekly,true)}), display: true, position: 'end', color: avgLineColor2, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 2 }}; if (averages.avgMonthly > 0) annotations.avgMonth = { type: 'line', scaleID: 'y', value: averages.avgMonthly, borderColor: avgLineColor3, borderWidth: 1.5, borderDash: [2, 2], label: { content: i18n.t('chartAvgMonthlyLabel', {value:formatHoursExtensive(averages.avgMonthly,true)}), display: true, position: 'end', color: avgLineColor3, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 14 }}; pluginOptions.annotation = { drawTime: 'afterDatasetsDraw', annotations: annotations }; } else { console.warn("ChartAnnotation not loaded, average lines disabled."); }
+                    if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy();
+                    monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'bar', data: { labels: chartLabels, datasets: [{ label: i18n.t('chartDailyHoursLabel'), data: dailyHoursData, backgroundColor: primaryColor, borderColor: primaryColor, borderWidth: 0, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title:{display:false}, ticks:{color: textMutedColor, padding: 10, callback: v=>formatHoursExtensive(v, true)}, grid: {color:gridColor, drawBorder: false}}, x: { title:{display:false}, ticks:{color:textMutedColor}, grid:{display: false}}}, plugins: { ...pluginOptions, title: { display: true, text: selectedMonthYearFormatted, color: textColor, font: { size: 14, weight: 'normal' }, padding: { bottom: 15 }}, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: false, padding: 10, cornerRadius: 6, callbacks: { label: ctx => i18n.t('chartTooltipLabel', {day: ctx.label, hours: formatHoursExtensive(ctx.parsed.y)})}}, legend: { display: false } } } });
+                } catch (error) {
+                    console.error("Chart rendering error:", error); if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles.fontFamily}`; ctx.fillText(i18n.t('feedbackChartRenderError'), ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore();
                 }
             }
-            function renderHistory() { historyList.innerHTML = ''; const sT = historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt = ''; const hasSearch = sT.length > 0; if (hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours || 0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); const fHE = formatHoursExtensive(e.hours).toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.', ',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || fHE.includes(sT)); }); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"' : ''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`; if (recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses`; } else if (recordedEntries.length === 0) { lblTxt = ''; } } showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado para a busca' : `Nenhum registro recente (use a busca para mais antigos)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : ''; const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); }); }
-            function renderPlanning() {
-                 planningList.innerHTML = '';
-                 const tS = getCurrentDateString();
-                 // Mostra todos os planos, ordenados por data (não filtra mais por >= tS aqui)
-                 const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-                 if (allPlansSorted.length === 0) {
-                     planningListPlaceholder.textContent = 'Nenhum planejamento futuro ou passado.';
-                     planningListPlaceholder.classList.remove('hidden');
-                     return;
-                 }
+            function updateAllDisplays() {
+                updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning();
+                const selectedMonthValue = chartMonthSelector.value; let chartRendered = false; let clearChartMsgKey = 'feedbackChartSelectMonth';
+                if (recordedEntries.length === 0) { clearChartMsgKey = 'feedbackChartNoData'; } else if (selectedMonthValue) { const hasData = recordedEntries.some(e => getMonthYearString(new Date(e.date+'T00:00:00')) === selectedMonthValue); if (hasData) { renderCharts(selectedMonthValue); chartRendered = true; } else { clearChartMsgKey = 'feedbackChartNoDataMonth'; } } else if (chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.value); chartRendered = true; } else { clearChartMsgKey = 'feedbackChartNoDataYet'; }
+                if (!chartRendered) { if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles.fontFamily}`; const msg = i18n.t(clearChartMsgKey, { month: formatMonthYearExtensive(selectedMonthValue)}); ctx.fillText(msg, ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore(); }
+                if (recordIdInput.value) { saveRecordBtn.textContent = i18n.t('updateRecordButton'); } else { saveRecordBtn.textContent = i18n.t('saveRecordButton'); }
+            }
 
-                 planningListPlaceholder.classList.add('hidden');
-                 allPlansSorted.forEach(plan => {
-                     const li = document.createElement('li');
-                     li.dataset.id = plan.id;
-                     const hD = formatHoursExtensive(plan.hours);
-                     const isPastPlan = plan.date < tS;
-                     li.innerHTML = `
-                        <div class="entry-details">
-                            <strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong>
-                            <span class="hours">${hD}</span> Planejadas ${isPastPlan ? '<span style="opacity: 0.7; margin-left: 5px;">(Data Passada)</span>' : ''}
-                        </div>
-                        <div class="plan-actions">
-                            <button class="done-plan-btn success">Feito</button>
-                            <button class="delete-plan-btn danger">Excluir</button>
-                        </div>`;
-                     li.querySelector('.done-plan-btn').addEventListener('click', (e) => {
-                         e.stopPropagation();
-                         markPlanAsDone(plan.id);
-                     });
-                     li.querySelector('.delete-plan-btn').addEventListener('click', (e) => {
-                         e.stopPropagation();
-                         deletePlanEntry(plan.id);
-                     });
-                     planningList.appendChild(li);
-                 });
-             }
-            function updateStatistics() { const cM = new Date().getMonth(); const cY = new Date().getFullYear(); const eM = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === cM && d.getFullYear() === cY; }); let tH = 0; const aD = new Set(); eM.forEach(e => { tH += e.hours; aD.add(e.date); }); const g = settings.monthlyGoal || 70; const pP = settings.goalHasBeenSet ? (g > 0 ? Math.min(Math.round((tH / g) * 100), 100) : 0) : 0; const aH = aD.size > 0 ? (tH / aD.size) : 0; const dAC = aD.size; statsMonthHours.textContent = formatHoursExtensive(tH); statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${pP}%` : '--%'; statsMonthProgressBar.style.width = `${pP}%`; statsAvgHoursDay.textContent = formatHoursExtensive(aH); statsMonthDaysActive.textContent = dAC; }
-            function populateMonthSelector() { const aM = new Set(); recordedEntries.forEach(e => { aM.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const sM = Array.from(aM).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = ''; if (sM.length === 0) { const o = document.createElement('option'); o.value = ''; o.textContent = 'Nenhum dado'; chartMonthSelector.appendChild(o); chartMonthSelector.disabled = true; return; } chartMonthSelector.disabled = false; const cMSValue = getMonthYearString(new Date()); const cMSFormatted = formatMonthYearExtensive(cMSValue); let hCM = false; let didSelectOld = false; sM.forEach(mSValue => { const o = document.createElement('option'); const mSFormatted = formatMonthYearExtensive(mSValue); o.value = mSValue; o.textContent = mSFormatted; if (mSValue === oldSelectedValue) { o.selected = true; didSelectOld = true; } else if (mSValue === cMSValue && !didSelectOld) { o.selected = true; } if (mSValue === cMSValue) { hCM = true; } chartMonthSelector.appendChild(o); }); if (!hCM) { const o = document.createElement('option'); o.value = cMSValue; o.textContent = `${cMSFormatted} (Mês Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); if (!didSelectOld) o.selected = true; } if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
-            function getAveragesForChart(year, monthIndex) { const entriesThisYear = recordedEntries.filter(e => new Date(e.date + 'T00:00:00').getFullYear() === year); const entriesThisMonth = entriesThisYear.filter(e => new Date(e.date + 'T00:00:00').getMonth() === monthIndex); let totalHoursMonth = 0; const activeDaysMonth = new Set(); entriesThisMonth.forEach(e => { totalHoursMonth += e.hours; activeDaysMonth.add(e.date); }); let totalHoursYear = 0; const monthsWithActivityYear = new Set(); entriesThisYear.forEach(e => { totalHoursYear += e.hours; monthsWithActivityYear.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const daysInMonth = new Date(year, monthIndex + 1, 0).getDate(); return { avgDaily: activeDaysMonth.size > 0 ? totalHoursMonth / activeDaysMonth.size : 0, avgWeekly: daysInMonth >= 7 && totalHoursMonth > 0 ? (totalHoursMonth / daysInMonth) * 7 : 0, avgMonthly: monthsWithActivityYear.size > 0 ? totalHoursYear / monthsWithActivityYear.size : 0 }; }
-            function renderCharts(selectedMonthYearValue) { if (!selectedMonthYearValue) { return; } try { const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue); const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number); const monthIndex = selectedMonth - 1; const year = selectedYear; const entriesSelectedMonth = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === monthIndex && d.getFullYear() === year; }); const daysInSelectedMonth = new Date(year, monthIndex + 1, 0).getDate(); const dailyHoursData = Array(daysInSelectedMonth).fill(0); entriesSelectedMonth.forEach(e => { dailyHoursData[new Date(e.date + 'T00:00:00').getDate() - 1] += e.hours; }); const chartLabels = Array.from({ length: daysInSelectedMonth }, (_, i) => i + 1); const averages = getAveragesForChart(year, monthIndex); const annotations = {}; let pluginOptions = {}; if (window.ChartAnnotation) { if (averages.avgDaily > 0) { annotations.avgDay = { type: 'line', scaleID: 'y', value: averages.avgDaily, borderColor: avgLineColor1, borderWidth: 1.5, borderDash: [6, 6], label: { content: `Média Diária: ${formatHoursExtensive(averages.avgDaily, true)}`, display: true, position: 'end', color: avgLineColor1, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: -10 } }; } if (averages.avgWeekly > 0) { annotations.avgWeek = { type: 'line', scaleID: 'y', value: averages.avgWeekly, borderColor: avgLineColor2, borderWidth: 1.5, borderDash: [10, 10], label: { content: `Média Semanal (est.): ${formatHoursExtensive(averages.avgWeekly, true)}`, display: true, position: 'end', color: avgLineColor2, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 2 } }; } if (averages.avgMonthly > 0) { annotations.avgMonth = { type: 'line', scaleID: 'y', value: averages.avgMonthly, borderColor: avgLineColor3, borderWidth: 1.5, borderDash: [2, 2], label: { content: `Média Mensal (no ano): ${formatHoursExtensive(averages.avgMonthly, true)}`, display: true, position: 'end', color: avgLineColor3, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 14 } }; } pluginOptions.annotation = { drawTime: 'afterDatasetsDraw', annotations: annotations };} else { console.warn("ChartAnnotation não carregado, anotações desabilitadas."); } if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); } monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'bar', data: { labels: chartLabels, datasets: [{ label: `Horas Diárias`, data: dailyHoursData, backgroundColor: primaryColor, borderColor: primaryColor, borderWidth: 0, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: false }, ticks: { color: textMutedColor, padding: 10, callback: function (value) { return formatHoursExtensive(value, true); } }, grid: { color: gridColor, drawBorder: false } }, x: { title: { display: false }, ticks: { color: textMutedColor }, grid: { display: false } } }, plugins: { ...pluginOptions, title: { display: true, text: selectedMonthYearFormatted, color: textColor, font: { size: 14, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: false, padding: 10, cornerRadius: 6, callbacks: { label: ctx => `Dia ${ctx.label}: ${formatHoursExtensive(ctx.parsed.y)}` } }, legend: { display: false } } } }); } catch (e) { console.error("Chart render error:", e); if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText("Erro ao renderizar gráfico.", ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); } }
-            function updateAllDisplays() { updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning(); const selectedMonthValue = chartMonthSelector.value; let chartNeedsUpdate = false; let clearChartMsg = 'Selecione um mês para visualizar'; if (recordedEntries.length === 0) { clearChartMsg = 'Comece registrando suas horas.'; } else if (selectedMonthValue) { const hasDataForSelectedMonth = recordedEntries.some(e => getMonthYearString(new Date(e.date + 'T00:00:00')) === selectedMonthValue); if (hasDataForSelectedMonth) { renderCharts(selectedMonthValue); chartNeedsUpdate = true; } else { clearChartMsg = `Nenhum registro encontrado em ${formatMonthYearExtensive(selectedMonthValue)}.`; } } else if (chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.value); chartNeedsUpdate = true; } else { clearChartMsg = 'Nenhum dado registrado ainda.'; } if (!chartNeedsUpdate) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = "14px " + computedStyles.fontFamily; ctx.fillText(clearChartMsg, ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); } }
-            function formatTimeInputOnType(event) { const input = event.target; let value = input.value; let originalCursorPos = input.selectionStart; let numericValue = value.replace(/[^\d]/g, ''); numericValue = numericValue.substring(0, 4); let formattedValue = numericValue; let colonWasAdded = false; if (numericValue.length > 2) { const hoursPart = numericValue.substring(0, numericValue.length - 2); const minutesPart = numericValue.substring(numericValue.length - 2); formattedValue = `${hoursPart}:${minutesPart}`; if (value.length < formattedValue.length && value.indexOf(':') === -1) { colonWasAdded = true; } } if (input.value !== formattedValue) { input.value = formattedValue; let newCursorPos = originalCursorPos; if (colonWasAdded && originalCursorPos >= formattedValue.indexOf(':') + 1) { newCursorPos++; } newCursorPos = Math.min(newCursorPos, formattedValue.length); requestAnimationFrame(() => { input.setSelectionRange(newCursorPos, newCursorPos); }); } }
-            function registerServiceWorker() { if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./service-worker.js').then((reg) => { console.log('Service Worker registered successfully. Scope:', reg.scope); }).catch((error) => { console.error('Service Worker registration failed:', error); }); } }
+            // ----- Funções Auxiliares (Inputs, SW, etc) -----
+            function formatTimeInputOnType(event) {
+                 const input = event.target; let value = input.value; let cursorPos = input.selectionStart; let numericValue = value.replace(/[^\d]/g, ''); let formattedValue = ''; let newCursorPos = cursorPos; numericValue = numericValue.substring(0, 4);
+                 if (numericValue.length === 0) { formattedValue = ''; } else if (numericValue.length <= 2) { formattedValue = numericValue; } else { const hoursPart = numericValue.slice(0, -2); const minutesPart = numericValue.slice(-2); formattedValue = `${hoursPart}:${minutesPart}`; if (value.indexOf(':') === -1 && formattedValue.indexOf(':') !== -1) { if (cursorPos >= formattedValue.indexOf(':')) { newCursorPos = cursorPos + 1; } } }
+                 if (input.value !== formattedValue) { input.value = formattedValue; requestAnimationFrame(() => { input.setSelectionRange(newCursorPos, newCursorPos); }); }
+            }
+            function validateTimeInputOnBlur(event) {
+                const input = event.target; const decimalValue = parseTimeInputToDecimal(input.value); if (!isNaN(decimalValue) && decimalValue > 0) { input.value = formatDecimalToTimeInput(decimalValue); } else if (input.value.trim() !== '') { input.value = ''; }
+            }
+            function validateNotesInput(event) {
+                const input = event.target; if (input.value.length > NOTES_MAX_LENGTH) { input.value = input.value.substring(0, NOTES_MAX_LENGTH); showFeedback(i18n.t('feedbackNotesLengthLimit', { maxLength: NOTES_MAX_LENGTH }), 'info'); }
+            }
+            function registerServiceWorker() {
+                if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./service-worker.js').then((reg) => { console.log('Service Worker registered successfully. Scope:', reg.scope); }).catch((error) => { console.error('Service Worker registration failed:', error); }); }
+            }
 
-            function init() {
-                console.log("Initializing PWT...");
-
-                appElement = document.getElementById('app');
-                dashboardWeekHours = document.getElementById('dashboard-week-hours');
-                dashboardMonthPercentage = document.getElementById('dashboard-month-percentage');
-                dashboardMonthTotal = document.getElementById('dashboard-month-total');
-                dashboardForecast = document.getElementById('dashboard-forecast');
-                dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates');
-                dashboardPlanList = document.getElementById('dashboard-plan-list');
-                progressRingFg = document.getElementById('progress-ring-fg');
-                recordCard = document.getElementById('record-card');
-                recordForm = document.getElementById('record-form');
-                recordIdInput = document.getElementById('record-id');
-                recordDateInput = document.getElementById('record-date');
-                dateLabel = document.getElementById('date-label');
-                displayDate = document.getElementById('display-date');
-                changeDateBtn = document.getElementById('change-date-btn');
-                recordHoursInput = document.getElementById('record-hours');
-                recordTagSelect = document.getElementById('record-tag');
-                recordNotesInput = document.getElementById('record-notes');
-                saveRecordBtn = document.getElementById('save-record-btn');
-                planCard = document.getElementById('plan-card');
-                planForm = document.getElementById('plan-form');
-                planIdInput = document.getElementById('plan-id');
-                planDateInput = document.getElementById('plan-date');
-                planHoursInput = document.getElementById('plan-hours');
-                savePlanBtn = document.getElementById('save-plan-btn');
-                clearPlanFormBtn = document.getElementById('clear-plan-form-btn');
-                planningList = document.getElementById('planning-list');
-                planningListPlaceholder = planningList.querySelector('.placeholder');
-                monthlyGoalInput = document.getElementById('monthly-goal');
-                saveGoalBtn = document.getElementById('save-goal-btn');
-                statsMonthHours = document.getElementById('stats-month-hours');
-                statsMonthGoalProgress = document.getElementById('stats-month-goal-progress');
-                statsMonthProgressBar = document.getElementById('stats-month-progress-bar');
-                statsAvgHoursDay = document.getElementById('stats-avg-hours-day');
-                statsMonthDaysActive = document.getElementById('stats-month-days-active');
-                chartMonthSelector = document.getElementById('chart-month-selector');
-                monthlyHoursChartCtx = document.getElementById('monthlyHoursChart').getContext('2d');
-                historyList = document.getElementById('history-list');
-                historySearchInput = document.getElementById('history-search-input');
-                historyListPlaceholder = historyList.querySelector('.placeholder');
-                showingResultsLabel = document.getElementById('showing-results-label');
-                clearAllDataBtn = document.getElementById('clear-all-data-btn');
-                confirmationDialog = document.getElementById('confirmation-dialog');
-                dialogMessage = document.getElementById('dialog-message');
-                dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
-                dialogCancelBtn = document.getElementById('dialog-cancel-btn');
-                computedStyles = getComputedStyle(document.body);
-                textColor = computedStyles.getPropertyValue('--text-color').trim();
-                textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim();
-                gridColor = computedStyles.getPropertyValue('--border-color').trim();
-                tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim();
-                primaryColor = computedStyles.getPropertyValue('--primary-color').trim();
-                avgLineColor1 = computedStyles.getPropertyValue('--avg-line-color-1').trim();
-                avgLineColor2 = computedStyles.getPropertyValue('--avg-line-color-2').trim();
-                avgLineColor3 = computedStyles.getPropertyValue('--avg-line-color-3').trim();
-
-                if(progressRingFg && progressRingFg.r) {
-                   progressRingRadius = progressRingFg.r.baseVal.value;
-                   progressRingCircumference = 2 * Math.PI * progressRingRadius;
-                } else { console.error("Progress ring not fully loaded at init"); }
-
-
+            // ----- Função de Inicialização -----
+            async function init() {
+                console.log("Initializing Pioneer Work Tracker...");
+                i18n.detectLanguage();
+                await i18n.loadTranslations();
+                console.log("Selecting DOM elements...");
+                appElement=document.getElementById('app');dashboardWeekHours=document.getElementById('dashboard-week-hours');dashboardMonthPercentage=document.getElementById('dashboard-month-percentage');dashboardMonthTotal=document.getElementById('dashboard-month-total');dashboardForecast=document.getElementById('dashboard-forecast');dashboardPlannedDatesContainer=document.getElementById('dashboard-planned-dates');dashboardPlanList=document.getElementById('dashboard-plan-list');progressRingFg=document.getElementById('progress-ring-fg');recordCard=document.getElementById('record-card');recordForm=document.getElementById('record-form');recordIdInput=document.getElementById('record-id');recordDateInput=document.getElementById('record-date');dateLabel=document.getElementById('date-label');displayDate=document.getElementById('display-date');changeDateBtn=document.getElementById('change-date-btn');recordHoursInput=document.getElementById('record-hours');recordTagSelect=document.getElementById('record-tag');recordNotesInput=document.getElementById('record-notes');saveRecordBtn=document.getElementById('save-record-btn');planCard=document.getElementById('plan-card');planForm=document.getElementById('plan-form');planIdInput=document.getElementById('plan-id');planDateInput=document.getElementById('plan-date');planHoursInput=document.getElementById('plan-hours');savePlanBtn=document.getElementById('save-plan-btn');clearPlanFormBtn=document.getElementById('clear-plan-form-btn');planningList=document.getElementById('planning-list');planningListPlaceholder=planningList.querySelector('.placeholder');monthlyGoalInput=document.getElementById('monthly-goal');saveGoalBtn=document.getElementById('save-goal-btn');statsMonthHours=document.getElementById('stats-month-hours');statsMonthGoalProgress=document.getElementById('stats-month-goal-progress');statsMonthProgressBar=document.getElementById('stats-month-progress-bar');statsAvgHoursDay=document.getElementById('stats-avg-hours-day');statsMonthDaysActive=document.getElementById('stats-month-days-active');chartMonthSelector=document.getElementById('chart-month-selector');monthlyHoursChartCtx=document.getElementById('monthlyHoursChart').getContext('2d');historyList=document.getElementById('history-list');historySearchInput=document.getElementById('history-search-input');historyListPlaceholder=historyList.querySelector('.placeholder');showingResultsLabel=document.getElementById('showing-results-label');clearAllDataBtn=document.getElementById('clear-all-data-btn');confirmationDialog=document.getElementById('confirmation-dialog');dialogMessage=document.getElementById('dialog-message');dialogConfirmBtn=document.getElementById('dialog-confirm-btn');dialogCancelBtn=document.getElementById('dialog-cancel-btn'); computedStyles = getComputedStyle(document.body); textColor = computedStyles.getPropertyValue('--text-color').trim(); textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim(); gridColor = computedStyles.getPropertyValue('--border-color').trim(); tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim(); primaryColor = computedStyles.getPropertyValue('--primary-color').trim(); avgLineColor1 = computedStyles.getPropertyValue('--avg-line-color-1').trim(); avgLineColor2 = computedStyles.getPropertyValue('--avg-line-color-2').trim(); avgLineColor3 = computedStyles.getPropertyValue('--avg-line-color-3').trim();
+                if (progressRingFg && progressRingFg.r && progressRingFg.r.baseVal) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; } else { console.error("Progress ring radius (r.baseVal) not found at init."); }
+                console.log("Applying initial translations to DOM...");
+                i18n.applyTranslationsToDOM();
+                console.log("Loading data from storage...");
                 loadData();
-                monthlyGoalInput.value = settings.monthlyGoal;
-
-
-                if (window.ChartAnnotation) {
-                    try { Chart.register(ChartAnnotation); console.log("ChartAnnotation plugin registered successfully in init."); } catch (e) { console.error("Error registering ChartAnnotation in init:", e); }
-                } else { console.warn("!!! ChartAnnotation plugin not found globally during init."); }
-
-                appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header'); if (header) { const card = header.closest('.card'); if (card) { toggleCard(card); } } });
-                document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
-                changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
-                recordHoursInput.addEventListener('input', formatTimeInputOnType);
-                planHoursInput.addEventListener('input', formatTimeInputOnType);
-                recordHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue >= 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
-                planHoursInput.addEventListener('blur', (e) => { const decimalValue = parseTimeInputToDecimal(e.target.value); if (!isNaN(decimalValue) && decimalValue > 0) { e.target.value = formatDecimalToTimeInput(decimalValue); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
-                recordNotesInput.addEventListener('input', (e) => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); showFeedback(`Limite de ${NOTES_MAX_LENGTH} caracteres atingido.`, 'info'); } });
-                historySearchInput.addEventListener('input', () => renderHistory());
-                recordForm.addEventListener('submit', handleRecordSubmit);
-                planForm.addEventListener('submit', handlePlanSubmit);
-                clearPlanFormBtn.addEventListener('click', clearPlanForm);
-                saveGoalBtn.addEventListener('click', handleGoalSave);
-                monthlyGoalInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); monthlyGoalInput.blur(); } });
-                chartMonthSelector.addEventListener('change', updateAllDisplays);
-                clearAllDataBtn.addEventListener('click', handleClearAllData);
-                dialogConfirmBtn.addEventListener('click', () => { try { if (typeof currentConfirmCallback === 'function') { currentConfirmCallback(); } } catch (e) { console.error("Error in confirmation callback:", e); } finally { hideConfirmationDialog(); } });
-                dialogCancelBtn.addEventListener('click', hideConfirmationDialog);
-                confirmationDialog.addEventListener('click', (e) => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
-                window.addEventListener('beforeinstallprompt', (e) => { console.log('`beforeinstallprompt` event fired.'); e.preventDefault(); deferredInstallPrompt = e; });
-
-                recordDateInput.value = getCurrentDateString();
-                setDateInputVisibility(false);
-                clearRecordForm();
-                clearPlanForm();
-                document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) { toggleCard(card); } else { const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; } });
-
+                const oldDefaultTag = "Casa em casa"; const currentDefaultTag = getDefaultTag(); if (oldDefaultTag !== currentDefaultTag) { let tagsUpdated = false; recordedEntries.forEach(entry => { if (entry.tag === oldDefaultTag || !entry.tag) { entry.tag = currentDefaultTag; tagsUpdated = true; } }); if (tagsUpdated) { console.log(`Updating old default tags ('${oldDefaultTag}') to current ('${currentDefaultTag}'). Saving...`); saveData(); } } monthlyGoalInput.value = settings.monthlyGoal;
+                if (window.ChartAnnotation) { try { Chart.register(ChartAnnotation); console.log("ChartAnnotation plugin registered."); } catch (e) { console.error("Error registering ChartAnnotation:", e); } } else { console.warn("ChartAnnotation plugin (chartjs-plugin-annotation) not found globally."); }
+                console.log("Adding event listeners...");
+                appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header[role="button"]'); if (header) { toggleCard(header.closest('.card')); } }); document.querySelectorAll('.card-header[role="button"]').forEach(header => { header.addEventListener('keydown', (e) => { if(e.key==='Enter'||e.key===' '){e.preventDefault(); toggleCard(header.closest('.card'));}}); });
+                changeDateBtn.addEventListener('click', () => setDateInputVisibility(true)); recordHoursInput.addEventListener('input', formatTimeInputOnType); recordHoursInput.addEventListener('blur', validateTimeInputOnBlur); recordNotesInput.addEventListener('input', validateNotesInput); recordForm.addEventListener('submit', handleRecordSubmit); planHoursInput.addEventListener('input', formatTimeInputOnType); planHoursInput.addEventListener('blur', validateTimeInputOnBlur); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress', (e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); clearAllDataBtn.addEventListener('click', handleClearAllData); historySearchInput.addEventListener('input', () => renderHistory()); chartMonthSelector.addEventListener('change', () => updateAllDisplays()); dialogConfirmBtn.addEventListener('click', () => { try {if(typeof currentConfirmCallback === 'function') currentConfirmCallback();} catch(e){console.error("Err in conf cb:", e);} finally {hideConfirmationDialog();}}); dialogCancelBtn.addEventListener('click', hideConfirmationDialog); confirmationDialog.addEventListener('click', (e)=>{if(e.target === confirmationDialog) hideConfirmationDialog();}); window.addEventListener('beforeinstallprompt', (e)=>{ console.log('`beforeinstallprompt` fired.'); e.preventDefault(); deferredInstallPrompt=e; });
+                console.log("Setting initial UI state...");
+                recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); clearRecordForm(); clearPlanForm(); document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) toggleCard(card); });
+                console.log("Performing initial full display update...");
                 updateAllDisplays();
                 registerServiceWorker();
-
-                if (!settings.goalHasBeenSet) {
-                    setTimeout(promptForMonthlyGoal, 500);
-                }
-
-                 // Atualiza o dashboard a cada minuto para refletir o status de 'overdue' dos planos
-                 setInterval(updateDashboardPlannedDates, 60 * 1000);
-
-
-                console.log("Init complete.");
+                if (!settings.goalHasBeenSet) { console.log("Initial goal not set, prompting user..."); setTimeout(promptForMonthlyGoal, 700); }
+                setInterval(updateDashboardPlannedDates, 60 * 1000);
+                console.log("Pioneer Work Tracker Initialization complete.");
             }
 
-            init();
+            init().catch(err => { console.error("Fatal error during application initialization:", err); const body = document.body; body.innerHTML = `<div style="padding: 20px; text-align: center; color: #ff453a; font-family: sans-serif;"><h2>Application Error</h2><p>Could not initialize the application. Please check the console for details or try refreshing.</p><pre style="font-size: 0.8em; color: #ccc; text-align: left; white-space: pre-wrap;">${err.message}\n${err.stack}</pre></div>`; });
+
         });
     </script>
 </body>
