@@ -4,7 +4,7 @@ A simple, modern, and efficient web application to help pioneers log and track t
 
 Available in 🇬🇧 🇧🇷 🇪🇸 🇩🇪 🇫🇷
 
-![image](https://github.com/user-attachments/assets/4af800c4-53ef-4a56-a651-43ccc294befb)
+![image](https://img4.uploadhouse.com/fileuploads/31948/319486744433ca106b9d1c74f6d03651745fa8a0.png)
 
 
 ---
