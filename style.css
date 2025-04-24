@@ -8,7 +8,7 @@
     --text-color: #ffffff;         /* Texto principal (branco) */
     --text-color-secondary: rgba(235, 235, 245, 0.6); /* Texto secundário */
     --border-color: #3a3a3c;       /* Cor das bordas/separadores */
-    --shadow-color: rgba(0, 0, 0, 0.2); /* Sombra (sutil) */
+    --shadow-color: rgba(0, 0, 0, 0.3); /* Sombra um pouco mais definida */
     --danger-color: #FF453A;       /* Cor de perigo (vermelho) */
     --success-color: #30D158;      /* Cor de sucesso (verde) */
     --placeholder-color: rgba(235, 235, 245, 0.3); /* Cor do placeholder */
@@ -42,34 +42,68 @@ h1 { display: none; }
 #dashboard-box {
     background-color: var(--card-bg); border-radius: var(--border-radius);
     padding: 15px var(--card-padding); margin-bottom: 20px; display: flex;
-    flex-wrap: wrap; justify-content: space-around; align-items: flex-start;
-    text-align: center; gap: 15px;
+    flex-wrap: wrap; justify-content: space-between; /* Espaço entre, alinha itens laterais */
+    align-items: center; /* Centraliza verticalmente por padrão */
+    text-align: left; /* Alinha texto à esquerda por padrão */
+    gap: 20px; /* Aumenta gap padrão */
     border: 1px solid var(--border-color);
 }
-.dashboard-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; min-width: 150px; }
-.dashboard-item--progress { width: 90px; height: 90px; flex-shrink: 0; flex-grow: 0; margin-top: 5px; }
-.progress-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
-.progress-ring__circle { fill: none; stroke-width: 5; transition: stroke-dashoffset 0.5s ease-out; }
-.progress-ring__bg { stroke: var(--progress-track-color); }
-.progress-ring__fg { stroke: var(--progress-bar-color); stroke-linecap: round; }
-.dashboard-item--progress .dashboard-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; }
-#dashboard-month-percentage { font-size: 1.6em; color: var(--text-color); margin-bottom: 0; font-weight: 600; }
-.dashboard-item--progress .dashboard-label { margin-top: 2px; margin-bottom: 0; font-size: 0.65em; }
-.dashboard-label { font-size: 0.85em; color: var(--text-color-secondary); margin-bottom: 4px; display: block; }
-.dashboard-value { font-size: 1.4em; font-weight: 500; color: var(--primary-color); line-height: 1.2; margin-bottom: 5px; }
-.dashboard-value .unit { font-size: 0.6em; font-weight: 500; color: var(--text-color-secondary); margin-left: 2px; }
-#dashboard-summary { margin-top: 12px; font-size: 0.85em; color: var(--text-color-secondary); line-height: 1.35; text-align: left; width: 100%; }
+/* Primeiro item do Dashboard (Contêiner principal de informações) */
+#dashboard-box > .dashboard-item:first-child {
+    flex-grow: 1; /* Permite que ele cresça */
+    flex-basis: 60%; /* Tenta ocupar 60% inicialmente */
+    min-width: 280px; /* Largura mínima */
+    /* align-items: flex-start; mantido */
+    order: 1; /* Garante que fique à esquerda em wrap */
+    display: flex; /* Para organizar seu conteúdo interno */
+    flex-direction: column;
+    gap: 10px; /* Espaço entre elementos internos */
+}
+/* Elementos dentro do primeiro item */
+#dashboard-box > .dashboard-item:first-child .dashboard-label {
+    margin-bottom: 2px;
+}
+#dashboard-box > .dashboard-item:first-child .dashboard-value {
+    margin-bottom: 10px; /* Mais espaço após horas semanais */
+    font-size: 1.8em; /* Valor semanal maior */
+}
+#dashboard-summary {
+    /* Estilos base - Modificado drasticamente no Desktop */
+    margin-top: 10px; font-size: 0.85em; color: var(--text-color-secondary);
+    line-height: 1.35; width: 100%;
+}
 #dashboard-summary strong { color: var(--text-color); font-weight: 500; }
 #dashboard-summary span { display: block; margin-bottom: 3px; }
-#dashboard-planned-dates .dashboard-label { margin-bottom: 8px; margin-top: 15px; }
-#dashboard-plan-list { list-style: none; padding: 0; margin: 0; text-align: left; font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow: hidden; }
+#dashboard-planned-dates {
+    /* Estilos base - Modificado drasticamente no Desktop */
+    margin-top: 15px; width: 100%;
+}
+#dashboard-planned-dates .dashboard-label { margin-bottom: 8px; }
+#dashboard-plan-list { list-style: none; padding: 0; margin: 0; font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow: hidden; }
 #dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #dashboard-plan-list li strong { color: var(--text-color); }
 #dashboard-plan-list .plan-warning, .plan-past-date-indicator { font-size: 0.9em; margin-left: 5px; opacity: 0.7; }
 #dashboard-plan-list .plan-warning { font-style: italic; }
 
+/* Item do progresso no Dashboard */
+.dashboard-item--progress {
+    order: 2; /* Fica à direita ou abaixo */
+    flex-basis: 100px; /* Largura base */
+    flex-grow: 0; /* Não cresce muito */
+    height: 100px; /* Ajusta altura */
+    min-width: 100px; /* Mantém tamanho mínimo */
+    width: auto; /* Largura auto para usar flex-basis */
+    position: relative; /* Para conteúdo absoluto */
+}
+.progress-ring { width: 100%; height: 100%; transform: rotate(-90deg); position: absolute; top:0; left: 0; } /* Torna absoluto */
+.progress-ring__circle { fill: none; stroke-width: 6; transition: stroke-dashoffset 0.5s ease-out; } /* Mais grosso */
+.progress-ring__bg { stroke: var(--progress-track-color); }
+.progress-ring__fg { stroke: var(--progress-bar-color); stroke-linecap: round; }
+.dashboard-item--progress .dashboard-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;}
+#dashboard-month-percentage { font-size: 1.8em; color: var(--text-color); margin-bottom: 0; font-weight: 600; line-height: 1; }
+.dashboard-item--progress .dashboard-label { margin-top: 4px; font-size: 0.7em; color: var(--text-color-secondary);}
+
 /* --- App Container & Cards --- */
-/* Estilo mobile: display padrão de block/flex-column implícito */
 #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
 .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
@@ -163,63 +197,127 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
 @media (min-width: 768px) {
 
     /* Ajustes Globais */
-    :root {
-        --card-padding: 22px;
-        --outer-padding: 30px;
-    }
-    body {
-        font-size: 17px;
-    }
+    :root { --card-padding: 20px; --outer-padding: 25px; } /* Padding um pouco menor */
+    body { font-size: 16px; } /* Mantém fonte base menor */
 
     /* -------- Layout Principal Desktop: Grid -------- */
     #app {
-        display: grid; /* <<-- MUDANÇA PRINCIPAL */
-        /* Cria colunas que se ajustam. Mínimo 350px, máximo 1fr (distribui igual) */
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 20px; /* Espaçamento entre os cards na grade */
-        max-width: 1200px; /* Aumenta a largura máxima para acomodar a grade */
-        align-items: start; /* Alinha os cards ao topo de suas linhas de grade */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); /* Reduz min-width do card */
+        gap: 20px;
+        max-width: 100%; /* Usa largura total disponível */
+        padding: 0; /* Remove padding de #app para os cards irem até a borda */
+        align-items: stretch; /* Força cards na mesma linha a ter a mesma altura */
     }
-     /* O dashboard continua full-width acima do #app */
+    /* Padding agora vai no body */
+     body { padding: var(--outer-padding); }
 
-    /* -------- Estilos Dashboard Desktop -------- */
+
+    /* -------- Estilos Dashboard Desktop (Reorganizado) -------- */
     #dashboard-box {
-        padding: 20px var(--card-padding); align-items: center; gap: 30px; flex-wrap: nowrap; margin-bottom: var(--outer-padding); /* Usa o mesmo espaçamento do body */
+        padding: var(--card-padding); /* Usa a variável correta */
+        align-items: stretch; /* Alinha itens ao topo e estica */
+        gap: var(--card-padding);
+        flex-wrap: nowrap;
+        margin-bottom: var(--outer-padding);
+        text-align: left; /* Alinha todo texto à esquerda por padrão */
     }
-    #dashboard-box .dashboard-item:first-child { flex: 2.5; min-width: 280px; text-align: left; align-items: flex-start; }
-    .dashboard-item--progress { width: 110px; height: 110px; flex: 1; min-width: 110px; margin-top: 0; }
-    #dashboard-month-percentage { font-size: 2em; }
+    /* Primeiro Item (Infos) */
+    #dashboard-box > .dashboard-item:first-child {
+        order: 1;
+        flex-grow: 3; /* Ocupa mais espaço */
+        flex-basis: auto; /* Remove base fixa */
+        min-width: 0; /* Reseta min-width */
+        display: flex; /* Usa flex para layout interno */
+        flex-wrap: wrap; /* Permite quebra se necessário */
+        align-content: flex-start; /* Alinha linhas de wrap ao topo */
+        gap: 5px var(--card-padding); /* Gap vertical pequeno, horizontal maior */
+        align-items: baseline; /* Alinha baseline do texto onde possível */
+    }
+    /* Container para "Horas nesta semana" */
+    .dashboard-main-info {
+        flex-basis: 100%; /* Ocupa a primeira linha */
+        margin-bottom: 5px; /* Pequeno espaço abaixo */
+    }
+    #dashboard-box > .dashboard-item:first-child .dashboard-label {
+         margin-bottom: 2px; font-size: 0.85em; /* Menor */
+    }
+    #dashboard-box > .dashboard-item:first-child .dashboard-value {
+         margin-bottom: 0; font-size: 2em; /* Mais destaque */
+    }
+    /* Divisão para Sumário e Planejamento (lado a lado) */
+    .dashboard-secondary-info {
+         display: flex;
+         flex-wrap: wrap; /* Permite wrap interno se precisar */
+         gap: var(--card-padding); /* Espaço entre Sumário e Planejamento */
+         width: 100%; /* Ocupa a linha abaixo */
+         margin-top: 10px; /* Espaço do item acima */
+    }
+
+    #dashboard-summary {
+         margin: 0; /* Reseta margens */
+         flex: 1; /* Tenta ocupar espaço igual */
+         min-width: 160px; /* Largura mínima */
+         align-self: flex-start;
+    }
+     #dashboard-summary .dashboard-value { font-size: 1.2em; } /* Ajusta tamanho da fonte do valor */
+
+    #dashboard-planned-dates {
+         margin: 0; /* Reseta margens */
+         flex: 1.5; /* Permite um pouco mais de espaço */
+         min-width: 200px; /* Largura mínima */
+         align-self: flex-start;
+    }
+     #dashboard-planned-dates .dashboard-label {
+         margin-bottom: 5px;
+     }
+    #dashboard-plan-list {
+         max-height: 80px; /* Ajusta altura */
+         font-size: 0.85em;
+         padding-right: 5px; /* Espaço para scrollbar se aparecer */
+         overflow-y: auto; /* Scroll automático */
+         border: 1px solid var(--input-bg); /* Borda sutil para delimitar */
+         border-radius: 4px;
+         padding: 5px 8px;
+    }
+
+    /* Item Progresso (Círculo) */
+    .dashboard-item--progress {
+        order: 2;
+        flex-basis: 120px; /* Tamanho do círculo */
+        flex-grow: 0;
+        flex-shrink: 0; /* Não encolhe */
+        height: 120px;
+        min-width: 120px;
+        align-self: center; /* Centraliza verticalmente no dashboard */
+    }
+    #dashboard-month-percentage { font-size: 2.2em; }
     .dashboard-item--progress .dashboard-label { font-size: 0.75em; }
-    .dashboard-label { font-size: 0.9em; }
-    .dashboard-value { font-size: 1.6em; }
-    #dashboard-summary { font-size: 0.9em; }
-    #dashboard-plan-list { font-size: 0.85em; max-height: 70px; }
 
     /* -------- Cards Sempre Abertos no Desktop -------- */
     .card {
-        border: 1px solid var(--border-color); box-shadow: 0 2px 6px var(--shadow-color);
-        overflow: visible; /* Permite sombras/tooltips */
-        display: flex; /* Usa flexbox para controlar a altura interna se necessário */
-        flex-direction: column; /* Empilha header e content */
-        height: fit-content; /* Ajusta altura ao conteúdo (bom para grid) */
+        border: 1px solid var(--border-color); box-shadow: 0 3px 8px rgba(0,0,0, 0.25); /* Sombra um pouco mais forte */
+        overflow: visible;
+        display: flex; flex-direction: column;
+        /* height: fit-content; removido, deixa o grid esticar */
     }
-    .card-header {
-        cursor: default; border-bottom: 1px solid var(--border-color);
-    }
+    .card-header { cursor: default; border-bottom: 1px solid var(--border-color); }
     .card:not(.expanded) .card-header:hover { background-color: transparent; }
     .card .card-header::after { display: none; }
     .card .card-content {
         max-height: none !important; opacity: 1 !important;
-        padding-top: var(--card-padding) !important;
-        padding-bottom: calc(var(--card-padding) + 10px) !important;
+        padding: var(--card-padding) !important; /* Padding consistente */
         margin-top: 0 !important; border-top: none !important;
         overflow: visible !important; transition: none !important;
-        flex-grow: 1; /* Permite que o content ocupe espaço vertical disponível */
+        flex-grow: 1; /* Permite que o conteúdo estique o card */
     }
     .card .toggle-icon { display: none !important; }
+    /* Garante que o textarea tenha uma altura máxima para não esticar demais o card */
+    #record-notes { max-height: 250px; min-height: 100px;}
      /* -------- FIM Cards Sempre Abertos -------- */
 
-    /* -------- Layout Interno dos Forms e Stats (Já adaptado antes) -------- */
+
+    /* -------- Layout Interno dos Forms e Stats -------- */
     #record-form .time-tag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     #record-form .time-tag-grid .form-group { margin-bottom: 0; }
     #record-form .time-tag-grid + .form-group { margin-top: 18px; }
@@ -229,24 +327,24 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
     #plan-form .plan-inputs-grid + .text-center { margin-top: 25px; }
     #plan-form .text-center button { width: auto; }
 
-    .stats-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 18px; }
-    .stat-value { font-size: 2em; }
-    .stat-label { font-size: 0.9em; }
-    #stats-card .card-content > .form-group { display: flex; align-items: center; gap: 12px; max-width: 100%; margin: 0 0 30px 0 !important; text-align: left !important; } /* Meta field usa 100% agora */
+    .stats-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; } /* Reduz min para caber 4 cols */
+    .stat-value { font-size: 1.8em; }
+    .stat-label { font-size: 0.85em; }
+    #stats-card .card-content > .form-group { display: flex; align-items: center; gap: 12px; max-width: 100%; margin: 0 0 25px 0 !important; text-align: left !important; }
     #stats-card .card-content > .form-group label { margin-bottom: 0; flex-shrink: 0; font-size: 0.95em; }
-    #stats-card .card-content > .form-group input[type="number"] { flex-grow: 1; }
+    #stats-card .card-content > .form-group input[type="number"] { flex-grow: 1; max-width: 100px; } /* Limita largura do input */
     #stats-card .card-content > .form-group button { margin-top: 0; flex-shrink: 0; width: auto !important; font-size: 0.95em !important; padding: 8px 18px !important; }
 
     /* -------- Gráfico Desktop -------- */
-    .chart-container { height: 350px; }
+    .chart-container { height: 320px; } /* Altura pode ser menor */
 
     /* -------- Listas Desktop -------- */
     #history-controls { padding: 0; }
-    .data-list { max-height: 550px; }
-    .data-list li { padding: 18px var(--card-padding); flex-wrap: nowrap; align-items: center; }
-    .entry-details { font-size: 1em; }
-    .entry-details .notes-preview { display: inline; margin-left: 10px; margin-top: 0; max-height: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; opacity: 0.65; font-size: 0.85em; max-width: 250px; }
-    .data-list li:hover .entry-details .notes-preview { white-space: normal; overflow: visible; opacity: 0.9; max-width: none; background-color: var(--card-bg); padding: 2px 4px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); position: relative; z-index: 1; }
+    .data-list { max-height: 350px; } /* Altura reduzida, cards já esticam */
+    .data-list li { padding: 15px var(--card-padding); flex-wrap: nowrap; align-items: center; }
+    .entry-details { font-size: 0.95em; }
+    .entry-details .notes-preview { display: inline; margin-left: 10px; margin-top: 0; max-height: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; opacity: 0.65; font-size: 0.85em; max-width: 180px; } /* Largura máxima reduzida */
+    .data-list li:hover .entry-details .notes-preview { white-space: normal; overflow: visible; opacity: 0.9; max-width: 300px; background-color: #3a3a3c; padding: 4px 6px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); position: absolute; /* Absoluto para não empurrar */ z-index: 10; margin-left: -5px; /* Ajusta posição */ }
     .entry-actions, .plan-actions { white-space: nowrap; align-self: center; }
     .entry-actions button, .plan-actions button { margin-top: 0; font-size: 0.8em; padding: 5px 9px; }
 
@@ -254,40 +352,48 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
     .dialog-content { width: 450px; padding: 30px; }
     .dialog-content p { font-size: 1.1em; }
     .dialog-actions button { font-size: 1em; padding: 12px; }
-
 }
 
 /* Breakpoint 2: Desktops Maiores (largura mínima de 1200px) */
 @media (min-width: 1200px) {
-
     /* Ajustes Globais */
-    :root { --card-padding: 25px; --outer-padding: 40px; }
+    :root { --card-padding: 22px; --outer-padding: 30px; }
+    body { font-size: 17px; padding: var(--outer-padding); }
+
     #app {
-        max-width: 1400px; /* Ainda mais largo */
-        gap: 25px; /* Mais espaço na grade */
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Cards um pouco maiores na base */
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); /* Cards maiores */
+        gap: 25px;
     }
 
     /* Dashboard */
-    #dashboard-box { gap: 40px; padding: 25px var(--card-padding); }
-    #dashboard-box .dashboard-item:first-child { min-width: 350px; flex: 3; }
-    .dashboard-item--progress { width: 120px; height: 120px; min-width: 120px; flex: 1.2; }
-    #dashboard-month-percentage { font-size: 2.2em; }
+    #dashboard-box { gap: 30px; padding: var(--card-padding); margin-bottom: 25px; }
+    #dashboard-box > .dashboard-item:first-child { gap: 8px var(--card-padding); } /* Ajusta gap interno */
+     #dashboard-box > .dashboard-item:first-child .dashboard-value { font-size: 2.2em; }
+    .dashboard-secondary-info { gap: 25px; }
+    #dashboard-summary .dashboard-value { font-size: 1.3em; }
+    #dashboard-plan-list { max-height: 90px; font-size: 0.9em;}
+
+    .dashboard-item--progress { flex-basis: 130px; height: 130px; min-width: 130px;}
+    #dashboard-month-percentage { font-size: 2.4em; }
     .dashboard-item--progress .dashboard-label { font-size: 0.8em; }
 
-    /* Formulários (gaps) */
-    #record-form .time-tag-grid, #plan-form .plan-inputs-grid { gap: 22px; }
-    #record-form .time-tag-grid + .form-group { margin-top: 22px; }
-    #plan-form .plan-inputs-grid + .text-center { margin-top: 30px; }
+
+    /* Formulários e Stats */
+    #record-form .time-tag-grid, #plan-form .plan-inputs-grid { gap: 20px; }
+    #stats-card .card-content > .form-group { margin-bottom: 30px;}
+    .stats-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 18px; }
+    .stat-value { font-size: 2em; }
+
 
     /* Gráfico */
-    .chart-container { height: 400px; }
+    .chart-container { height: 350px; }
 
     /* Listas */
-    .data-list { max-height: 600px; }
-    .data-list li { padding: 20px var(--card-padding); }
-    .entry-details .notes-preview { max-width: 350px; }
+    .data-list { max-height: 400px; }
+    .data-list li { padding: 18px var(--card-padding); }
+    .entry-details .notes-preview { max-width: 250px; }
 
     /* Dialog */
     .dialog-content { width: 500px; }
+
 }
