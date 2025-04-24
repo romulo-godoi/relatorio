@@ -1,16 +1,3 @@
-Você tem razão! Peço desculpas por não ter percebido isso na alteração anterior. O problema era a forma como a borda e a linha divisória eram tratadas durante a transição, combinado com o layout em grade.
-
-Fiz os seguintes ajustes no CSS para corrigir o comportamento visual dos cards fechados ao lado de um card aberto e garantir que apenas o card clicado mostre o estilo "aberto":
-
-1.  **Removi a `border-top` e `margin-top: -1px` do `.card-content`.** A linha divisória agora é controlada *exclusivamente* pelo `::after` do `.card-header`.
-2.  **Simplifiquei a transição do `.card-content`** para focar em `max-height`, `opacity` e `padding`.
-3.  Garanti que a linha divisória (`.card-header::after`) fique visível por padrão (card fechado) e tenha `opacity: 0` apenas na classe `.expanded`.
-
-Isso deve garantir que os cards não expandidos mantenham sua aparência "fechada" (com a linha no header visível) mesmo quando um card adjacente se expande. A organização do dashboard em grid para telas maiores foi mantida como na versão anterior.
-
-Aqui está o código final e corrigido:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
