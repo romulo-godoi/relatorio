@@ -5,57 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Loading...</title> <!-- O título será atualizado pelo JS via i18n -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0A84FF"> <!-- Você pode manter ou remover se o CSS definir -->
+    <meta name="theme-color" content="#0A84FF">
     <link rel="apple-touch-icon" href="icon-192x192.png">
 
     <!-- Links para bibliotecas JS externas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script> <!-- O plugin de annotation pode ser removido se não for mais necessário -->
 
     <!-- Link para o seu arquivo CSS externo -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- O CSS embutido foi removido מכאן -->
-
 </head>
 <body>
-    <h1>Pioneer Work Tracker</h1> <!-- H1 para semântica, será escondido pelo CSS -->
+    <h1>Pioneer Work Tracker</h1>
 
-    <!-- O container do dashboard -->
+    <!-- O container do dashboard (sem alterações) -->
     <div id="dashboard-box">
-         <div class="dashboard-item" style="align-items: flex-start; text-align: left;"> <!-- Estilos inline mantidos por ora, podem ser movidos para CSS -->
-             <span class="dashboard-label" data-translate-key="dashboardWeekHoursLabel">Horas nesta semana</span>
-             <span id="dashboard-week-hours" class="dashboard-value">0 hours</span>
-              <div id="dashboard-summary" style="margin-top: 12px;">
-                 <span id="dashboard-month-total"><span data-translate-key="dashboardMonthLabel">Mês</span>: <strong>0 hours</strong></span>
-                 <span id="dashboard-forecast"><span data-translate-key="dashboardForecastLabel">Meta</span>: ...</span>
-             </div>
-             <div class="hidden" id="dashboard-planned-dates">
-                <span class="dashboard-label" style="margin-top: 15px;" data-translate-key="dashboardPlannedDatesLabel">Saídas de campo planejadas</span>
-                <ul id="dashboard-plan-list">
-                    <!-- Conteúdo populado pelo JS -->
-                </ul>
-             </div>
-         </div>
-         <div class="dashboard-item dashboard-item--progress">
-            <svg viewBox="0 0 36 36" class="progress-ring">
-                 <circle class="progress-ring__circle progress-ring__bg" cx="18" cy="18" r="15.9155"></circle>
-                 <circle id="progress-ring-fg" class="progress-ring__circle progress-ring__fg" cx="18" cy="18" r="15.9155" stroke-dasharray="100 100" stroke-dashoffset="100"></circle>
-            </svg>
-            <div class="dashboard-content">
-                <span id="dashboard-month-percentage" class="dashboard-value">0%</span>
-                <span class="dashboard-label" data-translate-key="dashboardMonthGoalLabel">Meta Mês</span>
-             </div>
-         </div>
+        <div class="dashboard-item" style="align-items: flex-start; text-align: left;">
+            <span class="dashboard-label" data-translate-key="dashboardWeekHoursLabel">Horas nesta semana</span>
+            <span id="dashboard-week-hours" class="dashboard-value">0 hours</span>
+            <div id="dashboard-summary" style="margin-top: 12px;">
+                <span id="dashboard-month-total"><span data-translate-key="dashboardMonthLabel">Mês</span>: <strong>0 hours</strong></span>
+                <span id="dashboard-forecast"><span data-translate-key="dashboardForecastLabel">Meta</span>: ...</span>
+            </div>
+            <div class="hidden" id="dashboard-planned-dates">
+               <span class="dashboard-label" style="margin-top: 15px;" data-translate-key="dashboardPlannedDatesLabel">Saídas de campo planejadas</span>
+               <ul id="dashboard-plan-list">
+                   <!-- Conteúdo populado pelo JS -->
+               </ul>
+            </div>
+        </div>
+        <div class="dashboard-item dashboard-item--progress">
+           <svg viewBox="0 0 36 36" class="progress-ring">
+                <circle class="progress-ring__circle progress-ring__bg" cx="18" cy="18" r="15.9155"></circle>
+                <circle id="progress-ring-fg" class="progress-ring__circle progress-ring__fg" cx="18" cy="18" r="15.9155" stroke-dasharray="100 100" stroke-dashoffset="100"></circle>
+           </svg>
+           <div class="dashboard-content">
+               <span id="dashboard-month-percentage" class="dashboard-value">0%</span>
+               <span class="dashboard-label" data-translate-key="dashboardMonthGoalLabel">Meta Mês</span>
+            </div>
+        </div>
     </div>
 
     <!-- Container principal dos cards -->
     <div id="app">
-        <!-- Card de Registro -->
+        <!-- Card de Registro (sem alterações) -->
         <div class="card expanded" id="record-card">
-             <div class="card-header" role="button" tabindex="0">
+            <div class="card-header" role="button" tabindex="0">
                  <h2 data-translate-key="recordActivityTitle">Registrar Atividade</h2>
-                 <span class="toggle-icon">▲</span> <!-- Texto será atualizado pelo JS -->
+                 <span class="toggle-icon">▲</span>
              </div>
             <div class="card-content">
                 <form id="record-form">
@@ -65,9 +63,9 @@
                              <span data-translate-key="recordDateLabel">Data</span>: <strong id="display-date" data-translate-key="displayDateToday">Hoje</strong>
                             <button type="button" class="change-date-button" id="change-date-btn" data-translate-key="changeDateButton">(Alterar)</button>
                         </label>
-                        <input type="date" id="record-date" class="hidden"> <!-- Data input escondido inicialmente -->
+                        <input type="date" id="record-date" class="hidden">
                     </div>
-                     <div class="time-tag-grid"> <!-- Wrapper para grid tempo/tag (CSS cuida do layout) -->
+                     <div class="time-tag-grid">
                          <div class="form-group">
                              <label for="record-hours" data-translate-key="recordTimeLabel">Tempo:</label>
                              <input type="text" inputmode="numeric" id="record-hours" class="time-input" required data-translate-placeholder-key="recordTimePlaceholder">
@@ -75,7 +73,6 @@
                         <div class="form-group">
                             <label for="record-tag" data-translate-key="recordModeLabel">Modalidade:</label>
                             <select id="record-tag">
-                                <!-- Opções com chaves de tradução, texto será populado pelo JS/i18n -->
                                 <option value="Casa em casa" selected data-translate-key="recordTagOptionHouseToHouse">Casa em casa</option>
                                 <option value="Carrinho" data-translate-key="recordTagOptionCart">Carrinho</option>
                                 <option value="Cartas" data-translate-key="recordTagOptionLetters">Cartas</option>
@@ -88,147 +85,140 @@
                         <label for="record-notes" data-translate-key="recordNotesLabel">Notas / Observações (max 300):</label>
                         <textarea id="record-notes" rows="3" maxlength="300" data-translate-placeholder-key="recordNotesPlaceholder"></textarea>
                     </div>
-                    <div class="text-center" style="margin-top: 20px;"> <!-- Estilo inline pode ser movido para CSS -->
+                    <div class="text-center" style="margin-top: 20px;">
                         <button type="submit" id="save-record-btn" data-translate-key="saveRecordButton">Salvar Registro</button>
-                         <!-- Botão Limpar comentado no original, mantido comentado -->
-                         <!-- <button type="button" id="clear-record-form-btn" class="secondary">Limpar</button> -->
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Card de Planejamento -->
+        <!-- Card de Planejamento (sem alterações) -->
         <div class="card" id="plan-card">
-             <div class="card-header" role="button" tabindex="0">
-                <h2 data-translate-key="planHoursTitle">Planejar Horas</h2>
-                <span class="toggle-icon">▼</span> <!-- Texto será atualizado pelo JS -->
-             </div>
-             <div class="card-content">
-                 <form id="plan-form">
-                    <input type="hidden" id="plan-id">
-                    <div class="plan-inputs-grid"> <!-- Wrapper para grid (CSS cuida do layout) -->
-                        <div class="form-group">
-                          <label for="plan-date" data-translate-key="planDateLabel">Data Futura:</label>
-                          <input type="date" id="plan-date" required>
-                        </div>
-                        <div class="form-group">
-                           <label for="plan-hours" data-translate-key="planHoursLabel">Horas Planejadas (HH:MM):</label>
-                           <input type="text" inputmode="numeric" id="plan-hours" class="time-input" required data-translate-placeholder-key="planHoursPlaceholder">
-                        </div>
-                    </div>
-                    <div class="text-center">
-                      <button type="submit" id="save-plan-btn" data-translate-key="savePlanButton">Salvar Plano</button>
-                      <button type="button" id="clear-plan-form-btn" class="secondary" data-translate-key="clearPlanFormButton">Limpar</button>
-                    </div>
-                </form>
-                <div id="planning-list-container" class="mt-2">
-                    <!-- Estilo inline pode ser movido para CSS -->
-                    <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);" data-translate-key="planningListTitle">Próximos Planos:</h3>
-                    <ul id="planning-list" class="data-list">
-                        <!-- Placeholder - texto via JS/i18n -->
-                        <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="planningListPlaceholder">Nenhum planejamento futuro.</li>
-                        <!-- Itens populados pelo JS -->
-                    </ul>
-                </div>
-             </div>
-        </div>
+            <div class="card-header" role="button" tabindex="0">
+               <h2 data-translate-key="planHoursTitle">Planejar Horas</h2>
+               <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <form id="plan-form">
+                   <input type="hidden" id="plan-id">
+                   <div class="plan-inputs-grid">
+                       <div class="form-group">
+                         <label for="plan-date" data-translate-key="planDateLabel">Data Futura:</label>
+                         <input type="date" id="plan-date" required>
+                       </div>
+                       <div class="form-group">
+                          <label for="plan-hours" data-translate-key="planHoursLabel">Horas Planejadas (HH:MM):</label>
+                          <input type="text" inputmode="numeric" id="plan-hours" class="time-input" required data-translate-placeholder-key="planHoursPlaceholder">
+                       </div>
+                   </div>
+                   <div class="text-center">
+                     <button type="submit" id="save-plan-btn" data-translate-key="savePlanButton">Salvar Plano</button>
+                     <button type="button" id="clear-plan-form-btn" class="secondary" data-translate-key="clearPlanFormButton">Limpar</button>
+                   </div>
+               </form>
+               <div id="planning-list-container" class="mt-2">
+                   <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);" data-translate-key="planningListTitle">Próximos Planos:</h3>
+                   <ul id="planning-list" class="data-list">
+                       <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="planningListPlaceholder">Nenhum planejamento futuro.</li>
+                   </ul>
+               </div>
+            </div>
+       </div>
 
-        <!-- Card de Estatísticas -->
+        <!-- Card de Estatísticas (sem alterações) -->
         <div class="card" id="stats-card">
             <div class="card-header" role="button" tabindex="0">
-                <h2 data-translate-key="detailedSummaryTitle">Resumo Mensal Detalhado</h2>
-                <span class="toggle-icon">▼</span> <!-- Texto será atualizado pelo JS -->
-             </div>
-             <div class="card-content">
-                  <!-- Grupo de meta (CSS cuida do layout flex em telas maiores) -->
-                 <div class="form-group" style="margin: 0 auto 25px auto; text-align:center;"> <!-- Estilo inline pode ser movido para CSS -->
-                   <label for="monthly-goal" data-translate-key="monthlyGoalLabel">Meta Mensal (Horas):</label>
-                   <input type="number" id="monthly-goal" min="1" step="1" value="70"> <!-- Valor padrão, pode ser sobrescrito pelo JS -->
-                   <button id="save-goal-btn" class="mt-1 secondary" style="width:100%; font-size:0.9em; padding: 8px 10px;" data-translate-key="setGoalButton">Definir Meta</button>
-                 </div>
-                 <!-- Grid de estatísticas (CSS cuida do layout) -->
-                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <span id="stats-month-hours" class="stat-value">0</span>
-                        <span class="stat-label" data-translate-key="statsMonthHoursLabel">Horas no Mês</span>
-                    </div>
-                    <div class="stat-item">
-                        <span id="stats-month-goal-progress" class="stat-value">0%</span>
-                        <span class="stat-label" data-translate-key="statsGoalProgressLabel">Progresso Meta</span>
-                        <div class="progress-bar-container"><div id="stats-month-progress-bar" class="progress-bar"></div></div>
-                    </div>
-                    <div class="stat-item">
-                        <span id="stats-avg-hours-day" class="stat-value">0</span>
-                        <span class="stat-label" data-translate-key="statsAvgHoursDayLabel">Média / Dia Ativo</span>
-                    </div>
-                    <div class="stat-item">
-                        <span id="stats-month-days-active" class="stat-value">0</span>
-                        <span class="stat-label" data-translate-key="statsMonthDaysActiveLabel">Dias Ativos</span>
-                    </div>
-                 </div>
-             </div>
-        </div>
+               <h2 data-translate-key="detailedSummaryTitle">Resumo Mensal Detalhado</h2>
+               <span class="toggle-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="form-group" style="margin: 0 auto 25px auto; text-align:center;">
+                  <label for="monthly-goal" data-translate-key="monthlyGoalLabel">Meta Mensal (Horas):</label>
+                  <input type="number" id="monthly-goal" min="1" step="1" value="70">
+                  <button id="save-goal-btn" class="mt-1 secondary" style="width:100%; font-size:0.9em; padding: 8px 10px;" data-translate-key="setGoalButton">Definir Meta</button>
+                </div>
+                <div class="stats-grid">
+                   <div class="stat-item">
+                       <span id="stats-month-hours" class="stat-value">0</span>
+                       <span class="stat-label" data-translate-key="statsMonthHoursLabel">Horas no Mês</span>
+                   </div>
+                   <div class="stat-item">
+                       <span id="stats-month-goal-progress" class="stat-value">0%</span>
+                       <span class="stat-label" data-translate-key="statsGoalProgressLabel">Progresso Meta</span>
+                       <div class="progress-bar-container"><div id="stats-month-progress-bar" class="progress-bar"></div></div>
+                   </div>
+                   <div class="stat-item">
+                       <span id="stats-avg-hours-day" class="stat-value">0</span>
+                       <span class="stat-label" data-translate-key="statsAvgHoursDayLabel">Média / Dia Ativo</span>
+                   </div>
+                   <div class="stat-item">
+                       <span id="stats-month-days-active" class="stat-value">0</span>
+                       <span class="stat-label" data-translate-key="statsMonthDaysActiveLabel">Dias Ativos</span>
+                   </div>
+                </div>
+            </div>
+       </div>
 
-        <!-- Card de Gráficos -->
+        <!-- ========== Card de Gráficos (MODIFICADO) ========== -->
         <div class="card" id="charts-card">
             <div class="card-header" role="button" tabindex="0">
-                 <h2 data-translate-key="hoursChartTitle">Gráfico de Horas</h2>
-                 <span class="toggle-icon">▼</span> <!-- Texto será atualizado pelo JS -->
+                 <!-- Título Atualizado -->
+                 <h2 data-translate-key="categoryChartCardTitle">Horas por Categoria</h2>
+                 <span class="toggle-icon">▼</span>
              </div>
              <div class="card-content">
                  <div class="form-group">
                     <label for="chart-month-selector" data-translate-key="viewMonthLabel">Visualizar Mês:</label>
                     <select id="chart-month-selector">
-                        <!-- Opções populadas pelo JS -->
+                        <!-- Options populated by JS -->
                     </select>
                  </div>
-                 <div class="chart-container">
-                    <canvas id="monthlyHoursChart"></canvas>
+                 <!-- Contêiner ÚNICO para o gráfico de categorias -->
+                 <div class="chart-container" id="category-chart-container">
+                    <canvas id="categoryHoursChart"></canvas> <!-- Canvas ÚNICO -->
                  </div>
              </div>
         </div>
+        <!-- ========== Fim do Card de Gráficos ========== -->
 
-        <!-- Card de Histórico -->
+
+        <!-- Card de Histórico (sem alterações) -->
         <div class="card" id="history-card">
-            <div class="card-header" role="button" tabindex="0">
-                <h2 data-translate-key="historyTitle">Histórico de Registros</h2>
-                <span class="toggle-icon">▼</span> <!-- Texto será atualizado pelo JS -->
-            </div>
-             <div class="card-content">
-                 <div id="history-controls">
-                    <input type="search" id="history-search-input" class="history-search-input" data-translate-placeholder-key="historySearchPlaceholder">
-                 </div>
-                 <span id="showing-results-label"></span> <!-- Label de resultados populado pelo JS -->
-                 <ul id="history-list" class="data-list">
-                    <!-- Placeholder - texto via JS/i18n -->
-                    <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="historyNoRecordsYet">Nenhum registro encontrado.</li>
-                    <!-- Itens populados pelo JS -->
-                 </ul>
-            </div>
-        </div>
-
-         <!-- Card de Configurações -->
-        <div class="card" id="settings-card">
-            <div class="card-header" role="button" tabindex="0">
-                <h2 data-translate-key="settingsTitle">Configurações</h2>
-                <span class="toggle-icon">▼</span> <!-- Texto será atualizado pelo JS -->
-            </div>
+           <div class="card-header" role="button" tabindex="0">
+               <h2 data-translate-key="historyTitle">Histórico de Registros</h2>
+               <span class="toggle-icon">▼</span>
+           </div>
             <div class="card-content">
-                <div class="text-center">
-                  <button id="clear-all-data-btn" class="danger" data-translate-key="clearAllDataButton">Limpar Todos os Dados</button>
+                <div id="history-controls">
+                   <input type="search" id="history-search-input" class="history-search-input" data-translate-placeholder-key="historySearchPlaceholder">
                 </div>
-                <!-- Texto via JS/i18n -->
-                <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="clearDataWarning">
-                 Atenção: Limpar os dados removerá permanentemente...
-                </p>
-            </div>
-        </div>
+                <span id="showing-results-label"></span>
+                <ul id="history-list" class="data-list">
+                   <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="historyNoRecordsYet">Nenhum registro encontrado.</li>
+                </ul>
+           </div>
+       </div>
+
+        <!-- Card de Configurações (sem alterações) -->
+        <div class="card" id="settings-card">
+           <div class="card-header" role="button" tabindex="0">
+               <h2 data-translate-key="settingsTitle">Configurações</h2>
+               <span class="toggle-icon">▼</span>
+           </div>
+           <div class="card-content">
+               <div class="text-center">
+                 <button id="clear-all-data-btn" class="danger" data-translate-key="clearAllDataButton">Limpar Todos os Dados</button>
+               </div>
+               <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="clearDataWarning">
+                Atenção: Limpar os dados removerá permanentemente...
+               </p>
+           </div>
+       </div>
     </div>
 
-    <!-- Dialog de Confirmação -->
-    <div id="confirmation-dialog" class="dialog-backdrop"> <!-- Visibilidade controlada por classe CSS via JS -->
+    <!-- Dialog de Confirmação (sem alterações) -->
+    <div id="confirmation-dialog" class="dialog-backdrop">
       <div class="dialog-content">
-         <!-- Texto via JS/i18n -->
          <p id="dialog-message" data-translate-key="dialogConfirmMessage">Você tem certeza?</p>
          <div class="dialog-actions">
             <button id="dialog-confirm-btn" class="danger" data-translate-key="dialogConfirmButton">Confirmar</button>
@@ -237,7 +227,7 @@
        </div>
     </div>
 
-    <!-- Script externo carregado aqui (JavaScript removido מכאן) -->
+    <!-- Script externo carregado aqui -->
     <script src="script.js" defer></script>
 
 </body>
