@@ -42,13 +42,14 @@ h1 { display: none; }
 #dashboard-box {
     background-color: var(--card-bg); border-radius: var(--border-radius);
     padding: 15px var(--card-padding); margin-bottom: 20px; display: flex;
-    flex-wrap: wrap; justify-content: space-between; /* Mais espaço entre nos lados */
-    align-items: center; gap: 20px; border: 1px solid var(--border-color);
+    flex-wrap: wrap; justify-content: space-between; /* Default: Espaço entre itens (infos vs progresso) */
+    align-items: center; /* Default: Centro vertical */
+    gap: 20px; border: 1px solid var(--border-color);
 }
-/* Infos Principais (Mobile: um sobre o outro) */
+/* Container Infos (Mobile: padrão) */
 #dashboard-box > .dashboard-item:first-child {
-    flex-grow: 1; flex-basis: 60%; order: 1;
-    display: flex; flex-direction: column; gap: 5px; align-items: flex-start; /* Default mobile */
+    flex-grow: 1; flex-basis: 60%; order: 1; align-self: flex-start; /* Alinha topo mobile */
+    display: flex; flex-direction: column; gap: 5px; text-align: left; /* Garante esquerda */
 }
 #dashboard-week-hours { font-size: 1.6em; margin-bottom: 5px;}
 #dashboard-summary { margin-top: 5px; font-size: 0.85em; color: var(--text-color-secondary); width: 100%; }
@@ -60,7 +61,7 @@ h1 { display: none; }
 #dashboard-plan-list li strong { color: var(--text-color); }
 #dashboard-plan-list .plan-warning, .plan-past-date-indicator { font-size: 0.9em; margin-left: 5px; opacity: 0.7; }
 #dashboard-plan-list .plan-warning { font-style: italic; }
-/* Progresso (Mobile: abaixo ou ao lado) */
+/* Container Progresso (Mobile: padrão) */
 .dashboard-item--progress { order: 2; flex-basis: 90px; height: 90px; position: relative; }
 .progress-ring { width: 100%; height: 100%; transform: rotate(-90deg); position: absolute; top:0; left: 0; }
 .progress-ring__circle { fill: none; stroke-width: 6; transition: stroke-dashoffset 0.5s ease-out; }
@@ -73,19 +74,8 @@ h1 { display: none; }
 
 /* --- App Container & Cards (Mobile) --- */
 #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-.card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
-.card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
-.card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
-.card.expanded .card-header::after { opacity: 0; }
-.card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
-.card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; }
-.toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
-.card.expanded .toggle-icon { transform: rotate(180deg); }
-.card-content { padding: 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
-.card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
-
-/* --- Restante do CSS (Forms, Buttons, Stats, Lists, Chart, Dialog, Utils) ... --- */
-/* (Colar o resto do CSS base aqui - omitido para brevidade) */
+/* Resto do CSS base omitido para focar na solução */
+/* ... (Cole aqui o CSS para .card, forms, buttons, stats, lists, chart, dialog, utils da versão anterior) ... */
 /* --- Formulários --- */
 .form-group { margin-bottom: 16px; }
 label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
@@ -100,6 +90,7 @@ input::placeholder, textarea::placeholder { color: var(--placeholder-color); opa
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
 input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 textarea { resize: vertical; min-height: 90px; }
+#record-notes { max-height: 250px; min-height: 100px;} /* Limite de altura já no mobile se precisar */
 
 /* --- Botões --- */
 button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: auto; transform: scale(1); filter: brightness(1); -webkit-user-select: none; user-select: none; }
@@ -115,7 +106,7 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
 
 /* --- Estatísticas --- */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
-.stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
+.stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; } /* Ajuda alinhamento interno */
 .stat-value { font-size: 1.7em; font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; }
 .stat-label { font-size: 0.85em; color: var(--text-color-secondary); }
 .progress-bar-container { background-color: var(--border-color); border-radius: 5px; overflow: hidden; height: 8px; margin-top: 8px; }
@@ -158,110 +149,98 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
 .text-center { text-align: center; }
 .mt-1 { margin-top: 10px; }
 .mt-2 { margin-top: 20px; }
-/* --- FIM DO CSS Base --- */
+/* --- FIM RESTANTE CSS BASE --- */
 
 
 /* =========================================== */
 /* === ESTILOS RESPONSIVOS (Desktop/Tablet) === */
 /* =========================================== */
 
-/* Breakpoint 1: Tablets e Desktops Pequenos (largura mínima de 768px) */
 @media (min-width: 768px) {
 
-    /* Ajustes Globais */
+    /* Globals */
     :root { --card-padding: 20px; --outer-padding: 25px; }
-    body { font-size: 16px; padding: var(--outer-padding); } /* Ajusta padding no body */
+    body { font-size: 16px; padding: var(--outer-padding); }
 
-    /* -------- Layout Principal Desktop: Grid -------- */
-    #app {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Colunas com min 350px */
-        gap: 20px;
-        max-width: 100%; /* Usa largura total disponível */
-        padding: 0; /* Remove padding do app */
-        align-items: stretch;
-    }
+    /* App Grid Layout */
+    #app { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; max-width: 100%; padding: 0; align-items: stretch; }
 
-    /* -------- Estilos Dashboard Desktop (Layout Horizontal) -------- */
+    /* --- Dashboard Desktop Layout --- */
     #dashboard-box {
-        padding: var(--card-padding); align-items: center; /* Alinha verticalmente o círculo */
-        gap: 25px; flex-wrap: nowrap; margin-bottom: var(--outer-padding); text-align: left;
+        padding: var(--card-padding); display: flex; align-items: center; /* Alinha tudo verticalmente */
+        justify-content: space-between; /* Empurra progresso pra direita */ flex-wrap: nowrap;
+        gap: 25px; margin-bottom: var(--outer-padding); text-align: left;
     }
-    /* Item principal de informações (à esquerda) */
+
+    /* Container Esquerdo: Semana + (Sumário | Planos) */
     #dashboard-box > .dashboard-item:first-child {
-        order: 1; flex-grow: 1; flex-basis: 0; /* Deixa crescer/encolher */
-        min-width: 300px; /* Garante espaço mínimo */
-        display: flex; flex-wrap: nowrap; /* Força layout horizontal interno */
-        align-items: flex-start; /* Alinha conteúdo interno ao topo */
-        gap: 25px; /* Espaço entre os blocos internos */
+        order: 1; flex-grow: 1; /* Ocupa espaço */ display: flex; align-items: center; /* Alinha filhos verticalmente */
+        gap: 30px; /* Espaço entre Semana e o resto */ min-width: 0;
     }
-    /* Bloco 1: Horas Semanais (Label + Valor) */
-    .dashboard-main-info-block { /* Wrapper Conceitual -> Aplica aos spans */
+
+    /* Sub-Bloco 1: Horas Semanais */
+    .dashboard-week-info { /* Precisa adicionar esta classe no HTML ao redor do label e valor semanais, OU selecionar por ordem */
          flex-shrink: 0; /* Não encolhe */
     }
-    #dashboard-box > .dashboard-item:first-child > span.dashboard-label { /* Label "Horas..." */
-        font-size: 0.9em; margin-bottom: 0; display: block;
-    }
-    #dashboard-box > .dashboard-item:first-child > span#dashboard-week-hours { /* Valor "X horas" */
-        font-size: 2.2em; font-weight: 500; line-height: 1.1; margin-bottom: 0; color: var(--primary-color);
-    }
+    /* Selecionando por ordem (SEM MUDAR HTML): */
+     #dashboard-box > .dashboard-item:first-child > span.dashboard-label:first-of-type { display: block; font-size: 0.9em; margin-bottom: 2px; color: var(--text-color-secondary); }
+     #dashboard-box > .dashboard-item:first-child > span#dashboard-week-hours { display: block; font-size: 2.4em; color: var(--primary-color); font-weight: 500; line-height: 1.1; }
 
-    /* Bloco 2: Sumário (Mês/Meta) e Planos Futuros (lado a lado) */
-    .dashboard-secondary-info-block { /* Wrapper Conceitual -> Aplica aos Divs */
-        display: flex;
-        flex-direction: row; /* Colunas lado a lado */
-        gap: 25px; /* Espaço entre Sumário e Planos */
-        flex-grow: 1; /* Ocupa espaço restante */
-        padding-left: 25px; /* Espaço à esquerda (tipo indentação) */
-        border-left: 1px solid var(--border-color); /* Divisória vertical sutil */
-        align-self: stretch; /* Tenta ocupar altura total */
-        padding-top: 5px; /* Alinhamento vertical */
-        padding-bottom: 5px;
+    /* Sub-Bloco 2: Container para Sumário e Planos */
+    .dashboard-details-block { /* PRECISA ADICIONAR ESTA CLASSE NO HTML ao redor de #dashboard-summary e #dashboard-planned-dates */
+         display: flex; flex-grow: 1; /* Ocupa espaço */ gap: 25px; /* Espaço interno */
+         padding-left: 25px; border-left: 1px solid var(--border-color); /* Divisória */
+         align-self: stretch; /* Tenta esticar altura */ align-items: center; /* Alinha verticalmente */
     }
-     /* Para aplicar sem wrapper no HTML: estiliza os divs diretamente */
-     #dashboard-summary {
-         margin: 0; flex: 1 1 auto; /* Permite crescer/encolher */
-         font-size: 0.9em; align-self: flex-start; /* Alinha ao topo dentro do bloco */
+    /* SELECIONANDO DIRETO (SEM MUDAR HTML - pode ficar instável se ordem mudar): */
+    /* Precisamos estilizar #dashboard-summary E #dashboard-planned-dates para ficarem LADO A LADO e DENTRO do .dashboard-item:first-child */
+     /* Vamos resetar e ajustar os próprios divs */
+     #dashboard-summary, #dashboard-planned-dates {
+          margin: 0; /* Reseta */ padding: 0; border: none; /* Reseta */
+          align-self: center; /* Tenta centralizar verticalmente no pai */
+          flex-basis: auto; /* Deixa o flex decidir */
      }
-      #dashboard-summary .dashboard-label { font-size: 0.9em; margin-bottom: 2px; }
-      #dashboard-summary .dashboard-value { font-size: 1.1em; } /* Valor do Mês */
-      #dashboard-summary strong { font-size: 1.1em; } /* Valor do Mês em strong */
-      #dashboard-forecast { font-size: 0.9em; }
+     #dashboard-summary {
+          flex-grow: 1; /* Permite crescer */
+          padding-left: 25px; border-left: 1px solid var(--border-color); /* Adiciona espaço e borda */
+          min-width: 150px; /* Min width */
+     }
+      #dashboard-summary span:not(.dashboard-label){ font-size: 1.1em; display: block; margin-bottom: 2px;}
+      #dashboard-summary strong { font-size: 1.1em; }
+      #dashboard-forecast { font-size: 0.9em; margin-top: 3px;}
+      #dashboard-summary > span.dashboard-label { display: none; } /* Esconde label "Mês" se redundante */
+
 
      #dashboard-planned-dates {
-         margin: 0; flex: 1 1 auto; /* Permite crescer/encolher */
-         align-self: flex-start;
-         display: flex; flex-direction: column; /* Organiza label e lista */
-         max-width: 250px; /* Limita largura da lista de planos */
+          flex-grow: 1.5; /* Mais espaço para planos */
+          padding-left: 25px; border-left: 1px solid var(--border-color); /* Adiciona espaço e borda */
+          min-width: 200px; /* Min width */
+          display: flex; flex-direction: column; /* Label acima da lista */
+          max-width: 300px; /* Limita largura */
      }
-     #dashboard-planned-dates .dashboard-label {
-         font-size: 0.9em; margin-bottom: 5px; font-weight: 500; color: var(--text-color); /* Mais destaque */
-     }
-     #dashboard-plan-list {
-         max-height: 75px; font-size: 0.85em; padding-right: 5px; overflow-y: auto;
-         border: 1px solid var(--input-bg); border-radius: 4px; padding: 6px 8px;
-     }
+     #dashboard-planned-dates .dashboard-label { font-size: 0.9em; font-weight: 500; margin-bottom: 5px; color: var(--text-color); }
+     #dashboard-plan-list { max-height: 65px; font-size: 0.85em; overflow-y: auto; }
 
-    /* Item Progresso (Círculo, à direita) */
+    /* Bloco Progresso */
     .dashboard-item--progress {
-        order: 2; flex-basis: 110px; flex-shrink: 0; /* Não encolhe */
-        height: 110px; min-width: 110px; align-self: center; /* Centraliza no dashboard */
+        order: 2; flex-shrink: 0; align-self: center;
+        flex-basis: 110px; height: 110px; min-width: 110px;
     }
     #dashboard-month-percentage { font-size: 2.1em; }
     .dashboard-item--progress .dashboard-label { font-size: 0.75em; }
+    /* -------- FIM DASHBOARD -------- */
 
-    /* -------- Cards Sempre Abertos no Desktop -------- */
-    .card { border: 1px solid var(--border-color); box-shadow: 0 3px 8px rgba(0,0,0, 0.2); overflow: hidden; display: flex; flex-direction: column; } /* overflow hidden ajuda a conter */
+
+    /* -------- Cards Sempre Abertos -------- */
+    .card { border: 1px solid var(--border-color); box-shadow: 0 3px 8px rgba(0,0,0, 0.2); overflow: hidden; display: flex; flex-direction: column; }
     .card-header { cursor: default; border-bottom: 1px solid var(--border-color); }
     .card:not(.expanded) .card-header:hover { background-color: transparent; }
     .card .card-header::after { display: none; }
     .card .card-content { max-height: none !important; opacity: 1 !important; padding: var(--card-padding) !important; margin-top: 0 !important; border-top: none !important; overflow: visible !important; transition: none !important; flex-grow: 1; }
     .card .toggle-icon { display: none !important; }
-    #record-notes { max-height: 250px; min-height: 100px;}
-    /* -------- FIM Cards Sempre Abertos -------- */
+    /* -------- FIM CARDS -------- */
 
-
-    /* -------- Layout Interno dos Forms e Stats (sem grandes mudanças aqui) -------- */
+    /* -------- Layout Interno (igual anterior) -------- */
     #record-form .time-tag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     #record-form .time-tag-grid .form-group { margin-bottom: 0; }
     #record-form .time-tag-grid + .form-group { margin-top: 18px; }
@@ -278,14 +257,14 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
     #stats-card .card-content > .form-group button { margin-top: 0; flex-shrink: 0; width: auto !important; font-size: 0.95em !important; padding: 8px 18px !important; }
 
     /* -------- Gráfico Desktop -------- */
-    .chart-container { height: 320px; }
+    .chart-container { height: 300px; } /* Menor para dar espaço vertical */
 
     /* -------- Listas Desktop -------- */
-    .data-list { max-height: 300px; } /* Reduzir altura para compensar card mais alto */
+    .data-list { max-height: 280px; } /* Menor para compensar card mais alto */
     .data-list li { padding: 15px var(--card-padding); flex-wrap: nowrap; align-items: center; }
     .entry-details { font-size: 0.95em; }
-    .entry-details .notes-preview { display: inline; margin-left: 10px; margin-top: 0; max-height: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; opacity: 0.65; font-size: 0.85em; max-width: 180px; }
-    .data-list li:hover .entry-details .notes-preview { white-space: normal; overflow: visible; opacity: 0.9; max-width: 300px; background-color: #3a3a3c; padding: 4px 6px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); position: absolute; z-index: 10; margin-left: -5px; }
+    .entry-details .notes-preview { display: inline; margin-left: 10px; margin-top: 0; max-height: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; opacity: 0.65; font-size: 0.85em; max-width: 150px; } /* Largura Máx menor */
+    .data-list li:hover .entry-details .notes-preview { white-space: normal; overflow: visible; opacity: 1; max-width: 300px; background-color: #3a3a3c; color: var(--text-color); padding: 4px 6px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); position: absolute; z-index: 10; margin-left: -5px; margin-top: -2px; }
     .entry-actions, .plan-actions { white-space: nowrap; align-self: center; }
     .entry-actions button, .plan-actions button { margin-top: 0; font-size: 0.8em; padding: 5px 9px; }
 
@@ -297,22 +276,22 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
 } /* Fim @media 768px */
 
 
-/* Breakpoint 2: Desktops Maiores (largura mínima de 1200px) */
 @media (min-width: 1200px) {
-
-    /* Ajustes Globais */
+    /* Globals */
     :root { --card-padding: 22px; --outer-padding: 30px; }
     body { font-size: 17px; padding: var(--outer-padding); }
 
+    /* Layout */
     #app { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 25px; }
 
     /* Dashboard */
-    #dashboard-box { gap: 30px; padding: var(--card-padding); margin-bottom: 30px; }
-    #dashboard-box > .dashboard-item:first-child { gap: 30px; min-width: 400px; }
-    #dashboard-box > .dashboard-item:first-child > span#dashboard-week-hours { font-size: 2.5em; }
-    .dashboard-secondary-info-block { gap: 30px; padding-left: 30px; }
-    #dashboard-summary { font-size: 1em; } #dashboard-summary .dashboard-value { font-size: 1.2em; } #dashboard-summary strong {font-size: 1.2em;} #dashboard-forecast {font-size: 1em;}
-    #dashboard-planned-dates { max-width: 300px; } #dashboard-planned-dates .dashboard-label { font-size: 1em; } #dashboard-plan-list { max-height: 85px; font-size: 0.9em; }
+    #dashboard-box { gap: 35px; padding: var(--card-padding); margin-bottom: 30px; }
+    #dashboard-box > .dashboard-item:first-child { gap: 35px; min-width: 400px; } /* Mais espaço interno */
+    #dashboard-box > .dashboard-item:first-child > span#dashboard-week-hours { font-size: 2.8em; }
+    #dashboard-summary, #dashboard-planned-dates { padding-left: 35px; }
+    #dashboard-planned-dates { min-width: 250px; max-width: 350px; }
+    #dashboard-plan-list { max-height: 70px; font-size: 0.9em;}
+
     .dashboard-item--progress { flex-basis: 120px; height: 120px; min-width: 120px;}
     #dashboard-month-percentage { font-size: 2.3em; }
     .dashboard-item--progress .dashboard-label { font-size: 0.8em; }
@@ -322,12 +301,11 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
     .stat-value { font-size: 2em; } .stat-label { font-size: 0.9em; }
 
     /* Gráfico */
-    .chart-container { height: 350px; }
+    .chart-container { height: 320px; }
 
     /* Listas */
-    .data-list { max-height: 350px; }
-    .data-list li { padding: 18px var(--card-padding); }
-    .entry-details .notes-preview { max-width: 250px; }
+    .data-list { max-height: 320px; }
+    .entry-details .notes-preview { max-width: 200px; } /* Ajuste fino */
 
     /* Dialog */
     .dialog-content { width: 500px; }
