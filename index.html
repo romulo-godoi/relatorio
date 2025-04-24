@@ -7,10 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0A84FF">
     <link rel="apple-touch-icon" href="icon-192x192.png">
-    <!-- Chart.js Core -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Removido Chart Annotation pois não é necessário para Pie Chart -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script> -->
     <style>
         :root {
             --system-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -28,15 +25,8 @@
             --dialog-backdrop: rgba(0, 0, 0, 0.7);
             --progress-track-color: #38383a;
             --progress-bar-color: var(--success-color);
-            /* Renomeando para cores de tema/gráfico genéricas */
-            --chart-color-1: #0A84FF; /* Primary */
-            --chart-color-2: #30D158; /* Success */
-            --chart-color-3: #FF9F0A; /* Orange (era avg-1) */
-            --chart-color-4: #AF52DE; /* Purple (era avg-2) */
-            --chart-color-5: #5E5CE6; /* Blue-Purple (era avg-3) */
-            --chart-color-6: #FF69B4; /* Rosa Choque */
-            --chart-color-7: #32CD32; /* Verde Lima */
-            --chart-color-8: #FFD700; /* Dourado */
+            --chart-color-1: #0A84FF; --chart-color-2: #30D158; --chart-color-3: #FF9F0A; --chart-color-4: #AF52DE;
+            --chart-color-5: #5E5CE6; --chart-color-6: #FF69B4; --chart-color-7: #32CD32; --chart-color-8: #FFD700;
 
             --font-family: var(--system-font);
             --border-radius: 10px;
@@ -127,7 +117,18 @@
         .entry-actions button, .plan-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
         .plan-actions button { margin-top: 5px; }
         .entry-actions button.secondary, .plan-actions button.secondary { background-color: #3a3a3c; }
-        .chart-container { position: relative; /* Ajustado para Pie Chart que tende a ser quadrado */ min-height: 300px; max-height: 400px; width: 100%; margin-top: 25px; }
+        .chart-container { position: relative; min-height: 300px; max-height: 400px; width: 100%; margin-top: 15px; /* Reduzi a margem top */ }
+         /* Estilo para o texto do total de horas acima do gráfico */
+        .chart-summary-text {
+            text-align: center;
+            font-size: 0.95em; /* Tamanho um pouco maior que label normal */
+            font-weight: 500; /* Um pouco mais de peso */
+            color: var(--text-color-secondary); /* Cor secundária */
+            margin-bottom: 10px; /* Espaço antes do gráfico */
+            margin-top: 5px; /* Pequeno espaço depois do dropdown */
+            min-height: 1.3em; /* Evita pulos de layout */
+            padding: 0 var(--card-padding); /* Alinha com o padding geral se necessário */
+        }
         .dialog-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dialog-backdrop); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease; }
         .dialog-backdrop.visible { opacity: 1; visibility: visible; }
         .dialog-content { background-color: #2c2c2e; color: var(--text-color); padding: 25px; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 320px; transform: scale(0.95); transition: transform var(--transition-speed) ease; }
@@ -237,16 +238,21 @@
              </div>
         </div>
 
-        <!-- Gráfico (Agora Pie Chart) -->
+        <!-- Gráfico (Agora Pie Chart com Total Acima) -->
         <div class="card" id="charts-card">
             <div class="card-header">
-                 <h2>Distribuição de Horas por Modalidade</h2> <!-- Título atualizado -->
+                 <h2>Distribuição de Horas por Modalidade</h2>
                  <span class="toggle-icon">▼</span>
              </div>
              <div class="card-content">
                  <div class="form-group"> <label for="chart-month-selector">Visualizar Mês:</label> <select id="chart-month-selector"></select> </div>
-                 <div class="chart-container"> <!-- Container continua o mesmo -->
-                     <canvas id="monthlyHoursChart"></canvas> <!-- Canvas continua o mesmo -->
+
+                 <!-- NOVO ELEMENTO PARA EXIBIR TOTAL -->
+                 <p id="chart-total-hours-display" class="chart-summary-text"></p>
+                 <!-- FIM NOVO ELEMENTO -->
+
+                 <div class="chart-container">
+                     <canvas id="monthlyHoursChart"></canvas>
                  </div>
              </div>
         </div>
@@ -286,7 +292,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Declarações de Variáveis (mantidas, removidas as não usadas para PieChart) ---
+            // --- Declarações de Variáveis ---
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal,
                 dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg,
                 recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate,
@@ -297,14 +303,14 @@
                 statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList,
                 historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn,
                 confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn,
-                computedStyles, textColor, textMutedColor, tooltipBgColor, /* primaryColor foi movido para cores de chart */
-                /* avgLineColor1, avgLineColor2, avgLineColor3 removidos, agora são chart-color-x */
-                chartColors = []; // Array para cores do gráfico
+                computedStyles, textColor, textMutedColor, tooltipBgColor,
+                chartTotalHoursDisplay, // <<< NOVA Variável
+                chartColors = [];
 
             let recordedEntries = [];
             let plannedEntries = [];
             let settings = { monthlyGoal: 70, goalHasBeenSet: false };
-            let monthlyHoursChartInstance = null; // Continua sendo usado
+            let monthlyHoursChartInstance = null;
             let currentEditingId = null;
             let currentConfirmCallback = null;
             let isDateInputVisible = false;
@@ -312,7 +318,7 @@
             let progressRingRadius = 0;
             let progressRingCircumference = 0;
 
-            // --- Constantes e Funções Utilitárias (mantidas) ---
+            // --- Constantes e Funções Utilitárias (sem alterações) ---
             const DEFAULT_TAG = "Casa em casa";
             const HISTORY_MONTH_LIMIT = 3;
             const NOTES_MAX_LENGTH = 300;
@@ -331,7 +337,7 @@
             function getStartOfWeek(date = new Date()) { const d = new Date(date); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek; const sOW = new Date(d.setDate(diff)); sOW.setHours(0, 0, 0, 0); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
             function getDateMonthsAgo(months) { const d = new Date(); d.setMonth(d.getMonth() - months); d.setHours(0, 0, 0, 0); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
             function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/')) return monthYearString; const [m, y] = monthYearString.split('/'); const monthIndex = parseInt(m, 10) - 1; if (monthIndex < 0 || monthIndex > 11) return monthYearString; return `${MONTH_NAMES_PT[monthIndex]} de ${y}`; }
-            function formatHoursExtensive(hoursDecimal, short = false) { if (isNaN(hoursDecimal) || hoursDecimal < 0) return short ? '0h' : '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; const hSuffix = short ? 'h' : ` ${hours === 1 ? 'hora' : 'horas'}`; const mSuffix = short ? 'm' : ` ${minutes === 1 ? 'minuto' : 'minutos'}`; if (hours > 0) { result += `${hours}${hSuffix}`; } if (minutes > 0) { result += `${hours > 0 ? (short ? ' ' : ' e ') : ''}${minutes}${mSuffix}`; } if (!result && hoursDecimal === 0) { result = short ? '0h' : '0 horas'; } else if (!result && minutes > 0) { result = `${minutes}${mSuffix}`; } return result || (short ? '0h' : '0 horas'); } // Garante que sempre retorne algo
+            function formatHoursExtensive(hoursDecimal, short = false) { if (isNaN(hoursDecimal) || hoursDecimal < 0) return short ? '0h' : '0 horas'; const totalMinutes = Math.round((hoursDecimal || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; let result = ''; const hSuffix = short ? 'h' : ` ${hours === 1 ? 'hora' : 'horas'}`; const mSuffix = short ? 'm' : ` ${minutes === 1 ? 'minuto' : 'minutos'}`; if (hours > 0) { result += `${hours}${hSuffix}`; } if (minutes > 0) { result += `${hours > 0 ? (short ? ' ' : ' e ') : ''}${minutes}${mSuffix}`; } if (!result && hoursDecimal === 0) { result = short ? '0h' : '0 horas'; } else if (!result && minutes > 0) { result = `${minutes}${mSuffix}`; } return result || (short ? '0h' : '0 horas'); }
             function formatDecimalToTimeInput(decimalHours) { if (isNaN(decimalHours) || decimalHours <= 0) return ""; const totalMinutes = Math.round((decimalHours || 0) * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; return `${hours}:${String(minutes).padStart(2, '0')}`; }
             function parseTimeInputToDecimal(timeString) { if (!timeString) return 0; const trimmed = timeString.trim(); if (!trimmed) return 0; const colonMatch = trimmed.match(/^(\d{1,3}):(\d{1,2})$/); if (colonMatch) { const hours = parseInt(colonMatch[1], 10); const minutes = parseInt(colonMatch[2], 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } const numberMatch = trimmed.match(/^(\d+)$/); if (numberMatch) { const numStr = numberMatch[1]; const numVal = parseInt(numStr, 10); if (isNaN(numVal)) return NaN; if (numStr.length <= 2) { if (numVal < 60) return numVal / 60; } if (numStr.length >= 3) { const potentialHoursStr = numStr.slice(0, -2); const potentialMinutesStr = numStr.slice(-2); const hours = parseInt(potentialHoursStr, 10); const minutes = parseInt(potentialMinutesStr, 10); if (!isNaN(hours) && !isNaN(minutes) && minutes >= 0 && minutes < 60 && hours >= 0) { return hours + (minutes / 60); } else { return NaN; } } return NaN; } return NaN; }
             function formatRelativeDate(dateString) { const today = new Date(); today.setHours(0, 0, 0, 0); const inputDate = new Date(dateString + 'T00:00:00'); if (isNaN(inputDate)) return formatDisplayDate(dateString); const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const oneWeekFromToday = new Date(today); oneWeekFromToday.setDate(today.getDate() + 7); if (inputDate.getTime() === today.getTime()) { return "Hoje"; } if (inputDate.getTime() === tomorrow.getTime()) { return "Amanhã"; } if (inputDate > tomorrow && inputDate < oneWeekFromToday) { return `Próx. ${WEEKDAY_NAMES_PT[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
@@ -357,16 +363,15 @@
             function updateDashboard() { const today = new Date(); const cM = today.getMonth(); const cY = today.getFullYear(); const sOW = getStartOfWeek(today); let mH = 0; let wH = 0; recordedEntries.forEach(e => { const eD = new Date(e.date + 'T00:00:00'); if (eD.getMonth() === cM && eD.getFullYear() === cY) { mH += e.hours; } if (e.date >= sOW && e.date <= getCurrentDateString()) { wH += e.hours; } }); dashboardWeekHours.textContent = formatHoursExtensive(wH); const goal = settings.monthlyGoal || 70; const percent = goal > 0 ? Math.min(100, (mH / goal) * 100) : 0; dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(mH, goal); dashboardMonthTotal.innerHTML = `Mês: <strong>${formatHoursExtensive(mH)}</strong>`; const lastDay = new Date(cY, cM + 1, 0).getDate(); const todayDay = today.getDate(); const remainingDays = Math.max(0, lastDay - todayDay); const remainingHours = Math.max(0, goal - mH); let forecastText = ''; if (!settings.goalHasBeenSet) { forecastText = `<span>Defina sua meta mensal.</span>`; } else if (remainingHours <= 0) { forecastText = `<span>Meta Alcançada! 🎉</span>`; } else if (remainingDays <= 0) { forecastText = `<span>Meta não atingida este mês.</span>`; } else { let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours; let daysNeeded = remainingDays; let suggestion = ''; if (daysNeeded > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysNeeded = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; } else if (daysNeeded <= 0) { avgNeeded = remainingHours; daysNeeded = 1; } suggestion = `Tente ≈<strong>${formatHoursExtensive(avgNeeded, true)}</strong>/${daysNeeded > 1 ? 'dia' : 'dia'} por ${daysNeeded} ${daysNeeded === 1 ? 'dia' : 'dias'}.`; forecastText = `<span>Faltam ${formatHoursExtensive(remainingHours)}.</span><span>${suggestion}</span>`; } dashboardForecast.innerHTML = forecastText; updateDashboardPlannedDates(); }
             function updateProgressRing(cV, mV) { const p = mV > 0 ? Math.min(100, (cV / mV) * 100) : 0; const offset = progressRingCircumference * (1 - p / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); }
             function updateDashboardPlannedDates() { const today = new Date(); today.setHours(0, 0, 0, 0); const todayStr = getCurrentDateString(); const now = new Date(); const currentHour = now.getHours(); const overdueThreshold = 18; const futurePlans = plannedEntries .filter(p => p.date >= todayStr) .sort((a, b) => new Date(a.date) - new Date(b.date)) .slice(0, 3); const pastUncompletedPlans = plannedEntries .filter(p => { const planDate = new Date(p.date + 'T00:00:00'); return planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); }) .sort((a, b) => new Date(a.date) - new Date(b.date)) .slice(0, 3 - futurePlans.length); const displayPlans = [...pastUncompletedPlans, ...futurePlans].slice(0,3); displayPlans.sort((a, b) => new Date(a.date) - new Date(b.date)); dashboardPlanList.innerHTML = ''; if (displayPlans.length > 0) { dashboardPlannedDatesContainer.classList.remove('hidden'); displayPlans.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; let mainText = `<strong>${formatRelativeDate(plan.date)}:</strong> ${formatHoursExtensive(plan.hours)}`; li.innerHTML = mainText; const planDate = new Date(plan.date + 'T00:00:00'); let isOverdue = false; if (planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold)) { isOverdue = true; } if (isOverdue) { const warningSpan = document.createElement('span'); warningSpan.textContent = ' (Concluído ou reagendar?)'; warningSpan.classList.add('plan-warning'); li.appendChild(warningSpan); } dashboardPlanList.appendChild(li); }); } else { dashboardPlannedDatesContainer.classList.add('hidden'); } }
-            function renderHistory() { historyList.innerHTML = ''; const sT = historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt = ''; const hasSearch = sT.length > 0; if (hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours || 0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); const fHE = formatHoursExtensive(e.hours).toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.', ',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || fHE.includes(sT)); }); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"' : ''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`; if (recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses`; } else if (recordedEntries.length === 0) { lblTxt = ''; } } showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado para a busca' : `Nenhum registro recente (use a busca para mais antigos)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : (entry.tag === DEFAULT_TAG ? `<span class="tag-badge" style="opacity:0.6;">${entry.tag}</span>` : ''); // Mostra default tag com opacidade
-            const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); }); }
+            function renderHistory() { historyList.innerHTML = ''; const sT = historySearchInput.value.trim().toLowerCase(); let res = []; let lblTxt = ''; const hasSearch = sT.length > 0; if (hasSearch) { res = recordedEntries.filter(e => { const hrStr = Math.round(e.hours || 0).toString(); const dspDt = formatDisplayDate(e.date); const notes = (e.notes || '').toLowerCase(); const tag = (e.tag || '').toLowerCase(); const fHE = formatHoursExtensive(e.hours).toLowerCase(); return (dspDt.includes(sT) || e.hours.toString().replace('.', ',').includes(sT) || hrStr.includes(sT) || tag.includes(sT) || notes.includes(sT) || fHE.includes(sT)); }); lblTxt = `${res.length} resultado(s)${sT ? ' para "' + sT + '"' : ''}`; } else { const tMA = getDateMonthsAgo(HISTORY_MONTH_LIMIT); res = recordedEntries.filter(e => e.date >= tMA); lblTxt = `Mostrando últimos ${HISTORY_MONTH_LIMIT} meses`; if (recordedEntries.length > 0 && res.length === 0) { lblTxt = `Nenhum registro nos últimos ${HISTORY_MONTH_LIMIT} meses`; } else if (recordedEntries.length === 0) { lblTxt = ''; } } showingResultsLabel.textContent = lblTxt; if (res.length === 0) { historyListPlaceholder.textContent = recordedEntries.length > 0 ? (hasSearch ? 'Nenhum resultado para a busca' : `Nenhum registro recente (use a busca para mais antigos)`) : 'Nenhum registro encontrado.'; historyListPlaceholder.classList.remove('hidden'); } else { historyListPlaceholder.classList.add('hidden'); } res.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisp = entry.tag && entry.tag !== DEFAULT_TAG ? `<span class="tag-badge">${entry.tag}</span>` : (entry.tag === DEFAULT_TAG ? `<span class="tag-badge" style="opacity:0.6;">${entry.tag}</span>` : ''); const ntPrev = entry.notes ? `<span class="notes-preview">${entry.notes.replace(/\n/g, ' ')}</span>` : '<span class="notes-preview" style="opacity:0.5;">Sem notas</span>'; const hrsDisp = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"> <strong>${formatDisplayDate(entry.date)}:</strong> <span class="hours">${hrsDisp}</span> ${tagDisp} ${ntPrev} </div> <div class="entry-actions"> <button class="edit-btn secondary">Editar</button> <button class="delete-btn danger">Excluir</button> </div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); }); }
             function renderPlanning() { planningList.innerHTML = ''; const tS = getCurrentDateString(); const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date) - new Date(b.date)); if (allPlansSorted.length === 0) { planningListPlaceholder.textContent = 'Nenhum planejamento futuro ou passado.'; planningListPlaceholder.classList.remove('hidden'); return; } planningListPlaceholder.classList.add('hidden'); allPlansSorted.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const hD = formatHoursExtensive(plan.hours); const isPastPlan = plan.date < tS; li.innerHTML = ` <div class="entry-details"> <strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong> <span class="hours">${hD}</span> Planejadas ${isPastPlan ? '<span style="opacity: 0.7; margin-left: 5px;">(Data Passada)</span>' : ''} </div> <div class="plan-actions"> <button class="done-plan-btn success">Feito</button> <button class="delete-plan-btn danger">Excluir</button> </div>`; li.querySelector('.done-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); markPlanAsDone(plan.id); }); li.querySelector('.delete-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id); }); planningList.appendChild(li); }); }
             function updateStatistics() { const cM = new Date().getMonth(); const cY = new Date().getFullYear(); const eM = recordedEntries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d.getMonth() === cM && d.getFullYear() === cY; }); let tH = 0; const aD = new Set(); eM.forEach(e => { tH += e.hours; aD.add(e.date); }); const g = settings.monthlyGoal || 70; const pP = settings.goalHasBeenSet ? (g > 0 ? Math.min(Math.round((tH / g) * 100), 100) : 0) : 0; const aH = aD.size > 0 ? (tH / aD.size) : 0; const dAC = aD.size; statsMonthHours.textContent = formatHoursExtensive(tH); statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${pP}%` : '--%'; statsMonthProgressBar.style.width = `${pP}%`; statsAvgHoursDay.textContent = formatHoursExtensive(aH); statsMonthDaysActive.textContent = dAC; }
             function populateMonthSelector() { const aM = new Set(); recordedEntries.forEach(e => { aM.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const sM = Array.from(aM).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = ''; if (sM.length === 0) { const o = document.createElement('option'); o.value = ''; o.textContent = 'Nenhum dado'; chartMonthSelector.appendChild(o); chartMonthSelector.disabled = true; return; } chartMonthSelector.disabled = false; const cMSValue = getMonthYearString(new Date()); const cMSFormatted = formatMonthYearExtensive(cMSValue); let hCM = false; let didSelectOld = false; sM.forEach(mSValue => { const o = document.createElement('option'); const mSFormatted = formatMonthYearExtensive(mSValue); o.value = mSValue; o.textContent = mSFormatted; if (mSValue === oldSelectedValue) { o.selected = true; didSelectOld = true; } else if (mSValue === cMSValue && !didSelectOld) { o.selected = true; } if (mSValue === cMSValue) { hCM = true; } chartMonthSelector.appendChild(o); }); if (!hCM) { const o = document.createElement('option'); o.value = cMSValue; o.textContent = `${cMSFormatted} (Mês Atual)`; chartMonthSelector.insertBefore(o, chartMonthSelector.firstChild); if (!didSelectOld) o.selected = true; } if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
 
-            // --- MODIFICADO: renderCharts para PIE Chart ---
+            // --- MODIFICADO: renderCharts para PIE Chart e Total Acima ---
             function renderCharts(selectedMonthYearValue) {
                 if (monthlyHoursChartInstance) {
-                    monthlyHoursChartInstance.destroy(); // Destruir instância anterior
+                    monthlyHoursChartInstance.destroy();
                     monthlyHoursChartInstance = null;
                 }
 
@@ -380,67 +385,71 @@
                     const monthIndex = selectedMonth - 1;
                     const year = selectedYear;
 
-                    // Filtrar entradas para o mês/ano selecionado
                     const entriesSelectedMonth = recordedEntries.filter(e => {
                         const d = new Date(e.date + 'T00:00:00');
                         return d.getMonth() === monthIndex && d.getFullYear() === year;
                     });
 
+                    // Limpa o gráfico e total se não houver dados ANTES de tentar calcular
                     if (entriesSelectedMonth.length === 0) {
                          clearChartWithMessage(`Nenhum registro encontrado em ${formatMonthYearExtensive(selectedMonthYearValue)}.`);
                         return;
                     }
 
-                    // Agregação de horas por tag
+                    // Calcular total e agregar por tag
                     let totalHoursMonth = 0;
                     const hoursByTag = {};
                     entriesSelectedMonth.forEach(entry => {
-                        const tag = entry.tag || 'Sem Tag'; // Tag padrão se não existir
+                        const tag = entry.tag || 'Sem Tag';
                         const hours = entry.hours || 0;
                         totalHoursMonth += hours;
                         hoursByTag[tag] = (hoursByTag[tag] || 0) + hours;
                     });
 
-                    // Preparar dados para Chart.js
+                    // <<< ATUALIZA O DISPLAY DO TOTAL DE HORAS >>>
+                    if (chartTotalHoursDisplay) {
+                        chartTotalHoursDisplay.innerHTML = `Total no Mês: <strong>${formatHoursExtensive(totalHoursMonth)}</strong>`;
+                    } else {
+                         console.warn("Elemento chart-total-hours-display não encontrado.");
+                    }
+                    // <<< FIM ATUALIZAÇÃO TOTAL HORAS >>>
+
+
                     const chartLabels = Object.keys(hoursByTag);
                     const chartDataValues = Object.values(hoursByTag);
-
-                    // Definir cores ciclicamente
                     const backgroundColors = chartLabels.map((_, index) => chartColors[index % chartColors.length]);
 
-                    // Criar o gráfico de Pizza
                     monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, {
-                        type: 'pie', // <<< Tipo de Gráfico
+                        type: 'pie',
                         data: {
                             labels: chartLabels,
                             datasets: [{
-                                label: 'Horas por Modalidade',
+                                label: 'Horas por Modalidade', // Usado internamente, a legenda mostra labels
                                 data: chartDataValues,
                                 backgroundColor: backgroundColors,
-                                borderColor: computedStyles.getPropertyValue('--card-bg').trim() || '#1c1c1e', // Cor da borda das fatias
-                                borderWidth: 1.5 // Um pouco mais visível
+                                borderColor: computedStyles.getPropertyValue('--card-bg').trim() || '#1c1c1e',
+                                borderWidth: 1.5
                             }]
                         },
                         options: {
                             responsive: true,
-                            maintainAspectRatio: false, // Permite que o gráfico se ajuste melhor no container
+                            maintainAspectRatio: false,
                             plugins: {
-                                title: {
+                                title: { // Título acima da área do gráfico, abaixo do total que adicionamos
                                     display: true,
-                                    text: `Distribuição de Horas - ${formatMonthYearExtensive(selectedMonthYearValue)}`,
-                                    color: textColor,
-                                    font: { size: 14, weight: 'normal' },
-                                    padding: { bottom: 20 } // Aumentar padding inferior
+                                    text: `Distribuição Percentual`, // Título mais simples
+                                    color: textMutedColor, // Menos destaque que o total
+                                    font: { size: 12, weight: 'normal' },
+                                    padding: { bottom: 15 } // Espaço antes da legenda
                                 },
                                 tooltip: {
                                     backgroundColor: tooltipBgColor,
                                     titleColor: textColor,
                                     bodyColor: textColor,
-                                    displayColors: true, // Mostra a 'caixinha' de cor
+                                    displayColors: true,
                                     padding: 10,
                                     cornerRadius: 6,
                                     callbacks: {
-                                        // Tooltip mostra: Tag: X horas (Y%)
                                         label: function(context) {
                                             const label = context.label || '';
                                             const value = context.parsed || 0;
@@ -450,32 +459,37 @@
                                     }
                                 },
                                 legend: {
-                                    position: 'bottom', // Legenda embaixo
-                                    align: 'center',    // Alinhar ao centro
+                                    position: 'bottom',
+                                    align: 'center',
                                     labels: {
                                         color: textMutedColor,
                                         boxWidth: 12,
-                                        padding: 15 // Espaçamento entre itens da legenda
+                                        padding: 15
                                     }
                                 }
-                                // ANNOTATIONS e SCALES são removidos pois não se aplicam a Pie Chart
                             }
                         }
                     });
 
                 } catch (e) {
                     console.error("Chart render error:", e);
-                    clearChartWithMessage("Erro ao renderizar gráfico.");
+                    clearChartWithMessage("Erro ao renderizar gráfico."); // Também limpa o total
                 }
             }
             // --- FIM Modificação renderCharts ---
 
-            // Função auxiliar para limpar o canvas do gráfico e mostrar uma mensagem
+            // --- MODIFICADO: clearChartWithMessage para limpar o total também ---
             function clearChartWithMessage(message) {
                 if (monthlyHoursChartInstance) {
                     monthlyHoursChartInstance.destroy();
                     monthlyHoursChartInstance = null;
                 }
+
+                // Limpa o display do total de horas
+                if (chartTotalHoursDisplay) {
+                    chartTotalHoursDisplay.textContent = ''; // Limpa o texto
+                }
+
                 const ctx = monthlyHoursChartCtx;
                 if (ctx) {
                      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -490,26 +504,23 @@
                     console.error("Canvas context not found for clearing message.")
                 }
             }
+            // --- FIM Modificação clearChartWithMessage ---
 
-
-            // --- Função de Atualização Geral (Modificada para usar PieChart) ---
+            // Função de Atualização Geral (sem alterações na lógica principal)
             function updateAllDisplays() {
                 updateDashboard();
                 updateStatistics();
-                populateMonthSelector(); // Preenche ou atualiza o seletor de mês
+                populateMonthSelector();
                 renderHistory();
                 renderPlanning();
 
-                // Atualiza o gráfico com base no mês selecionado
                 const selectedMonthValue = chartMonthSelector.value;
                  if (!chartMonthSelector.disabled && selectedMonthValue) {
-                    renderCharts(selectedMonthValue); // Chama a função de renderização modificada
+                    renderCharts(selectedMonthValue);
                  } else if (!chartMonthSelector.disabled && chartMonthSelector.options.length > 0) {
-                    // Se nenhum valor estiver selecionado mas há opções, seleciona a primeira e renderiza
                     chartMonthSelector.options[0].selected = true;
                     renderCharts(chartMonthSelector.options[0].value);
                  } else {
-                     // Caso não haja dados ou o seletor esteja desabilitado
                      clearChartWithMessage(recordedEntries.length === 0 ? "Comece registrando suas horas." : "Nenhum dado para exibir.");
                  }
             }
@@ -519,9 +530,9 @@
 
             // --- Função de Inicialização (Init) ---
             function init() {
-                console.log("Initializing PWT (Pie Chart version)...");
+                console.log("Initializing PWT (Pie Chart + Total Display version)...");
 
-                // Captura de Elementos DOM (Mantido)
+                // Captura de Elementos DOM (Adicionado chartTotalHoursDisplay)
                 appElement = document.getElementById('app');
                 dashboardWeekHours = document.getElementById('dashboard-week-hours');
                 dashboardMonthPercentage = document.getElementById('dashboard-month-percentage');
@@ -558,7 +569,7 @@
                 statsAvgHoursDay = document.getElementById('stats-avg-hours-day');
                 statsMonthDaysActive = document.getElementById('stats-month-days-active');
                 chartMonthSelector = document.getElementById('chart-month-selector');
-                monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d'); // Adicionado '?' para segurança
+                monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d');
                 historyList = document.getElementById('history-list');
                 historySearchInput = document.getElementById('history-search-input');
                 historyListPlaceholder = historyList.querySelector('.placeholder');
@@ -568,14 +579,12 @@
                 dialogMessage = document.getElementById('dialog-message');
                 dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
                 dialogCancelBtn = document.getElementById('dialog-cancel-btn');
+                chartTotalHoursDisplay = document.getElementById('chart-total-hours-display'); // <<< Captura Novo Elemento
 
-                // Obtenção de Estilos Computados e Cores
                 computedStyles = getComputedStyle(document.body);
                 textColor = computedStyles.getPropertyValue('--text-color').trim();
                 textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim();
-                // gridColor removido (não usado no Pie Chart)
                 tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim();
-                // Define as cores do gráfico a partir das variáveis CSS
                 chartColors = [
                      computedStyles.getPropertyValue('--chart-color-1').trim() || '#0A84FF',
                      computedStyles.getPropertyValue('--chart-color-2').trim() || '#30D158',
@@ -589,27 +598,22 @@
 
                 if(!monthlyHoursChartCtx) {
                      console.error("ERRO CRÍTICO: Canvas do gráfico não encontrado ou contexto 2D falhou.");
-                     // Talvez desabilitar a seção de gráficos se o canvas não for encontrado
                      const chartsCardContent = document.querySelector('#charts-card .card-content');
-                     if(chartsCardContent) {
-                         chartsCardContent.innerHTML = "<p style='text-align: center; color: var(--danger-color);'>Erro ao carregar o gráfico.</p>";
-                     }
+                     if(chartsCardContent) { chartsCardContent.innerHTML = "<p style='text-align: center; color: var(--danger-color);'>Erro ao carregar o gráfico.</p>"; }
+                 }
+                 if (!chartTotalHoursDisplay) {
+                     console.warn("Elemento 'chart-total-hours-display' não encontrado no DOM.");
                  }
 
-                // Calcula a circunferência do anel de progresso (Mantido)
-                if(progressRingFg && progressRingFg.r?.baseVal?.value) { // Check aninhado
+                if(progressRingFg && progressRingFg.r?.baseVal?.value) {
                    progressRingRadius = progressRingFg.r.baseVal.value;
                    progressRingCircumference = 2 * Math.PI * progressRingRadius;
                 } else { console.warn("Elemento progress-ring-fg ou seu raio não encontrado no init."); }
 
-                // Carrega Dados e Define Meta Inicial (Mantido)
                 loadData();
                 monthlyGoalInput.value = settings.monthlyGoal;
 
-                // Remove registro de ChartAnnotation (não necessário)
-                // if (window.ChartAnnotation) { Chart.register(ChartAnnotation); }
-
-                // --- Adição de Event Listeners (Mantidos, exceto os específicos do Chart Annotation) ---
+                // Adição de Event Listeners (sem alterações)
                 appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header'); if (header) { const card = header.closest('.card'); if (card) { toggleCard(card); } } });
                 document.querySelectorAll('.card-header').forEach(header => { header.setAttribute('role','button');header.setAttribute('tabindex','0');header.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleCard(header.closest('.card'));}});});
                 changeDateBtn.addEventListener('click', () => setDateInputVisibility(true));
@@ -624,33 +628,31 @@
                 clearPlanFormBtn.addEventListener('click', clearPlanForm);
                 saveGoalBtn.addEventListener('click', handleGoalSave);
                 monthlyGoalInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); monthlyGoalInput.blur(); } });
-                chartMonthSelector.addEventListener('change', updateAllDisplays); // Mantido, aciona a atualização
+                chartMonthSelector.addEventListener('change', updateAllDisplays);
                 clearAllDataBtn.addEventListener('click', handleClearAllData);
                 dialogConfirmBtn.addEventListener('click', () => { try { if (typeof currentConfirmCallback === 'function') { currentConfirmCallback(); } } catch (e) { console.error("Error in confirmation callback:", e); } finally { hideConfirmationDialog(); } });
                 dialogCancelBtn.addEventListener('click', hideConfirmationDialog);
                 confirmationDialog.addEventListener('click', (e) => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
                 window.addEventListener('beforeinstallprompt', (e) => { console.log('`beforeinstallprompt` event fired.'); e.preventDefault(); deferredInstallPrompt = e; });
 
-                // Estado Inicial da Interface (Mantido)
+                // Estado Inicial da Interface (sem alterações)
                 recordDateInput.value = getCurrentDateString();
                 setDateInputVisibility(false);
                 clearRecordForm();
                 clearPlanForm();
                 document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) { toggleCard(card); } else { const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; } });
 
-                // Atualiza toda a UI inicialmente (incluindo o gráfico)
+                // Atualiza toda a UI inicialmente
                 updateAllDisplays();
                 registerServiceWorker();
 
-                // Solicita a meta se ainda não definida (Mantido)
                 if (!settings.goalHasBeenSet) {
                     setTimeout(promptForMonthlyGoal, 500);
                 }
 
-                 // Atualiza o dashboard (planos overdue) a cada minuto
                  setInterval(updateDashboardPlannedDates, 60 * 1000);
 
-                console.log("Init complete (Pie Chart version).");
+                console.log("Init complete (Pie Chart + Total Display version).");
             }
 
             // Inicia a aplicação
