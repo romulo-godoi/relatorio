@@ -68,7 +68,8 @@
         .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
         .card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
         .card.expanded .card-header::after { opacity: 0; }
-        .card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
+        /* Removed hover effect to prevent visual bug during expansion */
+        /* .card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); } */
         .card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; }
         .toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
         .card.expanded .toggle-icon { transform: rotate(180deg); }
@@ -139,7 +140,28 @@
                 margin-bottom: 30px;
                 padding-left: calc(var(--card-padding) * 1.5);
                 padding-right: calc(var(--card-padding) * 1.5);
+                display: grid; /* Use grid for better control */
+                grid-template-columns: 2fr 1fr; /* Text area takes 2/3, progress takes 1/3 */
+                align-items: start; /* Align items to the top */
                 gap: 25px;
+                text-align: left; /* Reset text-align for the grid container */
+            }
+            .dashboard-item {
+                 align-items: flex-start; /* Align content inside text item to start */
+                 text-align: left;
+                 flex: initial; /* Override flex: 1 */
+            }
+            .dashboard-item--progress {
+                 width: 110px; /* Slightly larger ring container */
+                 height: 110px;
+                 margin-top: 0; /* Reset margin-top */
+                 align-self: center; /* Vertically center the progress item itself in grid row */
+                 justify-self: center; /* Horizontally center the progress item itself */
+                 flex-shrink: initial;
+                 position: relative; /* Needed for absolute positioning inside */
+                 display: flex; /* Ensure flex works inside grid item */
+                 align-items: center;
+                 justify-content: center;
             }
              #app {
                 max-width: 1200px;
@@ -186,7 +208,7 @@
 </head>
 <body>
     <div id="dashboard-box">
-         <div class="dashboard-item" style="align-items: flex-start; text-align: left;">
+         <div class="dashboard-item"> {/* Removed inline styles, handled by CSS */}
              <span class="dashboard-label" data-translate-key="dashboardWeekHoursLabel">Horas nesta semana</span>
              <span id="dashboard-week-hours" class="dashboard-value">0 hours</span>
               <div id="dashboard-summary" style="margin-top: 12px;">
@@ -276,9 +298,9 @@
                     </div>
                 </form>
                 <div id="planning-list-container" class="mt-2">
-                    <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);" data-translate-key="planningListTitle">Próximos Planos (Interno):</h3>
+                    <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px;" data-translate-key="planningListTitle">Próximos Planos (Interno):</h3>
                     <ul id="planning-list" class="data-list">
-                        <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="planningListPlaceholder">Nenhum planejamento futuro.</li>
+                        <li class="placeholder hidden" data-translate-key="planningListPlaceholder">Nenhum planejamento futuro.</li>
                     </ul>
                 </div>
              </div>
@@ -345,7 +367,7 @@
                  </div>
                  <span id="showing-results-label"></span>
                  <ul id="history-list" class="data-list">
-                    <li class="placeholder hidden" style="padding-left: var(--card-padding);" data-translate-key="historyNoRecordsYet">Nenhum registro encontrado.</li>
+                    <li class="placeholder hidden" data-translate-key="historyNoRecordsYet">Nenhum registro encontrado.</li>
                  </ul>
             </div>
         </div>
@@ -748,7 +770,13 @@
              }
 
              function updateProgressRing(currentValue, maxValue) {
-                 const percentage = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0; const offset = progressRingCircumference * (1 - percentage / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset);
+                if(!progressRingFg) return; // Add guard clause
+                const percentage = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0;
+                // Ensure circumference is calculated or has a default
+                const currentCircumference = progressRingCircumference > 0 ? progressRingCircumference : 100; // Default to 100 if calculation failed
+                const offset = currentCircumference * (1 - percentage / 100);
+                progressRingFg.style.strokeDasharray = `${currentCircumference} ${currentCircumference}`;
+                progressRingFg.style.strokeDashoffset = Math.max(0, offset);
              }
 
              function updateDashboardPlannedDates() {
@@ -837,7 +865,17 @@
                  i18n.detectLanguage();
                  await i18n.loadTranslations();
                  appElement=document.getElementById('app');dashboardWeekHours=document.getElementById('dashboard-week-hours');dashboardMonthPercentage=document.getElementById('dashboard-month-percentage');dashboardMonthTotal=document.getElementById('dashboard-month-total');dashboardForecast=document.getElementById('dashboard-forecast');dashboardPlannedDatesContainer=document.getElementById('dashboard-planned-dates');dashboardPlanList=document.getElementById('dashboard-plan-list');progressRingFg=document.getElementById('progress-ring-fg');recordCard=document.getElementById('record-card');recordForm=document.getElementById('record-form');recordIdInput=document.getElementById('record-id');recordDateInput=document.getElementById('record-date');dateLabel=document.getElementById('date-label');displayDate=document.getElementById('display-date');changeDateBtn=document.getElementById('change-date-btn');recordHoursInput=document.getElementById('record-hours');recordTagSelect=document.getElementById('record-tag');recordNotesInput=document.getElementById('record-notes');saveRecordBtn=document.getElementById('save-record-btn');planCard=document.getElementById('plan-card');planForm=document.getElementById('plan-form');planIdInput=document.getElementById('plan-id');planDateInput=document.getElementById('plan-date');planHoursInput=document.getElementById('plan-hours');savePlanBtn=document.getElementById('save-plan-btn');clearPlanFormBtn=document.getElementById('clear-plan-form-btn');planningList=document.getElementById('planning-list');planningListPlaceholder=planningList.querySelector('.placeholder');monthlyGoalInput=document.getElementById('monthly-goal');saveGoalBtn=document.getElementById('save-goal-btn');statsMonthHours=document.getElementById('stats-month-hours');statsMonthGoalProgress=document.getElementById('stats-month-goal-progress');statsMonthProgressBar=document.getElementById('stats-month-progress-bar');statsAvgHoursDay=document.getElementById('stats-avg-hours-day');statsMonthDaysActive=document.getElementById('stats-month-days-active');chartMonthSelector=document.getElementById('chart-month-selector');monthlyHoursChartCtx=document.getElementById('monthlyHoursChart').getContext('2d');historyList=document.getElementById('history-list');historySearchInput=document.getElementById('history-search-input');historyListPlaceholder=historyList.querySelector('.placeholder');showingResultsLabel=document.getElementById('showing-results-label');clearAllDataBtn=document.getElementById('clear-all-data-btn');confirmationDialog=document.getElementById('confirmation-dialog');dialogMessage=document.getElementById('dialog-message');dialogConfirmBtn=document.getElementById('dialog-confirm-btn');dialogCancelBtn=document.getElementById('dialog-cancel-btn'); computedStyles = getComputedStyle(document.body); textColor = computedStyles.getPropertyValue('--text-color').trim(); textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim(); gridColor = computedStyles.getPropertyValue('--border-color').trim(); tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim(); primaryColor = computedStyles.getPropertyValue('--primary-color').trim(); avgLineColor1 = computedStyles.getPropertyValue('--avg-line-color-1').trim(); avgLineColor2 = computedStyles.getPropertyValue('--avg-line-color-2').trim(); avgLineColor3 = computedStyles.getPropertyValue('--avg-line-color-3').trim();
-                 if (progressRingFg && progressRingFg.r && progressRingFg.r.baseVal) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; }
+                 // Calculate progress ring circumference only if element exists and has radius
+                if (progressRingFg && progressRingFg.r && progressRingFg.r.baseVal) {
+                    progressRingRadius = progressRingFg.r.baseVal.value;
+                    if (progressRingRadius > 0) {
+                        progressRingCircumference = 2 * Math.PI * progressRingRadius;
+                    } else {
+                         progressRingCircumference = 100; // Fallback if radius is 0
+                    }
+                } else {
+                     progressRingCircumference = 100; // Fallback if element/radius not found
+                }
                  i18n.applyTranslationsToDOM();
                  loadData();
                  const oldDefaultTag = "Casa em casa"; const currentDefaultTag = getDefaultTag(); if (oldDefaultTag !== currentDefaultTag) { let tagsUpdated = false; recordedEntries.forEach(entry => { if (entry.tag === oldDefaultTag || !entry.tag) { entry.tag = currentDefaultTag; tagsUpdated = true; } }); if (tagsUpdated) { saveData(); } } monthlyGoalInput.value = settings.monthlyGoal;
