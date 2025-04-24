@@ -24,7 +24,6 @@
     --outer-padding: 15px;       /* Preenchimento externo base (mobile) */
     --transition-speed: 0.3s;
     --transition-speed-fast: 0.1s;
-    /* A transição do content só será relevante em mobile agora */
     --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
 }
 
@@ -45,12 +44,9 @@ h1 { display: none; }
     padding: 15px var(--card-padding); margin-bottom: 20px; display: flex;
     flex-wrap: wrap; justify-content: space-around; align-items: flex-start;
     text-align: center; gap: 15px;
-    border: 1px solid var(--border-color); /* Adiciona borda sutil sempre */
+    border: 1px solid var(--border-color);
 }
-.dashboard-item {
-    position: relative; display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-start; flex: 1; min-width: 150px;
-}
+.dashboard-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; min-width: 150px; }
 .dashboard-item--progress { width: 90px; height: 90px; flex-shrink: 0; flex-grow: 0; margin-top: 5px; }
 .progress-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
 .progress-ring__circle { fill: none; stroke-width: 5; transition: stroke-dashoffset 0.5s ease-out; }
@@ -73,44 +69,18 @@ h1 { display: none; }
 #dashboard-plan-list .plan-warning { font-style: italic; }
 
 /* --- App Container & Cards --- */
+/* Estilo mobile: display padrão de block/flex-column implícito */
 #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-.card {
-    background-color: var(--card-bg); border-radius: var(--border-radius);
-    overflow: hidden; transition: box-shadow var(--transition-speed) ease;
-    /* Borda adicionada via media query para desktop */
-}
-.card-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px var(--card-padding);
-    cursor: pointer; /* Cursor pointer mantido para mobile */
-    transition: background-color var(--transition-speed-fast) ease; position: relative;
-    /* Borda inferior via ::after apenas para mobile (quando fechado) */
-}
-.card-header::after { /* Linha separadora mobile */
-    content: ''; position: absolute; bottom: 0;
-    left: var(--card-padding); right: var(--card-padding); height: 1px;
-    background-color: var(--border-color); opacity: 1;
-    transition: opacity var(--transition-speed-fast) ease;
-}
+.card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
+.card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
+.card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
 .card.expanded .card-header::after { opacity: 0; }
 .card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
 .card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; }
-.toggle-icon { /* Visível apenas em mobile */
-    font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease;
-    color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px;
-    display: inline-flex; align-items: center; justify-content: center; pointer-events: none;
-}
+.toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
 .card.expanded .toggle-icon { transform: rotate(180deg); }
-.card-content { /* Escondido por padrão (mobile) */
-    padding: 0 var(--card-padding); max-height: 0; opacity: 0;
-    overflow: hidden; border-top: 1px solid var(--border-color);
-    transition: var(--content-transition); margin-top: -1px;
-}
-.card.expanded .card-content { /* Estilo quando expandido (mobile) */
-    padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px);
-    max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible;
-}
-/* Estilos Desktop (>= 768px) sobrescreverão max-height, opacity etc para card-content */
+.card-content { padding: 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
+.card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
 
 /* --- Formulários --- */
 .form-group { margin-bottom: 16px; }
@@ -201,15 +171,20 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
         font-size: 17px;
     }
 
-    /* Container Principal */
+    /* -------- Layout Principal Desktop: Grid -------- */
     #app {
-        max-width: 900px;
-        gap: 20px; /* Aumenta espaço entre cards */
+        display: grid; /* <<-- MUDANÇA PRINCIPAL */
+        /* Cria colunas que se ajustam. Mínimo 350px, máximo 1fr (distribui igual) */
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px; /* Espaçamento entre os cards na grade */
+        max-width: 1200px; /* Aumenta a largura máxima para acomodar a grade */
+        align-items: start; /* Alinha os cards ao topo de suas linhas de grade */
     }
+     /* O dashboard continua full-width acima do #app */
 
-    /* Dashboard */
+    /* -------- Estilos Dashboard Desktop -------- */
     #dashboard-box {
-        padding: 20px var(--card-padding); align-items: center; gap: 30px; flex-wrap: nowrap;
+        padding: 20px var(--card-padding); align-items: center; gap: 30px; flex-wrap: nowrap; margin-bottom: var(--outer-padding); /* Usa o mesmo espaçamento do body */
     }
     #dashboard-box .dashboard-item:first-child { flex: 2.5; min-width: 280px; text-align: left; align-items: flex-start; }
     .dashboard-item--progress { width: 110px; height: 110px; flex: 1; min-width: 110px; margin-top: 0; }
@@ -220,73 +195,62 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
     #dashboard-summary { font-size: 0.9em; }
     #dashboard-plan-list { font-size: 0.85em; max-height: 70px; }
 
-    /* -------- CARD STYLING FOR DESKTOP -------- */
+    /* -------- Cards Sempre Abertos no Desktop -------- */
     .card {
-        border: 1px solid var(--border-color); /* Adiciona borda para separar visualmente */
-        box-shadow: 0 2px 6px var(--shadow-color); /* Sombra sutil */
-        overflow: hidden; /* Mantém conteúdo contido, cuidado com dropdowns */
+        border: 1px solid var(--border-color); box-shadow: 0 2px 6px var(--shadow-color);
+        overflow: visible; /* Permite sombras/tooltips */
+        display: flex; /* Usa flexbox para controlar a altura interna se necessário */
+        flex-direction: column; /* Empilha header e content */
+        height: fit-content; /* Ajusta altura ao conteúdo (bom para grid) */
     }
     .card-header {
-        cursor: default; /* Remove cursor pointer, não é mais clicável */
-        border-bottom: 1px solid var(--border-color); /* Adiciona linha abaixo do header sempre */
+        cursor: default; border-bottom: 1px solid var(--border-color);
     }
-    /* Remove hover e linha ::after que eram para estado fechado */
     .card:not(.expanded) .card-header:hover { background-color: transparent; }
     .card .card-header::after { display: none; }
-
-    /* Força conteúdo a ser visível e remove ícone toggle */
     .card .card-content {
-        max-height: none !important; /* Remove limite de altura */
-        opacity: 1 !important; /* Força visibilidade */
-        padding-top: var(--card-padding) !important; /* Aplica padding superior */
-        padding-bottom: calc(var(--card-padding) + 10px) !important; /* Padding inferior (ajustado) */
-        margin-top: 0 !important; /* Reseta margem */
-        border-top: none !important; /* Remove a borda superior, já tem no header */
-        overflow: visible !important; /* Permite overflow para tooltips/dropdowns */
-        transition: none !important; /* Remove transição */
+        max-height: none !important; opacity: 1 !important;
+        padding-top: var(--card-padding) !important;
+        padding-bottom: calc(var(--card-padding) + 10px) !important;
+        margin-top: 0 !important; border-top: none !important;
+        overflow: visible !important; transition: none !important;
+        flex-grow: 1; /* Permite que o content ocupe espaço vertical disponível */
     }
-    .card .toggle-icon {
-        display: none !important; /* Esconde o ícone ▲/▼ */
-    }
-     /* -------- FIM CARD STYLING FOR DESKTOP -------- */
+    .card .toggle-icon { display: none !important; }
+     /* -------- FIM Cards Sempre Abertos -------- */
 
-
-    /* Formulário de Registro: Layout Grid */
+    /* -------- Layout Interno dos Forms e Stats (Já adaptado antes) -------- */
     #record-form .time-tag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     #record-form .time-tag-grid .form-group { margin-bottom: 0; }
     #record-form .time-tag-grid + .form-group { margin-top: 18px; }
 
-    /* Formulário de Planejamento: Layout Grid */
     #plan-form .plan-inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: end; }
     #plan-form .plan-inputs-grid .form-group { margin-bottom: 0; }
     #plan-form .plan-inputs-grid + .text-center { margin-top: 25px; }
-    #plan-form .text-center button { width: auto; } /* Botões lado a lado */
+    #plan-form .text-center button { width: auto; }
 
-    /* Estatísticas */
     .stats-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 18px; }
     .stat-value { font-size: 2em; }
     .stat-label { font-size: 0.9em; }
-    /* Layout do grupo de meta */
-    #stats-card .card-content > .form-group { display: flex; align-items: center; gap: 12px; max-width: 450px; margin: 0 auto 30px auto !important; text-align: left !important; }
+    #stats-card .card-content > .form-group { display: flex; align-items: center; gap: 12px; max-width: 100%; margin: 0 0 30px 0 !important; text-align: left !important; } /* Meta field usa 100% agora */
     #stats-card .card-content > .form-group label { margin-bottom: 0; flex-shrink: 0; font-size: 0.95em; }
     #stats-card .card-content > .form-group input[type="number"] { flex-grow: 1; }
     #stats-card .card-content > .form-group button { margin-top: 0; flex-shrink: 0; width: auto !important; font-size: 0.95em !important; padding: 8px 18px !important; }
 
-    /* Gráfico */
+    /* -------- Gráfico Desktop -------- */
     .chart-container { height: 350px; }
 
-    /* Listas */
+    /* -------- Listas Desktop -------- */
     #history-controls { padding: 0; }
     .data-list { max-height: 550px; }
     .data-list li { padding: 18px var(--card-padding); flex-wrap: nowrap; align-items: center; }
     .entry-details { font-size: 1em; }
-    /* Notas mais discretas */
     .entry-details .notes-preview { display: inline; margin-left: 10px; margin-top: 0; max-height: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; opacity: 0.65; font-size: 0.85em; max-width: 250px; }
-    .data-list li:hover .entry-details .notes-preview { white-space: normal; overflow: visible; opacity: 0.9; max-width: none; background-color: var(--card-bg); /* Para ler sobre outros elementos */ padding: 2px 4px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); position: relative; z-index: 1; }
+    .data-list li:hover .entry-details .notes-preview { white-space: normal; overflow: visible; opacity: 0.9; max-width: none; background-color: var(--card-bg); padding: 2px 4px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); position: relative; z-index: 1; }
     .entry-actions, .plan-actions { white-space: nowrap; align-self: center; }
     .entry-actions button, .plan-actions button { margin-top: 0; font-size: 0.8em; padding: 5px 9px; }
 
-    /* Dialog */
+    /* -------- Dialog Desktop -------- */
     .dialog-content { width: 450px; padding: 30px; }
     .dialog-content p { font-size: 1.1em; }
     .dialog-actions button { font-size: 1em; padding: 12px; }
@@ -298,7 +262,11 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
 
     /* Ajustes Globais */
     :root { --card-padding: 25px; --outer-padding: 40px; }
-    #app { max-width: 1150px; /* Levemente mais largo */ gap: 25px; }
+    #app {
+        max-width: 1400px; /* Ainda mais largo */
+        gap: 25px; /* Mais espaço na grade */
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Cards um pouco maiores na base */
+    }
 
     /* Dashboard */
     #dashboard-box { gap: 40px; padding: 25px var(--card-padding); }
@@ -307,7 +275,7 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
     #dashboard-month-percentage { font-size: 2.2em; }
     .dashboard-item--progress .dashboard-label { font-size: 0.8em; }
 
-    /* Formulários */
+    /* Formulários (gaps) */
     #record-form .time-tag-grid, #plan-form .plan-inputs-grid { gap: 22px; }
     #record-form .time-tag-grid + .form-group { margin-top: 22px; }
     #plan-form .plan-inputs-grid + .text-center { margin-top: 30px; }
@@ -322,8 +290,4 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
 
     /* Dialog */
     .dialog-content { width: 500px; }
-
-    /* Opcional: Aumentar fontes */
-    /* body { font-size: 18px; } */
-    /* .card-header h2 { font-size: 1.2em; } */
 }
