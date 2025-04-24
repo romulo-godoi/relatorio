@@ -1,76 +1,76 @@
-# ⏳ Registro de Campo Pioneiro
+# ⏳ Registro de Campo Pioneiro (Pioneer Field Log) 🇧🇷 🇬🇧 🇪🇸 
 
-Uma aplicação web simples, moderna e eficiente para ajudar pioneiros a registrar e acompanhar suas horas de serviço de campo diretamente no navegador, sem necessidade de instalação.
+A simple, modern, and efficient web application to help pioneers log and track their field service hours directly in the browser, without the need for installation.
 
 ![image](https://github.com/user-attachments/assets/4af800c4-53ef-4a56-a651-43ccc294befb)
 
 
 ---
 
-## ✨ Funcionalidades Principais
+## ✨ Key Features
 
-*   **Registro Fácil de Atividades:** Adicione registros diários informando data (com seletor ou "Hoje" como padrão), tempo gasto, modalidade da atividade (Casa em casa, Carrinho, Cartas, etc.) e notas opcionais.
-*   **Formatação Inteligente de Tempo:** Digite o tempo como `HH:MM` (ex: `2:30`), `HHMM` (ex: `130` para 1h 30m) ou apenas minutos (ex: `45`). O campo insere os dois pontos `:` automaticamente enquanto você digita números (`130` vira `1:30`).
-*   **Planejamento Futuro:** Agende horas que você planeja fazer em datas futuras.
-*   **Dashboard Interativo:** Veja rapidamente um resumo das horas da semana atual, o total de horas no mês e o progresso em relação à sua meta mensal em um gráfico de rosca.
-*   **Previsão de Meta:** Calcule quantas horas ainda faltam para a meta e veja uma sugestão de ritmo diário para alcançá-la.
-*   **Definição de Meta Mensal:** Personalize sua meta de horas para o mês.
-*   **Estatísticas Mensais Detalhadas:** Visualize o total de horas, progresso percentual, média de horas por dia ativo e o número de dias com atividade no mês.
-*   **Gráfico Mensal Visual:** Acompanhe seu desempenho diário ao longo do mês em um gráfico de barras interativo. Inclui linhas de média (diária, semanal estimada, mensal no ano) para referência.
-*   **Seleção de Mês para Gráfico:** Visualize facilmente os gráficos de meses anteriores.
-*   **Histórico Completo e Pesquisável:** Todos os seus registros ficam salvos e podem ser pesquisados por data, horas, modalidade ou conteúdo das notas.
-*   **Edição e Exclusão:** Modifique ou remova registros e planejamentos facilmente.
-*   **Armazenamento 100% Local:** Seus dados ficam **salvos apenas no seu navegador** (usando *Local Storage*), garantindo privacidade total. Nenhum dado é enviado para servidores externos.
-*   **Design Responsivo:** Interface agradável e funcional em desktops, tablets e celulares.
-*   **Configurações:** Opção segura (com confirmação) para limpar todos os dados do navegador.
+*   **Easy Activity Logging:** Add daily records by specifying the date (with a selector or "Today" as the default), time spent, activity type (Door-to-door, Cart, Letters, etc.), and optional notes.
+*   **Smart Time Formatting:** Enter time as `HH:MM` (e.g., `2:30`), `HHMM` (e.g., `130` for 1h 30m), or just minutes (e.g., `45`). The field automatically inserts the colon `:` as you type numbers (`130` becomes `1:30`).
+*   **Future Planning:** Schedule hours you plan to work on future dates.
+*   **Interactive Dashboard:** Quickly view a summary of hours for the current week, total hours for the month, and progress towards your monthly goal in a donut chart.
+*   **Goal Forecasting:** Calculate how many hours are left to reach your goal and see a suggested daily pace to achieve it.
+*   **Monthly Goal Setting:** Customize your hourly goal for the month.
+*   **Detailed Monthly Statistics:** View total hours, percentage progress, average hours per active day, and the number of active days in the month.
+*   **Visual Monthly Chart:** Track your daily performance throughout the month in an interactive bar chart. Includes average lines (daily, estimated weekly, monthly for the year) for reference.
+*   **Month Selection for Chart:** Easily view charts for previous months.
+*   **Complete and Searchable History:** All your records are saved and can be searched by date, hours, activity type, or note content.
+*   **Editing and Deletion:** Easily modify or remove records and plans.
+*   **100% Local Storage:** Your data is **saved only in your browser** (using *Local Storage*), ensuring total privacy. No data is sent to external servers.
+*   **Responsive Design:** A pleasant and functional interface on desktops, tablets, and mobile devices.
+*   **Settings:** A secure option (with confirmation) to clear all browser data.
 
 ---
 
-## 🚀 Como Usar
+## 🚀 How To Use
 
 https://romulo-godoi.github.io/relatorio/
 
 ---
 
-## 💾 Armazenamento de Dados
+## 💾 Data Storage
 
-**Importante:** Todos os dados que você registra (horas, notas, planos, meta) são salvos utilizando o **Local Storage** do seu navegador.
+**Important:** All the data you log (hours, notes, plans, goals) is saved using your browser's **Local Storage**.
 
-*   ✅ **Privacidade:** Os dados ficam apenas na sua máquina, no navegador que você usou.
-*   ⚠️ **Atenção:**
-    *   Se você **limpar os dados de navegação** (cache, cookies, dados de site) do seu navegador, **todos os registros serão PERDIDOS**.
-    *   Os dados **não são sincronizados** entre diferentes navegadores ou diferentes dispositivos. Se usar no Chrome no PC e depois no Safari no celular, serão dois conjuntos de dados separados.
-    *   No futuro teremos uma versão que sincronizará os dados.
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-*   **HTML5:** Estrutura da página.
-*   **CSS3:** Estilização (incluindo Variáveis CSS, Flexbox, Grid para layout responsivo).
-*   **JavaScript (ES6+):** Lógica da aplicação, manipulação do DOM, gerenciamento de dados.
-*   **Chart.js (v4):** Biblioteca para criação dos gráficos interativos.
-*   **Chart.js Annotation Plugin:** Plugin para adicionar as linhas de média ao gráfico.
-*   **Local Storage:** API do navegador para armazenamento persistente de dados no lado do cliente.
+*   ✅ **Privacy:** The data remains only on your machine, in the browser you used.
+*   ⚠️ **Attention:**
+    *   If you **clear your browsing data** (cache, cookies, site data) from your browser, **all records will be LOST**.
+    *   The data **is not synchronized** between different browsers or devices. If you use it on Chrome on your PC and then on Safari on your phone, there will be two separate data sets.
+    *   In the future, we will have a version that synchronizes the data.
 
 ---
 
-## 🤝 Contribuindo
+## 🛠️ Technologies Used
 
-Contribuições são bem-vindas! Se você encontrar algum bug, tiver sugestões de melhorias ou quiser adicionar novas funcionalidades:
-
-1.  Faça um *Fork* do repositório.
-2.  Crie uma nova *Branch* (`git checkout -b feature/NovaFuncionalidade` ou `bugfix/CorrigeAlgo`).
-3.  Faça suas alterações e *Commit* (`git commit -m 'Adiciona NovaFuncionalidade'`).
-4.  Faça o *Push* para a *Branch* (`git push origin feature/NovaFuncionalidade`).
-5.  Abra um *Pull Request*.
-
----
-
-## 📄 Licença
-
-Distribuído sob a Apache License 2.0. Veja o link para mais informações: [https://www.apache.org/licenses/LICENSE-2.0)
+*   **HTML5:** Page structure.
+*   **CSS3:** Styling (including CSS Variables, Flexbox, Grid for responsive layout).
+*   **JavaScript (ES6+):** Application logic, DOM manipulation, data management.
+*   **Chart.js (v4):** Library for creating interactive charts.
+*   **Chart.js Annotation Plugin:** Plugin for adding average lines to the chart.
+*   **Local Storage:** Browser API for persistent client-side data storage.
 
 ---
 
-Esperamos que esta ferramenta seja útil em seu serviço! 😊
+## 🤝 Contributing
+
+Contributions are welcome! If you find any bugs, have suggestions for improvements, or want to add new features:
+
+1.  Fork the repository.
+2.  Create a new branch (`git checkout -b feature/NewFeature` or `bugfix/FixSomething`).
+3.  Make your changes and commit (`git commit -m 'Adds NewFeature'`).
+4.  Push to the branch (`git push origin feature/NewFeature`).
+5.  Open a pull request.
+
+---
+
+## 📄 License
+
+Distributed under the Apache License 2.0. See the link for more information: [https://www.apache.org/licenses/LICENSE-2.0)
+
+---
+
+We hope this tool is useful in your service! 😊
