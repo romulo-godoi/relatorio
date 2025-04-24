@@ -40,7 +40,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { height: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
         body { font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color); line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px; }
-        #dashboard-box { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 15px var(--card-padding); margin-bottom: 20px; display: flex; justify-content: space-around; align-items: flex-start; text-align: center; gap: 15px; }
+        #dashboard-box { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 15px var(--card-padding); margin-bottom: 20px; display: flex; justify-content: space-around; align-items: flex-start; text-align: center; gap: 15px; max-width: 700px; margin-left: auto; margin-right: auto; }
         .dashboard-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; }
         .dashboard-item--progress { width: 90px; height: 90px; flex-shrink: 0; margin-top: 5px; }
         .progress-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -57,11 +57,11 @@
         #dashboard-summary strong { color: var(--text-color); font-weight: 500; }
         #dashboard-summary span { display: block; margin-bottom: 3px;}
         #dashboard-planned-dates .dashboard-label { margin-bottom: 8px; margin-top: 15px; }
-         #dashboard-plan-list { list-style: none; padding: 0; margin: 0; text-align: left; font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow: hidden; }
-         #dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-         #dashboard-plan-list li strong { color: var(--text-color); }
-         #dashboard-plan-list .plan-warning { font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic; }
-         .plan-past-date-indicator { font-size: 0.9em; opacity: 0.7; margin-left: 5px;}
+        #dashboard-plan-list { list-style: none; padding: 0; margin: 0; text-align: left; font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow: hidden; }
+        #dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #dashboard-plan-list li strong { color: var(--text-color); }
+        #dashboard-plan-list .plan-warning { font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic; }
+        .plan-past-date-indicator { font-size: 0.9em; opacity: 0.7; margin-left: 5px;}
         #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
         h1 { display: none; }
         .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
@@ -94,8 +94,7 @@
         button.success { background-color: var(--success-color); color: var(--text-color); } button.success:hover { filter: brightness(1.15); } button.success:active { transform: scale(0.95); filter: brightness(0.8); }
         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.15); } button.danger:active { background-color: #E0352D; transform: scale(0.96); filter: brightness(0.85); }
         #record-form .text-center button, #plan-form .text-center button { width: auto; margin-right: 8px; }
-         #record-form .text-center button:last-child { margin-right: 0; }
-         @media (min-width: 600px) { #plan-form .text-center button { } }
+        #record-form .text-center button:last-child { margin-right: 0; }
         .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
         .stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
@@ -129,6 +128,60 @@
         .hidden { display: none !important; }
         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         .text-center { text-align: center; } .mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
+
+        @media (min-width: 768px) {
+             body {
+                padding: 25px;
+                --outer-padding: 25px;
+            }
+            #dashboard-box {
+                max-width: 1200px;
+                margin-bottom: 30px;
+                padding-left: calc(var(--card-padding) * 1.5);
+                padding-right: calc(var(--card-padding) * 1.5);
+                gap: 25px;
+            }
+             #app {
+                max-width: 1200px;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+                gap: 20px;
+             }
+            .card-content {
+                padding-left: calc(var(--card-padding) * 1.2);
+                padding-right: calc(var(--card-padding) * 1.2);
+            }
+            .card.expanded .card-content {
+                padding-top: calc(var(--card-padding) * 1.2);
+                 padding-bottom: calc(var(--card-padding) * 1.2 + 5px);
+                 max-height: 2000px;
+            }
+             .chart-container {
+                 height: 350px;
+                 margin-top: 30px;
+             }
+            .data-list {
+                 max-height: 500px;
+            }
+             #history-controls {
+                 padding: 0 calc(var(--card-padding) * 1.2);
+             }
+             #showing-results-label {
+                 padding: 0 calc(var(--card-padding) * 1.2) 5px calc(var(--card-padding) * 1.2) ;
+             }
+             .data-list li {
+                 padding: 16px calc(var(--card-padding) * 1.2);
+             }
+             #planning-list-container h3 {
+                 padding-left: calc(var(--card-padding) * 1.2);
+             }
+             #planning-list .placeholder {
+                 padding-left: calc(var(--card-padding) * 1.2);
+             }
+              #history-list .placeholder {
+                  padding-left: calc(var(--card-padding) * 1.2);
+              }
+        }
     </style>
 </head>
 <body>
@@ -326,7 +379,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // ----- Configurações de Internacionalização (i18n) -----
             const i18n = {
                 translations: {},
                 supportedLanguages: ['pt-BR', 'en'],
@@ -351,7 +403,6 @@
                     } else {
                         this.currentLanguage = this.defaultLanguage;
                     }
-                    console.log(`Browser language: ${fullBrowserLang}, Using language: ${this.currentLanguage}`);
                     document.documentElement.lang = this.currentLanguage;
                 },
 
@@ -362,7 +413,6 @@
                             throw new Error(`HTTP error! status: ${response.status}, ao buscar ${this.translationsUrl}`);
                         }
                         this.translations = await response.json();
-                        console.log('Translations loaded successfully.');
                         this.translations[this.defaultLanguage] = this.translations[this.defaultLanguage] || {};
                         this.translations[this.currentLanguage] = this.translations[this.currentLanguage] || this.translations[this.defaultLanguage];
                     } catch (error) {
@@ -389,8 +439,7 @@
                            translation = translation.replace(regex, replacements[placeholder]);
                         }
                     } else {
-                        console.warn(`Translation for key "${key}" is not a string or array:`, translation);
-                        translation = key;
+                         translation = key;
                     }
                     return translation;
                 },
@@ -432,7 +481,6 @@
                 }
             };
 
-            // ----- Variáveis Globais e Seletores de Elementos -----
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal,
                 dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg,
                 recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate,
@@ -457,7 +505,6 @@
             let progressRingRadius = 0;
             let progressRingCircumference = 0;
 
-            // ----- Constantes -----
             const HISTORY_MONTH_LIMIT = 3;
             const NOTES_MAX_LENGTH = 300;
             const MIN_HOURS_PER_DAY_FORECAST = 1.0;
@@ -467,7 +514,6 @@
                 SETTINGS: 'pioneerTracker_settings_v1.2'
             };
 
-            // ----- Funções Utilitárias -----
             function replacePlaceholders(text, replacements) {
                 let result = text;
                 if(typeof text !== 'string') return text;
@@ -491,8 +537,7 @@
                 if (monthIndex < 0 || monthIndex > 11) return monthYearString;
                 const monthNames = i18n.t('monthNames');
                 if (!Array.isArray(monthNames) || monthNames.length !== 12) {
-                    console.warn("Month names not available or invalid in translation.");
-                    return `${m}/${y}`;
+                     return `${m}/${y}`;
                 }
                 return `${monthNames[monthIndex]} ${y}`;
             }
@@ -552,7 +597,7 @@
                 const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
                 const oneWeekFromToday = new Date(today); oneWeekFromToday.setDate(today.getDate() + 7);
                 const weekdayNames = i18n.t('weekdayNamesShort');
-                if (!Array.isArray(weekdayNames) || weekdayNames.length !== 7) { console.warn("Weekday names not available/invalid for relative date formatting."); return formatDisplayDate(dateString); }
+                if (!Array.isArray(weekdayNames) || weekdayNames.length !== 7) { return formatDisplayDate(dateString); }
                 if (inputDate.getTime() === today.getTime()) return i18n.t('today');
                 if (inputDate.getTime() === tomorrow.getTime()) return i18n.t('tomorrow');
                 if (inputDate > tomorrow && inputDate <= oneWeekFromToday) { const weekday = weekdayNames[inputDate.getDay()]; return i18n.t('nextWeekday', { weekday: weekday }); }
@@ -561,23 +606,22 @@
 
             function getDefaultTag() { return i18n.t('recordTagOptionHouseToHouse'); }
 
-            // ----- Persistência -----
             function saveData() {
                 try { localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); }
-                catch (e) { console.error("Error saving data to localStorage:", e); showFeedback(i18n.t('feedbackDataSaveFailed'), 'danger'); }
+                catch (e) { showFeedback(i18n.t('feedbackDataSaveFailed'), 'danger'); }
             }
             function loadData() {
                 try {
                     let storedEntriesRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
                     if (storedEntriesRaw) {
                         try { const parsedEntries = JSON.parse(storedEntriesRaw); if (Array.isArray(parsedEntries)) { recordedEntries = parsedEntries.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag })); } else { throw new Error("Stored entries data is not an array"); } }
-                        catch (parseErr) { console.error("Error parsing stored entries, resetting entries:", parseErr); storedEntriesRaw = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); }
+                        catch (parseErr) { storedEntriesRaw = null; recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); }
                     } else { recordedEntries = []; }
                     recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00'));
 
                     const storedPlansRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS);
                     plannedEntries = storedPlansRaw ? JSON.parse(storedPlansRaw) : [];
-                    if (!Array.isArray(plannedEntries)) { console.error("Stored plans data is not an array, resetting plans."); plannedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); }
+                    if (!Array.isArray(plannedEntries)) { plannedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); }
                     plannedEntries = plannedEntries.map(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } p.hours = Number(p.hours) || 0; return p; }).filter(p => p.hours > 0);
                     plannedEntries.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'));
 
@@ -587,243 +631,227 @@
                     settings.monthlyGoal = Number(settings.monthlyGoal);
                     if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) { settings.monthlyGoal = 70; }
                     if (typeof settings.goalHasBeenSet !== 'boolean') { settings.goalHasBeenSet = !!settings.monthlyGoal; }
-                    console.log("Data loaded from localStorage.");
-                } catch (err) {
-                    console.error("Error loading data from localStorage:", err);
-                    recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false };
-                    try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { console.error("Error removing invalid storage items:", e); }
+                 } catch (err) {
+                     recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false };
+                    try { localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.SETTINGS); } catch (e) { /* Ignore removal error */ }
                     showFeedback(i18n.t('feedbackLoadError'), 'danger');
                 }
             }
 
-            // ----- Instalação PWA -----
             function triggerInstallPromptIfAvailable(context = 'Context not specified') {
                 if (deferredInstallPrompt && settings.goalHasBeenSet) {
-                    console.log(`Attempting to show install prompt (${context})...`);
-                    setTimeout(() => {
+                     setTimeout(() => {
                         deferredInstallPrompt.prompt();
-                        deferredInstallPrompt.userChoice.then((choiceResult) => { if (choiceResult.outcome === 'accepted') { console.log('User accepted the install prompt'); } else { console.log('User dismissed the install prompt'); } deferredInstallPrompt = null; })
-                        .catch(err => { console.error("Error processing prompt userChoice:", err); deferredInstallPrompt = null; });
+                        deferredInstallPrompt.userChoice.then((choiceResult) => { if (choiceResult.outcome === 'accepted') { /* User accepted */ } else { /* User dismissed */ } deferredInstallPrompt = null; })
+                        .catch(err => { deferredInstallPrompt = null; });
                     }, 500);
-                } else if (!settings.goalHasBeenSet) { console.log(`Install prompt not shown: Goal not set yet (${context}).`); }
-                else { console.log(`Install prompt not available at this time (${context}).`); }
-            }
+                 }
+             }
 
-            // ----- UI e Manipulação do DOM -----
-            function promptForMonthlyGoal() {
-                let goalSet = false;
-                while (!goalSet) {
-                    const goalInput = prompt(i18n.t('feedbackGoalPrompt'), settings.monthlyGoal);
-                    if (goalInput === null) { goalSet = true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); console.log("User cancelled initial goal setting, using default goal."); } }
-                    else { const goalValue = parseInt(goalInput, 10); if (!isNaN(goalValue) && goalValue > 0) { settings.monthlyGoal = goalValue; settings.goalHasBeenSet = true; monthlyGoalInput.value = goalValue; saveData(); goalSet = true; updateAllDisplays(); showFeedback(i18n.t('feedbackGoalSet'), "success"); triggerInstallPromptIfAvailable('After setting initial goal'); } else { alert(i18n.t('feedbackGoalInvalid')); } }
-                }
-            }
+             function promptForMonthlyGoal() {
+                 let goalSet = false;
+                 while (!goalSet) {
+                     const goalInput = prompt(i18n.t('feedbackGoalPrompt'), settings.monthlyGoal);
+                     if (goalInput === null) { goalSet = true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); } }
+                     else { const goalValue = parseInt(goalInput, 10); if (!isNaN(goalValue) && goalValue > 0) { settings.monthlyGoal = goalValue; settings.goalHasBeenSet = true; monthlyGoalInput.value = goalValue; saveData(); goalSet = true; updateAllDisplays(); showFeedback(i18n.t('feedbackGoalSet'), "success"); triggerInstallPromptIfAvailable('After setting initial goal'); } else { alert(i18n.t('feedbackGoalInvalid')); } }
+                 }
+             }
 
-            function setDateInputVisibility(visible) {
-                isDateInputVisible = visible;
-                if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); }
-                else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); const dateValue = recordDateInput.value; const isToday = !dateValue || dateValue === getCurrentDateString(); displayDate.textContent = isToday ? i18n.t('displayDateToday') : formatDisplayDate(dateValue); }
-            }
+             function setDateInputVisibility(visible) {
+                 isDateInputVisible = visible;
+                 if (visible) { recordDateInput.classList.remove('hidden'); dateLabel.classList.add('visually-hidden'); recordDateInput.focus(); }
+                 else { recordDateInput.classList.add('hidden'); dateLabel.classList.remove('visually-hidden'); const dateValue = recordDateInput.value; const isToday = !dateValue || dateValue === getCurrentDateString(); displayDate.textContent = isToday ? i18n.t('displayDateToday') : formatDisplayDate(dateValue); }
+             }
 
-            function toggleCard(cardElement) {
-                if (!cardElement) return; const isExpanded = cardElement.classList.contains('expanded'); cardElement.classList.toggle('expanded', !isExpanded); const icon = cardElement.querySelector('.toggle-icon');
-                if (icon) { icon.textContent = !isExpanded ? i18n.t('toggleIconCollapse') : i18n.t('toggleIconExpand'); }
-            }
+             function toggleCard(cardElement) {
+                 if (!cardElement) return; const isExpanded = cardElement.classList.contains('expanded'); cardElement.classList.toggle('expanded', !isExpanded); const icon = cardElement.querySelector('.toggle-icon');
+                 if (icon) { icon.textContent = !isExpanded ? i18n.t('toggleIconCollapse') : i18n.t('toggleIconExpand'); }
+             }
 
-            function clearRecordForm() {
-                recordForm.reset(); recordIdInput.value = ''; currentEditingId = null; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = getDefaultTag(); recordNotesInput.value = ''; recordHoursInput.value = ''; saveRecordBtn.textContent = i18n.t('saveRecordButton'); saveRecordBtn.classList.remove('editing');
-            }
+             function clearRecordForm() {
+                 recordForm.reset(); recordIdInput.value = ''; currentEditingId = null; recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); recordTagSelect.value = getDefaultTag(); recordNotesInput.value = ''; recordHoursInput.value = ''; saveRecordBtn.textContent = i18n.t('saveRecordButton'); saveRecordBtn.classList.remove('editing');
+             }
 
-            function handleRecordSubmit(event) {
-                event.preventDefault(); const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString(); const hoursInput = recordHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const tag = recordTagSelect.value || getDefaultTag(); const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH);
-                if (isNaN(hours) || hours <= 0) { alert(i18n.t('feedbackTimeInvalid')); recordHoursInput.focus(); return; }
-                if (!date) { alert(i18n.t('feedbackDateInvalid')); if(!isDateInputVisible) setDateInputVisibility(true); recordDateInput.focus(); return; }
-                const newEntry = { id, date, hours, tag, notes }; const existingIndex = recordedEntries.findIndex(entry => entry.id === id);
-                if (existingIndex > -1) { recordedEntries[existingIndex] = newEntry; } else { recordedEntries.push(newEntry); }
-                recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackRecordSaved'), 'success');
-            }
+             function handleRecordSubmit(event) {
+                 event.preventDefault(); const id = recordIdInput.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || (recordDateInput.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString(); const hoursInput = recordHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const tag = recordTagSelect.value || getDefaultTag(); const notes = recordNotesInput.value.trim().substring(0, NOTES_MAX_LENGTH);
+                 if (isNaN(hours) || hours <= 0) { alert(i18n.t('feedbackTimeInvalid')); recordHoursInput.focus(); return; }
+                 if (!date) { alert(i18n.t('feedbackDateInvalid')); if(!isDateInputVisible) setDateInputVisibility(true); recordDateInput.focus(); return; }
+                 const newEntry = { id, date, hours, tag, notes }; const existingIndex = recordedEntries.findIndex(entry => entry.id === id);
+                 if (existingIndex > -1) { recordedEntries[existingIndex] = newEntry; } else { recordedEntries.push(newEntry); }
+                 recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackRecordSaved'), 'success');
+             }
 
-            function editRecordEntry(id) {
-                const entry = recordedEntries.find(e => e.id === id);
-                if (entry) { if (!recordCard.classList.contains('expanded')) { toggleCard(recordCard); } currentEditingId = id; recordIdInput.value = entry.id; recordDateInput.value = entry.date; setDateInputVisibility(entry.date !== getCurrentDateString()); recordHoursInput.value = formatDecimalToTimeInput(entry.hours); recordTagSelect.value = entry.tag || getDefaultTag(); recordNotesInput.value = entry.notes || ''; saveRecordBtn.textContent = i18n.t('updateRecordButton'); saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => recordHoursInput.focus(), 300); }
-            }
+             function editRecordEntry(id) {
+                 const entry = recordedEntries.find(e => e.id === id);
+                 if (entry) { if (!recordCard.classList.contains('expanded')) { toggleCard(recordCard); } currentEditingId = id; recordIdInput.value = entry.id; recordDateInput.value = entry.date; setDateInputVisibility(entry.date !== getCurrentDateString()); recordHoursInput.value = formatDecimalToTimeInput(entry.hours); recordTagSelect.value = entry.tag || getDefaultTag(); recordNotesInput.value = entry.notes || ''; saveRecordBtn.textContent = i18n.t('updateRecordButton'); saveRecordBtn.classList.add('editing'); recordCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => recordHoursInput.focus(), 300); }
+             }
 
-            function deleteRecordEntry(id) {
-                showConfirmationDialog(i18n.t('feedbackDeleteRecordConfirm'), () => { const index = recordedEntries.findIndex(e => e.id === id); if (index > -1) { recordedEntries.splice(index, 1); saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackRecordDeleted'), 'info'); if (currentEditingId === id) { clearRecordForm(); } } else { console.warn("Record entry not found for deletion:", id); } });
-            }
+             function deleteRecordEntry(id) {
+                 showConfirmationDialog(i18n.t('feedbackDeleteRecordConfirm'), () => { const index = recordedEntries.findIndex(e => e.id === id); if (index > -1) { recordedEntries.splice(index, 1); saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackRecordDeleted'), 'info'); if (currentEditingId === id) { clearRecordForm(); } } });
+             }
 
-            function clearPlanForm() {
-                planForm.reset(); planIdInput.value = ''; currentEditingId = null; planDateInput.value = ''; planHoursInput.value = ''; savePlanBtn.textContent = i18n.t('savePlanButton');
-            }
+             function clearPlanForm() {
+                 planForm.reset(); planIdInput.value = ''; currentEditingId = null; planDateInput.value = ''; planHoursInput.value = ''; savePlanBtn.textContent = i18n.t('savePlanButton');
+             }
 
-            function handlePlanSubmit(event) {
-                event.preventDefault(); const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now(); const date = planDateInput.value; const hoursInput = planHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const todayStr = getCurrentDateString();
-                if (!date || isNaN(hours) || hours <= 0) { alert(i18n.t('feedbackPlanInvalid')); if (!date) planDateInput.focus(); else planHoursInput.focus(); return; }
-                if (date < todayStr) { alert(i18n.t('feedbackPlanDatePast')); planDateInput.focus(); return; }
-                const newPlan = { id, date, hours }; const existingIndex = plannedEntries.findIndex(p => p.id === id);
-                if (existingIndex > -1) { plannedEntries[existingIndex] = newPlan; } else { plannedEntries.push(newPlan); }
-                plannedEntries.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanSaved'), 'success');
-            }
+             function handlePlanSubmit(event) {
+                 event.preventDefault(); const id = planIdInput.value ? parseInt(planIdInput.value, 10) : Date.now(); const date = planDateInput.value; const hoursInput = planHoursInput.value; const hours = parseTimeInputToDecimal(hoursInput); const todayStr = getCurrentDateString();
+                 if (!date || isNaN(hours) || hours <= 0) { alert(i18n.t('feedbackPlanInvalid')); if (!date) planDateInput.focus(); else planHoursInput.focus(); return; }
+                 if (date < todayStr) { alert(i18n.t('feedbackPlanDatePast')); planDateInput.focus(); return; }
+                 const newPlan = { id, date, hours }; const existingIndex = plannedEntries.findIndex(p => p.id === id);
+                 if (existingIndex > -1) { plannedEntries[existingIndex] = newPlan; } else { plannedEntries.push(newPlan); }
+                 plannedEntries.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanSaved'), 'success');
+             }
 
-            function markPlanAsDone(id) {
-                const planIndex = plannedEntries.findIndex(p => p.id === id); if (planIndex === -1) { console.error("Plan not found to mark as done:", id); showFeedback(i18n.t('feedbackPlanNotFound'), 'danger'); return; } const plan = plannedEntries[planIndex]; const todayStr = getCurrentDateString(); const recordDate = new Date(plan.date + 'T00:00:00') < new Date(todayStr + 'T00:00:00') ? plan.date : todayStr; const newRecordEntry = { id: Date.now(), date: recordDate, hours: plan.hours, tag: getDefaultTag(), notes: i18n.t('planNoteFromPastPlan', { date: formatDisplayDate(plan.date) }) };
-                recordedEntries.push(newRecordEntry); recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); plannedEntries.splice(planIndex, 1); saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanMarkedDone'), 'success');
-            }
+             function markPlanAsDone(id) {
+                 const planIndex = plannedEntries.findIndex(p => p.id === id); if (planIndex === -1) { showFeedback(i18n.t('feedbackPlanNotFound'), 'danger'); return; } const plan = plannedEntries[planIndex]; const todayStr = getCurrentDateString(); const recordDate = new Date(plan.date + 'T00:00:00') < new Date(todayStr + 'T00:00:00') ? plan.date : todayStr; const newRecordEntry = { id: Date.now(), date: recordDate, hours: plan.hours, tag: getDefaultTag(), notes: i18n.t('planNoteFromPastPlan', { date: formatDisplayDate(plan.date) }) };
+                 recordedEntries.push(newRecordEntry); recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00')); plannedEntries.splice(planIndex, 1); saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanMarkedDone'), 'success');
+             }
 
-            function deletePlanEntry(id) {
-                showConfirmationDialog(i18n.t('feedbackDeletePlanConfirm'), () => { const initialLength = plannedEntries.length; plannedEntries = plannedEntries.filter(p => p.id !== id); if (plannedEntries.length < initialLength) { saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanDeleted'), 'info'); if (currentEditingId === id) { clearPlanForm(); } } else { console.warn("Plan entry not found for deletion:", id); } });
-            }
+             function deletePlanEntry(id) {
+                 showConfirmationDialog(i18n.t('feedbackDeletePlanConfirm'), () => { const initialLength = plannedEntries.length; plannedEntries = plannedEntries.filter(p => p.id !== id); if (plannedEntries.length < initialLength) { saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackPlanDeleted'), 'info'); if (currentEditingId === id) { clearPlanForm(); } } });
+             }
 
-            function handleGoalSave() {
-                const newGoal = parseInt(monthlyGoalInput.value, 10); if (!isNaN(newGoal) && newGoal > 0) { if(settings.monthlyGoal !== newGoal) { settings.monthlyGoal = newGoal; settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackGoalUpdated'), 'success'); triggerInstallPromptIfAvailable('After updating goal in settings card'); } } else { alert(i18n.t('feedbackGoalInvalid')); monthlyGoalInput.value = settings.monthlyGoal; }
-            }
+             function handleGoalSave() {
+                 const newGoal = parseInt(monthlyGoalInput.value, 10); if (!isNaN(newGoal) && newGoal > 0) { if(settings.monthlyGoal !== newGoal) { settings.monthlyGoal = newGoal; settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); showFeedback(i18n.t('feedbackGoalUpdated'), 'success'); triggerInstallPromptIfAvailable('After updating goal in settings card'); } } else { alert(i18n.t('feedbackGoalInvalid')); monthlyGoalInput.value = settings.monthlyGoal; }
+             }
 
-            function handleClearAllData() {
-                showConfirmationDialog(i18n.t('feedbackClearAllConfirm'), () => { recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackDataCleared'), 'danger'); document.querySelectorAll('.card').forEach(c => { const shouldBeExpanded = (c.id === 'record-card'); if (c.classList.contains('expanded') !== shouldBeExpanded) { toggleCard(c); } }); });
-            }
+             function handleClearAllData() {
+                 showConfirmationDialog(i18n.t('feedbackClearAllConfirm'), () => { recordedEntries = []; plannedEntries = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); updateAllDisplays(); showFeedback(i18n.t('feedbackDataCleared'), 'danger'); document.querySelectorAll('.card').forEach(c => { const shouldBeExpanded = (c.id === 'record-card'); if (c.classList.contains('expanded') !== shouldBeExpanded) { toggleCard(c); } }); });
+             }
 
-            function showConfirmationDialog(message, onConfirm) {
-                dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog.classList.add('visible'); dialogConfirmBtn.focus();
-            }
+             function showConfirmationDialog(message, onConfirm) {
+                 dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog.classList.add('visible'); dialogConfirmBtn.focus();
+             }
 
-            function hideConfirmationDialog() {
-                confirmationDialog.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300);
-            }
+             function hideConfirmationDialog() {
+                 confirmationDialog.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300);
+             }
 
-            function showFeedback(message, type = 'info') {
-                console.log(`Feedback[${type}]: ${message}`); const feedbackElement = document.createElement('div'); feedbackElement.textContent = message; feedbackElement.style.position = 'fixed'; feedbackElement.style.bottom = '-50px'; feedbackElement.style.left = '50%'; feedbackElement.style.transform = 'translateX(-50%)'; feedbackElement.style.padding = '10px 20px'; feedbackElement.style.borderRadius = '8px'; feedbackElement.style.zIndex = '1100'; feedbackElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)'; feedbackElement.style.fontSize = '0.95em'; feedbackElement.style.textAlign = 'center'; feedbackElement.style.maxWidth = '90%'; feedbackElement.style.transition = 'opacity 0.4s ease, bottom 0.4s ease'; feedbackElement.style.opacity = '0';
-                switch (type) { case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = '#ffffff'; break; case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = '#ffffff'; break; case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = '#ffffff'; break; } document.body.appendChild(feedbackElement);
-                setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '20px'; }, 10);
-                setTimeout(() => { feedbackElement.style.opacity = '0'; feedbackElement.style.bottom = '-50px'; }, 3500);
-                setTimeout(() => { if (feedbackElement.parentNode) { feedbackElement.parentNode.removeChild(feedbackElement); } }, 4000);
-            }
+             function showFeedback(message, type = 'info') {
+                 const feedbackElement = document.createElement('div'); feedbackElement.textContent = message; feedbackElement.style.position = 'fixed'; feedbackElement.style.bottom = '-50px'; feedbackElement.style.left = '50%'; feedbackElement.style.transform = 'translateX(-50%)'; feedbackElement.style.padding = '10px 20px'; feedbackElement.style.borderRadius = '8px'; feedbackElement.style.zIndex = '1100'; feedbackElement.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)'; feedbackElement.style.fontSize = '0.95em'; feedbackElement.style.textAlign = 'center'; feedbackElement.style.maxWidth = '90%'; feedbackElement.style.transition = 'opacity 0.4s ease, bottom 0.4s ease'; feedbackElement.style.opacity = '0';
+                 switch (type) { case 'success': feedbackElement.style.backgroundColor = 'var(--success-color)'; feedbackElement.style.color = '#ffffff'; break; case 'danger': feedbackElement.style.backgroundColor = 'var(--danger-color)'; feedbackElement.style.color = '#ffffff'; break; case 'info': default: feedbackElement.style.backgroundColor = 'var(--primary-color)'; feedbackElement.style.color = '#ffffff'; break; } document.body.appendChild(feedbackElement);
+                 setTimeout(() => { feedbackElement.style.opacity = '1'; feedbackElement.style.bottom = '20px'; }, 10);
+                 setTimeout(() => { feedbackElement.style.opacity = '0'; feedbackElement.style.bottom = '-50px'; }, 3500);
+                 setTimeout(() => { if (feedbackElement.parentNode) { feedbackElement.parentNode.removeChild(feedbackElement); } }, 4000);
+             }
 
-            function updateDashboard() {
-                const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); const startOfWeekStr = getStartOfWeek(today); const todayStr = getCurrentDateString(); let monthHours = 0; let weekHours = 0;
-                recordedEntries.forEach(entry => { const entryDate = new Date(entry.date + 'T00:00:00'); if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) { monthHours += entry.hours; } if (entry.date >= startOfWeekStr && entry.date <= todayStr) { weekHours += entry.hours; } });
-                dashboardWeekHours.textContent = formatHoursExtensive(weekHours);
-                const goal = settings.monthlyGoal; const percent = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0; dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(monthHours, goal);
-                dashboardMonthTotal.querySelector('strong').textContent = formatHoursExtensive(monthHours);
-                const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); const todayDayOfMonth = today.getDate(); const remainingDays = Math.max(0, lastDayOfMonth - todayDayOfMonth); const remainingHours = Math.max(0, goal - monthHours); let forecastText = ''; const forecastLabelSpan = `<span data-translate-key="dashboardForecastLabel">${i18n.t('dashboardForecastLabel')}</span>: `;
-                if (!settings.goalHasBeenSet) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalNotSet'); } else if (remainingHours <= 0) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalReached'); } else if (remainingDays <= 0 && monthHours < goal) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalNotReached'); } else { let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours; let daysToReachGoal = remainingDays; if (daysToReachGoal > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysToReachGoal = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; } else if (daysToReachGoal <= 0) { avgNeeded = remainingHours; daysToReachGoal = 1; } const neededText = i18n.t('dashboardForecastNeeded', { remainingHours: formatHoursExtensive(remainingHours) }); const suggestion = i18n.t('dashboardForecastSuggestion', { avgNeeded: formatHoursExtensive(avgNeeded, true), daysUnit: daysToReachGoal === 1 ? i18n.t('day') : i18n.t('days'), daysNeeded: daysToReachGoal, daysPlural: daysToReachGoal === 1 ? i18n.t('day') : i18n.t('days') }); forecastText = `<span>${forecastLabelSpan}${neededText}</span><span>${suggestion}</span>`; } dashboardForecast.innerHTML = forecastText;
-                updateDashboardPlannedDates();
-            }
+             function updateDashboard() {
+                 const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); const startOfWeekStr = getStartOfWeek(today); const todayStr = getCurrentDateString(); let monthHours = 0; let weekHours = 0;
+                 recordedEntries.forEach(entry => { const entryDate = new Date(entry.date + 'T00:00:00'); if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) { monthHours += entry.hours; } if (entry.date >= startOfWeekStr && entry.date <= todayStr) { weekHours += entry.hours; } });
+                 dashboardWeekHours.textContent = formatHoursExtensive(weekHours);
+                 const goal = settings.monthlyGoal; const percent = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0; dashboardMonthPercentage.textContent = `${Math.round(percent)}%`; updateProgressRing(monthHours, goal);
+                 dashboardMonthTotal.querySelector('strong').textContent = formatHoursExtensive(monthHours);
+                 const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); const todayDayOfMonth = today.getDate(); const remainingDays = Math.max(0, lastDayOfMonth - todayDayOfMonth); const remainingHours = Math.max(0, goal - monthHours); let forecastText = ''; const forecastLabelSpan = `<span data-translate-key="dashboardForecastLabel">${i18n.t('dashboardForecastLabel')}</span>: `;
+                 if (!settings.goalHasBeenSet) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalNotSet'); } else if (remainingHours <= 0) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalReached'); } else if (remainingDays <= 0 && monthHours < goal) { forecastText = forecastLabelSpan + i18n.t('dashboardGoalNotReached'); } else { let avgNeeded = remainingDays > 0 ? remainingHours / remainingDays : remainingHours; let daysToReachGoal = remainingDays; if (daysToReachGoal > 0 && avgNeeded > 0 && avgNeeded < MIN_HOURS_PER_DAY_FORECAST) { daysToReachGoal = Math.ceil(remainingHours / MIN_HOURS_PER_DAY_FORECAST); avgNeeded = MIN_HOURS_PER_DAY_FORECAST; } else if (daysToReachGoal <= 0) { avgNeeded = remainingHours; daysToReachGoal = 1; } const neededText = i18n.t('dashboardForecastNeeded', { remainingHours: formatHoursExtensive(remainingHours) }); const suggestion = i18n.t('dashboardForecastSuggestion', { avgNeeded: formatHoursExtensive(avgNeeded, true), daysUnit: daysToReachGoal === 1 ? i18n.t('day') : i18n.t('days'), daysNeeded: daysToReachGoal, daysPlural: daysToReachGoal === 1 ? i18n.t('day') : i18n.t('days') }); forecastText = `<span>${forecastLabelSpan}${neededText}</span><span>${suggestion}</span>`; } dashboardForecast.innerHTML = forecastText;
+                 updateDashboardPlannedDates();
+             }
 
-            function updateProgressRing(currentValue, maxValue) {
-                const percentage = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0; const offset = progressRingCircumference * (1 - percentage / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset);
-            }
+             function updateProgressRing(currentValue, maxValue) {
+                 const percentage = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0; const offset = progressRingCircumference * (1 - percentage / 100); progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset);
+             }
 
-            function updateDashboardPlannedDates() {
-                const today = new Date(); today.setHours(0, 0, 0, 0); const todayStr = getCurrentDateString(); const now = new Date(); const currentHour = now.getHours(); const overdueThreshold = 18;
-                const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a,b)=>new Date(a.date)-new Date(b.date));
-                const pastUncompletedPlans = plannedEntries.filter(p => { const planDate = new Date(p.date + 'T00:00:00'); return planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); }).sort((a, b) => new Date(a.date) - new Date(b.date));
-                const displayPlans = [...futurePlans, ...pastUncompletedPlans].reduce((acc, current) => { if (!acc.some(item => item.id === current.id)) { acc.push(current); } return acc; }, []).sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')).slice(0, 3);
-                dashboardPlanList.innerHTML = '';
-                if (displayPlans.length > 0) { dashboardPlannedDatesContainer.classList.remove('hidden'); displayPlans.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const planDate = new Date(plan.date + 'T00:00:00'); const isOverdue = planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); li.innerHTML = i18n.t('dashboardPlannedDateEntry', { relativeDate: formatRelativeDate(plan.date), hours: formatHoursExtensive(plan.hours, true) }); if (isOverdue) { const warningSpan = document.createElement('span'); warningSpan.textContent = i18n.t('dashboardPlannedOverdue'); warningSpan.classList.add('plan-warning'); li.appendChild(warningSpan); } dashboardPlanList.appendChild(li); }); }
-                else { dashboardPlannedDatesContainer.classList.add('hidden'); }
-            }
+             function updateDashboardPlannedDates() {
+                 const today = new Date(); today.setHours(0, 0, 0, 0); const todayStr = getCurrentDateString(); const now = new Date(); const currentHour = now.getHours(); const overdueThreshold = 18;
+                 const futurePlans = plannedEntries.filter(p => p.date >= todayStr).sort((a,b)=>new Date(a.date)-new Date(b.date));
+                 const pastUncompletedPlans = plannedEntries.filter(p => { const planDate = new Date(p.date + 'T00:00:00'); return planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); }).sort((a, b) => new Date(a.date) - new Date(b.date));
+                 const displayPlans = [...futurePlans, ...pastUncompletedPlans].reduce((acc, current) => { if (!acc.some(item => item.id === current.id)) { acc.push(current); } return acc; }, []).sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00')).slice(0, 3);
+                 dashboardPlanList.innerHTML = '';
+                 if (displayPlans.length > 0) { dashboardPlannedDatesContainer.classList.remove('hidden'); displayPlans.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const planDate = new Date(plan.date + 'T00:00:00'); const isOverdue = planDate < today || (planDate.getTime() === today.getTime() && currentHour >= overdueThreshold); li.innerHTML = i18n.t('dashboardPlannedDateEntry', { relativeDate: formatRelativeDate(plan.date), hours: formatHoursExtensive(plan.hours, true) }); if (isOverdue) { const warningSpan = document.createElement('span'); warningSpan.textContent = i18n.t('dashboardPlannedOverdue'); warningSpan.classList.add('plan-warning'); li.appendChild(warningSpan); } dashboardPlanList.appendChild(li); }); }
+                 else { dashboardPlannedDatesContainer.classList.add('hidden'); }
+             }
 
-            function renderHistory() {
-                historyList.innerHTML = ''; const searchTerm = historySearchInput.value.trim().toLowerCase(); let results = []; let resultsLabelText = ''; const hasSearch = searchTerm.length > 0; const defaultTag = getDefaultTag();
-                if (hasSearch) { results = recordedEntries.filter(entry => { const entryDateFormatted = formatDisplayDate(entry.date).toLowerCase(); const entryDateISO = entry.date.toLowerCase(); const entryHoursStr = String(entry.hours || 0).replace('.', ','); const entryHoursRounded = Math.round(entry.hours || 0).toString(); const entryHoursFormatted = formatHoursExtensive(entry.hours).toLowerCase(); const entryTag = (entry.tag || '').toLowerCase(); const entryNotes = (entry.notes || '').toLowerCase(); return entryDateFormatted.includes(searchTerm) || entryDateISO.includes(searchTerm) || entryHoursStr.includes(searchTerm) || entryHoursRounded.includes(searchTerm) || entryHoursFormatted.includes(searchTerm) || entryTag.includes(searchTerm) || entryNotes.includes(searchTerm); }); const searchTermText = i18n.t('historyShowingResultsTerm', { term: searchTerm }); resultsLabelText = i18n.t('historyShowingResultsLabel', { count: results.length, searchTerm: searchTermText }); }
-                else { const dateLimit = getDateMonthsAgo(HISTORY_MONTH_LIMIT); results = recordedEntries.filter(entry => entry.date >= dateLimit); if (recordedEntries.length > 0 && results.length === 0) { resultsLabelText = i18n.t('historyNoRecentData', { months: HISTORY_MONTH_LIMIT }); } else if (recordedEntries.length > 0) { resultsLabelText = i18n.t('historyShowingLastMonthsLabel', { months: HISTORY_MONTH_LIMIT }); } else { resultsLabelText = ''; } }
-                showingResultsLabel.textContent = resultsLabelText;
-                if (results.length === 0) { let placeholderKey = 'historyNoRecordsYet'; if (recordedEntries.length > 0) { placeholderKey = hasSearch ? 'historyPlaceholderSearch' : 'historyPlaceholderRecent'; } historyListPlaceholder.textContent = i18n.t(placeholderKey, { months: HISTORY_MONTH_LIMIT }); historyListPlaceholder.classList.remove('hidden'); }
-                else { historyListPlaceholder.classList.add('hidden'); }
-                results.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisplay = entry.tag && entry.tag !== defaultTag ? `<span class="tag-badge">${entry.tag}</span>` : ''; const notesPreviewText = entry.notes ? entry.notes.replace(/\n/g, ' ') : i18n.t('historyEntryNoNotes'); const notesPreviewClass = entry.notes ? "notes-preview" : "notes-preview"; const notesPreview = `<span class="${notesPreviewClass}">${notesPreviewText}</span>`; const hoursDisplay = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(entry.date)}:</strong><span class="hours">${hoursDisplay}</span>${tagDisplay}${notesPreview}</div><div class="entry-actions"><button class="edit-btn secondary" data-translate-key="historyEditButton">${i18n.t('historyEditButton')}</button><button class="delete-btn danger" data-translate-key="historyDeleteButton">${i18n.t('historyDeleteButton')}</button></div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); });
-            }
+             function renderHistory() {
+                 historyList.innerHTML = ''; const searchTerm = historySearchInput.value.trim().toLowerCase(); let results = []; let resultsLabelText = ''; const hasSearch = searchTerm.length > 0; const defaultTag = getDefaultTag();
+                 if (hasSearch) { results = recordedEntries.filter(entry => { const entryDateFormatted = formatDisplayDate(entry.date).toLowerCase(); const entryDateISO = entry.date.toLowerCase(); const entryHoursStr = String(entry.hours || 0).replace('.', ','); const entryHoursRounded = Math.round(entry.hours || 0).toString(); const entryHoursFormatted = formatHoursExtensive(entry.hours).toLowerCase(); const entryTag = (entry.tag || '').toLowerCase(); const entryNotes = (entry.notes || '').toLowerCase(); return entryDateFormatted.includes(searchTerm) || entryDateISO.includes(searchTerm) || entryHoursStr.includes(searchTerm) || entryHoursRounded.includes(searchTerm) || entryHoursFormatted.includes(searchTerm) || entryTag.includes(searchTerm) || entryNotes.includes(searchTerm); }); const searchTermText = i18n.t('historyShowingResultsTerm', { term: searchTerm }); resultsLabelText = i18n.t('historyShowingResultsLabel', { count: results.length, searchTerm: searchTermText }); }
+                 else { const dateLimit = getDateMonthsAgo(HISTORY_MONTH_LIMIT); results = recordedEntries.filter(entry => entry.date >= dateLimit); if (recordedEntries.length > 0 && results.length === 0) { resultsLabelText = i18n.t('historyNoRecentData', { months: HISTORY_MONTH_LIMIT }); } else if (recordedEntries.length > 0) { resultsLabelText = i18n.t('historyShowingLastMonthsLabel', { months: HISTORY_MONTH_LIMIT }); } else { resultsLabelText = ''; } }
+                 showingResultsLabel.textContent = resultsLabelText;
+                 if (results.length === 0) { let placeholderKey = 'historyNoRecordsYet'; if (recordedEntries.length > 0) { placeholderKey = hasSearch ? 'historyPlaceholderSearch' : 'historyPlaceholderRecent'; } historyListPlaceholder.textContent = i18n.t(placeholderKey, { months: HISTORY_MONTH_LIMIT }); historyListPlaceholder.classList.remove('hidden'); }
+                 else { historyListPlaceholder.classList.add('hidden'); }
+                 results.forEach(entry => { const li = document.createElement('li'); li.dataset.id = entry.id; const tagDisplay = entry.tag && entry.tag !== defaultTag ? `<span class="tag-badge">${entry.tag}</span>` : ''; const notesPreviewText = entry.notes ? entry.notes.replace(/\n/g, ' ') : i18n.t('historyEntryNoNotes'); const notesPreviewClass = entry.notes ? "notes-preview" : "notes-preview"; const notesPreview = `<span class="${notesPreviewClass}">${notesPreviewText}</span>`; const hoursDisplay = formatHoursExtensive(entry.hours); li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(entry.date)}:</strong><span class="hours">${hoursDisplay}</span>${tagDisplay}${notesPreview}</div><div class="entry-actions"><button class="edit-btn secondary" data-translate-key="historyEditButton">${i18n.t('historyEditButton')}</button><button class="delete-btn danger" data-translate-key="historyDeleteButton">${i18n.t('historyDeleteButton')}</button></div>`; li.querySelector('.edit-btn').addEventListener('click', (e) => { e.stopPropagation(); editRecordEntry(entry.id); }); li.querySelector('.delete-btn').addEventListener('click', (e) => { e.stopPropagation(); deleteRecordEntry(entry.id); }); historyList.appendChild(li); });
+             }
 
-            function renderPlanning() {
-                planningList.innerHTML = ''; const todayStr = getCurrentDateString(); const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'));
-                if (allPlansSorted.length === 0) { planningListPlaceholder.textContent = i18n.t('planningListPastPlaceholder'); planningListPlaceholder.classList.remove('hidden'); return; }
-                planningListPlaceholder.classList.add('hidden');
-                allPlansSorted.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const hoursDisplay = formatHoursExtensive(plan.hours); const isPastPlan = plan.date < todayStr; li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong><span class="hours">${hoursDisplay}</span> ${i18n.t('planningEntryLabel')}${isPastPlan ? `<span class="plan-past-date-indicator">${i18n.t('planningEntryPastDate')}</span>` : ''}</div><div class="plan-actions"><button class="done-plan-btn success" data-translate-key="planningDoneButton">${i18n.t('planningDoneButton')}</button><button class="delete-plan-btn danger" data-translate-key="planningDeleteButton">${i18n.t('planningDeleteButton')}</button></div>`; li.querySelector('.done-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); markPlanAsDone(plan.id); }); li.querySelector('.delete-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id); }); planningList.appendChild(li); });
-            }
+             function renderPlanning() {
+                 planningList.innerHTML = ''; const todayStr = getCurrentDateString(); const allPlansSorted = [...plannedEntries].sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'));
+                 if (allPlansSorted.length === 0) { planningListPlaceholder.textContent = i18n.t('planningListPastPlaceholder'); planningListPlaceholder.classList.remove('hidden'); return; }
+                 planningListPlaceholder.classList.add('hidden');
+                 allPlansSorted.forEach(plan => { const li = document.createElement('li'); li.dataset.id = plan.id; const hoursDisplay = formatHoursExtensive(plan.hours); const isPastPlan = plan.date < todayStr; li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(plan.date)} (${formatRelativeDate(plan.date)}):</strong><span class="hours">${hoursDisplay}</span> ${i18n.t('planningEntryLabel')}${isPastPlan ? `<span class="plan-past-date-indicator">${i18n.t('planningEntryPastDate')}</span>` : ''}</div><div class="plan-actions"><button class="done-plan-btn success" data-translate-key="planningDoneButton">${i18n.t('planningDoneButton')}</button><button class="delete-plan-btn danger" data-translate-key="planningDeleteButton">${i18n.t('planningDeleteButton')}</button></div>`; li.querySelector('.done-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); markPlanAsDone(plan.id); }); li.querySelector('.delete-plan-btn').addEventListener('click', (e) => { e.stopPropagation(); deletePlanEntry(plan.id); }); planningList.appendChild(li); });
+             }
 
-            function updateStatistics() {
-                const currentMonth = new Date().getMonth(); const currentYear = new Date().getFullYear(); const entriesThisMonth = recordedEntries.filter(entry => { const entryDate = new Date(entry.date + 'T00:00:00'); return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear; }); let totalHoursThisMonth = 0; const activeDaysThisMonth = new Set(); entriesThisMonth.forEach(entry => { totalHoursThisMonth += entry.hours; activeDaysThisMonth.add(entry.date); }); const goal = settings.monthlyGoal; const progressPercentage = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursThisMonth / goal) * 100), 100) : 0) : 0; const averageHoursPerActiveDay = activeDaysThisMonth.size > 0 ? (totalHoursThisMonth / activeDaysThisMonth.size) : 0; const daysActiveCount = activeDaysThisMonth.size;
-                statsMonthHours.textContent = formatHoursExtensive(totalHoursThisMonth); statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${progressPercentage}%` : '--%'; statsMonthProgressBar.style.width = `${progressPercentage}%`; statsAvgHoursDay.textContent = formatHoursExtensive(averageHoursPerActiveDay); statsMonthDaysActive.textContent = daysActiveCount;
-            }
+             function updateStatistics() {
+                 const currentMonth = new Date().getMonth(); const currentYear = new Date().getFullYear(); const entriesThisMonth = recordedEntries.filter(entry => { const entryDate = new Date(entry.date + 'T00:00:00'); return entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear; }); let totalHoursThisMonth = 0; const activeDaysThisMonth = new Set(); entriesThisMonth.forEach(entry => { totalHoursThisMonth += entry.hours; activeDaysThisMonth.add(entry.date); }); const goal = settings.monthlyGoal; const progressPercentage = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursThisMonth / goal) * 100), 100) : 0) : 0; const averageHoursPerActiveDay = activeDaysThisMonth.size > 0 ? (totalHoursThisMonth / activeDaysThisMonth.size) : 0; const daysActiveCount = activeDaysThisMonth.size;
+                 statsMonthHours.textContent = formatHoursExtensive(totalHoursThisMonth); statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${progressPercentage}%` : '--%'; statsMonthProgressBar.style.width = `${progressPercentage}%`; statsAvgHoursDay.textContent = formatHoursExtensive(averageHoursPerActiveDay); statsMonthDaysActive.textContent = daysActiveCount;
+             }
 
-            function populateMonthSelector() {
-                const availableMonths = new Set(); recordedEntries.forEach(e => availableMonths.add(getMonthYearString(new Date(e.date + 'T00:00:00')))); const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = '';
-                if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = i18n.t('chartNoData'); chartMonthSelector.appendChild(option); chartMonthSelector.disabled = true; return; }
-                chartMonthSelector.disabled = false; const currentMonthYearValue = getMonthYearString(new Date()); const currentMonthYearFormatted = formatMonthYearExtensive(currentMonthYearValue); let hasCurrentMonth = sortedMonths.includes(currentMonthYearValue); let didSelectOld = false;
-                sortedMonths.forEach(monthYearValue => { const option = document.createElement('option'); option.value = monthYearValue; option.textContent = formatMonthYearExtensive(monthYearValue); if (monthYearValue === oldSelectedValue) { option.selected = true; didSelectOld = true; } else if (monthYearValue === currentMonthYearValue && !didSelectOld) { option.selected = true; } chartMonthSelector.appendChild(option); });
-                if (!hasCurrentMonth) { const option = document.createElement('option'); option.value = currentMonthYearValue; option.textContent = `${currentMonthYearFormatted} ${i18n.t('chartCurrentMonth')}`; chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); if (!didSelectOld) option.selected = true; }
-                if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; }
-            }
+             function populateMonthSelector() {
+                 const availableMonths = new Set(); recordedEntries.forEach(e => availableMonths.add(getMonthYearString(new Date(e.date + 'T00:00:00')))); const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/'); const [mB, yB] = b.split('/'); return new Date(yB, mB - 1) - new Date(yA, mA - 1); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = '';
+                 if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = i18n.t('chartNoData'); chartMonthSelector.appendChild(option); chartMonthSelector.disabled = true; return; }
+                 chartMonthSelector.disabled = false; const currentMonthYearValue = getMonthYearString(new Date()); const currentMonthYearFormatted = formatMonthYearExtensive(currentMonthYearValue); let hasCurrentMonth = sortedMonths.includes(currentMonthYearValue); let didSelectOld = false;
+                 sortedMonths.forEach(monthYearValue => { const option = document.createElement('option'); option.value = monthYearValue; option.textContent = formatMonthYearExtensive(monthYearValue); if (monthYearValue === oldSelectedValue) { option.selected = true; didSelectOld = true; } else if (monthYearValue === currentMonthYearValue && !didSelectOld) { option.selected = true; } chartMonthSelector.appendChild(option); });
+                 if (!hasCurrentMonth) { const option = document.createElement('option'); option.value = currentMonthYearValue; option.textContent = `${currentMonthYearFormatted} ${i18n.t('chartCurrentMonth')}`; chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); if (!didSelectOld) option.selected = true; }
+                 if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; }
+             }
 
-            function getAveragesForChart(year, monthIndex) {
-                const entriesThisYear = recordedEntries.filter(e => new Date(e.date + 'T00:00:00').getFullYear() === year); const entriesThisMonth = entriesThisYear.filter(e => new Date(e.date + 'T00:00:00').getMonth() === monthIndex); let totalHoursMonth = 0; const activeDaysMonth = new Set(); entriesThisMonth.forEach(e => { totalHoursMonth += e.hours; activeDaysMonth.add(e.date); }); let totalHoursYear = 0; const monthsWithActivityYear = new Set(); entriesThisYear.forEach(e => { totalHoursYear += e.hours; monthsWithActivityYear.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
-                return { avgDaily: activeDaysMonth.size > 0 ? totalHoursMonth / activeDaysMonth.size : 0, avgWeekly: daysInMonth >= 7 && totalHoursMonth > 0 ? (totalHoursMonth / daysInMonth) * 7 : 0, avgMonthly: monthsWithActivityYear.size > 0 ? totalHoursYear / monthsWithActivityYear.size : 0 };
-            }
+             function getAveragesForChart(year, monthIndex) {
+                 const entriesThisYear = recordedEntries.filter(e => new Date(e.date + 'T00:00:00').getFullYear() === year); const entriesThisMonth = entriesThisYear.filter(e => new Date(e.date + 'T00:00:00').getMonth() === monthIndex); let totalHoursMonth = 0; const activeDaysMonth = new Set(); entriesThisMonth.forEach(e => { totalHoursMonth += e.hours; activeDaysMonth.add(e.date); }); let totalHoursYear = 0; const monthsWithActivityYear = new Set(); entriesThisYear.forEach(e => { totalHoursYear += e.hours; monthsWithActivityYear.add(getMonthYearString(new Date(e.date + 'T00:00:00'))); }); const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+                 return { avgDaily: activeDaysMonth.size > 0 ? totalHoursMonth / activeDaysMonth.size : 0, avgWeekly: daysInMonth >= 7 && totalHoursMonth > 0 ? (totalHoursMonth / daysInMonth) * 7 : 0, avgMonthly: monthsWithActivityYear.size > 0 ? totalHoursYear / monthsWithActivityYear.size : 0 };
+             }
 
-            function renderCharts(selectedMonthYearValue) {
-                if (!selectedMonthYearValue) { if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = `14px ${computedStyles.fontFamily}`; ctx.fillText(i18n.t('feedbackChartSelectMonth'), ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); return; }
-                try {
-                    const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue); const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number); const monthIndex = selectedMonth - 1; const year = selectedYear; const entriesSelectedMonth = recordedEntries.filter(e => { const d=new Date(e.date+'T00:00:00'); return d.getMonth()===monthIndex && d.getFullYear()===year; }); const daysInSelectedMonth = new Date(year, monthIndex + 1, 0).getDate(); const dailyHoursData = Array(daysInSelectedMonth).fill(0); entriesSelectedMonth.forEach(e => { dailyHoursData[new Date(e.date+'T00:00:00').getDate()-1] += e.hours; }); const chartLabels = Array.from({ length: daysInSelectedMonth }, (_, i) => i + 1); const averages = getAveragesForChart(year, monthIndex);
-                    const annotations = {}; let pluginOptions = {};
-                    if (window.ChartAnnotation) { if (averages.avgDaily > 0) annotations.avgDay = { type: 'line', scaleID: 'y', value: averages.avgDaily, borderColor: avgLineColor1, borderWidth: 1.5, borderDash: [6, 6], label: { content: i18n.t('chartAvgDailyLabel', {value:formatHoursExtensive(averages.avgDaily,true)}), display: true, position: 'end', color: avgLineColor1, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: -10 }}; if (averages.avgWeekly > 0) annotations.avgWeek = { type: 'line', scaleID: 'y', value: averages.avgWeekly, borderColor: avgLineColor2, borderWidth: 1.5, borderDash: [10, 10], label: { content: i18n.t('chartAvgWeeklyLabel', {value:formatHoursExtensive(averages.avgWeekly,true)}), display: true, position: 'end', color: avgLineColor2, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 2 }}; if (averages.avgMonthly > 0) annotations.avgMonth = { type: 'line', scaleID: 'y', value: averages.avgMonthly, borderColor: avgLineColor3, borderWidth: 1.5, borderDash: [2, 2], label: { content: i18n.t('chartAvgMonthlyLabel', {value:formatHoursExtensive(averages.avgMonthly,true)}), display: true, position: 'end', color: avgLineColor3, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 14 }}; pluginOptions.annotation = { drawTime: 'afterDatasetsDraw', annotations: annotations }; } else { console.warn("ChartAnnotation not loaded, average lines disabled."); }
-                    if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy();
-                    monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'bar', data: { labels: chartLabels, datasets: [{ label: i18n.t('chartDailyHoursLabel'), data: dailyHoursData, backgroundColor: primaryColor, borderColor: primaryColor, borderWidth: 0, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title:{display:false}, ticks:{color: textMutedColor, padding: 10, callback: v=>formatHoursExtensive(v, true)}, grid: {color:gridColor, drawBorder: false}}, x: { title:{display:false}, ticks:{color:textMutedColor}, grid:{display: false}}}, plugins: { ...pluginOptions, title: { display: true, text: selectedMonthYearFormatted, color: textColor, font: { size: 14, weight: 'normal' }, padding: { bottom: 15 }}, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: false, padding: 10, cornerRadius: 6, callbacks: { label: ctx => i18n.t('chartTooltipLabel', {day: ctx.label, hours: formatHoursExtensive(ctx.parsed.y)})}}, legend: { display: false } } } });
-                } catch (error) {
-                    console.error("Chart rendering error:", error); if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles.fontFamily}`; ctx.fillText(i18n.t('feedbackChartRenderError'), ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore();
-                }
-            }
+             function renderCharts(selectedMonthYearValue) {
+                 if (!selectedMonthYearValue) { if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = `14px ${computedStyles.fontFamily}`; ctx.fillText(i18n.t('feedbackChartSelectMonth'), ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); return; }
+                 try {
+                     const selectedMonthYearFormatted = formatMonthYearExtensive(selectedMonthYearValue); const [selectedMonth, selectedYear] = selectedMonthYearValue.split('/').map(Number); const monthIndex = selectedMonth - 1; const year = selectedYear; const entriesSelectedMonth = recordedEntries.filter(e => { const d=new Date(e.date+'T00:00:00'); return d.getMonth()===monthIndex && d.getFullYear()===year; }); const daysInSelectedMonth = new Date(year, monthIndex + 1, 0).getDate(); const dailyHoursData = Array(daysInSelectedMonth).fill(0); entriesSelectedMonth.forEach(e => { dailyHoursData[new Date(e.date+'T00:00:00').getDate()-1] += e.hours; }); const chartLabels = Array.from({ length: daysInSelectedMonth }, (_, i) => i + 1); const averages = getAveragesForChart(year, monthIndex);
+                     const annotations = {}; let pluginOptions = {};
+                     if (window.ChartAnnotation) { if (averages.avgDaily > 0) annotations.avgDay = { type: 'line', scaleID: 'y', value: averages.avgDaily, borderColor: avgLineColor1, borderWidth: 1.5, borderDash: [6, 6], label: { content: i18n.t('chartAvgDailyLabel', {value:formatHoursExtensive(averages.avgDaily,true)}), display: true, position: 'end', color: avgLineColor1, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: -10 }}; if (averages.avgWeekly > 0) annotations.avgWeek = { type: 'line', scaleID: 'y', value: averages.avgWeekly, borderColor: avgLineColor2, borderWidth: 1.5, borderDash: [10, 10], label: { content: i18n.t('chartAvgWeeklyLabel', {value:formatHoursExtensive(averages.avgWeekly,true)}), display: true, position: 'end', color: avgLineColor2, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 2 }}; if (averages.avgMonthly > 0) annotations.avgMonth = { type: 'line', scaleID: 'y', value: averages.avgMonthly, borderColor: avgLineColor3, borderWidth: 1.5, borderDash: [2, 2], label: { content: i18n.t('chartAvgMonthlyLabel', {value:formatHoursExtensive(averages.avgMonthly,true)}), display: true, position: 'end', color: avgLineColor3, backgroundColor: tooltipBgColor, font: { size: 9 }, yAdjust: 14 }}; pluginOptions.annotation = { drawTime: 'afterDatasetsDraw', annotations: annotations }; }
+                     if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy();
+                     monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'bar', data: { labels: chartLabels, datasets: [{ label: i18n.t('chartDailyHoursLabel'), data: dailyHoursData, backgroundColor: primaryColor, borderColor: primaryColor, borderWidth: 0, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title:{display:false}, ticks:{color: textMutedColor, padding: 10, callback: v=>formatHoursExtensive(v, true)}, grid: {color:gridColor, drawBorder: false}}, x: { title:{display:false}, ticks:{color:textMutedColor}, grid:{display: false}}}, plugins: { ...pluginOptions, title: { display: true, text: selectedMonthYearFormatted, color: textColor, font: { size: 14, weight: 'normal' }, padding: { bottom: 15 }}, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: false, padding: 10, cornerRadius: 6, callbacks: { label: ctx => i18n.t('chartTooltipLabel', {day: ctx.label, hours: formatHoursExtensive(ctx.parsed.y)})}}, legend: { display: false } } } });
+                 } catch (error) {
+                      if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles.fontFamily}`; ctx.fillText(i18n.t('feedbackChartRenderError'), ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore();
+                 }
+             }
 
-            function updateAllDisplays() {
-                updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning();
-                const selectedMonthValue = chartMonthSelector.value; let chartRendered = false; let clearChartMsgKey = 'feedbackChartSelectMonth';
-                if (recordedEntries.length === 0) { clearChartMsgKey = 'feedbackChartNoData'; } else if (selectedMonthValue) { const hasData = recordedEntries.some(e => getMonthYearString(new Date(e.date+'T00:00:00')) === selectedMonthValue); if (hasData) { renderCharts(selectedMonthValue); chartRendered = true; } else { clearChartMsgKey = 'feedbackChartNoDataMonth'; } } else if (chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.value); chartRendered = true; } else { clearChartMsgKey = 'feedbackChartNoDataYet'; }
-                if (!chartRendered) { if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles.fontFamily}`; const msg = i18n.t(clearChartMsgKey, { month: formatMonthYearExtensive(selectedMonthValue)}); ctx.fillText(msg, ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore(); }
-                if (recordIdInput.value) { saveRecordBtn.textContent = i18n.t('updateRecordButton'); } else { saveRecordBtn.textContent = i18n.t('saveRecordButton'); }
-            }
+             function updateAllDisplays() {
+                 updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning();
+                 const selectedMonthValue = chartMonthSelector.value; let chartRendered = false; let clearChartMsgKey = 'feedbackChartSelectMonth';
+                 if (recordedEntries.length === 0) { clearChartMsgKey = 'feedbackChartNoData'; } else if (selectedMonthValue) { const hasData = recordedEntries.some(e => getMonthYearString(new Date(e.date+'T00:00:00')) === selectedMonthValue); if (hasData) { renderCharts(selectedMonthValue); chartRendered = true; } else { clearChartMsgKey = 'feedbackChartNoDataMonth'; } } else if (chartMonthSelector.options.length > 0 && chartMonthSelector.options[0].value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.value); chartRendered = true; } else { clearChartMsgKey = 'feedbackChartNoDataYet'; }
+                 if (!chartRendered) { if (monthlyHoursChartInstance) monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; const ctx = monthlyHoursChartCtx; ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles.fontFamily}`; const msg = i18n.t(clearChartMsgKey, { month: formatMonthYearExtensive(selectedMonthValue)}); ctx.fillText(msg, ctx.canvas.width/2, ctx.canvas.height/2); ctx.restore(); }
+                 if (recordIdInput.value) { saveRecordBtn.textContent = i18n.t('updateRecordButton'); } else { saveRecordBtn.textContent = i18n.t('saveRecordButton'); }
+             }
 
-            // ----- Funções Auxiliares (Inputs, SW, etc) -----
-            function formatTimeInputOnType(event) {
-                 const input = event.target; let value = input.value; let cursorPos = input.selectionStart; let numericValue = value.replace(/[^\d]/g, ''); let formattedValue = ''; let newCursorPos = cursorPos; numericValue = numericValue.substring(0, 4);
-                 if (numericValue.length === 0) { formattedValue = ''; } else if (numericValue.length <= 2) { formattedValue = numericValue; } else { const hoursPart = numericValue.slice(0, -2); const minutesPart = numericValue.slice(-2); formattedValue = `${hoursPart}:${minutesPart}`; if (value.indexOf(':') === -1 && formattedValue.indexOf(':') !== -1) { if (cursorPos >= formattedValue.indexOf(':')) { newCursorPos = cursorPos + 1; } } }
-                 if (input.value !== formattedValue) { input.value = formattedValue; requestAnimationFrame(() => { input.setSelectionRange(newCursorPos, newCursorPos); }); }
-            }
-            function validateTimeInputOnBlur(event) {
-                const input = event.target; const decimalValue = parseTimeInputToDecimal(input.value); if (!isNaN(decimalValue) && decimalValue > 0) { input.value = formatDecimalToTimeInput(decimalValue); } else if (input.value.trim() !== '') { input.value = ''; }
-            }
-            function validateNotesInput(event) {
-                const input = event.target; if (input.value.length > NOTES_MAX_LENGTH) { input.value = input.value.substring(0, NOTES_MAX_LENGTH); showFeedback(i18n.t('feedbackNotesLengthLimit', { maxLength: NOTES_MAX_LENGTH }), 'info'); }
-            }
-            function registerServiceWorker() {
-                if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./service-worker.js').then((reg) => { console.log('Service Worker registered successfully. Scope:', reg.scope); }).catch((error) => { console.error('Service Worker registration failed:', error); }); }
-            }
+             function formatTimeInputOnType(event) {
+                  const input = event.target; let value = input.value; let cursorPos = input.selectionStart; let numericValue = value.replace(/[^\d]/g, ''); let formattedValue = ''; let newCursorPos = cursorPos; numericValue = numericValue.substring(0, 4);
+                  if (numericValue.length === 0) { formattedValue = ''; } else if (numericValue.length <= 2) { formattedValue = numericValue; } else { const hoursPart = numericValue.slice(0, -2); const minutesPart = numericValue.slice(-2); formattedValue = `${hoursPart}:${minutesPart}`; if (value.indexOf(':') === -1 && formattedValue.indexOf(':') !== -1) { if (cursorPos >= formattedValue.indexOf(':')) { newCursorPos = cursorPos + 1; } } }
+                  if (input.value !== formattedValue) { input.value = formattedValue; requestAnimationFrame(() => { input.setSelectionRange(newCursorPos, newCursorPos); }); }
+             }
+             function validateTimeInputOnBlur(event) {
+                 const input = event.target; const decimalValue = parseTimeInputToDecimal(input.value); if (!isNaN(decimalValue) && decimalValue > 0) { input.value = formatDecimalToTimeInput(decimalValue); } else if (input.value.trim() !== '') { input.value = ''; }
+             }
+             function validateNotesInput(event) {
+                 const input = event.target; if (input.value.length > NOTES_MAX_LENGTH) { input.value = input.value.substring(0, NOTES_MAX_LENGTH); showFeedback(i18n.t('feedbackNotesLengthLimit', { maxLength: NOTES_MAX_LENGTH }), 'info'); }
+             }
+             function registerServiceWorker() {
+                 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./service-worker.js').then((reg) => {}).catch((error) => {}); }
+             }
 
-            // ----- Função de Inicialização -----
-            async function init() {
-                console.log("Initializing Pioneer Work Tracker...");
-                i18n.detectLanguage();
-                await i18n.loadTranslations();
-                console.log("Selecting DOM elements...");
-                appElement=document.getElementById('app');dashboardWeekHours=document.getElementById('dashboard-week-hours');dashboardMonthPercentage=document.getElementById('dashboard-month-percentage');dashboardMonthTotal=document.getElementById('dashboard-month-total');dashboardForecast=document.getElementById('dashboard-forecast');dashboardPlannedDatesContainer=document.getElementById('dashboard-planned-dates');dashboardPlanList=document.getElementById('dashboard-plan-list');progressRingFg=document.getElementById('progress-ring-fg');recordCard=document.getElementById('record-card');recordForm=document.getElementById('record-form');recordIdInput=document.getElementById('record-id');recordDateInput=document.getElementById('record-date');dateLabel=document.getElementById('date-label');displayDate=document.getElementById('display-date');changeDateBtn=document.getElementById('change-date-btn');recordHoursInput=document.getElementById('record-hours');recordTagSelect=document.getElementById('record-tag');recordNotesInput=document.getElementById('record-notes');saveRecordBtn=document.getElementById('save-record-btn');planCard=document.getElementById('plan-card');planForm=document.getElementById('plan-form');planIdInput=document.getElementById('plan-id');planDateInput=document.getElementById('plan-date');planHoursInput=document.getElementById('plan-hours');savePlanBtn=document.getElementById('save-plan-btn');clearPlanFormBtn=document.getElementById('clear-plan-form-btn');planningList=document.getElementById('planning-list');planningListPlaceholder=planningList.querySelector('.placeholder');monthlyGoalInput=document.getElementById('monthly-goal');saveGoalBtn=document.getElementById('save-goal-btn');statsMonthHours=document.getElementById('stats-month-hours');statsMonthGoalProgress=document.getElementById('stats-month-goal-progress');statsMonthProgressBar=document.getElementById('stats-month-progress-bar');statsAvgHoursDay=document.getElementById('stats-avg-hours-day');statsMonthDaysActive=document.getElementById('stats-month-days-active');chartMonthSelector=document.getElementById('chart-month-selector');monthlyHoursChartCtx=document.getElementById('monthlyHoursChart').getContext('2d');historyList=document.getElementById('history-list');historySearchInput=document.getElementById('history-search-input');historyListPlaceholder=historyList.querySelector('.placeholder');showingResultsLabel=document.getElementById('showing-results-label');clearAllDataBtn=document.getElementById('clear-all-data-btn');confirmationDialog=document.getElementById('confirmation-dialog');dialogMessage=document.getElementById('dialog-message');dialogConfirmBtn=document.getElementById('dialog-confirm-btn');dialogCancelBtn=document.getElementById('dialog-cancel-btn'); computedStyles = getComputedStyle(document.body); textColor = computedStyles.getPropertyValue('--text-color').trim(); textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim(); gridColor = computedStyles.getPropertyValue('--border-color').trim(); tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim(); primaryColor = computedStyles.getPropertyValue('--primary-color').trim(); avgLineColor1 = computedStyles.getPropertyValue('--avg-line-color-1').trim(); avgLineColor2 = computedStyles.getPropertyValue('--avg-line-color-2').trim(); avgLineColor3 = computedStyles.getPropertyValue('--avg-line-color-3').trim();
-                if (progressRingFg && progressRingFg.r && progressRingFg.r.baseVal) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; } else { console.error("Progress ring radius (r.baseVal) not found at init."); }
-                console.log("Applying initial translations to DOM...");
-                i18n.applyTranslationsToDOM();
-                console.log("Loading data from storage...");
-                loadData();
-                const oldDefaultTag = "Casa em casa"; const currentDefaultTag = getDefaultTag(); if (oldDefaultTag !== currentDefaultTag) { let tagsUpdated = false; recordedEntries.forEach(entry => { if (entry.tag === oldDefaultTag || !entry.tag) { entry.tag = currentDefaultTag; tagsUpdated = true; } }); if (tagsUpdated) { console.log(`Updating old default tags ('${oldDefaultTag}') to current ('${currentDefaultTag}'). Saving...`); saveData(); } } monthlyGoalInput.value = settings.monthlyGoal;
-                if (window.ChartAnnotation) { try { Chart.register(ChartAnnotation); console.log("ChartAnnotation plugin registered."); } catch (e) { console.error("Error registering ChartAnnotation:", e); } } else { console.warn("ChartAnnotation plugin (chartjs-plugin-annotation) not found globally."); }
-                console.log("Adding event listeners...");
-                appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header[role="button"]'); if (header) { toggleCard(header.closest('.card')); } }); document.querySelectorAll('.card-header[role="button"]').forEach(header => { header.addEventListener('keydown', (e) => { if(e.key==='Enter'||e.key===' '){e.preventDefault(); toggleCard(header.closest('.card'));}}); });
-                changeDateBtn.addEventListener('click', () => setDateInputVisibility(true)); recordHoursInput.addEventListener('input', formatTimeInputOnType); recordHoursInput.addEventListener('blur', validateTimeInputOnBlur); recordNotesInput.addEventListener('input', validateNotesInput); recordForm.addEventListener('submit', handleRecordSubmit); planHoursInput.addEventListener('input', formatTimeInputOnType); planHoursInput.addEventListener('blur', validateTimeInputOnBlur); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress', (e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); clearAllDataBtn.addEventListener('click', handleClearAllData); historySearchInput.addEventListener('input', () => renderHistory()); chartMonthSelector.addEventListener('change', () => updateAllDisplays()); dialogConfirmBtn.addEventListener('click', () => { try {if(typeof currentConfirmCallback === 'function') currentConfirmCallback();} catch(e){console.error("Err in conf cb:", e);} finally {hideConfirmationDialog();}}); dialogCancelBtn.addEventListener('click', hideConfirmationDialog); confirmationDialog.addEventListener('click', (e)=>{if(e.target === confirmationDialog) hideConfirmationDialog();}); window.addEventListener('beforeinstallprompt', (e)=>{ console.log('`beforeinstallprompt` fired.'); e.preventDefault(); deferredInstallPrompt=e; });
-                console.log("Setting initial UI state...");
-                recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); clearRecordForm(); clearPlanForm(); document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) toggleCard(card); });
-                console.log("Performing initial full display update...");
-                updateAllDisplays();
-                registerServiceWorker();
-                if (!settings.goalHasBeenSet) { console.log("Initial goal not set, prompting user..."); setTimeout(promptForMonthlyGoal, 700); }
-                setInterval(updateDashboardPlannedDates, 60 * 1000);
-                console.log("Pioneer Work Tracker Initialization complete.");
-            }
+             async function init() {
+                 i18n.detectLanguage();
+                 await i18n.loadTranslations();
+                 appElement=document.getElementById('app');dashboardWeekHours=document.getElementById('dashboard-week-hours');dashboardMonthPercentage=document.getElementById('dashboard-month-percentage');dashboardMonthTotal=document.getElementById('dashboard-month-total');dashboardForecast=document.getElementById('dashboard-forecast');dashboardPlannedDatesContainer=document.getElementById('dashboard-planned-dates');dashboardPlanList=document.getElementById('dashboard-plan-list');progressRingFg=document.getElementById('progress-ring-fg');recordCard=document.getElementById('record-card');recordForm=document.getElementById('record-form');recordIdInput=document.getElementById('record-id');recordDateInput=document.getElementById('record-date');dateLabel=document.getElementById('date-label');displayDate=document.getElementById('display-date');changeDateBtn=document.getElementById('change-date-btn');recordHoursInput=document.getElementById('record-hours');recordTagSelect=document.getElementById('record-tag');recordNotesInput=document.getElementById('record-notes');saveRecordBtn=document.getElementById('save-record-btn');planCard=document.getElementById('plan-card');planForm=document.getElementById('plan-form');planIdInput=document.getElementById('plan-id');planDateInput=document.getElementById('plan-date');planHoursInput=document.getElementById('plan-hours');savePlanBtn=document.getElementById('save-plan-btn');clearPlanFormBtn=document.getElementById('clear-plan-form-btn');planningList=document.getElementById('planning-list');planningListPlaceholder=planningList.querySelector('.placeholder');monthlyGoalInput=document.getElementById('monthly-goal');saveGoalBtn=document.getElementById('save-goal-btn');statsMonthHours=document.getElementById('stats-month-hours');statsMonthGoalProgress=document.getElementById('stats-month-goal-progress');statsMonthProgressBar=document.getElementById('stats-month-progress-bar');statsAvgHoursDay=document.getElementById('stats-avg-hours-day');statsMonthDaysActive=document.getElementById('stats-month-days-active');chartMonthSelector=document.getElementById('chart-month-selector');monthlyHoursChartCtx=document.getElementById('monthlyHoursChart').getContext('2d');historyList=document.getElementById('history-list');historySearchInput=document.getElementById('history-search-input');historyListPlaceholder=historyList.querySelector('.placeholder');showingResultsLabel=document.getElementById('showing-results-label');clearAllDataBtn=document.getElementById('clear-all-data-btn');confirmationDialog=document.getElementById('confirmation-dialog');dialogMessage=document.getElementById('dialog-message');dialogConfirmBtn=document.getElementById('dialog-confirm-btn');dialogCancelBtn=document.getElementById('dialog-cancel-btn'); computedStyles = getComputedStyle(document.body); textColor = computedStyles.getPropertyValue('--text-color').trim(); textMutedColor = computedStyles.getPropertyValue('--text-color-secondary').trim(); gridColor = computedStyles.getPropertyValue('--border-color').trim(); tooltipBgColor = computedStyles.getPropertyValue('--card-bg').trim(); primaryColor = computedStyles.getPropertyValue('--primary-color').trim(); avgLineColor1 = computedStyles.getPropertyValue('--avg-line-color-1').trim(); avgLineColor2 = computedStyles.getPropertyValue('--avg-line-color-2').trim(); avgLineColor3 = computedStyles.getPropertyValue('--avg-line-color-3').trim();
+                 if (progressRingFg && progressRingFg.r && progressRingFg.r.baseVal) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; }
+                 i18n.applyTranslationsToDOM();
+                 loadData();
+                 const oldDefaultTag = "Casa em casa"; const currentDefaultTag = getDefaultTag(); if (oldDefaultTag !== currentDefaultTag) { let tagsUpdated = false; recordedEntries.forEach(entry => { if (entry.tag === oldDefaultTag || !entry.tag) { entry.tag = currentDefaultTag; tagsUpdated = true; } }); if (tagsUpdated) { saveData(); } } monthlyGoalInput.value = settings.monthlyGoal;
+                 if (window.ChartAnnotation) { try { Chart.register(ChartAnnotation); } catch (e) { console.error("Error registering ChartAnnotation:", e); } }
+                 appElement.addEventListener('click', (event) => { const header = event.target.closest('.card-header[role="button"]'); if (header) { toggleCard(header.closest('.card')); } }); document.querySelectorAll('.card-header[role="button"]').forEach(header => { header.addEventListener('keydown', (e) => { if(e.key==='Enter'||e.key===' '){e.preventDefault(); toggleCard(header.closest('.card'));}}); });
+                 changeDateBtn.addEventListener('click', () => setDateInputVisibility(true)); recordHoursInput.addEventListener('input', formatTimeInputOnType); recordHoursInput.addEventListener('blur', validateTimeInputOnBlur); recordNotesInput.addEventListener('input', validateNotesInput); recordForm.addEventListener('submit', handleRecordSubmit); planHoursInput.addEventListener('input', formatTimeInputOnType); planHoursInput.addEventListener('blur', validateTimeInputOnBlur); planForm.addEventListener('submit', handlePlanSubmit); clearPlanFormBtn.addEventListener('click', clearPlanForm); saveGoalBtn.addEventListener('click', handleGoalSave); monthlyGoalInput.addEventListener('keypress', (e)=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();monthlyGoalInput.blur();}}); clearAllDataBtn.addEventListener('click', handleClearAllData); historySearchInput.addEventListener('input', () => renderHistory()); chartMonthSelector.addEventListener('change', () => updateAllDisplays()); dialogConfirmBtn.addEventListener('click', () => { try {if(typeof currentConfirmCallback === 'function') currentConfirmCallback();} catch(e){} finally {hideConfirmationDialog();}}); dialogCancelBtn.addEventListener('click', hideConfirmationDialog); confirmationDialog.addEventListener('click', (e)=>{if(e.target === confirmationDialog) hideConfirmationDialog();}); window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredInstallPrompt=e; });
+                 recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); clearRecordForm(); clearPlanForm(); document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); const isExpanded = card.classList.contains('expanded'); if (isExpanded !== shouldBeExpanded) toggleCard(card); });
+                 updateAllDisplays();
+                 registerServiceWorker();
+                 if (!settings.goalHasBeenSet) { setTimeout(promptForMonthlyGoal, 700); }
+                 setInterval(updateDashboardPlannedDates, 60 * 1000);
+             }
 
-            init().catch(err => { console.error("Fatal error during application initialization:", err); const body = document.body; body.innerHTML = `<div style="padding: 20px; text-align: center; color: #ff453a; font-family: sans-serif;"><h2>Application Error</h2><p>Could not initialize the application. Please check the console for details or try refreshing.</p><pre style="font-size: 0.8em; color: #ccc; text-align: left; white-space: pre-wrap;">${err.message}\n${err.stack}</pre></div>`; });
+             init().catch(err => { const body = document.body; body.innerHTML = `<div style="padding: 20px; text-align: center; color: #ff453a; font-family: sans-serif;"><h2>Application Error</h2><p>Could not initialize the application. Please check the console for details or try refreshing.</p><pre style="font-size: 0.8em; color: #ccc; text-align: left; white-space: pre-wrap;">${err.message}\n${err.stack}</pre></div>`; });
 
         });
     </script>
