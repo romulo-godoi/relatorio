@@ -18,24 +18,25 @@
     },
     "recordCard": {
       "title": "Registrar Atividade",
-      "dateLabel": "Data:",
+      "dateLabel": "Data",
       "changeDateButton": "(Alterar)",
-      "timeLabel": "Tempo:",
+      "timeLabel": "Tempo",
       "timePlaceholder": "Ex: 2:30 ou 130",
-      "tagLabel": "Modalidade:",
-      "notesLabel": "Notas / Observações (max {maxLength}):",
+      "tagLabel": "Modalidade",
+      "notesLabel": "Notas / Observações (max {maxLength})",
       "notesPlaceholder": "Descreva a atividade...",
       "saveButton": "Salvar Registro",
-      "updateButton": "Atualizar Registro"
+      "updateButton": "Atualizar Registro",
+      "autoNoteFromPlan": "[AUTO] {hours} do plano de {date}."
     },
     "planCard": {
       "title": "Planejar Horas",
-      "dateLabel": "Data Futura:",
-      "hoursLabel": "Horas Planejadas (HH:MM):",
+      "dateLabel": "Data Futura",
+      "hoursLabel": "Horas Planejadas (HH:MM)",
       "hoursPlaceholder": "Ex: 3:00 ou 130",
       "saveButton": "Salvar Plano",
       "clearButton": "Limpar",
-      "listTitle": "Planejamentos:",
+      "listTitle": "Planejamentos",
       "listPlaceholderNoFuture": "Nenhum planejamento futuro.",
       "listPlaceholderNoPastOrFuture": "Nenhum planejamento futuro ou passado.",
       "pastDateSuffix": "(Data Passada)",
@@ -43,7 +44,7 @@
     },
     "statsCard": {
       "title": "Resumo Mensal Detalhado",
-      "goalLabel": "Meta Mensal (Horas):",
+      "goalLabel": "Meta Mensal (Horas)",
       "setGoalButton": "Definir Meta",
       "monthHoursLabel": "Horas no Mês",
       "goalProgressLabel": "Progresso Meta",
@@ -52,8 +53,8 @@
     },
     "chartsCard": {
       "title": "Distribuição de Horas por Modalidade",
-      "monthSelectorLabel": "Visualizar Mês:",
-      "totalHoursLabel": "Total no Mês:",
+      "monthSelectorLabel": "Visualizar Mês",
+      "totalHoursLabel": "Total no Mês",
       "percentageDistributionTitle": "Distribuição Percentual",
       "noDataOption": "Nenhum dado",
       "currentMonthSuffix": "(Mês Atual)",
@@ -110,7 +111,8 @@
     },
     "common": {
       "editButton": "Editar",
-      "deleteButton": "Excluir"
+      "deleteButton": "Excluir",
+      "loading": "Carregando..."
     },
     "tags": {
       "houseToHouse": "Casa em casa",
@@ -125,7 +127,11 @@
       "hours": "horas",
       "minute": "minuto",
       "minutes": "minutos",
-      "andConnector": "e"
+      "andConnector": "e",
+      "hour_short": "h",
+      "hours_short": "h",
+      "minute_short": "m",
+      "minutes_short": "m"
     },
     "dates": {
       "today": "Hoje",
@@ -154,24 +160,25 @@
     },
     "recordCard": {
       "title": "Record Activity",
-      "dateLabel": "Date:",
+      "dateLabel": "Date",
       "changeDateButton": "(Change)",
-      "timeLabel": "Time:",
+      "timeLabel": "Time",
       "timePlaceholder": "Ex: 2:30 or 130",
-      "tagLabel": "Type:",
-      "notesLabel": "Notes / Remarks (max {maxLength}):",
+      "tagLabel": "Type",
+      "notesLabel": "Notes / Remarks (max {maxLength})",
       "notesPlaceholder": "Describe the activity...",
       "saveButton": "Save Record",
-      "updateButton": "Update Record"
+      "updateButton": "Update Record",
+      "autoNoteFromPlan": "[AUTO] {hours} from plan {date}."
     },
     "planCard": {
       "title": "Plan Hours",
-      "dateLabel": "Future Date:",
-      "hoursLabel": "Planned Hours (HH:MM):",
+      "dateLabel": "Future Date",
+      "hoursLabel": "Planned Hours (HH:MM)",
       "hoursPlaceholder": "Ex: 3:00 or 130",
       "saveButton": "Save Plan",
       "clearButton": "Clear",
-      "listTitle": "Plans:",
+      "listTitle": "Plans",
       "listPlaceholderNoFuture": "No future plans.",
       "listPlaceholderNoPastOrFuture": "No future or past plans.",
       "pastDateSuffix": "(Past Date)",
@@ -179,7 +186,7 @@
     },
     "statsCard": {
       "title": "Detailed Monthly Summary",
-      "goalLabel": "Monthly Goal (Hours):",
+      "goalLabel": "Monthly Goal (Hours)",
       "setGoalButton": "Set Goal",
       "monthHoursLabel": "Hours in Month",
       "goalProgressLabel": "Goal Progress",
@@ -188,8 +195,8 @@
     },
     "chartsCard": {
       "title": "Hours Distribution by Type",
-      "monthSelectorLabel": "View Month:",
-      "totalHoursLabel": "Total in Month:",
+      "monthSelectorLabel": "View Month",
+      "totalHoursLabel": "Total in Month",
       "percentageDistributionTitle": "Percentage Distribution",
       "noDataOption": "No data",
       "currentMonthSuffix": "(Current Month)",
@@ -246,7 +253,8 @@
     },
     "common": {
       "editButton": "Edit",
-      "deleteButton": "Delete"
+      "deleteButton": "Delete",
+      "loading": "Loading..."
     },
     "tags": {
       "houseToHouse": "House to house",
@@ -261,7 +269,11 @@
       "hours": "hours",
       "minute": "minute",
       "minutes": "minutes",
-      "andConnector": "and"
+      "andConnector": "and",
+      "hour_short": "h",
+      "hours_short": "h",
+      "minute_short": "m",
+      "minutes_short": "m"
     },
     "dates": {
       "today": "Today",
@@ -281,7 +293,7 @@
       "forecastSuffixDaysSingular": "día",
       "goalMet": "¡Meta Alcanzada! 🎉",
       "goalNotMetMonthEnd": "Meta no alcanzada este mes.",
-      "setGoalPrompt": "Establece tu meta mensal.",
+      "setGoalPrompt": "Establece tu meta mensual.",
       "attemptPrefix": "Intenta ≈",
       "perDay": "por",
       "plannedTripsLabel": "Servicio de Campo Planeado",
@@ -290,24 +302,25 @@
     },
     "recordCard": {
       "title": "Registrar Actividad",
-      "dateLabel": "Fecha:",
+      "dateLabel": "Fecha",
       "changeDateButton": "(Cambiar)",
-      "timeLabel": "Tiempo:",
+      "timeLabel": "Tiempo",
       "timePlaceholder": "Ej: 2:30 o 130",
-      "tagLabel": "Modalidad:",
-      "notesLabel": "Notas / Observaciones (máx {maxLength}):",
+      "tagLabel": "Modalidad",
+      "notesLabel": "Notas / Observaciones (máx {maxLength})",
       "notesPlaceholder": "Describe la actividad...",
       "saveButton": "Guardar Registro",
-      "updateButton": "Actualizar Registro"
+      "updateButton": "Actualizar Registro",
+      "autoNoteFromPlan": "[AUTO] {hours} del plan {date}."
     },
     "planCard": {
       "title": "Planificar Horas",
-      "dateLabel": "Fecha Futura:",
-      "hoursLabel": "Horas Planificadas (HH:MM):",
+      "dateLabel": "Fecha Futura",
+      "hoursLabel": "Horas Planificadas (HH:MM)",
       "hoursPlaceholder": "Ej: 3:00 o 130",
       "saveButton": "Guardar Plan",
       "clearButton": "Limpiar",
-      "listTitle": "Planes:",
+      "listTitle": "Planes",
       "listPlaceholderNoFuture": "Ningún plan futuro.",
       "listPlaceholderNoPastOrFuture": "Ningún plan futuro ni pasado.",
       "pastDateSuffix": "(Fecha Pasada)",
@@ -315,7 +328,7 @@
     },
     "statsCard": {
       "title": "Resumen Mensual Detallado",
-      "goalLabel": "Meta Mensual (Horas):",
+      "goalLabel": "Meta Mensual (Horas)",
       "setGoalButton": "Definir Meta",
       "monthHoursLabel": "Horas en el Mes",
       "goalProgressLabel": "Progreso Meta",
@@ -324,8 +337,8 @@
     },
     "chartsCard": {
       "title": "Distribución de Horas por Modalidad",
-      "monthSelectorLabel": "Ver Mes:",
-      "totalHoursLabel": "Total en el Mes:",
+      "monthSelectorLabel": "Ver Mes",
+      "totalHoursLabel": "Total en el Mes",
       "percentageDistributionTitle": "Distribución Porcentual",
       "noDataOption": "Sin datos",
       "currentMonthSuffix": "(Mes Actual)",
@@ -382,7 +395,8 @@
     },
     "common": {
       "editButton": "Editar",
-      "deleteButton": "Eliminar"
+      "deleteButton": "Eliminar",
+      "loading": "Cargando..."
     },
     "tags": {
       "houseToHouse": "Casa en casa",
@@ -397,7 +411,11 @@
       "hours": "horas",
       "minute": "minuto",
       "minutes": "minutos",
-      "andConnector": "y"
+      "andConnector": "y",
+      "hour_short": "h",
+      "hours_short": "h",
+      "minute_short": "m",
+      "minutes_short": "m"
     },
     "dates": {
       "today": "Hoy",
@@ -426,24 +444,25 @@
     },
     "recordCard": {
       "title": "Aktivität erfassen",
-      "dateLabel": "Datum:",
+      "dateLabel": "Datum",
       "changeDateButton": "(Ändern)",
-      "timeLabel": "Zeit:",
+      "timeLabel": "Zeit",
       "timePlaceholder": "Z.B.: 2:30 oder 130",
-      "tagLabel": "Art:",
-      "notesLabel": "Notizen / Anmerkungen (max. {maxLength}):",
+      "tagLabel": "Art",
+      "notesLabel": "Notizen / Anmerkungen (max. {maxLength})",
       "notesPlaceholder": "Beschreibe die Aktivität...",
       "saveButton": "Bericht speichern",
-      "updateButton": "Bericht aktualisieren"
+      "updateButton": "Bericht aktualisieren",
+      "autoNoteFromPlan": "[AUTO] {hours} von Plan {date}."
     },
     "planCard": {
       "title": "Stunden planen",
-      "dateLabel": "Zukünftiges Datum:",
-      "hoursLabel": "Geplante Stunden (HH:MM):",
+      "dateLabel": "Zukünftiges Datum",
+      "hoursLabel": "Geplante Stunden (HH:MM)",
       "hoursPlaceholder": "Z.B.: 3:00 oder 130",
       "saveButton": "Plan speichern",
       "clearButton": "Leeren",
-      "listTitle": "Pläne:",
+      "listTitle": "Pläne",
       "listPlaceholderNoFuture": "Keine zukünftigen Pläne.",
       "listPlaceholderNoPastOrFuture": "Keine zukünftigen oder vergangenen Pläne.",
       "pastDateSuffix": "(Vergangenes Datum)",
@@ -451,7 +470,7 @@
     },
     "statsCard": {
       "title": "Detaillierte Monatsübersicht",
-      "goalLabel": "Monatsziel (Stunden):",
+      "goalLabel": "Monatsziel (Stunden)",
       "setGoalButton": "Ziel festlegen",
       "monthHoursLabel": "Stunden im Monat",
       "goalProgressLabel": "Zielfortschritt",
@@ -460,8 +479,8 @@
     },
     "chartsCard": {
       "title": "Stundenverteilung nach Art",
-      "monthSelectorLabel": "Monat anzeigen:",
-      "totalHoursLabel": "Gesamt im Monat:",
+      "monthSelectorLabel": "Monat anzeigen",
+      "totalHoursLabel": "Gesamt im Monat",
       "percentageDistributionTitle": "Prozentuale Verteilung",
       "noDataOption": "Keine Daten",
       "currentMonthSuffix": "(Aktueller Monat)",
@@ -518,7 +537,8 @@
     },
     "common": {
       "editButton": "Bearbeiten",
-      "deleteButton": "Löschen"
+      "deleteButton": "Löschen",
+      "loading": "Lädt..."
     },
     "tags": {
       "houseToHouse": "Haus zu Haus",
@@ -533,7 +553,11 @@
       "hours": "Stunden",
       "minute": "Minute",
       "minutes": "Minuten",
-      "andConnector": "und"
+      "andConnector": "und",
+      "hour_short": "Std",
+      "hours_short": "Std",
+      "minute_short": "Min",
+      "minutes_short": "Min"
     },
     "dates": {
       "today": "Heute",
@@ -562,24 +586,25 @@
     },
     "recordCard": {
       "title": "Enregistrer l'Activité",
-      "dateLabel": "Date :",
+      "dateLabel": "Date",
       "changeDateButton": "(Changer)",
-      "timeLabel": "Temps :",
+      "timeLabel": "Temps",
       "timePlaceholder": "Ex : 2:30 ou 130",
-      "tagLabel": "Type :",
-      "notesLabel": "Notes / Observations (max {maxLength}) :",
+      "tagLabel": "Type",
+      "notesLabel": "Notes / Observations (max {maxLength})",
       "notesPlaceholder": "Décrire l'activité...",
       "saveButton": "Enregistrer le Rapport",
-      "updateButton": "Mettre à Jour le Rapport"
+      "updateButton": "Mettre à Jour le Rapport",
+      "autoNoteFromPlan": "[AUTO] {hours} du plan {date}."
     },
     "planCard": {
       "title": "Planifier les Heures",
-      "dateLabel": "Date Future :",
-      "hoursLabel": "Heures Planifiées (HH:MM) :",
+      "dateLabel": "Date Future",
+      "hoursLabel": "Heures Planifiées (HH:MM)",
       "hoursPlaceholder": "Ex : 3:00 ou 130",
       "saveButton": "Sauvegarder le Plan",
       "clearButton": "Effacer",
-      "listTitle": "Plans :",
+      "listTitle": "Plans",
       "listPlaceholderNoFuture": "Aucun plan futur.",
       "listPlaceholderNoPastOrFuture": "Aucun plan futur ou passé.",
       "pastDateSuffix": "(Date Passée)",
@@ -587,7 +612,7 @@
     },
     "statsCard": {
       "title": "Résumé Mensuel Détaillé",
-      "goalLabel": "Objectif Mensuel (Heures) :",
+      "goalLabel": "Objectif Mensuel (Heures)",
       "setGoalButton": "Définir l'Objectif",
       "monthHoursLabel": "Heures dans le Mois",
       "goalProgressLabel": "Progression Objectif",
@@ -596,8 +621,8 @@
     },
     "chartsCard": {
       "title": "Distribution des Heures par Type",
-      "monthSelectorLabel": "Voir le Mois :",
-      "totalHoursLabel": "Total dans le Mois :",
+      "monthSelectorLabel": "Voir le Mois",
+      "totalHoursLabel": "Total dans le Mois",
       "percentageDistributionTitle": "Distribution Pourcentage",
       "noDataOption": "Aucune donnée",
       "currentMonthSuffix": "(Mois Actuel)",
@@ -654,7 +679,8 @@
     },
     "common": {
       "editButton": "Modifier",
-      "deleteButton": "Supprimer"
+      "deleteButton": "Supprimer",
+      "loading": "Chargement..."
     },
     "tags": {
       "houseToHouse": "Porte à porte",
@@ -669,7 +695,11 @@
       "hours": "heures",
       "minute": "minute",
       "minutes": "minutes",
-      "andConnector": "et"
+      "andConnector": "et",
+      "hour_short": "h",
+      "hours_short": "h",
+      "minute_short": "min",
+      "minutes_short": "min"
     },
     "dates": {
       "today": "Aujourd'hui",
