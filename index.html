@@ -147,6 +147,7 @@
 
     <script>
         (async () => {
+            // --- Translation & Setup Variables (unchanged) ---
             let translations = {};
             let currentLang = 'en';
             const supportedLanguages = ["pt-BR", "en", "es", "de", "fr"];
@@ -205,6 +206,7 @@
                  if (loadingIndicator) loadingIndicator.textContent = t('common.loading');
              }
 
+            // --- Element & State Variables (unchanged) ---
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let recordedEntries = [], plannedEntries = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
             let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
@@ -218,6 +220,7 @@
             const loadingIndicator = document.getElementById('loading-indicator');
             if (loadingIndicator) loadingIndicator.classList.remove('hidden');
 
+            // --- Translation Loading (unchanged, includes corrected MONTH/WEEKDAY fetching) ---
             try {
                  const response = await fetch('translations.json');
                  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -245,70 +248,65 @@
                 console.error('FATAL: Error loading/processing translations:', error);
                  if (loadingIndicator) loadingIndicator.textContent = 'Error loading language file!';
                  alert("Could not load language data. UI might be broken.");
-                 // Define hardcoded fallbacks here if loading fails entirely
                  MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
                  WEEKDAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
             }
 
+            // --- Element Assignments (unchanged) ---
             appElement = document.getElementById('app'); dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list'); progressRingFg = document.getElementById('progress-ring-fg'); recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn'); planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder'); monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active'); chartMonthSelector = document.getElementById('chart-month-selector'); monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d'); historyList = document.getElementById('history-list'); historySearchInput = document.getElementById('history-search-input'); historyListPlaceholder = historyList?.querySelector('.placeholder'); showingResultsLabel = document.getElementById('showing-results-label'); clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn'); chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
 
+            // --- Style & Ring Calculations (unchanged) ---
             try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Cannot get computed styles"); computedStyles = {}; } textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff'; textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa'; tooltipBgColor = computedStyles.getPropertyValue?.('--card-bg')?.trim() || '#1c1c1e'; chartColors = ['#0A84FF', '#30D158', '#FF9F0A', '#AF52DE', '#5E5CE6', '#FF69B4', '#32CD32', '#FFD700'].map((fallback, i) => computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim() || fallback); if (progressRingFg && progressRingFg.r?.baseVal?.value) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; }
 
-             // --- START OF CORRECTION: Date/Time Helper Functions ---
+
+             // --- START OF HELPER FUNCTIONS SECTION ---
+
+             // Corrected Date/Time Helpers (from previous step)
              function getCurrentDateString() {
-                 const t = new Date(); // Gets current local date and time
+                 const t = new Date();
                  return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
              }
-
-             // Helper to parse YYYY-MM-DD into a LOCAL Date object (midnight local time)
              function parseLocalDate(dateString) {
                  if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
                     console.warn("Invalid date string passed to parseLocalDate:", dateString);
-                    return new Date(NaN); // Return invalid date
+                    return new Date(NaN);
                  }
-                 // Creates date based on local time zone
                  const [y, m, d] = dateString.split('-').map(Number);
                  return new Date(y, m - 1, d);
              }
-
              function formatDisplayDate(dateString) {
                  if (!dateString || !dateString.includes('-')) return dateString;
                  try {
                      const date = parseLocalDate(dateString);
                      if (isNaN(date.valueOf())) throw new Error("Invalid date created");
-                     // Use Intl.DateTimeFormat without timezone specifier, defaults to local
                      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
                      return new Intl.DateTimeFormat(currentLang.split('-')[0] || 'default', options).format(date);
                  } catch (e) {
                     console.error("Error formatting display date:", dateString, e);
-                    const [y, m, d] = dateString.split('-'); // Basic fallback
+                    const [y, m, d] = dateString.split('-');
                     return `${d}/${m}/${y}`;
                  }
              }
-
-             function getMonthYearString(date) { // Accepts a Date object
-                 const m = String(date.getMonth() + 1).padStart(2, '0'); // Use local month
-                 const y = date.getFullYear(); // Use local year
+             function getMonthYearString(date) {
+                 const m = String(date.getMonth() + 1).padStart(2, '0');
+                 const y = date.getFullYear();
                  return `${m}/${y}`;
              }
-
-             function getStartOfWeek(date = new Date()) { // Works with local Date object
+             function getStartOfWeek(date = new Date()) {
                  const d = new Date(date);
-                 d.setHours(0, 0, 0, 0); // Set to midnight local time
-                 const dayOfWeek = d.getDay(); // 0 for Sunday, 1 for Monday... (local)
-                 const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust to Monday (or Sunday if week starts Sunday)
+                 d.setHours(0, 0, 0, 0);
+                 const dayOfWeek = d.getDay();
+                 const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
                  const sOW = new Date(d.setDate(diff));
                  return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`;
              }
-
              function getDateMonthsAgo(months) {
-                 const d = new Date(); // Start with current local date/time
-                 d.setHours(0, 0, 0, 0); // Midnight local time
-                 d.setMonth(d.getMonth() - months); // Go back months locally
+                 const d = new Date();
+                 d.setHours(0, 0, 0, 0);
+                 d.setMonth(d.getMonth() - months);
                  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
              }
-
-             function formatMonthYearExtensive(monthYearString) { // MM/YYYY
+             function formatMonthYearExtensive(monthYearString) {
                  if (!monthYearString || !monthYearString.includes('/') || !Array.isArray(MONTH_NAMES) || MONTH_NAMES.length<12) return monthYearString;
                  const [m,y]=monthYearString.split('/');
                  const idx=parseInt(m,10)-1;
@@ -316,20 +314,73 @@
                  return `${MONTH_NAMES[idx]} ${y}`;
              }
 
-             // No changes needed for formatHoursExtensive, formatDecimalToTimeInput, parseTimeInputToDecimal as they don't handle full dates.
+            // --- FUNCTIONS RESTORED ---
+             function formatHoursExtensive(hoursDecimal, short=false) {
+                 if (isNaN(hoursDecimal) || hoursDecimal < 0) hoursDecimal = 0;
+                 const totalMinutes = Math.round(hoursDecimal * 60);
+                 const hours = Math.floor(totalMinutes / 60);
+                 const minutes = totalMinutes % 60;
+                 const hKey = short?(hours === 1?'units.hour_short':'units.hours_short'):(hours === 1?'units.hour':'units.hours');
+                 const mKey = short?(minutes === 1?'units.minute_short':'units.minutes_short'):(minutes === 1?'units.minute':'units.minutes');
+                 let result='', hPart='', mPart='';
+                 if (hours>0){const hUnit=t(hKey); hPart=`${hours}${short?hUnit:' '+hUnit}`;}
+                 if (minutes>0){const mUnit=t(mKey); mPart=`${minutes}${short?mUnit:' '+mUnit}`;}
+                 if (hPart && mPart){const connector=short?" ":` ${t('units.andConnector')} `; result=`${hPart}${connector}${mPart}`;}
+                 else{result=hPart||mPart;}
+                 if(result===''){const zeroKey=short?'units.hours_short':'units.hours'; result=`0${short?t(zeroKey):' '+t(zeroKey,{count:0})}`;} // Use {count: 0} for pluralization
+                 return result;
+             }
 
+             function formatDecimalToTimeInput(d) {
+                 if(isNaN(d)||d<=0)return"";
+                 const t=Math.round(d*60), h=Math.floor(t/60), m=t%60;
+                 return `${h}:${String(m).padStart(2,'0')}`;
+             }
+
+             function parseTimeInputToDecimal(s) {
+                 if(!s)return 0; const t=s.trim(); if(!t)return 0;
+                 // Try H:MM format
+                 const c=t.match(/^(\d{1,3}):(\d{1,2})$/);
+                 if(c){
+                     const h=parseInt(c[1],10), m=parseInt(c[2],10);
+                     if(!isNaN(h)&&!isNaN(m)&&m>=0&&m<60&&h>=0)return h+(m/60);
+                 }
+                 // Try HMM or MM or M format (e.g., 130 -> 1:30, 30 -> 0:30, 5 -> 0:05)
+                 const n=t.match(/^(\d+)$/);
+                 if(n){
+                     const str=n[1],v=parseInt(str,10); if(isNaN(v))return NaN; // Invalid if not a number
+                     // Treat 1 or 2 digits as minutes (e.g., 30 -> 0.5, 5 -> 0.0833)
+                     if(str.length<=2){
+                         if(v<60)return v/60;
+                         // Don't allow > 60 if only 2 digits (e.g. '75') - could be ambiguous
+                         // Allow it if explicitly more than 2 digits (e.g. '175' for 1h 75m is handled below)
+                         // Or maybe treat '75' as 1h 15m? Stick to MM for simplicity for now.
+                     }
+                     // Treat 3 or 4 digits as H...MM (e.g., 130 -> 1:30, 1215 -> 12:15)
+                     if(str.length>=3){
+                         const hs=str.slice(0,-2), ms=str.slice(-2);
+                         const h=parseInt(hs,10), m=parseInt(ms,10);
+                         if(!isNaN(h)&&!isNaN(m)&&m>=0&&m<60&&h>=0)return h+(m/60);
+                     }
+                 }
+                 // If nothing matches, return NaN (or could return 0 or throw error)
+                 return NaN;
+             }
+            // --- END OF FUNCTIONS RESTORED ---
+
+
+             // Corrected Date/Time Helper (formatRelativeDate, from previous step)
              function formatRelativeDate(dateString) {
-                 const today = new Date(); today.setHours(0, 0, 0, 0); // Midnight LOCAL time today
-                 const inputDate = parseLocalDate(dateString); // Midnight LOCAL time for the input date
+                 const today = new Date(); today.setHours(0, 0, 0, 0);
+                 const inputDate = parseLocalDate(dateString);
 
                  if (isNaN(inputDate.valueOf()) || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length < 7) {
-                     return formatDisplayDate(dateString); // Fallback if input is invalid
+                     return formatDisplayDate(dateString);
                  }
 
                  const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
                  const week = new Date(today); week.setDate(today.getDate() + 7);
 
-                 // Compare time values (milliseconds since epoch) which correctly handles dates
                  const inputTime = inputDate.getTime();
                  const todayTime = today.getTime();
                  const tomorrowTime = tomorrow.getTime();
@@ -337,14 +388,14 @@
                  if (inputTime === todayTime) return t('dates.today');
                  if (inputTime === tomorrowTime) return t('dates.tomorrow');
                  if (inputDate > tomorrow && inputDate < week) {
-                     return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`; // Use getDay() for local day of week
+                     return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`;
                  }
 
-                 return formatDisplayDate(dateString); // Default formatted date
+                 return formatDisplayDate(dateString);
              }
-             // --- END OF CORRECTION: Date/Time Helper Functions ---
 
 
+             // --- Other Helper Functions (saveData, loadData, etc. - includes corrected sorting from previous step) ---
              function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES,JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS,JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS,JSON.stringify(settings));}catch(e){console.error("Save Err:",e); showFeedback('feedback.saveError','danger');} }
              function loadData() {
                  try{
@@ -352,17 +403,14 @@
                      if(sER){try{const p=JSON.parse(sER); recordedEntries=Array.isArray(p)?p.map(e=>({...e, notes:e.notes?.substring(0,NOTES_MAX_LENGTH)||'', tag:e.tag||DEFAULT_TAG_VALUE})):(()=>{throw new Error("Entries not array")})(); }catch(e){console.error("Parse Err:",e);recordedEntries=[]; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES);}}
                      const sP=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS);
                      plannedEntries=sP?JSON.parse(sP):[];
-                     // Migrate old data if necessary (schema change from v1.0 plannedHours to v1.1 hours)
                      plannedEntries.forEach(p=>{if(p.plannedHours!==undefined && typeof p.plannedHours==='number'){p.hours=p.plannedHours;delete p.plannedHours;}});
                      const sSR=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS);
                      settings={monthlyGoal:70,goalHasBeenSet:false, ...JSON.parse(sSR||'{}')};
                      if(isNaN(settings.monthlyGoal)||settings.monthlyGoal<=0)settings.monthlyGoal=70;
                      if(typeof settings.goalHasBeenSet!=='boolean')settings.goalHasBeenSet=false;
 
-                     // --- CORRECTION: Sort using string comparison ---
-                     recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
-                     plannedEntries.sort((a, b) => a.date.localeCompare(b.date));
-                     // --- END CORRECTION ---
+                     recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); // Sort YYYY-MM-DD strings
+                     plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); // Sort YYYY-MM-DD strings
 
                      console.log("Data loaded.");
                  }catch(e){
@@ -377,13 +425,12 @@
              function setDateInputVisibility(v) { isDateInputVisible=v; if(v){ recordDateInput?.classList.remove('hidden'); dateLabel?.classList.add('visually-hidden'); recordDateInput?.focus(); } else{ recordDateInput?.classList.add('hidden'); dateLabel?.classList.remove('visually-hidden'); if (displayDate) displayDate.textContent=(!recordDateInput?.value || recordDateInput.value===getCurrentDateString())?t('dates.today'):formatDisplayDate(recordDateInput.value);}}
              function toggleCard(e) { if(!e)return;const ex=e.classList.contains('expanded');e.classList.toggle('expanded',!ex); const i=e.querySelector('.toggle-icon'); if(i) i.textContent=!ex?'▲':'▼';}
              function clearRecordForm() { recordForm?.reset(); if(recordIdInput)recordIdInput.value=''; if(recordDateInput)recordDateInput.value=getCurrentDateString(); setDateInputVisibility(false); if(recordTagSelect)recordTagSelect.value=DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=''; if(recordHoursInput)recordHoursInput.value=''; if(saveRecordBtn)saveRecordBtn.textContent=t('recordCard.saveButton'); saveRecordBtn?.classList.remove('editing'); currentEditingId=null;}
-             function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput?.value?parseInt(recordIdInput.value,10):Date.now(); const date=(isDateInputVisible||(recordDateInput?.value && recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hours=parseTimeInputToDecimal(recordHoursInput?.value); const tag=recordTagSelect?.value||DEFAULT_TAG_VALUE; const notes=recordNotesInput?.value.trim().substring(0,NOTES_MAX_LENGTH); if(isNaN(hours)||hours<=0){alert(t('feedback.invalidTimeFormat'));recordHoursInput?.focus(); return;} if(!date){alert(t('feedback.invalidDate'));return;} const entry={id,date,hours,tag,notes}; const idx=recordedEntries.findIndex(e=>e.id===id); if(idx>-1)recordedEntries[idx]=entry; else recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); /* Corrected Sort */ saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess','success'); }
+             function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput?.value?parseInt(recordIdInput.value,10):Date.now(); const date=(isDateInputVisible||(recordDateInput?.value && recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hours=parseTimeInputToDecimal(recordHoursInput?.value); const tag=recordTagSelect?.value||DEFAULT_TAG_VALUE; const notes=recordNotesInput?.value.trim().substring(0,NOTES_MAX_LENGTH); if(isNaN(hours)||hours<=0){alert(t('feedback.invalidTimeFormat'));recordHoursInput?.focus(); return;} if(!date){alert(t('feedback.invalidDate'));return;} const entry={id,date,hours,tag,notes}; const idx=recordedEntries.findIndex(e=>e.id===id); if(idx>-1)recordedEntries[idx]=entry; else recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess','success'); }
              function editRecordEntry(id) { const entry=recordedEntries.find(e=>e.id===id); if(entry){ if(!recordCard?.classList.contains('expanded'))toggleCard(recordCard); currentEditingId=id; if(recordIdInput)recordIdInput.value=entry.id; if(recordDateInput)recordDateInput.value=entry.date; setDateInputVisibility(entry.date!==getCurrentDateString()); if(recordHoursInput)recordHoursInput.value=formatDecimalToTimeInput(entry.hours); if(recordTagSelect)recordTagSelect.value=entry.tag||DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=entry.notes||''; if(saveRecordBtn){saveRecordBtn.textContent=t('recordCard.updateButton');saveRecordBtn.classList.add('editing');} recordCard?.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput?.focus();}}
              function deleteRecordEntry(id) { showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'),()=>{const i=recordedEntries.findIndex(e=>e.id===id); if(i>-1){recordedEntries.splice(i,1);saveData();updateAllDisplays();showFeedback('feedback.recordDeletedSuccess','info');if(currentEditingId===id)clearRecordForm();}else console.warn("Not found for del:", id);});}
              function clearPlanForm() { planForm?.reset(); if(planIdInput)planIdInput.value=''; if(planDateInput)planDateInput.value=''; if(planHoursInput)planHoursInput.value=''; if(savePlanBtn)savePlanBtn.textContent=t('planCard.saveButton'); currentEditingId=null; }
-             function handlePlanSubmit(event) { event.preventDefault(); const id=planIdInput?.value?parseInt(planIdInput.value,10):Date.now(); const date=planDateInput?.value; const hours=parseTimeInputToDecimal(planHoursInput?.value); const todayStr=getCurrentDateString(); if(!date||isNaN(hours)||hours<=0){alert(t('feedback.planFormInvalid')); planHoursInput?.focus();return;} if(date<todayStr){alert(t('feedback.planDatePastError'));planDateInput?.focus();return;} const plan={id,date,hours}; const idx=plannedEntries.findIndex(p=>p.id===id); if(idx>-1)plannedEntries[idx]=plan; else plannedEntries.push(plan); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); /* Corrected Sort */ saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('feedback.planSavedSuccess','success'); }
-             function markPlanAsDone(id) { const idx=plannedEntries.findIndex(p=>p.id===id); if(idx===-1){showFeedback('feedback.planNotFound','danger');return;} const plan=plannedEntries[idx]; const todayStr=getCurrentDateString(); const recDate=todayStr<plan.date?todayStr:plan.date; // Use earlier date
-                 const note=t('recordCard.autoNoteFromPlan',{date:formatDisplayDate(plan.date),hours:formatHoursExtensive(plan.hours)}); const entry={id:Date.now(),date:recDate,hours:plan.hours,tag:DEFAULT_TAG_VALUE,notes:note}; recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); /* Corrected Sort */ plannedEntries.splice(idx,1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess','success'); }
+             function handlePlanSubmit(event) { event.preventDefault(); const id=planIdInput?.value?parseInt(planIdInput.value,10):Date.now(); const date=planDateInput?.value; const hours=parseTimeInputToDecimal(planHoursInput?.value); const todayStr=getCurrentDateString(); if(!date||isNaN(hours)||hours<=0){alert(t('feedback.planFormInvalid')); planHoursInput?.focus();return;} if(date<todayStr){alert(t('feedback.planDatePastError'));planDateInput?.focus();return;} const plan={id,date,hours}; const idx=plannedEntries.findIndex(p=>p.id===id); if(idx>-1)plannedEntries[idx]=plan; else plannedEntries.push(plan); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('feedback.planSavedSuccess','success'); }
+             function markPlanAsDone(id) { const idx=plannedEntries.findIndex(p=>p.id===id); if(idx===-1){showFeedback('feedback.planNotFound','danger');return;} const plan=plannedEntries[idx]; const todayStr=getCurrentDateString(); const recDate=todayStr<plan.date?todayStr:plan.date; const note=t('recordCard.autoNoteFromPlan',{date:formatDisplayDate(plan.date),hours:formatHoursExtensive(plan.hours)}); const entry={id:Date.now(),date:recDate,hours:plan.hours,tag:DEFAULT_TAG_VALUE,notes:note}; recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.splice(idx,1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess','success'); }
              function deletePlanEntry(id){ showConfirmationDialog(t('dialog.confirmDeletePlanMessage'),()=>{plannedEntries=plannedEntries.filter(p=>p.id!==id); saveData(); updateAllDisplays(); showFeedback('feedback.planDeletedSuccess','info'); if(currentEditingId===id)clearPlanForm();});}
              function handleGoalSave(){ const g=parseInt(monthlyGoalInput?.value,10); if(!isNaN(g)&&g>0){settings.monthlyGoal=g;settings.goalHasBeenSet=true;saveData();updateAllDisplays();showFeedback('feedback.goalUpdateSuccess','success');triggerInstallPromptIfAvailable('goal save');}else{alert(t('feedback.invalidGoalValue')); if(monthlyGoalInput) monthlyGoalInput.value=settings.monthlyGoal;}}
              function handleClearAllData() { showConfirmationDialog(t('dialog.confirmClearAllDataMessage'),()=>{recordedEntries=[];plannedEntries=[];settings={monthlyGoal:70,goalHasBeenSet:false}; if(monthlyGoalInput)monthlyGoalInput.value=settings.monthlyGoal;saveData();clearRecordForm();clearPlanForm();updateAllDisplays();showFeedback('feedback.clearAllDataSuccess','danger'); document.querySelectorAll('.card').forEach(c=>{if(c.id!=='record-card'&&c.classList.contains('expanded'))toggleCard(c);else if(c.id==='record-card'&&!c.classList.contains('expanded'))toggleCard(c);});});}
@@ -391,26 +438,24 @@
              function hideConfirmationDialog() { confirmationDialog?.classList.remove('visible'); setTimeout(()=>{currentConfirmCallback=null;},300);}
              function showFeedback(key,type='info',vars={}) { let msg=t(key,vars); console.log(`Feedback[${type}]: ${msg}`); const fb=document.createElement('div'); fb.textContent=msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type==='success'?'var(--success-color)':type==='danger'?'var(--danger-color)':'var(--primary-color)'}; color: var(--text-color);`; document.body.appendChild(fb); setTimeout(()=>{fb.style.opacity='1'; fb.style.bottom='30px';},10); setTimeout(()=>{fb.style.opacity='0'; fb.style.bottom='10px';},3500); setTimeout(()=>{fb.parentNode?.removeChild(fb)},4000);}
 
-             function updateDashboard() {
-                 const today = new Date(); // Local current date/time
-                 const currentMonth = today.getMonth(); // Local month index
-                 const currentYear = today.getFullYear(); // Local year
+            // --- Display Update Functions (includes corrected date handling from previous step) ---
+            function updateDashboard() {
+                 const today = new Date();
+                 const currentMonth = today.getMonth();
+                 const currentYear = today.getFullYear();
                  let monthHours = 0, weekHours = 0;
-                 const startOfWeekStr = getStartOfWeek(today); // Based on local date
+                 const startOfWeekStr = getStartOfWeek(today);
 
                  recordedEntries.forEach(entry => {
-                     const entryDate = parseLocalDate(entry.date); // Parse as local date
-                     if (isNaN(entryDate.valueOf())) return; // Skip invalid dates
+                     const entryDate = parseLocalDate(entry.date);
+                     if (isNaN(entryDate.valueOf())) return;
 
-                     // --- CORRECTION: Filter using local month/year ---
                      if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) {
                          monthHours += entry.hours;
                      }
-                     // --- CORRECTION: Compare date string directly for week calc ---
                      if (entry.date >= startOfWeekStr) {
                          weekHours += entry.hours;
                      }
-                     // --- END CORRECTION ---
                  });
 
                  if(dashboardWeekHours)dashboardWeekHours.textContent=formatHoursExtensive(weekHours);
@@ -420,10 +465,9 @@
                  updateProgressRing(monthHours, goal);
                  if(dashboardMonthTotal)dashboardMonthTotal.innerHTML=`${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(monthHours)}</strong>`;
 
-                 // --- CORRECTION: Forecast based on local date components ---
-                 const lastDayOfMonthObj = new Date(currentYear, currentMonth + 1, 0); // Gets last day of current local month
-                 const lastDayOfMonth = lastDayOfMonthObj.getDate(); // Day number
-                 const todayDay = today.getDate(); // Current local day number
+                 const lastDayOfMonthObj = new Date(currentYear, currentMonth + 1, 0);
+                 const lastDayOfMonth = lastDayOfMonthObj.getDate();
+                 const todayDay = today.getDate();
 
                  const remainingDays = Math.max(0, lastDayOfMonth - todayDay);
                  const remainingHoursNeeded = Math.max(0, goal - monthHours);
@@ -433,80 +477,64 @@
                     forecastText = `<span>${t('dashboard.setGoalPrompt')}</span>`;
                  } else if (remainingHoursNeeded <= 0) {
                     forecastText = `<span>${t('dashboard.goalMet')}</span>`;
-                 } else if (remainingDays <= 0 && todayDay === lastDayOfMonth) { // End of month today, still needed
+                 } else if (remainingDays <= 0 && todayDay === lastDayOfMonth) {
                     forecastText = `<span>${t('dashboard.goalNotMetMonthEnd')}</span>`;
-                 } else if (remainingDays <= 0) { // Should not happen if logic above is correct, but safety catch
+                 } else if (remainingDays <= 0) {
                      forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span>`;
-                 } else { // Still time and hours remaining
+                 } else {
                     let avgNeededPerDay = remainingHoursNeeded / remainingDays;
                     let daysToWork = remainingDays;
-
-                    // Adjust if avg is too low, suggest working fewer days with higher avg
                     if (avgNeededPerDay > 0 && avgNeededPerDay < MIN_HOURS_PER_DAY_FORECAST) {
                         daysToWork = Math.ceil(remainingHoursNeeded / MIN_HOURS_PER_DAY_FORECAST);
                         avgNeededPerDay = MIN_HOURS_PER_DAY_FORECAST;
                     }
-
                     const daysSuffix = t(daysToWork === 1 ? 'dashboard.forecastSuffixDaysSingular' : 'dashboard.forecastSuffixDaysPlural');
-                    const suggestion = `${t('dashboard.attemptPrefix')}<strong>${formatHoursExtensive(avgNeededPerDay, true)}</strong> ${t('dashboard.perDay')} ${daysToWork} ${daysSuffix}.`; // Simplified the "/ {ds}" part
+                    const suggestion = `${t('dashboard.attemptPrefix')}<strong>${formatHoursExtensive(avgNeededPerDay, true)}</strong> ${t('dashboard.perDay')} ${daysToWork} ${daysSuffix}.`;
                     forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span><span>${suggestion}</span>`;
                  }
                  if(dashboardForecast) dashboardForecast.innerHTML = forecastText;
-                 // --- END CORRECTION ---
 
-                 updateDashboardPlannedDates(); // This function also needs checking/updates
+                 updateDashboardPlannedDates();
              }
-             function updateProgressRing(cV, mV) { const p=mV>0?Math.min(100,(cV/mV)*100):0; const off=progressRingCircumference*(1-p/100); if(progressRingFg){progressRingFg.style.strokeDasharray=`${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset=Math.max(0,off);}}
-
-             function updateDashboardPlannedDates() {
-                 const todayStr = getCurrentDateString(); // Today's local date string
-                 const now = new Date(); // Current local time
+            function updateProgressRing(cV, mV) { const p=mV>0?Math.min(100,(cV/mV)*100):0; const off=progressRingCircumference*(1-p/100); if(progressRingFg){progressRingFg.style.strokeDasharray=`${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset=Math.max(0,off);}}
+            function updateDashboardPlannedDates() {
+                 const todayStr = getCurrentDateString();
+                 const now = new Date();
                  const currentHour = now.getHours();
-                 const overdueHourThreshold = 18; // Example threshold
+                 const overdueHourThreshold = 18;
 
-                 // --- CORRECTION: Use string comparison and formatRelativeDate (already corrected) ---
                  const pastDuePlans = plannedEntries
                      .filter(p => p.date < todayStr)
-                     .sort((a, b) => a.date.localeCompare(b.date)); // Sort chronologically
-
+                     .sort((a, b) => a.date.localeCompare(b.date));
                  const upcomingPlans = plannedEntries
                      .filter(p => p.date >= todayStr)
-                     .sort((a, b) => a.date.localeCompare(b.date)); // Sort chronologically
+                     .sort((a, b) => a.date.localeCompare(b.date));
 
-                 // Combine intelligently: Show nearest upcoming first, then nearest past due
                  const displayPlans = upcomingPlans.slice(0, 3);
                  if (displayPlans.length < 3) {
                      const neededFromPast = 3 - displayPlans.length;
-                     // Get the *most recent* past due plans (end of the sorted pastDuePlans array)
                      const recentPastDue = pastDuePlans.slice(-neededFromPast);
-                     displayPlans.unshift(...recentPastDue); // Add past due plans before upcoming ones
+                     displayPlans.unshift(...recentPastDue);
                  }
-                 // No final sort needed if we arrange like this ^
 
                  if (dashboardPlanList) dashboardPlanList.innerHTML = '';
-
                  if (displayPlans.length > 0) {
                      dashboardPlannedDatesContainer?.classList.remove('hidden');
                      displayPlans.forEach(p => {
                          const li = document.createElement('li');
                          li.dataset.id = p.id;
                          let planText = `<strong>${formatRelativeDate(p.date)}:</strong> ${formatHoursExtensive(p.hours)}`;
-
                          const isPastDate = p.date < todayStr;
-                         // Check if it's today *and* past the threshold hour
                          const isTodayPastThreshold = p.date === todayStr && currentHour >= overdueHourThreshold;
-
                          if (isPastDate || isTodayPastThreshold) {
                              planText += `<span class="plan-warning"> ${t('dashboard.overduePlanSuffix')}</span>`;
                          }
-
                          li.innerHTML = planText;
                          dashboardPlanList?.appendChild(li);
                      });
                  } else {
                      dashboardPlannedDatesContainer?.classList.add('hidden');
                  }
-                  // --- END CORRECTION ---
              }
              function renderHistory() {
                 if (!historyList) return;
@@ -517,341 +545,124 @@
                 const hasSearch = searchTerm.length > 0;
 
                 if (hasSearch) {
-                    // Filter based on various fields, ensuring date formats match search term possibility
                     results = recordedEntries.filter(e => {
                         const tagInternal = e.tag || DEFAULT_TAG_VALUE;
                         const tagTranslated = t(tagKeyMapping[tagInternal] || 'tags.noTag').toLowerCase();
-                        const formattedDate = formatDisplayDate(e.date).toLowerCase(); // Use consistent display format for search
-                        const hoursStr = (e.hours || 0).toString().replace('.', ','); // Common decimal separator variation
+                        const formattedDate = formatDisplayDate(e.date).toLowerCase();
+                        const hoursStr = (e.hours || 0).toString().replace('.', ',');
                         const hoursRoundedStr = Math.round(e.hours || 0).toString();
                         const hoursFormatted = formatHoursExtensive(e.hours).toLowerCase();
                         const notes = (e.notes || '').toLowerCase();
-
-                        return (
-                            formattedDate.includes(searchTerm) ||
-                            hoursStr.includes(searchTerm) ||
-                            hoursRoundedStr.includes(searchTerm) ||
-                            tagTranslated.includes(searchTerm) ||
-                            notes.includes(searchTerm) ||
-                            hoursFormatted.includes(searchTerm) ||
-                            tagInternal.toLowerCase().includes(searchTerm) // Search internal tag name too? Maybe remove if noisy.
-                        );
+                        return (formattedDate.includes(searchTerm) || hoursStr.includes(searchTerm) || hoursRoundedStr.includes(searchTerm) || tagTranslated.includes(searchTerm) || notes.includes(searchTerm) || hoursFormatted.includes(searchTerm) || tagInternal.toLowerCase().includes(searchTerm));
                     });
                     const countKey = results.length === 1 ? 'historyCard.resultsCountForTermSingular' : 'historyCard.resultsCountForTermPlural';
                     labelText = t(countKey, { count: results.length, term: searchTerm });
                 } else {
-                    // --- CORRECTION: Use date string comparison for filtering by date ---
                     const dateLimitStr = getDateMonthsAgo(HISTORY_MONTH_LIMIT);
-                    results = recordedEntries.filter(e => e.date >= dateLimitStr); // String compare works for YYYY-MM-DD
-                     // --- END CORRECTION ---
-
-                    if (recordedEntries.length === 0) {
-                        labelText = t('historyCard.listPlaceholderNoRecords');
-                    } else if (results.length === 0) {
-                         // This means there are records, but none in the last X months
-                        labelText = t('historyCard.noRecordsLastMonths', { limit: HISTORY_MONTH_LIMIT });
-                    } else {
-                         // Showing results from the last X months (all records within limit)
-                        labelText = t('historyCard.showingLastMonths', { limit: HISTORY_MONTH_LIMIT });
-                    }
+                    results = recordedEntries.filter(e => e.date >= dateLimitStr);
+                    if (recordedEntries.length === 0) { labelText = t('historyCard.listPlaceholderNoRecords'); }
+                    else if (results.length === 0) { labelText = t('historyCard.noRecordsLastMonths', { limit: HISTORY_MONTH_LIMIT }); }
+                    else { labelText = t('historyCard.showingLastMonths', { limit: HISTORY_MONTH_LIMIT }); }
                 }
 
                 if (showingResultsLabel) showingResultsLabel.textContent = labelText;
-
                 if (results.length === 0) {
-                    let placeholderKey = 'historyCard.listPlaceholderNoRecords'; // Default
-                    if (recordedEntries.length > 0) { // If there *are* records, but none match
-                       placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent';
-                    }
-                    if (historyListPlaceholder) {
-                       historyListPlaceholder.textContent = t(placeholderKey);
-                       historyListPlaceholder.classList.remove('hidden');
-                    }
+                    let placeholderKey = 'historyCard.listPlaceholderNoRecords';
+                    if (recordedEntries.length > 0) { placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent'; }
+                    if (historyListPlaceholder) { historyListPlaceholder.textContent = t(placeholderKey); historyListPlaceholder.classList.remove('hidden'); }
                 } else {
                     historyListPlaceholder?.classList.add('hidden');
-                    // --- CORRECTION: Already sorted during load/save, no need to re-sort here unless search changes order desired ---
-                    // results.sort((a, b) => b.date.localeCompare(a.date)); // Keep most recent first if needed
-                     // --- END CORRECTION ---
+                    // Results should already be sorted DESC by date from loadData/handleRecordSubmit
                     results.forEach(e => {
-                         const li = document.createElement('li');
-                         li.dataset.id = e.id;
-                         const tagInternal = e.tag || DEFAULT_TAG_VALUE;
-                         const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag');
-                         const tagBadge = `<span class="tag-badge" ${tagInternal===DEFAULT_TAG_VALUE?'style="opacity:0.6;"':''}>${tagText}</span>`;
-                         const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`;
-                         const hoursFormatted = formatHoursExtensive(e.hours);
-                         li.innerHTML = `
-                             <div class="entry-details">
-                                 <strong>${formatDisplayDate(e.date)}:</strong> <span class="hours">${hoursFormatted}</span> ${tagBadge} ${notesPreview}
-                             </div>
-                             <div class="entry-actions">
-                                 <button class="edit-btn secondary">${t('common.editButton')}</button>
-                                 <button class="delete-btn danger">${t('common.deleteButton')}</button>
-                             </div>`;
-                         li.querySelector('.edit-btn')?.addEventListener('click', ev => {ev.stopPropagation(); editRecordEntry(e.id);});
-                         li.querySelector('.delete-btn')?.addEventListener('click', ev => {ev.stopPropagation(); deleteRecordEntry(e.id);});
-                         historyList.appendChild(li);
+                         const li = document.createElement('li'); li.dataset.id = e.id;
+                         const tagInternal = e.tag || DEFAULT_TAG_VALUE; const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag'); const tagBadge = `<span class="tag-badge" ${tagInternal===DEFAULT_TAG_VALUE?'style="opacity:0.6;"':''}>${tagText}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; const hoursFormatted = formatHoursExtensive(e.hours);
+                         li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(e.date)}:</strong> <span class="hours">${hoursFormatted}</span> ${tagBadge} ${notesPreview}</div> <div class="entry-actions"><button class="edit-btn secondary">${t('common.editButton')}</button> <button class="delete-btn danger">${t('common.deleteButton')}</button></div>`;
+                         li.querySelector('.edit-btn')?.addEventListener('click', ev => {ev.stopPropagation(); editRecordEntry(e.id);}); li.querySelector('.delete-btn')?.addEventListener('click', ev => {ev.stopPropagation(); deleteRecordEntry(e.id);}); historyList.appendChild(li);
                      });
                 }
              }
-
             function renderPlanning() {
                  if(!planningList) return;
                  planningList.innerHTML='';
                  const todayStr = getCurrentDateString();
-                 // --- CORRECTION: Already sorted on load/save, use directly ---
-                 const allPlans = [...plannedEntries]; // Use the already sorted array
-                  // --- END CORRECTION ---
-
-                 if(allPlans.length===0){
-                     if(planningListPlaceholder){
-                         planningListPlaceholder.textContent=t('planCard.listPlaceholderNoPastOrFuture');
-                         planningListPlaceholder.classList.remove('hidden');
-                     }
-                     return;
-                 }
-
+                 const allPlans = [...plannedEntries]; // Already sorted ASC by date from loadData/handlePlanSubmit
+                 if(allPlans.length===0){ if(planningListPlaceholder){ planningListPlaceholder.textContent=t('planCard.listPlaceholderNoPastOrFuture'); planningListPlaceholder.classList.remove('hidden');} return;}
                  planningListPlaceholder?.classList.add('hidden');
                  allPlans.forEach(p=>{
-                     const li=document.createElement('li');
-                     li.dataset.id=p.id;
-                     const hoursDisplay = formatHoursExtensive(p.hours);
-                     const isPast = p.date < todayStr; // Direct string comparison
-                     const pastDateSuffix = isPast ? `<span style="opacity:0.7;margin-left:5px;">${t('planCard.pastDateSuffix')}</span>`:'';
-
-                     li.innerHTML = `
-                         <div class="entry-details">
-                             <strong>${formatDisplayDate(p.date)} (${formatRelativeDate(p.date)}):</strong> <span class="hours">${hoursDisplay}</span> ${pastDateSuffix}
-                         </div>
-                         <div class="plan-actions">
-                             <button class="done-plan-btn success">${t('planCard.markDoneButton')}</button>
-                             <button class="delete-plan-btn danger">${t('common.deleteButton')}</button>
-                         </div>`;
-                     li.querySelector('.done-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();markPlanAsDone(p.id);});
-                     li.querySelector('.delete-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();deletePlanEntry(p.id);});
-                     planningList.appendChild(li);
+                     const li=document.createElement('li'); li.dataset.id=p.id; const hoursDisplay = formatHoursExtensive(p.hours); const isPast = p.date < todayStr; const pastDateSuffix = isPast ? `<span style="opacity:0.7;margin-left:5px;">${t('planCard.pastDateSuffix')}</span>`:'';
+                     li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(p.date)} (${formatRelativeDate(p.date)}):</strong> <span class="hours">${hoursDisplay}</span> ${pastDateSuffix}</div><div class="plan-actions"><button class="done-plan-btn success">${t('planCard.markDoneButton')}</button> <button class="delete-plan-btn danger">${t('common.deleteButton')}</button></div>`;
+                     li.querySelector('.done-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();markPlanAsDone(p.id);}); li.querySelector('.delete-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();deletePlanEntry(p.id);}); planningList.appendChild(li);
                  });
              }
-
              function updateStatistics() {
-                const today = new Date(); // Local time
-                const currentMonth = today.getMonth(); // Local month index
-                const currentYear = today.getFullYear(); // Local year
-                let totalHoursMonth = 0;
-                const activeDays = new Set();
-
-                // --- CORRECTION: Filter using local date methods ---
-                recordedEntries
-                    .filter(e => {
-                         const d = parseLocalDate(e.date);
-                         if (isNaN(d.valueOf())) return false; // Skip invalid
-                         return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-                     })
-                    .forEach(e => {
-                         totalHoursMonth += e.hours;
-                         activeDays.add(e.date); // Add the date string to the set
-                     });
-                // --- END CORRECTION ---
-
-                const goal = settings.monthlyGoal || 70;
-                const percentProgress = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursMonth / goal) * 100), 100) : 0) : 0;
-                const daysActiveCount = activeDays.size;
-                const avgHoursPerActiveDay = daysActiveCount > 0 ? (totalHoursMonth / daysActiveCount) : 0;
-
-                if (statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(totalHoursMonth);
-                if (statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${percentProgress}%` : '--%';
-                if (statsMonthProgressBar) statsMonthProgressBar.style.width = `${percentProgress}%`;
-                if (statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(avgHoursPerActiveDay);
-                if (statsMonthDaysActive) statsMonthDaysActive.textContent = daysActiveCount;
+                const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let totalHoursMonth = 0; const activeDays = new Set();
+                recordedEntries.filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === currentMonth && d.getFullYear() === currentYear; }).forEach(e => { totalHoursMonth += e.hours; activeDays.add(e.date); });
+                const goal = settings.monthlyGoal || 70; const percentProgress = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursMonth / goal) * 100), 100) : 0) : 0; const daysActiveCount = activeDays.size; const avgHoursPerActiveDay = daysActiveCount > 0 ? (totalHoursMonth / daysActiveCount) : 0;
+                if (statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(totalHoursMonth); if (statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${percentProgress}%` : '--%'; if (statsMonthProgressBar) statsMonthProgressBar.style.width = `${percentProgress}%`; if (statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(avgHoursPerActiveDay); if (statsMonthDaysActive) statsMonthDaysActive.textContent = daysActiveCount;
              }
-
-             function populateMonthSelector() {
-                if (!chartMonthSelector) return;
-                const availableMonths = new Set();
-
-                // --- CORRECTION: Generate Month/Year strings from local dates ---
-                recordedEntries.forEach(e => {
-                    const dateObj = parseLocalDate(e.date);
-                    if (!isNaN(dateObj.valueOf())) {
-                        availableMonths.add(getMonthYearString(dateObj)); // MM/YYYY format
-                    }
-                });
-                // --- END CORRECTION ---
-
-                 // Sort months chronologically descending (most recent first)
-                const sortedMonths = Array.from(availableMonths).sort((a, b) => {
-                    const [mA, yA] = a.split('/').map(Number);
-                    const [mB, yB] = b.split('/').map(Number);
-                    return (yB - yA) || (mB - mA); // Compare year then month
-                });
-
-                const oldSelectedValue = chartMonthSelector.value;
-                chartMonthSelector.innerHTML = ''; // Clear existing options
-
-                if (sortedMonths.length === 0) {
-                    const option = document.createElement('option');
-                    option.value = '';
-                    option.textContent = t('chartsCard.noDataOption');
-                    chartMonthSelector.append(option);
-                    chartMonthSelector.disabled = true;
-                    return;
-                }
-
-                chartMonthSelector.disabled = false;
-                const currentMonthStr = getMonthYearString(new Date()); // Get current local month/year
-                let currentMonthFormatted = formatMonthYearExtensive(currentMonthStr);
-                let hasCurrentMonthData = false;
-                let didSelectOldValue = false;
-
-                sortedMonths.forEach(monthYearValue => {
-                    const option = document.createElement('option');
-                    let monthFormatted = formatMonthYearExtensive(monthYearValue);
-                    option.value = monthYearValue;
-                    option.textContent = monthFormatted || monthYearValue; // Fallback if formatting fails
-
-                    if (monthYearValue === oldSelectedValue) {
-                        option.selected = true;
-                        didSelectOldValue = true;
-                    } else if (monthYearValue === currentMonthStr && !didSelectOldValue) {
-                        // Select current month by default if no old value was re-selected
-                        option.selected = true;
-                    }
-
-                    if (monthYearValue === currentMonthStr) {
-                        hasCurrentMonthData = true;
-                    }
-                    chartMonthSelector.append(option);
-                });
-
-                // If current month had no data but exists, add it as an option (potentially selected)
-                if (!hasCurrentMonthData && currentMonthFormatted && Array.isArray(MONTH_NAMES) && MONTH_NAMES.length > 0) {
-                    const option = document.createElement('option');
-                    option.value = currentMonthStr;
-                    option.textContent = `${currentMonthFormatted} ${t('chartsCard.currentMonthSuffix')}`; // Indicate it's current
-                    chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); // Add to top
-                    if (!didSelectOldValue && !chartMonthSelector.querySelector('option[selected]')) {
-                         // Select if nothing else was selected (e.g., first load or deleted month data)
-                        option.selected = true;
-                    }
-                }
-
-                // Ensure *something* is selected if options exist
-                 if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) {
-                    chartMonthSelector.options[0].selected = true;
-                 }
+            function populateMonthSelector() {
+                if (!chartMonthSelector) return; const availableMonths = new Set();
+                recordedEntries.forEach(e => { const dateObj = parseLocalDate(e.date); if (!isNaN(dateObj.valueOf())) { availableMonths.add(getMonthYearString(dateObj)); } });
+                const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/').map(Number); const [mB, yB] = b.split('/').map(Number); return (yB - yA) || (mB - mA); });
+                const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = '';
+                if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = t('chartsCard.noDataOption'); chartMonthSelector.append(option); chartMonthSelector.disabled = true; return; }
+                chartMonthSelector.disabled = false; const currentMonthStr = getMonthYearString(new Date()); let currentMonthFormatted = formatMonthYearExtensive(currentMonthStr); let hasCurrentMonthData = false; let didSelectOldValue = false;
+                sortedMonths.forEach(monthYearValue => { const option = document.createElement('option'); let monthFormatted = formatMonthYearExtensive(monthYearValue); option.value = monthYearValue; option.textContent = monthFormatted || monthYearValue; if (monthYearValue === oldSelectedValue) { option.selected = true; didSelectOldValue = true; } else if (monthYearValue === currentMonthStr && !didSelectOldValue) { option.selected = true; } if (monthYearValue === currentMonthStr) { hasCurrentMonthData = true; } chartMonthSelector.append(option); });
+                if (!hasCurrentMonthData && currentMonthFormatted && Array.isArray(MONTH_NAMES) && MONTH_NAMES.length > 0) { const option = document.createElement('option'); option.value = currentMonthStr; option.textContent = `${currentMonthFormatted} ${t('chartsCard.currentMonthSuffix')}`; chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); if (!didSelectOldValue && !chartMonthSelector.querySelector('option[selected]')) { option.selected = true; } }
+                 if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; }
              }
-             function renderCharts(selectedMonthYear) { // Expects MM/YYYY
-                 if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; }
-                 if (!selectedMonthYear) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; }
-
+            function renderCharts(selectedMonthYear) {
+                 if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (!selectedMonthYear) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; }
                  try {
-                     const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number);
-                     const monthIndex = selectedMonth - 1; // 0-based index for getMonth()
-
-                     // --- CORRECTION: Filter entries based on local month/year ---
-                     const entriesForMonth = recordedEntries.filter(e => {
-                         const d = parseLocalDate(e.date);
-                         if (isNaN(d.valueOf())) return false;
-                         return d.getMonth() === monthIndex && d.getFullYear() === selectedYear;
-                     });
-                     // --- END CORRECTION ---
-
-                     if (entriesForMonth.length === 0) {
-                         clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) }));
-                         return;
-                     }
-
-                     let totalHours = 0;
-                     const hoursByTag = {};
-                     entriesForMonth.forEach(e => {
-                         const tagName = e.tag || DEFAULT_TAG_VALUE;
-                         const hours = e.hours || 0;
-                         totalHours += hours;
-                         hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours;
-                     });
-
+                     const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number); const monthIndex = selectedMonth - 1;
+                     const entriesForMonth = recordedEntries.filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === monthIndex && d.getFullYear() === selectedYear; });
+                     if (entriesForMonth.length === 0) { clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) })); return; }
+                     let totalHours = 0; const hoursByTag = {};
+                     entriesForMonth.forEach(e => { const tagName = e.tag || DEFAULT_TAG_VALUE; const hours = e.hours || 0; totalHours += hours; hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours; });
                      if (chartTotalHoursDisplay) chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHours)}</strong>`;
-
-                     const labels = Object.keys(hoursByTag).map(tagName => t(tagKeyMapping[tagName] || 'tags.noTag'));
-                     const values = Object.values(hoursByTag);
-                     const backgroundColors = labels.map((_, i) => chartColors[i % chartColors.length]);
-
+                     const labels = Object.keys(hoursByTag).map(tagName => t(tagKeyMapping[tagName] || 'tags.noTag')); const values = Object.values(hoursByTag); const backgroundColors = labels.map((_, i) => chartColors[i % chartColors.length]);
                      if (!monthlyHoursChartCtx) return;
                      monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, {
-                         type: 'pie',
-                         data: {
-                             labels: labels,
-                             datasets: [{
-                                 data: values,
-                                 backgroundColor: backgroundColors,
-                                 borderColor: tooltipBgColor || '#1c1c1e',
-                                 borderWidth: 1.5
-                             }]
-                         },
-                         options: {
-                             responsive: true,
-                             maintainAspectRatio: false,
-                             plugins: {
-                                 title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } },
-                                 tooltip: {
-                                     backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6,
-                                     callbacks: {
-                                         label: ctx => {
-                                             const label = ctx.label || '';
-                                             const value = ctx.parsed || 0;
-                                             const percentage = totalHours > 0 ? ((value / totalHours) * 100).toFixed(1) : 0;
-                                             return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`;
-                                         }
-                                     }
-                                 },
-                                 legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } }
-                             }
-                         }
+                         type: 'pie', data: { labels: labels, datasets: [{ data: values, backgroundColor: backgroundColors, borderColor: tooltipBgColor || '#1c1c1e', borderWidth: 1.5 }] },
+                         options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6, callbacks: { label: ctx => { const label = ctx.label || ''; const value = ctx.parsed || 0; const percentage = totalHours > 0 ? ((value / totalHours) * 100).toFixed(1) : 0; return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`; } } }, legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } } } }
                      });
-                 } catch (e) {
-                     console.error("Chart render err:", e);
-                     clearChartWithMessage(t('chartsCard.renderErrorMessage'));
-                 }
-             }
-             function clearChartWithMessage(msg) { if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();monthlyHoursChartInstance=null;} if(chartTotalHoursDisplay)chartTotalHoursDisplay.textContent=''; const ctx=monthlyHoursChartCtx; if(ctx){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles?.fontFamily||'sans-serif'}`; ctx.fillText(msg,ctx.canvas.width/2,ctx.canvas.height/2); ctx.restore();}}
-             function updateAllDisplays() { if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Skip update: Translations not ready"); return;} try{applyStaticTranslations();updateDashboard();updateStatistics();populateMonthSelector();renderHistory();renderPlanning(); const selVal=chartMonthSelector?.value; if(!chartMonthSelector?.disabled && selVal)renderCharts(selVal); else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length>0 && chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=true; renderCharts(chartMonthSelector.options[0].value);} else clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'));}catch(err){console.error("UpdateAll err:",err);}}
+                 } catch (e) { console.error("Chart render err:", e); clearChartWithMessage(t('chartsCard.renderErrorMessage')); }
+            }
+            function clearChartWithMessage(msg) { if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();monthlyHoursChartInstance=null;} if(chartTotalHoursDisplay)chartTotalHoursDisplay.textContent=''; const ctx=monthlyHoursChartCtx; if(ctx){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles?.fontFamily||'sans-serif'}`; ctx.fillText(msg,ctx.canvas.width/2,ctx.canvas.height/2); ctx.restore();}}
+            function updateAllDisplays() { if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Skip update: Translations not ready"); return;} try{applyStaticTranslations();updateDashboard();updateStatistics();populateMonthSelector();renderHistory();renderPlanning(); const selVal=chartMonthSelector?.value; if(!chartMonthSelector?.disabled && selVal)renderCharts(selVal); else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length>0 && chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=true; renderCharts(chartMonthSelector.options[0].value);} else clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'));}catch(err){console.error("UpdateAll err:",err);}}
              function formatTimeInputOnType(event) { const i=event.target;let v=i.value,op=i.selectionStart,n=v.replace(/[^\d]/g,'').substring(0,4),f=n;let ca=false;if(n.length>2){const hp=n.substring(0,n.length-2),mp=n.substring(n.length-2);f=`${hp}:${mp}`;if(v.length<f.length&&v.indexOf(':')===-1)ca=true;}if(i.value!==f){i.value=f;let np=op;if(ca&&op>=f.indexOf(':')+1)np++;np=Math.min(np,f.length);requestAnimationFrame(()=>{try{i.setSelectionRange(np,np);}catch(e){}});}}
              function registerServiceWorker() { if('serviceWorker'in navigator)window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(r=>console.log('SW ok:',r.scope)).catch(e=>console.error('SW fail:',e));});}
 
-            // --- Initialization Sequence ---
+
+            // --- Initialization Sequence (unchanged from previous correct step) ---
             loadData();
-            applyStaticTranslations(); // Apply base translations first
-
-            // Set initial states after loading data/settings
+            applyStaticTranslations();
             if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
-            if (recordDateInput) recordDateInput.value = getCurrentDateString(); // Set to today's local date string
+            if (recordDateInput) recordDateInput.value = getCurrentDateString();
             setDateInputVisibility(false);
-            clearRecordForm(); // Ensure form starts clean respecting loaded settings/defaults
+            clearRecordForm();
             clearPlanForm();
-
-            // Set initial card visibility
             document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); if (card.classList.contains('expanded') !== shouldBeExpanded) toggleCard(card); const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; });
-
-            // Add event listeners
             appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) toggleCard(h.closest('.card')); });
             document.querySelectorAll('.card-header').forEach(h=>{h.setAttribute('role','button');h.setAttribute('tabindex','0');h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ') {e.preventDefault();toggleCard(h.closest('.card'));}});});
             changeDateBtn?.addEventListener('click',()=>setDateInputVisibility(true)); recordHoursInput?.addEventListener('input',formatTimeInputOnType); planHoursInput?.addEventListener('input',formatTimeInputOnType);
-            recordHoursInput?.addEventListener('blur',e=>{const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>=0)e.target.value=formatDecimalToTimeInput(d);else if(e.target.value.trim()!=='')e.target.value='';}); planHoursInput?.addEventListener('blur',e=>{const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>0)e.target.value=formatDecimalToTimeInput(d);else if(e.target.value.trim()!=='')e.target.value='';});
+             // --- Corrected Event Listeners using the restored functions ---
+            recordHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); /* Use restored function */ if(!isNaN(d)&&d>=0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
+            planHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); /* Use restored function */ if(!isNaN(d)&&d>0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
+            // --- End corrected listeners ---
             recordNotesInput?.addEventListener('input',e=>{if(e.target.value.length>NOTES_MAX_LENGTH){e.target.value=e.target.value.substring(0,NOTES_MAX_LENGTH);showFeedback('feedback.notesLengthLimit','info',{maxLength:NOTES_MAX_LENGTH});}});
             historySearchInput?.addEventListener('input',renderHistory); recordForm?.addEventListener('submit',handleRecordSubmit); planForm?.addEventListener('submit',handlePlanSubmit);
             clearPlanFormBtn?.addEventListener('click',clearPlanForm); saveGoalBtn?.addEventListener('click',handleGoalSave);
             monthlyGoalInput?.addEventListener('keypress',e=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();e.target.blur();}});
-            chartMonthSelector?.addEventListener('change',updateAllDisplays); // Use updateAllDisplays for simplicity
+            chartMonthSelector?.addEventListener('change',updateAllDisplays);
             clearAllDataBtn?.addEventListener('click',handleClearAllData);
             dialogConfirmBtn?.addEventListener('click',()=>{if(typeof currentConfirmCallback==='function')currentConfirmCallback(); hideConfirmationDialog();});
             dialogCancelBtn?.addEventListener('click',hideConfirmationDialog); confirmationDialog?.addEventListener('click',e=>{if(e.target===confirmationDialog)hideConfirmationDialog();});
             window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredInstallPrompt=e; console.log('install prompt ready');});
-             // --- Add Interval for Dashboard Date Updates (Kept from original) ---
-             // Updates things like "Today", "Tomorrow", "Overdue" status dynamically
-            setInterval(updateDashboardPlannedDates, 60 * 1000); // Every minute
+            setInterval(updateDashboardPlannedDates, 60 * 1000);
 
             // Final steps
-            updateAllDisplays(); // Initial render of everything based on loaded data
+            updateAllDisplays();
             registerServiceWorker();
             if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) {
                 setTimeout(promptForMonthlyGoal, 600);
