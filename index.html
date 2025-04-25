@@ -230,7 +230,7 @@
                  else throw new Error("'en' missing in translations.json");
                  console.log("Selected language:", currentLang);
 
-                 // ------ START OF CORRECTION ------
+                 // ------ START OF ORIGINAL CORRECTION (NO CHANGE HERE) ------
                  // Use getNestedValue directly for arrays, with fallback to 'en'
                  MONTH_NAMES = getNestedValue(translations[currentLang], 'dates.monthNames') || getNestedValue(translations['en'], 'dates.monthNames');
                  WEEKDAY_NAMES = getNestedValue(translations[currentLang], 'dates.weekdaysShort') || getNestedValue(translations['en'], 'dates.weekdaysShort');
@@ -244,7 +244,7 @@
                      console.warn(`Weekday names for "${currentLang}" (and 'en') seem invalid or missing in translations.json. Using default fallback.`);
                      WEEKDAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
                  }
-                 // ------ END OF CORRECTION ------
+                 // ------ END OF ORIGINAL CORRECTION ------
 
             } catch (error) {
                 console.error('FATAL: Error loading/processing translations:', error);
@@ -277,7 +277,42 @@
              function setDateInputVisibility(v) { isDateInputVisible=v; if(v){ recordDateInput?.classList.remove('hidden'); dateLabel?.classList.add('visually-hidden'); recordDateInput?.focus(); } else{ recordDateInput?.classList.add('hidden'); dateLabel?.classList.remove('visually-hidden'); if (displayDate) displayDate.textContent=(!recordDateInput?.value || recordDateInput.value===getCurrentDateString())?t('dates.today'):formatDisplayDate(recordDateInput.value);}}
              function toggleCard(e) { if(!e)return;const ex=e.classList.contains('expanded');e.classList.toggle('expanded',!ex); const i=e.querySelector('.toggle-icon'); if(i) i.textContent=!ex?'▲':'▼';}
              function clearRecordForm() { recordForm?.reset(); if(recordIdInput)recordIdInput.value=''; if(recordDateInput)recordDateInput.value=getCurrentDateString(); setDateInputVisibility(false); if(recordTagSelect)recordTagSelect.value=DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=''; if(recordHoursInput)recordHoursInput.value=''; if(saveRecordBtn)saveRecordBtn.textContent=t('recordCard.saveButton'); saveRecordBtn?.classList.remove('editing'); currentEditingId=null;}
-             function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput?.value?parseInt(recordIdInput.value,10):Date.now(); const date=(isDateInputVisible||(recordDateInput?.value && recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hours=parseTimeInputToDecimal(recordHoursInput?.value); const tag=recordTagSelect?.value||DEFAULT_TAG_VALUE; const notes=recordNotesInput?.value.trim().substring(0,NOTES_MAX_LENGTH); if(isNaN(hours)||hours<=0){alert(t('feedback.invalidTimeFormat'));recordHoursInput?.focus(); return;} if(!date){alert(t('feedback.invalidDate'));return;} const entry={id,date,hours,tag,notes}; const idx=recordedEntries.findIndex(e=>e.id===id); if(idx>-1)recordedEntries[idx]=entry; else recordedEntries.push(entry); recordedEntries.sort((a,b)=>new Date(b.date+'T00:00:00Z')-new Date(a.date+'T00:00:00Z')); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess','success'); }
+             function handleRecordSubmit(event) {
+                 event.preventDefault();
+                 const id = recordIdInput?.value ? parseInt(recordIdInput.value, 10) : Date.now();
+                 // --- CORRECTION START ---
+                 // Get date directly from the input's value. This is the definitive source.
+                 const date = recordDateInput?.value;
+                 // Add validation that was previously implicitly handled by the fallback.
+                 if (!date) {
+                     alert(t('feedback.invalidDate'));
+                     return;
+                 }
+                 // --- CORRECTION END ---
+                 const hours = parseTimeInputToDecimal(recordHoursInput?.value);
+                 const tag = recordTagSelect?.value || DEFAULT_TAG_VALUE;
+                 const notes = recordNotesInput?.value.trim().substring(0, NOTES_MAX_LENGTH);
+
+                 if (isNaN(hours) || hours <= 0) {
+                     alert(t('feedback.invalidTimeFormat'));
+                     recordHoursInput?.focus();
+                     return;
+                 }
+                 // Date validation already happened above.
+
+                 const entry = { id, date, hours, tag, notes };
+                 const idx = recordedEntries.findIndex(e => e.id === id);
+                 if (idx > -1) {
+                     recordedEntries[idx] = entry;
+                 } else {
+                     recordedEntries.push(entry);
+                 }
+                 recordedEntries.sort((a, b) => new Date(b.date + 'T00:00:00Z') - new Date(a.date + 'T00:00:00Z'));
+                 saveData();
+                 clearRecordForm();
+                 updateAllDisplays();
+                 showFeedback('feedback.recordSavedSuccess', 'success');
+             }
              function editRecordEntry(id) { const entry=recordedEntries.find(e=>e.id===id); if(entry){ if(!recordCard?.classList.contains('expanded'))toggleCard(recordCard); currentEditingId=id; if(recordIdInput)recordIdInput.value=entry.id; if(recordDateInput)recordDateInput.value=entry.date; setDateInputVisibility(entry.date!==getCurrentDateString()); if(recordHoursInput)recordHoursInput.value=formatDecimalToTimeInput(entry.hours); if(recordTagSelect)recordTagSelect.value=entry.tag||DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=entry.notes||''; if(saveRecordBtn){saveRecordBtn.textContent=t('recordCard.updateButton');saveRecordBtn.classList.add('editing');} recordCard?.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput?.focus();}}
              function deleteRecordEntry(id) { showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'),()=>{const i=recordedEntries.findIndex(e=>e.id===id); if(i>-1){recordedEntries.splice(i,1);saveData();updateAllDisplays();showFeedback('feedback.recordDeletedSuccess','info');if(currentEditingId===id)clearRecordForm();}else console.warn("Not found for del:", id);});}
              function clearPlanForm() { planForm?.reset(); if(planIdInput)planIdInput.value=''; if(planDateInput)planDateInput.value=''; if(planHoursInput)planHoursInput.value=''; if(savePlanBtn)savePlanBtn.textContent=t('planCard.saveButton'); currentEditingId=null; }
