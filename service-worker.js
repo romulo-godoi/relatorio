@@ -1,22 +1,23 @@
 // Define um nome e versão para o cache
-const CACHE_NAME = 'pioneer-tracker-cache-v1.4'; // <<-- INCREMENTE A VERSÃO AO MUDAR ARQUIVOS CACHEADOS
+const CACHE_NAME = 'pioneer-tracker-cache-v1.4'; // <<-- Mantenha esta versão para a última atualização
 
 // Lista de arquivos essenciais para cachear na instalação
 const urlsToCache = [
-  './',                 // Atalho para index.html
-  './index.html',       // O arquivo HTML principal
-  './style.css',        // SEU ARQUIVO CSS - ESSENCIAL ADICIONAR
-  './script.js',        // SEU ARQUIVO JAVASCRIPT - ESSENCIAL ADICIONAR
-  './manifest.json',    // Manifest para PWA
-  './translations.json',// Arquivo de traduções - RECOMENDADO ADICIONAR
+  './',                  // Atalho para index.html
+  './index.html',        // O arquivo HTML principal (contém CSS e JS inline)
+  // './style.css',      // REMOVIDO/COMENTADO - Estilos estão inline no index.html
+  // './script.js',      // REMOVIDO - Script está inline no index.html
+  './manifest.json',     // Manifest para PWA
+  './translations.json', // Arquivo de traduções
 
-  // Ícones (adicione todos que seu manifest/HTML referencia)
-  './icon-192x192.png', // Exemplo, ajuste o caminho se necessário
-  // './icon-512x512.png', // Adicione outros tamanhos se existirem
+  // Ícones (verifique se os caminhos estão corretos)
+  './icon-192x192.png',
+  // './icon-512x512.png', // Adicione se existir
 
-  // Scripts essenciais da CDN (estes já estavam corretos)
+  // Scripts essenciais da CDN (mantidos)
   'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
-  'https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js',
+  // Removido chartjs-plugin-annotation pois não está no HTML atual
+  // 'https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js',
 ];
 
 // Evento de Instalação: Cacheia os arquivos essenciais
@@ -43,7 +44,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Evento de Ativação: Limpa caches antigos (Nenhuma mudança necessária aqui)
+// Evento de Ativação: Limpa caches antigos
 self.addEventListener('activate', (event) => {
   console.log(`Service Worker: Ativando (${CACHE_NAME})...`);
   event.waitUntil(
@@ -57,18 +58,18 @@ self.addEventListener('activate', (event) => {
         })
       );
     }).then(() => {
-        console.log('Service Worker: Ativado e caches antigos removidos.');
-        return self.clients.claim();
+      console.log('Service Worker: Ativado e caches antigos removidos.');
+      return self.clients.claim();
     })
   );
 });
 
-// Evento Fetch: Intercepta requisições (Nenhuma mudança necessária aqui, a lógica parece correta para cache-first)
+// Evento Fetch: Intercepta requisições (Estratégia Cache-First)
 self.addEventListener('fetch', (event) => {
    // Ignora requisições não-GET ou de extensões
    if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
-    return;
-  }
+     return;
+   }
 
   event.respondWith(
     caches.match(event.request)
@@ -79,6 +80,7 @@ self.addEventListener('fetch', (event) => {
         }
 
         // console.log('Service Worker: Buscando na rede (cache miss):', event.request.url);
+        // Se não estiver no cache, busca na rede
         return fetch(event.request).then(
             (networkResponse) => {
                 // Verifica se a resposta da rede é válida
@@ -87,21 +89,27 @@ self.addEventListener('fetch', (event) => {
                     return networkResponse;
                 }
 
-                // Clona a resposta válida
+                // Clona a resposta válida para poder colocar no cache e retornar ao navegador
                 const responseToCache = networkResponse.clone();
 
                 caches.open(CACHE_NAME)
-                  .then((cache) => {
-                    // console.log('Service Worker: Cacheando nova resposta da rede:', event.request.url);
-                    cache.put(event.request, responseToCache);
-                  });
+                    .then((cache) => {
+                        // console.log('Service Worker: Cacheando nova resposta da rede:', event.request.url);
+                        // Adiciona a resposta da rede ao cache para futuras requisições
+                        cache.put(event.request, responseToCache);
+                    });
 
                 return networkResponse;
             }
         ).catch(error => {
             console.error('Service Worker: Fetch falhou (rede e cache):', error, event.request.url);
-            // Pode retornar uma resposta offline genérica aqui, se desejar.
+            // Opcional: Retornar uma página offline genérica aqui
             // Ex: return caches.match('./offline.html');
+            // Retorna uma resposta de erro genérica se a rede falhar e não houver cache
+             return new Response("Network error trying to fetch resource.", {
+                 status: 408, // Request Timeout
+                 headers: { 'Content-Type': 'text/plain' },
+             });
         });
       })
   );
