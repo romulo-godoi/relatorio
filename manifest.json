@@ -1,6 +1,6 @@
 {
   "name": "Registro de Campo Pioneiro",
-  "short_name": "PioneiroReg",
+  "short_name": "Pioneiro",
   "description": "Aplicativo para registrar horas de campo pioneiro.",
   "start_url": "./index.html",
   "display": "standalone",
