@@ -61,6 +61,7 @@
             align-items: center;
             justify-content: center; /* Changed from flex-start to center */
             flex: 1;
+            min-height: 90px; /* Ensure minimum height for alignment */
         }
         .dashboard-item--progress {
             width: 90px; /* Keep fixed size for the ring container */
@@ -107,6 +108,7 @@
         .dashboard-item:not(.dashboard-item--progress) {
             align-items: flex-start; /* Keep text aligned left */
             text-align: left;
+            justify-content: flex-start; /* Align content to top within its own box */
         }
         .dashboard-label {
             font-size: 0.85em;
@@ -275,7 +277,7 @@
 
     <script>
         (async () => {
-            // --- Translation & Setup Variables (unchanged) ---
+            // --- Translation & Setup Variables ---
             let translations = {};
             let currentLang = 'en';
             const supportedLanguages = ["pt-BR", "en", "es", "de", "fr"];
@@ -334,11 +336,13 @@
                  if (loadingIndicator) loadingIndicator.textContent = t('common.loading');
             }
 
-            // --- Element & State Variables (unchanged) ---
+            // --- Element & State Variables ---
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let recordedEntries = [], plannedEntries = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
             let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
             let progressRingRadius = 0, progressRingCircumference = 0, MONTH_NAMES = [], WEEKDAY_NAMES = [];
+            let lastCheckedDateString = ''; // Variable to store the date for comparison
+            let dateCheckInterval = null; // Variable to hold the interval ID
 
             const HISTORY_MONTH_LIMIT = 3;
             const NOTES_MAX_LENGTH = 300;
@@ -348,7 +352,7 @@
             const loadingIndicator = document.getElementById('loading-indicator');
             if (loadingIndicator) loadingIndicator.classList.remove('hidden');
 
-            // --- Translation Loading (unchanged, includes corrected MONTH/WEEKDAY fetching) ---
+            // --- Translation Loading ---
             try {
                 const response = await fetch('translations.json');
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -380,16 +384,16 @@
                 WEEKDAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
             }
 
-            // --- Element Assignments (unchanged) ---
+            // --- Element Assignments ---
             appElement = document.getElementById('app'); dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list'); progressRingFg = document.getElementById('progress-ring-fg'); recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn'); planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder'); monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active'); chartMonthSelector = document.getElementById('chart-month-selector'); monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d'); historyList = document.getElementById('history-list'); historySearchInput = document.getElementById('history-search-input'); historyListPlaceholder = historyList?.querySelector('.placeholder'); showingResultsLabel = document.getElementById('showing-results-label'); clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn'); chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
 
-            // --- Style & Ring Calculations (unchanged) ---
+            // --- Style & Ring Calculations ---
             try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Cannot get computed styles"); computedStyles = {}; } textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff'; textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa'; tooltipBgColor = computedStyles.getPropertyValue?.('--card-bg')?.trim() || '#1c1c1e'; chartColors = ['#0A84FF', '#30D158', '#FF9F0A', '#AF52DE', '#5E5CE6', '#FF69B4', '#32CD32', '#FFD700'].map((fallback, i) => computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim() || fallback); if (progressRingFg && progressRingFg.r?.baseVal?.value) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; }
 
 
             // --- START OF HELPER FUNCTIONS SECTION ---
 
-            // Corrected Date/Time Helpers (from previous step)
+            // Date/Time Helpers
             function getCurrentDateString() {
                 const t = new Date();
                 return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
@@ -424,7 +428,7 @@
                 const d = new Date(date);
                 d.setHours(0, 0, 0, 0);
                 const dayOfWeek = d.getDay();
-                const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+                const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Assuming Monday is start of week
                 const sOW = new Date(d.setDate(diff));
                 return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`;
             }
@@ -442,7 +446,7 @@
                 return `${MONTH_NAMES[idx]} ${y}`;
             }
 
-            // --- FUNCTIONS RESTORED ---
+            // Time Formatting Helpers
             function formatHoursExtensive(hoursDecimal, short=false) {
                 if (isNaN(hoursDecimal) || hoursDecimal < 0) hoursDecimal = 0;
                 const totalMinutes = Math.round(hoursDecimal * 60);
@@ -458,13 +462,11 @@
                 if(result===''){const zeroKey=short?'units.hours_short':'units.hours'; result=`0${short?t(zeroKey):' '+t(zeroKey,{count:0})}`;} // Use {count: 0} for pluralization
                 return result;
             }
-
             function formatDecimalToTimeInput(d) {
                 if(isNaN(d)||d<=0)return"";
                 const t=Math.round(d*60), h=Math.floor(t/60), m=t%60;
                 return `${h}:${String(m).padStart(2,'0')}`;
             }
-
             function parseTimeInputToDecimal(s) {
                 if(!s)return 0; const t=s.trim(); if(!t)return 0;
                 // Try H:MM format
@@ -477,27 +479,15 @@
                 const n=t.match(/^(\d+)$/);
                 if(n){
                     const str=n[1],v=parseInt(str,10); if(isNaN(v))return NaN; // Invalid if not a number
-                    // Treat 1 or 2 digits as minutes (e.g., 30 -> 0.5, 5 -> 0.0833)
-                    if(str.length<=2){
-                        if(v<60)return v/60;
-                        // Don't allow > 60 if only 2 digits (e.g. '75') - could be ambiguous
-                        // Allow it if explicitly more than 2 digits (e.g. '175' for 1h 75m is handled below)
-                        // Or maybe treat '75' as 1h 15m? Stick to MM for simplicity for now.
-                    }
-                    // Treat 3 or 4 digits as H...MM (e.g., 130 -> 1:30, 1215 -> 12:15)
+                    if(str.length<=2){ if(v<60)return v/60; }
                     if(str.length>=3){
                         const hs=str.slice(0,-2), ms=str.slice(-2);
                         const h=parseInt(hs,10), m=parseInt(ms,10);
                         if(!isNaN(h)&&!isNaN(m)&&m>=0&&m<60&&h>=0)return h+(m/60);
                     }
                 }
-                // If nothing matches, return NaN (or could return 0 or throw error)
                 return NaN;
             }
-            // --- END OF FUNCTIONS RESTORED ---
-
-
-            // Corrected Date/Time Helper (formatRelativeDate, from previous step)
             function formatRelativeDate(dateString) {
                 const today = new Date(); today.setHours(0, 0, 0, 0);
                 const inputDate = parseLocalDate(dateString);
@@ -522,8 +512,7 @@
                 return formatDisplayDate(dateString);
             }
 
-
-            // --- Other Helper Functions (saveData, loadData, etc. - includes corrected sorting from previous step) ---
+            // Data & UI Helpers
             function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES,JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS,JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS,JSON.stringify(settings));}catch(e){console.error("Save Err:",e); showFeedback('feedback.saveError','danger');} }
             function loadData() {
                 try{
@@ -566,7 +555,7 @@
             function hideConfirmationDialog() { confirmationDialog?.classList.remove('visible'); setTimeout(()=>{currentConfirmCallback=null;},300);}
             function showFeedback(key,type='info',vars={}) { let msg=t(key,vars); console.log(`Feedback[${type}]: ${msg}`); const fb=document.createElement('div'); fb.textContent=msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type==='success'?'var(--success-color)':type==='danger'?'var(--danger-color)':'var(--primary-color)'}; color: var(--text-color);`; document.body.appendChild(fb); setTimeout(()=>{fb.style.opacity='1'; fb.style.bottom='30px';},10); setTimeout(()=>{fb.style.opacity='0'; fb.style.bottom='10px';},3500); setTimeout(()=>{fb.parentNode?.removeChild(fb)},4000);}
 
-            // --- Display Update Functions (includes corrected date handling from previous step) ---
+            // --- Display Update Functions ---
             function updateDashboard() {
                 const today = new Date();
                 const currentMonth = today.getMonth();
@@ -700,7 +689,6 @@
                     if (historyListPlaceholder) { historyListPlaceholder.textContent = t(placeholderKey); historyListPlaceholder.classList.remove('hidden'); }
                 } else {
                     historyListPlaceholder?.classList.add('hidden');
-                    // Results should already be sorted DESC by date from loadData/handleRecordSubmit
                     results.forEach(e => {
                         const li = document.createElement('li'); li.dataset.id = e.id;
                         const tagInternal = e.tag || DEFAULT_TAG_VALUE; const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag'); const tagBadge = `<span class="tag-badge" ${tagInternal===DEFAULT_TAG_VALUE?'style="opacity:0.6;"':''}>${tagText}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; const hoursFormatted = formatHoursExtensive(e.hours);
@@ -761,12 +749,22 @@
             function formatTimeInputOnType(event) { const i=event.target;let v=i.value,op=i.selectionStart,n=v.replace(/[^\d]/g,'').substring(0,4),f=n;let ca=false;if(n.length>2){const hp=n.substring(0,n.length-2),mp=n.substring(n.length-2);f=`${hp}:${mp}`;if(v.length<f.length&&v.indexOf(':')===-1)ca=true;}if(i.value!==f){i.value=f;let np=op;if(ca&&op>=f.indexOf(':')+1)np++;np=Math.min(np,f.length);requestAnimationFrame(()=>{try{i.setSelectionRange(np,np);}catch(e){}});}}
             function registerServiceWorker() { if('serviceWorker'in navigator)window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(r=>console.log('SW ok:',r.scope)).catch(e=>console.error('SW fail:',e));});}
 
+            // Function to check if the date has changed and update if necessary
+            function checkDateAndUpdate() {
+                const newDateString = getCurrentDateString();
+                if (newDateString !== lastCheckedDateString) {
+                    console.log(`Date changed from ${lastCheckedDateString} to ${newDateString}. Updating display...`);
+                    lastCheckedDateString = newDateString; // Update the stored date
+                    updateAllDisplays(); // Re-render the UI
+                }
+            }
 
-            // --- Initialization Sequence (unchanged from previous correct step) ---
+            // --- Initialization Sequence ---
             loadData();
             applyStaticTranslations();
             if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
             if (recordDateInput) recordDateInput.value = getCurrentDateString();
+            lastCheckedDateString = getCurrentDateString(); // Initialize the date checker
             setDateInputVisibility(false);
             clearRecordForm();
             clearPlanForm();
@@ -774,10 +772,8 @@
             appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) toggleCard(h.closest('.card')); });
             document.querySelectorAll('.card-header').forEach(h=>{h.setAttribute('role','button');h.setAttribute('tabindex','0');h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ') {e.preventDefault();toggleCard(h.closest('.card'));}});});
             changeDateBtn?.addEventListener('click',()=>setDateInputVisibility(true)); recordHoursInput?.addEventListener('input',formatTimeInputOnType); planHoursInput?.addEventListener('input',formatTimeInputOnType);
-             // --- Corrected Event Listeners using the restored functions ---
-            recordHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); /* Use restored function */ if(!isNaN(d)&&d>=0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
-            planHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); /* Use restored function */ if(!isNaN(d)&&d>0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
-            // --- End corrected listeners ---
+            recordHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>=0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
+            planHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
             recordNotesInput?.addEventListener('input',e=>{if(e.target.value.length>NOTES_MAX_LENGTH){e.target.value=e.target.value.substring(0,NOTES_MAX_LENGTH);showFeedback('feedback.notesLengthLimit','info',{maxLength:NOTES_MAX_LENGTH});}});
             historySearchInput?.addEventListener('input',renderHistory); recordForm?.addEventListener('submit',handleRecordSubmit); planForm?.addEventListener('submit',handlePlanSubmit);
             clearPlanFormBtn?.addEventListener('click',clearPlanForm); saveGoalBtn?.addEventListener('click',handleGoalSave);
@@ -787,7 +783,11 @@
             dialogConfirmBtn?.addEventListener('click',()=>{if(typeof currentConfirmCallback==='function')currentConfirmCallback(); hideConfirmationDialog();});
             dialogCancelBtn?.addEventListener('click',hideConfirmationDialog); confirmationDialog?.addEventListener('click',e=>{if(e.target===confirmationDialog)hideConfirmationDialog();});
             window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredInstallPrompt=e; console.log('install prompt ready');});
-            setInterval(updateDashboardPlannedDates, 60 * 1000);
+            // setInterval(updateDashboardPlannedDates, 60 * 1000); // Keep this for overdue check, but date change handles main update
+
+            // Start the date check interval (every minute)
+            if (dateCheckInterval) clearInterval(dateCheckInterval); // Clear any existing interval
+            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000); // Check every 60 seconds
 
             // Final steps
             updateAllDisplays();
