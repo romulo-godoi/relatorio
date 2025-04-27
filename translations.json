@@ -15,7 +15,11 @@
       "plannedTripsLabel": "Saídas de campo planejadas",
       "monthGoalLabel": "Meta Mês",
       "overduePlanSuffix": "(Concluído ou reagendar?)",
-      "pendingRevisitsLabel": "Revisitas Pendentes"
+      "pendingRevisitsLabel": "Revisitas Pendentes",
+      "nextRevisitLabel": "Próxima Revisita Agendada",
+      "noUpcomingRevisits": "Nenhuma revisita agendada",
+      "pendingTotalSingular": "pendente",
+      "pendingTotalPlural": "pendentes"
     },
     "recordCard": {
       "title": "Registrar Atividade",
@@ -34,6 +38,7 @@
       "title": "Adicionar Revisita",
       "nameLabel": "Nome",
       "namePlaceholder": "Nome da pessoa ou referência",
+      "dateLabel": "Agendar para (Opcional)",
       "notesLabel": "Notas da Revisita",
       "notesPlaceholder": "Detalhes, assunto pendente...",
       "addButton": "Adicionar Revisita",
@@ -41,6 +46,7 @@
       "pendingListTitle": "Revisitas Pendentes",
       "listPlaceholderNoPending": "Nenhuma revisita pendente.",
       "addedOnLabel": "Adicionado em",
+      "scheduledForLabel": "Agendado para",
       "markCompleteButton": "Concluída"
     },
     "planCard": {
@@ -181,7 +187,11 @@
       "plannedTripsLabel": "Planned Field Service",
       "monthGoalLabel": "Month Goal",
       "overduePlanSuffix": "(Complete or reschedule?)",
-      "pendingRevisitsLabel": "Pending Revisits"
+      "pendingRevisitsLabel": "Pending Revisits",
+      "nextRevisitLabel": "Next Scheduled Revisit",
+      "noUpcomingRevisits": "No upcoming scheduled revisits",
+      "pendingTotalSingular": "pending",
+      "pendingTotalPlural": "pending"
     },
     "recordCard": {
       "title": "Record Activity",
@@ -200,6 +210,7 @@
       "title": "Add Revisit",
       "nameLabel": "Name",
       "namePlaceholder": "Person's name or reference",
+      "dateLabel": "Schedule for (Optional)",
       "notesLabel": "Revisit Notes",
       "notesPlaceholder": "Details, topic discussed...",
       "addButton": "Add Revisit",
@@ -207,6 +218,7 @@
       "pendingListTitle": "Pending Revisits",
       "listPlaceholderNoPending": "No pending revisits.",
       "addedOnLabel": "Added on",
+      "scheduledForLabel": "Scheduled for",
       "markCompleteButton": "Complete"
     },
     "planCard": {
@@ -347,7 +359,11 @@
       "plannedTripsLabel": "Servicio de Campo Planeado",
       "monthGoalLabel": "Meta Mes",
       "overduePlanSuffix": "(¿Completado o reprogramar?)",
-      "pendingRevisitsLabel": "Revisitas Pendientes"
+      "pendingRevisitsLabel": "Revisitas Pendientes",
+      "nextRevisitLabel": "Próxima Revisita Programada",
+      "noUpcomingRevisits": "Ninguna revisita programada",
+      "pendingTotalSingular": "pendiente",
+      "pendingTotalPlural": "pendientes"
     },
     "recordCard": {
       "title": "Registrar Actividad",
@@ -366,6 +382,7 @@
         "title": "Añadir Revisita",
         "nameLabel": "Nombre",
         "namePlaceholder": "Nombre de la persona o referencia",
+        "dateLabel": "Programar para (Opcional)",
         "notesLabel": "Notas de la Revisita",
         "notesPlaceholder": "Detalles, tema tratado...",
         "addButton": "Añadir Revisita",
@@ -373,6 +390,7 @@
         "pendingListTitle": "Revisitas Pendientes",
         "listPlaceholderNoPending": "Ninguna revisita pendiente.",
         "addedOnLabel": "Añadido el",
+        "scheduledForLabel": "Programado para",
         "markCompleteButton": "Completada"
     },
     "planCard": {
@@ -513,7 +531,11 @@
       "plannedTripsLabel": "Geplanter Predigtdienst",
       "monthGoalLabel": "Monatsziel",
       "overduePlanSuffix": "(Abschließen oder neu planen?)",
-      "pendingRevisitsLabel": "Offene Rückbesuche"
+      "pendingRevisitsLabel": "Offene Rückbesuche",
+      "nextRevisitLabel": "Nächster geplanter Rückbesuch",
+      "noUpcomingRevisits": "Keine bevorstehenden geplanten Rückbesuche",
+      "pendingTotalSingular": "offen",
+      "pendingTotalPlural": "offen"
     },
     "recordCard": {
       "title": "Aktivität erfassen",
@@ -532,6 +554,7 @@
         "title": "Rückbesuch hinzufügen",
         "nameLabel": "Name",
         "namePlaceholder": "Name der Person oder Referenz",
+        "dateLabel": "Planen für (Optional)",
         "notesLabel": "Rückbesuchsnotizen",
         "notesPlaceholder": "Details, besprochenes Thema...",
         "addButton": "Rückbesuch hinzufügen",
@@ -539,6 +562,7 @@
         "pendingListTitle": "Offene Rückbesuche",
         "listPlaceholderNoPending": "Keine offenen Rückbesuche.",
         "addedOnLabel": "Hinzugefügt am",
+        "scheduledForLabel": "Geplant für",
         "markCompleteButton": "Abschließen"
     },
     "planCard": {
@@ -679,7 +703,11 @@
       "plannedTripsLabel": "Prédication planifiée",
       "monthGoalLabel": "Objectif Mois",
       "overduePlanSuffix": "(Terminé ou reporter ?)",
-      "pendingRevisitsLabel": "Nouvelles visites en attente"
+      "pendingRevisitsLabel": "Nouvelles visites en attente",
+      "nextRevisitLabel": "Prochaine Nouvelle Visite Planifiée",
+      "noUpcomingRevisits": "Aucune nouvelle visite planifiée",
+      "pendingTotalSingular": "en attente",
+      "pendingTotalPlural": "en attente"
     },
     "recordCard": {
       "title": "Enregistrer l'Activité",
@@ -698,6 +726,7 @@
         "title": "Ajouter une Nouvelle Visite",
         "nameLabel": "Nom",
         "namePlaceholder": "Nom de la personne ou référence",
+        "dateLabel": "Planifier pour (Optionnel)",
         "notesLabel": "Notes de la Nouvelle Visite",
         "notesPlaceholder": "Détails, sujet abordé...",
         "addButton": "Ajouter Nouvelle Visite",
@@ -705,6 +734,7 @@
         "pendingListTitle": "Nouvelles Visites en Attente",
         "listPlaceholderNoPending": "Aucune nouvelle visite en attente.",
         "addedOnLabel": "Ajouté le",
+        "scheduledForLabel": "Planifié pour",
         "markCompleteButton": "Terminée"
     },
     "planCard": {
