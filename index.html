@@ -131,6 +131,20 @@
         }
         #dashboard-summary strong { color: var(--text-color); font-weight: 500; }
         #dashboard-summary span { display: block; margin-bottom: 3px;}
+
+        /* Added for Revisits Count */
+        #dashboard-revisits-count {
+            margin-top: 10px; /* Space above revisits count */
+        }
+        #dashboard-revisits-count .dashboard-label {
+            margin-bottom: 2px;
+        }
+        #dashboard-revisits-count .dashboard-value {
+            font-size: 1.1em; /* Slightly smaller than main hours */
+            color: var(--text-color);
+            margin-bottom: 0;
+        }
+
         #dashboard-planned-dates { /* Renamed from ID to class for clarity */
              margin-top: 15px; /* Add some space above planned dates */
              width: 100%; /* Ensure it takes full width of its container */
@@ -181,7 +195,7 @@
         .toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
         .card.expanded .toggle-icon { transform: rotate(180deg); }
         .card-content { padding: 0 var(--card-padding) 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
-        .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
+        .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; /* Increased max-height */ opacity: 1; margin-top: 0; overflow: visible; }
         .form-group { margin-bottom: 16px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
         input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
@@ -201,8 +215,8 @@
         button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; filter: none; } button.secondary:active { background-color: #48484a; transform: scale(0.96); filter: brightness(1); }
         button.success { background-color: var(--success-color); color: var(--text-color); } button.success:hover { filter: brightness(1.15); } button.success:active { transform: scale(0.95); filter: brightness(0.8); }
         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.15); } button.danger:active { background-color: #E0352D; transform: scale(0.96); filter: brightness(0.85); }
-        #record-form .text-center button, #plan-form .text-center button { width: auto; margin-right: 8px; }
-         #record-form .text-center button:last-child { margin-right: 0; }
+        #record-form .text-center button, #plan-form .text-center button, #revisit-form .text-center button { width: auto; margin-right: 8px; }
+         #record-form .text-center button:last-child, #plan-form .text-center button:last-child, #revisit-form .text-center button:last-child { margin-right: 0; }
          @media (min-width: 600px) { #plan-form .text-center button { } }
         .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
@@ -223,10 +237,23 @@
         .entry-details .hours { color: var(--primary-color); font-weight: 600; margin-left: 5px; margin-right: 5px; }
         .entry-details .tag-badge { display: inline-block; background-color: var(--input-bg); color: var(--text-color-secondary); font-size: 0.75em; padding: 2px 6px; border-radius: 5px; margin-left: 8px; vertical-align: middle; }
         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 4.5em; overflow: hidden; }
+        /* Added style for completed revisit marker */
+        .entry-details .revisit-completed-marker {
+            display: inline-block;
+            background-color: var(--success-color);
+            color: var(--text-color);
+            font-size: 0.7em;
+            font-weight: 600;
+            padding: 2px 5px;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
         .entry-actions { flex-shrink: 0; align-self: center; }
-        .entry-actions button, .plan-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
-        .plan-actions button { margin-top: 5px; }
-        .entry-actions button.secondary, .plan-actions button.secondary { background-color: #3a3a3c; }
+        .entry-actions button, .plan-actions button, .revisit-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
+        .plan-actions button, .revisit-actions button { margin-top: 5px; }
+        .entry-actions button.secondary, .plan-actions button.secondary, .revisit-actions button.secondary { background-color: #3a3a3c; }
         .chart-container { position: relative; min-height: 300px; max-height: 400px; width: 100%; margin-top: 15px; }
         .chart-summary-text { text-align: center; font-size: 0.95em; font-weight: 500; color: var(--text-color-secondary); margin-bottom: 10px; margin-top: 5px; min-height: 1.3em; padding: 0 var(--card-padding); }
         .dialog-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dialog-backdrop); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease; }
@@ -238,23 +265,32 @@
         .hidden { display: none !important; }
         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         .text-center { text-align: center; } .mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
+        h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding); }
+        .data-list li.placeholder { padding-left: var(--card-padding); color: var(--text-color-secondary); font-style: italic; }
     </style>
 </head>
 <body>
     <div id="loading-indicator">Loading...</div>
 
     <div id="dashboard-box">
-        <div class="dashboard-item"> <span class="dashboard-label" data-translate-key="dashboard.weekHoursLabel"></span>
+        <div class="dashboard-item">
+            <span class="dashboard-label" data-translate-key="dashboard.weekHoursLabel"></span>
             <span id="dashboard-week-hours" class="dashboard-value">0</span>
             <div id="dashboard-summary">
                 <span id="dashboard-month-total"></span>
                 <span id="dashboard-forecast"></span>
             </div>
-            <div class="hidden" id="dashboard-planned-dates"> <span class="dashboard-label" data-translate-key="dashboard.plannedTripsLabel"></span>
+            <div id="dashboard-revisits-count">
+                <span class="dashboard-label" data-translate-key="dashboard.pendingRevisitsLabel"></span>
+                <span id="dashboard-revisits-value" class="dashboard-value">0</span>
+            </div>
+            <div class="hidden" id="dashboard-planned-dates">
+                <span class="dashboard-label" data-translate-key="dashboard.plannedTripsLabel"></span>
                 <ul id="dashboard-plan-list"></ul>
             </div>
         </div>
-        <div class="dashboard-item dashboard-item--progress"> <svg viewBox="0 0 36 36" class="progress-ring">
+        <div class="dashboard-item dashboard-item--progress">
+            <svg viewBox="0 0 36 36" class="progress-ring">
                 <circle class="progress-ring__circle progress-ring__bg" cx="18" cy="18" r="15.9155"></circle>
                 <circle id="progress-ring-fg" class="progress-ring__circle progress-ring__fg" cx="18" cy="18" r="15.9155" stroke-dasharray="100 100" stroke-dashoffset="100"></circle>
             </svg>
@@ -266,14 +302,157 @@
     </div>
 
     <div id="app">
-        <div class="card expanded" id="record-card"> <div class="card-header"> <h2 data-translate-key="recordCard.title"></h2> <span class="toggle-icon">▲</span></div> <div class="card-content"> <form id="record-form"><input type="hidden" id="record-id"> <div class="form-group"><label for="record-date" id="date-label"> <span data-translate-key="recordCard.dateLabel"></span>: <strong id="display-date"></strong> <button type="button" class="change-date-button" id="change-date-btn" data-translate-key="recordCard.changeDateButton"></button></label> <input type="date" id="record-date" class="hidden"></div> <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;"> <div class="form-group"> <label for="record-hours" data-translate-key="recordCard.timeLabel"></label> <input type="text" inputmode="numeric" id="record-hours" class="time-input" required data-translate-key="recordCard.timePlaceholder" data-translate-attr="placeholder"></div> <div class="form-group"> <label for="record-tag" data-translate-key="recordCard.tagLabel"></label> <select id="record-tag"></select></div> </div> <div class="form-group"> <label for="record-notes" id="record-notes-label" data-translate-key="recordCard.notesLabel"></label> <textarea id="record-notes" rows="3" data-translate-key="recordCard.notesPlaceholder" data-translate-attr="placeholder"></textarea></div> <div class="text-center" style="margin-top: 20px;"> <button type="submit" id="save-record-btn" data-translate-key="recordCard.saveButton"></button> </div> </form> </div> </div>
-        <div class="card" id="plan-card"> <div class="card-header"><h2 data-translate-key="planCard.title"></h2><span class="toggle-icon">▼</span></div> <div class="card-content"> <form id="plan-form"><input type="hidden" id="plan-id"><div class="form-group"><label for="plan-date" data-translate-key="planCard.dateLabel"></label><input type="date" id="plan-date" required></div> <div class="form-group"><label for="plan-hours" data-translate-key="planCard.hoursLabel"></label> <input type="text" inputmode="numeric" id="plan-hours" class="time-input" required data-translate-key="planCard.hoursPlaceholder" data-translate-attr="placeholder"></div> <div class="text-center"> <button type="submit" id="save-plan-btn" data-translate-key="planCard.saveButton"></button> <button type="button" id="clear-plan-form-btn" class="secondary" data-translate-key="planCard.clearButton"></button> </div> </form> <div id="planning-list-container" class="mt-2"> <h3 style="font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding);" data-translate-key="planCard.listTitle"></h3> <ul id="planning-list" class="data-list"> <li class="placeholder hidden" style="padding-left: var(--card-padding);"></li></ul></div> </div> </div>
-        <div class="card" id="stats-card"> <div class="card-header"><h2 data-translate-key="statsCard.title"></h2><span class="toggle-icon">▼</span></div> <div class="card-content"> <div class="form-group" style="max-width: 200px; margin: 0 auto 25px auto; text-align:center;"> <label for="monthly-goal" data-translate-key="statsCard.goalLabel"></label> <input type="number" id="monthly-goal" min="1" step="1" value="70"> <button id="save-goal-btn" class="mt-1 secondary" style="width:100%; font-size:0.9em; padding: 8px 10px;" data-translate-key="statsCard.setGoalButton"></button></div> <div class="stats-grid"> <div class="stat-item"><span id="stats-month-hours" class="stat-value">0</span><span class="stat-label" data-translate-key="statsCard.monthHoursLabel"></span></div> <div class="stat-item"><span id="stats-month-goal-progress" class="stat-value">0%</span><span class="stat-label" data-translate-key="statsCard.goalProgressLabel"></span><div class="progress-bar-container"><div id="stats-month-progress-bar" class="progress-bar"></div></div></div> <div class="stat-item"><span id="stats-avg-hours-day" class="stat-value">0</span><span class="stat-label" data-translate-key="statsCard.avgHoursDayLabel"></span></div> <div class="stat-item"><span id="stats-month-days-active" class="stat-value">0</span><span class="stat-label" data-translate-key="statsCard.daysActiveLabel"></span></div></div> </div> </div>
-        <div class="card" id="charts-card"> <div class="card-header"><h2 data-translate-key="chartsCard.title"></h2><span class="toggle-icon">▼</span></div> <div class="card-content"> <div class="form-group"> <label for="chart-month-selector" data-translate-key="chartsCard.monthSelectorLabel"></label> <select id="chart-month-selector"></select></div> <p id="chart-total-hours-display" class="chart-summary-text"></p> <div class="chart-container"> <canvas id="monthlyHoursChart"></canvas></div> </div> </div>
-        <div class="card" id="history-card"> <div class="card-header"><h2 data-translate-key="historyCard.title"></h2><span class="toggle-icon">▼</span></div> <div class="card-content"> <div id="history-controls"> <input type="search" id="history-search-input" class="history-search-input" data-translate-key="historyCard.searchPlaceholder" data-translate-attr="placeholder"></div> <span id="showing-results-label"></span> <ul id="history-list" class="data-list"> <li class="placeholder hidden" style="padding-left: var(--card-padding);"></li> </ul></div> </div>
-        <div class="card" id="settings-card"> <div class="card-header"><h2 data-translate-key="settingsCard.title"></h2><span class="toggle-icon">▼</span></div> <div class="card-content"> <div class="text-center"> <button id="clear-all-data-btn" class="danger" data-translate-key="settingsCard.clearDataButton"></button></div> <p id="settings-warning-text" style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="settingsCard.clearDataWarning"></p> </div> </div>
+        <div class="card expanded" id="record-card">
+            <div class="card-header"> <h2 data-translate-key="recordCard.title"></h2> <span class="toggle-icon">▲</span></div>
+            <div class="card-content">
+                <form id="record-form">
+                    <input type="hidden" id="record-id">
+                    <div class="form-group">
+                        <label for="record-date" id="date-label">
+                            <span data-translate-key="recordCard.dateLabel"></span>: <strong id="display-date"></strong>
+                            <button type="button" class="change-date-button" id="change-date-btn" data-translate-key="recordCard.changeDateButton"></button>
+                        </label>
+                        <input type="date" id="record-date" class="hidden">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="record-hours" data-translate-key="recordCard.timeLabel"></label>
+                            <input type="text" inputmode="numeric" id="record-hours" class="time-input" required data-translate-key="recordCard.timePlaceholder" data-translate-attr="placeholder">
+                        </div>
+                        <div class="form-group">
+                            <label for="record-tag" data-translate-key="recordCard.tagLabel"></label>
+                            <select id="record-tag"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="record-notes" id="record-notes-label" data-translate-key="recordCard.notesLabel"></label>
+                        <textarea id="record-notes" rows="3" data-translate-key="recordCard.notesPlaceholder" data-translate-attr="placeholder"></textarea>
+                    </div>
+                    <div class="text-center" style="margin-top: 20px;">
+                        <button type="submit" id="save-record-btn" data-translate-key="recordCard.saveButton"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card" id="revisit-card">
+            <div class="card-header"><h2 data-translate-key="revisitCard.title"></h2><span class="toggle-icon">▼</span></div>
+            <div class="card-content">
+                <form id="revisit-form">
+                    <input type="hidden" id="revisit-id">
+                    <div class="form-group">
+                        <label for="revisit-name" data-translate-key="revisitCard.nameLabel"></label>
+                        <input type="text" id="revisit-name" required data-translate-key="revisitCard.namePlaceholder" data-translate-attr="placeholder">
+                    </div>
+                     <div class="form-group">
+                        <label for="revisit-notes" data-translate-key="revisitCard.notesLabel"></label>
+                        <textarea id="revisit-notes" rows="2" data-translate-key="revisitCard.notesPlaceholder" data-translate-attr="placeholder"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" id="save-revisit-btn" data-translate-key="revisitCard.addButton"></button>
+                        <button type="button" id="clear-revisit-form-btn" class="secondary" data-translate-key="revisitCard.clearButton"></button>
+                    </div>
+                </form>
+                <div id="revisit-list-container" class="mt-2">
+                    <h3 class="list-title" data-translate-key="revisitCard.pendingListTitle"></h3>
+                    <ul id="revisit-list" class="data-list">
+                        <li class="placeholder hidden"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="plan-card">
+            <div class="card-header"><h2 data-translate-key="planCard.title"></h2><span class="toggle-icon">▼</span></div>
+            <div class="card-content">
+                <form id="plan-form">
+                    <input type="hidden" id="plan-id">
+                    <div class="form-group">
+                        <label for="plan-date" data-translate-key="planCard.dateLabel"></label>
+                        <input type="date" id="plan-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plan-hours" data-translate-key="planCard.hoursLabel"></label>
+                        <input type="text" inputmode="numeric" id="plan-hours" class="time-input" required data-translate-key="planCard.hoursPlaceholder" data-translate-attr="placeholder">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" id="save-plan-btn" data-translate-key="planCard.saveButton"></button>
+                        <button type="button" id="clear-plan-form-btn" class="secondary" data-translate-key="planCard.clearButton"></button>
+                    </div>
+                </form>
+                <div id="planning-list-container" class="mt-2">
+                    <h3 class="list-title" data-translate-key="planCard.listTitle"></h3>
+                    <ul id="planning-list" class="data-list">
+                        <li class="placeholder hidden"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="stats-card">
+            <div class="card-header"><h2 data-translate-key="statsCard.title"></h2><span class="toggle-icon">▼</span></div>
+            <div class="card-content">
+                <div class="form-group" style="max-width: 200px; margin: 0 auto 25px auto; text-align:center;">
+                    <label for="monthly-goal" data-translate-key="statsCard.goalLabel"></label>
+                    <input type="number" id="monthly-goal" min="1" step="1" value="70">
+                    <button id="save-goal-btn" class="mt-1 secondary" style="width:100%; font-size:0.9em; padding: 8px 10px;" data-translate-key="statsCard.setGoalButton"></button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item"><span id="stats-month-hours" class="stat-value">0</span><span class="stat-label" data-translate-key="statsCard.monthHoursLabel"></span></div>
+                    <div class="stat-item"><span id="stats-month-goal-progress" class="stat-value">0%</span><span class="stat-label" data-translate-key="statsCard.goalProgressLabel"></span><div class="progress-bar-container"><div id="stats-month-progress-bar" class="progress-bar"></div></div></div>
+                    <div class="stat-item"><span id="stats-avg-hours-day" class="stat-value">0</span><span class="stat-label" data-translate-key="statsCard.avgHoursDayLabel"></span></div>
+                    <div class="stat-item"><span id="stats-month-days-active" class="stat-value">0</span><span class="stat-label" data-translate-key="statsCard.daysActiveLabel"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="charts-card">
+            <div class="card-header"><h2 data-translate-key="chartsCard.title"></h2><span class="toggle-icon">▼</span></div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label for="chart-month-selector" data-translate-key="chartsCard.monthSelectorLabel"></label>
+                    <select id="chart-month-selector"></select>
+                </div>
+                <p id="chart-total-hours-display" class="chart-summary-text"></p>
+                <div class="chart-container">
+                    <canvas id="monthlyHoursChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="history-card">
+            <div class="card-header"><h2 data-translate-key="historyCard.title"></h2><span class="toggle-icon">▼</span></div>
+            <div class="card-content">
+                <div id="history-controls">
+                    <input type="search" id="history-search-input" class="history-search-input" data-translate-key="historyCard.searchPlaceholder" data-translate-attr="placeholder">
+                </div>
+                <span id="showing-results-label"></span>
+                <ul id="history-list" class="data-list">
+                    <li class="placeholder hidden"></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" id="settings-card">
+            <div class="card-header"><h2 data-translate-key="settingsCard.title"></h2><span class="toggle-icon">▼</span></div>
+            <div class="card-content">
+                <div class="text-center">
+                    <button id="clear-all-data-btn" class="danger" data-translate-key="settingsCard.clearDataButton"></button>
+                </div>
+                <p id="settings-warning-text" style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="settingsCard.clearDataWarning"></p>
+            </div>
+        </div>
     </div>
-    <div id="confirmation-dialog" class="dialog-backdrop"> <div class="dialog-content"> <p id="dialog-message"></p> <div class="dialog-actions"> <button id="dialog-confirm-btn" class="danger" data-translate-key="dialog.confirmButton"></button> <button id="dialog-cancel-btn" class="secondary" data-translate-key="dialog.cancelButton"></button> </div> </div> </div>
+
+    <div id="confirmation-dialog" class="dialog-backdrop">
+        <div class="dialog-content">
+            <p id="dialog-message"></p>
+            <div class="dialog-actions">
+                <button id="dialog-confirm-btn" class="danger" data-translate-key="dialog.confirmButton"></button>
+                <button id="dialog-cancel-btn" class="secondary" data-translate-key="dialog.cancelButton"></button>
+            </div>
+        </div>
+    </div>
 
     <script>
         (async () => {
@@ -282,10 +461,14 @@
             let currentLang = 'en';
             const supportedLanguages = ["pt-BR", "en", "es", "de", "fr"];
             const tagKeyMapping = {
-                "Casa em casa": "tags.houseToHouse", "Carrinho": "tags.cart",
-                "Cartas": "tags.letters", "Telefone": "tags.phone", "Outro": "tags.other"
+                "Casa em casa": "tags.houseToHouse",
+                "Carrinho": "tags.cart",
+                "Cartas": "tags.letters",
+                "Testemunho informal": "tags.informalWitnessing", // Changed from Telefone
+                "Outro": "tags.other"
             };
             const DEFAULT_TAG_VALUE = "Casa em casa";
+            const REVISIT_NOTES_MAX_LENGTH = 500; // Max length for revisit notes
 
             function getNestedValue(obj, key) {
                 if (!key || typeof key !== 'string') return undefined;
@@ -331,23 +514,28 @@
                 }
                 document.title = t('appTitle');
                 document.documentElement.lang = currentLang.split('-')[0];
-                 if (recordNotesLabel) recordNotesLabel.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH });
-                 if (recordNotesInput) recordNotesInput.maxLength = NOTES_MAX_LENGTH;
-                 if (loadingIndicator) loadingIndicator.textContent = t('common.loading');
+                if (recordNotesLabel) recordNotesLabel.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH });
+                if (recordNotesInput) recordNotesInput.maxLength = NOTES_MAX_LENGTH;
+                // Add max length for revisit notes
+                if (revisitNotesInput) revisitNotesInput.maxLength = REVISIT_NOTES_MAX_LENGTH;
+                if (loadingIndicator) loadingIndicator.textContent = t('common.loading');
             }
 
             // --- Element & State Variables ---
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
-            let recordedEntries = [], plannedEntries = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
+            // Revisit elements
+            let revisitCard, revisitForm, revisitIdInput, revisitNameInput, revisitNotesInput, saveRevisitBtn, clearRevisitFormBtn, revisitListContainer, revisitList, revisitListPlaceholder, dashboardRevisitsCount, dashboardRevisitsValue;
+
+            let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
             let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
             let progressRingRadius = 0, progressRingCircumference = 0, MONTH_NAMES = [], WEEKDAY_NAMES = [];
-            let lastCheckedDateString = ''; // Variable to store the date for comparison
-            let dateCheckInterval = null; // Variable to hold the interval ID
+            let lastCheckedDateString = '';
+            let dateCheckInterval = null;
 
             const HISTORY_MONTH_LIMIT = 3;
             const NOTES_MAX_LENGTH = 300;
             const MIN_HOURS_PER_DAY_FORECAST = 1.0;
-            const LOCAL_STORAGE_KEYS = { ENTRIES: 'pioneerTracker_entries_v5.1', PLANS: 'pioneerTracker_plans_v1.1', SETTINGS: 'pioneerTracker_settings_v1.1' };
+            const LOCAL_STORAGE_KEYS = { ENTRIES: 'pioneerTracker_entries_v5.1', PLANS: 'pioneerTracker_plans_v1.1', REVISITS: 'pioneerTracker_revisits_v1.0', SETTINGS: 'pioneerTracker_settings_v1.1' };
 
             const loadingIndicator = document.getElementById('loading-indicator');
             if (loadingIndicator) loadingIndicator.classList.remove('hidden');
@@ -386,6 +574,8 @@
 
             // --- Element Assignments ---
             appElement = document.getElementById('app'); dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list'); progressRingFg = document.getElementById('progress-ring-fg'); recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn'); planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder'); monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active'); chartMonthSelector = document.getElementById('chart-month-selector'); monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d'); historyList = document.getElementById('history-list'); historySearchInput = document.getElementById('history-search-input'); historyListPlaceholder = historyList?.querySelector('.placeholder'); showingResultsLabel = document.getElementById('showing-results-label'); clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn'); chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
+            // Revisit element assignments
+            revisitCard = document.getElementById('revisit-card'); revisitForm = document.getElementById('revisit-form'); revisitIdInput = document.getElementById('revisit-id'); revisitNameInput = document.getElementById('revisit-name'); revisitNotesInput = document.getElementById('revisit-notes'); saveRevisitBtn = document.getElementById('save-revisit-btn'); clearRevisitFormBtn = document.getElementById('clear-revisit-form-btn'); revisitListContainer = document.getElementById('revisit-list-container'); revisitList = document.getElementById('revisit-list'); revisitListPlaceholder = revisitList?.querySelector('.placeholder'); dashboardRevisitsCount = document.getElementById('dashboard-revisits-count'); dashboardRevisitsValue = document.getElementById('dashboard-revisits-value');
 
             // --- Style & Ring Calculations ---
             try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Cannot get computed styles"); computedStyles = {}; } textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff'; textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa'; tooltipBgColor = computedStyles.getPropertyValue?.('--card-bg')?.trim() || '#1c1c1e'; chartColors = ['#0A84FF', '#30D158', '#FF9F0A', '#AF52DE', '#5E5CE6', '#FF69B4', '#32CD32', '#FFD700'].map((fallback, i) => computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim() || fallback); if (progressRingFg && progressRingFg.r?.baseVal?.value) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; }
@@ -513,7 +703,17 @@
             }
 
             // Data & UI Helpers
-            function saveData() { try{localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES,JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS,JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS,JSON.stringify(settings));}catch(e){console.error("Save Err:",e); showFeedback('feedback.saveError','danger');} }
+            function saveData() {
+                try{
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES,JSON.stringify(recordedEntries));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS,JSON.stringify(plannedEntries));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS,JSON.stringify(revisits)); // Save revisits
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS,JSON.stringify(settings));
+                } catch(e) {
+                    console.error("Save Err:",e);
+                    showFeedback('feedback.saveError','danger');
+                }
+            }
             function loadData() {
                 try{
                     let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
@@ -521,18 +721,30 @@
                     const sP=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS);
                     plannedEntries=sP?JSON.parse(sP):[];
                     plannedEntries.forEach(p=>{if(p.plannedHours!==undefined && typeof p.plannedHours==='number'){p.hours=p.plannedHours;delete p.plannedHours;}});
+                    // Load revisits
+                    const sRV=localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS);
+                    revisits=sRV?JSON.parse(sRV):[];
+                    // Simple validation/migration for revisits (add status if missing)
+                    revisits = revisits.map(rv => ({
+                        ...rv,
+                        status: rv.status || 'pending', // Default to pending if status is missing
+                        notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '',
+                        dateAdded: rv.dateAdded || getCurrentDateString() // Add dateAdded if missing
+                    }));
+
                     const sSR=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS);
                     settings={monthlyGoal:70,goalHasBeenSet:false, ...JSON.parse(sSR||'{}')};
                     if(isNaN(settings.monthlyGoal)||settings.monthlyGoal<=0)settings.monthlyGoal=70;
                     if(typeof settings.goalHasBeenSet!=='boolean')settings.goalHasBeenSet=false;
 
-                    recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); // Sort YYYY-MM-DD strings
-                    plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); // Sort YYYY-MM-DD strings
+                    recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+                    plannedEntries.sort((a, b) => a.date.localeCompare(b.date));
+                    revisits.sort((a, b) => (a.status === b.status) ? (a.dateAdded?.localeCompare(b.dateAdded || '') || 0) : (a.status === 'pending' ? -1 : 1)); // Sort pending first, then by date added
 
                     console.log("Data loaded.");
                 }catch(e){
                     console.error("Load Err:",e);
-                    recordedEntries=[];plannedEntries=[]; settings={monthlyGoal:70,goalHasBeenSet:false};
+                    recordedEntries=[];plannedEntries=[]; revisits=[]; settings={monthlyGoal:70,goalHasBeenSet:false};
                     try{localStorage.clear();}catch(se){}
                     showFeedback('feedback.loadError','danger');
                 }
@@ -542,18 +754,108 @@
             function setDateInputVisibility(v) { isDateInputVisible=v; if(v){ recordDateInput?.classList.remove('hidden'); dateLabel?.classList.add('visually-hidden'); recordDateInput?.focus(); } else{ recordDateInput?.classList.add('hidden'); dateLabel?.classList.remove('visually-hidden'); if (displayDate) displayDate.textContent=(!recordDateInput?.value || recordDateInput.value===getCurrentDateString())?t('dates.today'):formatDisplayDate(recordDateInput.value);}}
             function toggleCard(e) { if(!e)return;const ex=e.classList.contains('expanded');e.classList.toggle('expanded',!ex); const i=e.querySelector('.toggle-icon'); if(i) i.textContent=!ex?'▲':'▼';}
             function clearRecordForm() { recordForm?.reset(); if(recordIdInput)recordIdInput.value=''; if(recordDateInput)recordDateInput.value=getCurrentDateString(); setDateInputVisibility(false); if(recordTagSelect)recordTagSelect.value=DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=''; if(recordHoursInput)recordHoursInput.value=''; if(saveRecordBtn)saveRecordBtn.textContent=t('recordCard.saveButton'); saveRecordBtn?.classList.remove('editing'); currentEditingId=null;}
-            function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput?.value?parseInt(recordIdInput.value,10):Date.now(); const date=(isDateInputVisible||(recordDateInput?.value && recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hours=parseTimeInputToDecimal(recordHoursInput?.value); const tag=recordTagSelect?.value||DEFAULT_TAG_VALUE; const notes=recordNotesInput?.value.trim().substring(0,NOTES_MAX_LENGTH); if(isNaN(hours)||hours<=0){alert(t('feedback.invalidTimeFormat'));recordHoursInput?.focus(); return;} if(!date){alert(t('feedback.invalidDate'));return;} const entry={id,date,hours,tag,notes}; const idx=recordedEntries.findIndex(e=>e.id===id); if(idx>-1)recordedEntries[idx]=entry; else recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess','success'); }
-            function editRecordEntry(id) { const entry=recordedEntries.find(e=>e.id===id); if(entry){ if(!recordCard?.classList.contains('expanded'))toggleCard(recordCard); currentEditingId=id; if(recordIdInput)recordIdInput.value=entry.id; if(recordDateInput)recordDateInput.value=entry.date; setDateInputVisibility(entry.date!==getCurrentDateString()); if(recordHoursInput)recordHoursInput.value=formatDecimalToTimeInput(entry.hours); if(recordTagSelect)recordTagSelect.value=entry.tag||DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=entry.notes||''; if(saveRecordBtn){saveRecordBtn.textContent=t('recordCard.updateButton');saveRecordBtn.classList.add('editing');} recordCard?.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput?.focus();}}
+            function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput?.value?parseInt(recordIdInput.value,10):Date.now(); const date=(isDateInputVisible||(recordDateInput?.value && recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hours=parseTimeInputToDecimal(recordHoursInput?.value); const tag=recordTagSelect?.value||DEFAULT_TAG_VALUE; const notes=recordNotesInput?.value.trim().substring(0,NOTES_MAX_LENGTH); if(isNaN(hours)||hours<=0){alert(t('feedback.invalidTimeFormat'));recordHoursInput?.focus(); return;} if(!date){alert(t('feedback.invalidDate'));return;} const entry={id,date,hours,tag,notes, type: 'record'}; const idx=recordedEntries.findIndex(e=>e.id===id); if(idx>-1)recordedEntries[idx]=entry; else recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess','success'); }
+            function editRecordEntry(id) { const entry=recordedEntries.find(e=>e.id===id && e.type !== 'revisit_completed'); if(entry){ if(!recordCard?.classList.contains('expanded'))toggleCard(recordCard); currentEditingId=id; if(recordIdInput)recordIdInput.value=entry.id; if(recordDateInput)recordDateInput.value=entry.date; setDateInputVisibility(entry.date!==getCurrentDateString()); if(recordHoursInput)recordHoursInput.value=formatDecimalToTimeInput(entry.hours); if(recordTagSelect)recordTagSelect.value=entry.tag||DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=entry.notes||''; if(saveRecordBtn){saveRecordBtn.textContent=t('recordCard.updateButton');saveRecordBtn.classList.add('editing');} recordCard?.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput?.focus();}}
             function deleteRecordEntry(id) { showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'),()=>{const i=recordedEntries.findIndex(e=>e.id===id); if(i>-1){recordedEntries.splice(i,1);saveData();updateAllDisplays();showFeedback('feedback.recordDeletedSuccess','info');if(currentEditingId===id)clearRecordForm();}else console.warn("Not found for del:", id);});}
             function clearPlanForm() { planForm?.reset(); if(planIdInput)planIdInput.value=''; if(planDateInput)planDateInput.value=''; if(planHoursInput)planHoursInput.value=''; if(savePlanBtn)savePlanBtn.textContent=t('planCard.saveButton'); currentEditingId=null; }
             function handlePlanSubmit(event) { event.preventDefault(); const id=planIdInput?.value?parseInt(planIdInput.value,10):Date.now(); const date=planDateInput?.value; const hours=parseTimeInputToDecimal(planHoursInput?.value); const todayStr=getCurrentDateString(); if(!date||isNaN(hours)||hours<=0){alert(t('feedback.planFormInvalid')); planHoursInput?.focus();return;} if(date<todayStr){alert(t('feedback.planDatePastError'));planDateInput?.focus();return;} const plan={id,date,hours}; const idx=plannedEntries.findIndex(p=>p.id===id); if(idx>-1)plannedEntries[idx]=plan; else plannedEntries.push(plan); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('feedback.planSavedSuccess','success'); }
-            function markPlanAsDone(id) { const idx=plannedEntries.findIndex(p=>p.id===id); if(idx===-1){showFeedback('feedback.planNotFound','danger');return;} const plan=plannedEntries[idx]; const todayStr=getCurrentDateString(); const recDate=todayStr<plan.date?todayStr:plan.date; const note=t('recordCard.autoNoteFromPlan',{date:formatDisplayDate(plan.date),hours:formatHoursExtensive(plan.hours)}); const entry={id:Date.now(),date:recDate,hours:plan.hours,tag:DEFAULT_TAG_VALUE,notes:note}; recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.splice(idx,1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess','success'); }
+            function markPlanAsDone(id) { const idx=plannedEntries.findIndex(p=>p.id===id); if(idx===-1){showFeedback('feedback.planNotFound','danger');return;} const plan=plannedEntries[idx]; const todayStr=getCurrentDateString(); const recDate=todayStr<plan.date?todayStr:plan.date; const note=t('recordCard.autoNoteFromPlan',{date:formatDisplayDate(plan.date),hours:formatHoursExtensive(plan.hours)}); const entry={id:Date.now(),date:recDate,hours:plan.hours,tag:DEFAULT_TAG_VALUE,notes:note, type: 'record'}; recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.splice(idx,1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess','success'); }
             function deletePlanEntry(id){ showConfirmationDialog(t('dialog.confirmDeletePlanMessage'),()=>{plannedEntries=plannedEntries.filter(p=>p.id!==id); saveData(); updateAllDisplays(); showFeedback('feedback.planDeletedSuccess','info'); if(currentEditingId===id)clearPlanForm();});}
             function handleGoalSave(){ const g=parseInt(monthlyGoalInput?.value,10); if(!isNaN(g)&&g>0){settings.monthlyGoal=g;settings.goalHasBeenSet=true;saveData();updateAllDisplays();showFeedback('feedback.goalUpdateSuccess','success');triggerInstallPromptIfAvailable('goal save');}else{alert(t('feedback.invalidGoalValue')); if(monthlyGoalInput) monthlyGoalInput.value=settings.monthlyGoal;}}
-            function handleClearAllData() { showConfirmationDialog(t('dialog.confirmClearAllDataMessage'),()=>{recordedEntries=[];plannedEntries=[];settings={monthlyGoal:70,goalHasBeenSet:false}; if(monthlyGoalInput)monthlyGoalInput.value=settings.monthlyGoal;saveData();clearRecordForm();clearPlanForm();updateAllDisplays();showFeedback('feedback.clearAllDataSuccess','danger'); document.querySelectorAll('.card').forEach(c=>{if(c.id!=='record-card'&&c.classList.contains('expanded'))toggleCard(c);else if(c.id==='record-card'&&!c.classList.contains('expanded'))toggleCard(c);});});}
+            function handleClearAllData() { showConfirmationDialog(t('dialog.confirmClearAllDataMessage'),()=>{recordedEntries=[];plannedEntries=[]; revisits=[]; settings={monthlyGoal:70,goalHasBeenSet:false}; if(monthlyGoalInput)monthlyGoalInput.value=settings.monthlyGoal;saveData();clearRecordForm();clearPlanForm();clearRevisitForm(); updateAllDisplays();showFeedback('feedback.clearAllDataSuccess','danger'); document.querySelectorAll('.card').forEach(c=>{if(c.id!=='record-card'&&c.classList.contains('expanded'))toggleCard(c);else if(c.id==='record-card'&&!c.classList.contains('expanded'))toggleCard(c);});});}
             function showConfirmationDialog(message, onConfirm) { if(dialogMessage)dialogMessage.textContent=message; currentConfirmCallback=onConfirm; confirmationDialog?.classList.add('visible'); dialogConfirmBtn?.focus(); }
             function hideConfirmationDialog() { confirmationDialog?.classList.remove('visible'); setTimeout(()=>{currentConfirmCallback=null;},300);}
             function showFeedback(key,type='info',vars={}) { let msg=t(key,vars); console.log(`Feedback[${type}]: ${msg}`); const fb=document.createElement('div'); fb.textContent=msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type==='success'?'var(--success-color)':type==='danger'?'var(--danger-color)':'var(--primary-color)'}; color: var(--text-color);`; document.body.appendChild(fb); setTimeout(()=>{fb.style.opacity='1'; fb.style.bottom='30px';},10); setTimeout(()=>{fb.style.opacity='0'; fb.style.bottom='10px';},3500); setTimeout(()=>{fb.parentNode?.removeChild(fb)},4000);}
+
+            // --- Revisit Specific Functions ---
+            function clearRevisitForm() {
+                revisitForm?.reset();
+                if(revisitIdInput) revisitIdInput.value = '';
+                if(revisitNameInput) revisitNameInput.value = '';
+                if(revisitNotesInput) revisitNotesInput.value = '';
+                if(saveRevisitBtn) saveRevisitBtn.textContent = t('revisitCard.addButton');
+                currentEditingId = null; // Assuming we might add edit later
+            }
+
+            function handleRevisitSubmit(event) {
+                event.preventDefault();
+                const id = revisitIdInput?.value ? parseInt(revisitIdInput.value, 10) : Date.now();
+                const name = revisitNameInput?.value.trim();
+                const notes = revisitNotesInput?.value.trim().substring(0, REVISIT_NOTES_MAX_LENGTH);
+                const dateAdded = getCurrentDateString();
+
+                if (!name) {
+                    alert(t('feedback.revisitNameRequired'));
+                    revisitNameInput?.focus();
+                    return;
+                }
+
+                const revisit = { id, name, notes, dateAdded, status: 'pending', dateCompleted: null };
+                const idx = revisits.findIndex(rv => rv.id === id);
+                if (idx > -1) {
+                    // Update existing (if editing is implemented later)
+                    revisits[idx] = revisit;
+                } else {
+                    revisits.push(revisit);
+                }
+                // Sort pending first, then by date added
+                 revisits.sort((a, b) => (a.status === b.status) ? (a.dateAdded?.localeCompare(b.dateAdded || '') || 0) : (a.status === 'pending' ? -1 : 1));
+                saveData();
+                clearRevisitForm();
+                updateAllDisplays();
+                showFeedback('feedback.revisitSavedSuccess', 'success');
+            }
+
+            function markRevisitComplete(id) {
+                const idx = revisits.findIndex(rv => rv.id === id);
+                if (idx === -1) {
+                    showFeedback('feedback.revisitNotFound', 'danger');
+                    return;
+                }
+                const revisit = revisits[idx];
+                const completionDate = getCurrentDateString();
+
+                // Change status and date
+                revisit.status = 'completed';
+                revisit.dateCompleted = completionDate;
+
+                // Create a corresponding history entry
+                const historyEntry = {
+                    id: Date.now(), // New ID for history entry
+                    date: completionDate,
+                    hours: 0, // Completed revisits don't count hours directly here
+                    tag: t('historyCard.revisitCompletedTag'), // Special tag
+                    notes: `${t('historyCard.revisitCompletedNotePrefix')} ${revisit.name}${revisit.notes ? `\n${t('historyCard.revisitOriginalNotes')}: ${revisit.notes}` : ''}`,
+                    type: 'revisit_completed', // Special type
+                    revisitId: revisit.id // Link back to original revisit if needed
+                };
+                recordedEntries.push(historyEntry);
+                recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+
+                // Remove from active revisits list (or just update status if preferred)
+                // For now, let's keep it simple and remove it from the active list
+                revisits.splice(idx, 1);
+
+                saveData();
+                updateAllDisplays();
+                showFeedback('feedback.revisitMarkedCompleteSuccess', 'success');
+            }
+
+            function deleteRevisit(id) {
+                showConfirmationDialog(t('dialog.confirmDeleteRevisitMessage'), () => {
+                    const initialLength = revisits.length;
+                    revisits = revisits.filter(rv => rv.id !== id);
+                    if (revisits.length < initialLength) {
+                        saveData();
+                        updateAllDisplays();
+                        showFeedback('feedback.revisitDeletedSuccess', 'info');
+                        if (currentEditingId === id) clearRevisitForm(); // If editing was implemented
+                    } else {
+                        console.warn("Revisit not found for deletion:", id);
+                    }
+                });
+            }
+
 
             // --- Display Update Functions ---
             function updateDashboard() {
@@ -564,14 +866,17 @@
                 const startOfWeekStr = getStartOfWeek(today);
 
                 recordedEntries.forEach(entry => {
-                    const entryDate = parseLocalDate(entry.date);
-                    if (isNaN(entryDate.valueOf())) return;
+                    // Only count 'record' type entries for hours
+                    if (entry.type !== 'revisit_completed') {
+                        const entryDate = parseLocalDate(entry.date);
+                        if (isNaN(entryDate.valueOf())) return;
 
-                    if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) {
-                        monthHours += entry.hours;
-                    }
-                    if (entry.date >= startOfWeekStr) {
-                        weekHours += entry.hours;
+                        if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) {
+                            monthHours += entry.hours;
+                        }
+                        if (entry.date >= startOfWeekStr) {
+                            weekHours += entry.hours;
+                        }
                     }
                 });
 
@@ -611,7 +916,13 @@
                 }
                 if(dashboardForecast) dashboardForecast.innerHTML = forecastText;
 
-                updateDashboardPlannedDates();
+                // Update Revisit Count on Dashboard
+                const pendingRevisitsCount = revisits.filter(rv => rv.status === 'pending').length;
+                if (dashboardRevisitsValue) dashboardRevisitsValue.textContent = pendingRevisitsCount;
+                if (dashboardRevisitsCount) dashboardRevisitsCount.classList.toggle('hidden', pendingRevisitsCount === 0);
+
+
+                updateDashboardPlannedDates(); // Keep this as is for now
             }
             function updateProgressRing(cV, mV) { const p=mV>0?Math.min(100,(cV/mV)*100):0; const off=progressRingCircumference*(1-p/100); if(progressRingFg){progressRingFg.style.strokeDasharray=`${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset=Math.max(0,off);}}
             function updateDashboardPlannedDates() {
@@ -661,23 +972,36 @@
                 let labelText = '';
                 const hasSearch = searchTerm.length > 0;
 
+                // Combine regular entries and completed revisits for history view
+                const allHistoryItems = recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+
                 if (hasSearch) {
-                    results = recordedEntries.filter(e => {
-                        const tagInternal = e.tag || DEFAULT_TAG_VALUE;
-                        const tagTranslated = t(tagKeyMapping[tagInternal] || 'tags.noTag').toLowerCase();
+                    results = allHistoryItems.filter(e => {
+                        const isRevisit = e.type === 'revisit_completed';
+                        const tagInternal = isRevisit ? t('historyCard.revisitCompletedTag') : (e.tag || DEFAULT_TAG_VALUE);
+                        const tagTranslated = isRevisit ? tagInternal.toLowerCase() : t(tagKeyMapping[tagInternal] || 'tags.noTag').toLowerCase();
                         const formattedDate = formatDisplayDate(e.date).toLowerCase();
-                        const hoursStr = (e.hours || 0).toString().replace('.', ',');
-                        const hoursRoundedStr = Math.round(e.hours || 0).toString();
-                        const hoursFormatted = formatHoursExtensive(e.hours).toLowerCase();
+                        const hoursStr = isRevisit ? '' : (e.hours || 0).toString().replace('.', ',');
+                        const hoursRoundedStr = isRevisit ? '' : Math.round(e.hours || 0).toString();
+                        const hoursFormatted = isRevisit ? '' : formatHoursExtensive(e.hours).toLowerCase();
                         const notes = (e.notes || '').toLowerCase();
-                        return (formattedDate.includes(searchTerm) || hoursStr.includes(searchTerm) || hoursRoundedStr.includes(searchTerm) || tagTranslated.includes(searchTerm) || notes.includes(searchTerm) || hoursFormatted.includes(searchTerm) || tagInternal.toLowerCase().includes(searchTerm));
+                        const name = (e.name || '').toLowerCase(); // For revisits
+
+                        return (
+                            formattedDate.includes(searchTerm) ||
+                            (!isRevisit && (hoursStr.includes(searchTerm) || hoursRoundedStr.includes(searchTerm) || hoursFormatted.includes(searchTerm))) ||
+                            tagTranslated.includes(searchTerm) ||
+                            notes.includes(searchTerm) ||
+                            (isRevisit && name.includes(searchTerm)) || // Search name for completed revisits
+                            tagInternal.toLowerCase().includes(searchTerm)
+                        );
                     });
                     const countKey = results.length === 1 ? 'historyCard.resultsCountForTermSingular' : 'historyCard.resultsCountForTermPlural';
                     labelText = t(countKey, { count: results.length, term: searchTerm });
                 } else {
                     const dateLimitStr = getDateMonthsAgo(HISTORY_MONTH_LIMIT);
-                    results = recordedEntries.filter(e => e.date >= dateLimitStr);
-                    if (recordedEntries.length === 0) { labelText = t('historyCard.listPlaceholderNoRecords'); }
+                    results = allHistoryItems.filter(e => e.date >= dateLimitStr);
+                    if (allHistoryItems.length === 0) { labelText = t('historyCard.listPlaceholderNoRecords'); }
                     else if (results.length === 0) { labelText = t('historyCard.noRecordsLastMonths', { limit: HISTORY_MONTH_LIMIT }); }
                     else { labelText = t('historyCard.showingLastMonths', { limit: HISTORY_MONTH_LIMIT }); }
                 }
@@ -685,15 +1009,36 @@
                 if (showingResultsLabel) showingResultsLabel.textContent = labelText;
                 if (results.length === 0) {
                     let placeholderKey = 'historyCard.listPlaceholderNoRecords';
-                    if (recordedEntries.length > 0) { placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent'; }
+                    if (allHistoryItems.length > 0) { placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent'; }
                     if (historyListPlaceholder) { historyListPlaceholder.textContent = t(placeholderKey); historyListPlaceholder.classList.remove('hidden'); }
                 } else {
                     historyListPlaceholder?.classList.add('hidden');
                     results.forEach(e => {
                         const li = document.createElement('li'); li.dataset.id = e.id;
-                        const tagInternal = e.tag || DEFAULT_TAG_VALUE; const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag'); const tagBadge = `<span class="tag-badge" ${tagInternal===DEFAULT_TAG_VALUE?'style="opacity:0.6;"':''}>${tagText}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; const hoursFormatted = formatHoursExtensive(e.hours);
-                        li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(e.date)}:</strong> <span class="hours">${hoursFormatted}</span> ${tagBadge} ${notesPreview}</div> <div class="entry-actions"><button class="edit-btn secondary">${t('common.editButton')}</button> <button class="delete-btn danger">${t('common.deleteButton')}</button></div>`;
-                        li.querySelector('.edit-btn')?.addEventListener('click', ev => {ev.stopPropagation(); editRecordEntry(e.id);}); li.querySelector('.delete-btn')?.addEventListener('click', ev => {ev.stopPropagation(); deleteRecordEntry(e.id);}); historyList.appendChild(li);
+                        const isRevisit = e.type === 'revisit_completed';
+                        let detailsHtml = '';
+                        let actionsHtml = '';
+
+                        if (isRevisit) {
+                             const revisitMarker = `<span class="revisit-completed-marker">${t('historyCard.revisitCompletedMarker')}</span>`;
+                             const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`;
+                             detailsHtml = `<div class="entry-details">${revisitMarker}<strong>${formatDisplayDate(e.date)}:</strong> ${notesPreview}</div>`;
+                             // No actions for completed revisits in history for now
+                             actionsHtml = '<div class="entry-actions"></div>';
+                        } else {
+                            // Regular record entry
+                            const tagInternal = e.tag || DEFAULT_TAG_VALUE; const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag'); const tagBadge = `<span class="tag-badge" ${tagInternal===DEFAULT_TAG_VALUE?'style="opacity:0.6;"':''}>${tagText}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; const hoursFormatted = formatHoursExtensive(e.hours);
+                            detailsHtml = `<div class="entry-details"><strong>${formatDisplayDate(e.date)}:</strong> <span class="hours">${hoursFormatted}</span> ${tagBadge} ${notesPreview}</div>`;
+                            actionsHtml = `<div class="entry-actions"><button class="edit-btn secondary">${t('common.editButton')}</button> <button class="delete-btn danger">${t('common.deleteButton')}</button></div>`;
+                        }
+
+                        li.innerHTML = detailsHtml + actionsHtml;
+
+                        if (!isRevisit) {
+                            li.querySelector('.edit-btn')?.addEventListener('click', ev => {ev.stopPropagation(); editRecordEntry(e.id);});
+                            li.querySelector('.delete-btn')?.addEventListener('click', ev => {ev.stopPropagation(); deleteRecordEntry(e.id);});
+                        }
+                        historyList.appendChild(li);
                     });
                 }
             }
@@ -710,15 +1055,49 @@
                     li.querySelector('.done-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();markPlanAsDone(p.id);}); li.querySelector('.delete-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();deletePlanEntry(p.id);}); planningList.appendChild(li);
                 });
             }
+            function renderRevisits() {
+                if (!revisitList) return;
+                revisitList.innerHTML = '';
+                const pendingRevisits = revisits.filter(rv => rv.status === 'pending').sort((a, b) => a.dateAdded.localeCompare(b.dateAdded)); // Sort pending by date added
+
+                if (pendingRevisits.length === 0) {
+                    if (revisitListPlaceholder) {
+                        revisitListPlaceholder.textContent = t('revisitCard.listPlaceholderNoPending');
+                        revisitListPlaceholder.classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                revisitListPlaceholder?.classList.add('hidden');
+                pendingRevisits.forEach(rv => {
+                    const li = document.createElement('li');
+                    li.dataset.id = rv.id;
+                    const notesPreview = rv.notes ? `<span class="notes-preview">${rv.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('revisitCard.noNotes')}</span>`;
+                    const addedDateFormatted = formatDisplayDate(rv.dateAdded);
+                    li.innerHTML = `
+                        <div class="entry-details">
+                            <strong>${rv.name}</strong>
+                            <span style="font-size:0.8em; color: var(--text-color-secondary); margin-left: 5px;">(${t('revisitCard.addedOnLabel')} ${addedDateFormatted})</span>
+                            ${notesPreview}
+                        </div>
+                        <div class="revisit-actions">
+                            <button class="complete-revisit-btn success">${t('revisitCard.markCompleteButton')}</button>
+                            <button class="delete-revisit-btn danger">${t('common.deleteButton')}</button>
+                        </div>`;
+                    li.querySelector('.complete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); markRevisitComplete(rv.id); });
+                    li.querySelector('.delete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); deleteRevisit(rv.id); });
+                    revisitList.appendChild(li);
+                });
+            }
             function updateStatistics() {
                 const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let totalHoursMonth = 0; const activeDays = new Set();
-                recordedEntries.filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === currentMonth && d.getFullYear() === currentYear; }).forEach(e => { totalHoursMonth += e.hours; activeDays.add(e.date); });
+                recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === currentMonth && d.getFullYear() === currentYear; }).forEach(e => { totalHoursMonth += e.hours; activeDays.add(e.date); });
                 const goal = settings.monthlyGoal || 70; const percentProgress = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursMonth / goal) * 100), 100) : 0) : 0; const daysActiveCount = activeDays.size; const avgHoursPerActiveDay = daysActiveCount > 0 ? (totalHoursMonth / daysActiveCount) : 0;
                 if (statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(totalHoursMonth); if (statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${percentProgress}%` : '--%'; if (statsMonthProgressBar) statsMonthProgressBar.style.width = `${percentProgress}%`; if (statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(avgHoursPerActiveDay); if (statsMonthDaysActive) statsMonthDaysActive.textContent = daysActiveCount;
             }
             function populateMonthSelector() {
                 if (!chartMonthSelector) return; const availableMonths = new Set();
-                recordedEntries.forEach(e => { const dateObj = parseLocalDate(e.date); if (!isNaN(dateObj.valueOf())) { availableMonths.add(getMonthYearString(dateObj)); } });
+                recordedEntries.filter(e => e.type !== 'revisit_completed').forEach(e => { const dateObj = parseLocalDate(e.date); if (!isNaN(dateObj.valueOf())) { availableMonths.add(getMonthYearString(dateObj)); } });
                 const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/').map(Number); const [mB, yB] = b.split('/').map(Number); return (yB - yA) || (mB - mA); });
                 const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = '';
                 if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = t('chartsCard.noDataOption'); chartMonthSelector.append(option); chartMonthSelector.disabled = true; return; }
@@ -731,7 +1110,7 @@
                 if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (!selectedMonthYear) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; }
                 try {
                     const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number); const monthIndex = selectedMonth - 1;
-                    const entriesForMonth = recordedEntries.filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === monthIndex && d.getFullYear() === selectedYear; });
+                    const entriesForMonth = recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === monthIndex && d.getFullYear() === selectedYear; });
                     if (entriesForMonth.length === 0) { clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) })); return; }
                     let totalHours = 0; const hoursByTag = {};
                     entriesForMonth.forEach(e => { const tagName = e.tag || DEFAULT_TAG_VALUE; const hours = e.hours || 0; totalHours += hours; hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours; });
@@ -745,11 +1124,10 @@
                 } catch (e) { console.error("Chart render err:", e); clearChartWithMessage(t('chartsCard.renderErrorMessage')); }
             }
             function clearChartWithMessage(msg) { if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();monthlyHoursChartInstance=null;} if(chartTotalHoursDisplay)chartTotalHoursDisplay.textContent=''; const ctx=monthlyHoursChartCtx; if(ctx){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles?.fontFamily||'sans-serif'}`; ctx.fillText(msg,ctx.canvas.width/2,ctx.canvas.height/2); ctx.restore();}}
-            function updateAllDisplays() { if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Skip update: Translations not ready"); return;} try{applyStaticTranslations();updateDashboard();updateStatistics();populateMonthSelector();renderHistory();renderPlanning(); const selVal=chartMonthSelector?.value; if(!chartMonthSelector?.disabled && selVal)renderCharts(selVal); else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length>0 && chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=true; renderCharts(chartMonthSelector.options[0].value);} else clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'));}catch(err){console.error("UpdateAll err:",err);}}
+            function updateAllDisplays() { if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Skip update: Translations not ready"); return;} try{applyStaticTranslations();updateDashboard();updateStatistics();populateMonthSelector();renderHistory();renderPlanning();renderRevisits(); const selVal=chartMonthSelector?.value; if(!chartMonthSelector?.disabled && selVal)renderCharts(selVal); else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length>0 && chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=true; renderCharts(chartMonthSelector.options[0].value);} else clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'));}catch(err){console.error("UpdateAll err:",err);}}
             function formatTimeInputOnType(event) { const i=event.target;let v=i.value,op=i.selectionStart,n=v.replace(/[^\d]/g,'').substring(0,4),f=n;let ca=false;if(n.length>2){const hp=n.substring(0,n.length-2),mp=n.substring(n.length-2);f=`${hp}:${mp}`;if(v.length<f.length&&v.indexOf(':')===-1)ca=true;}if(i.value!==f){i.value=f;let np=op;if(ca&&op>=f.indexOf(':')+1)np++;np=Math.min(np,f.length);requestAnimationFrame(()=>{try{i.setSelectionRange(np,np);}catch(e){}});}}
             function registerServiceWorker() { if('serviceWorker'in navigator)window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(r=>console.log('SW ok:',r.scope)).catch(e=>console.error('SW fail:',e));});}
 
-            // Function to check if the date has changed and update if necessary
             function checkDateAndUpdate() {
                 const newDateString = getCurrentDateString();
                 if (newDateString !== lastCheckedDateString) {
@@ -764,10 +1142,11 @@
             applyStaticTranslations();
             if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
             if (recordDateInput) recordDateInput.value = getCurrentDateString();
-            lastCheckedDateString = getCurrentDateString(); // Initialize the date checker
+            lastCheckedDateString = getCurrentDateString();
             setDateInputVisibility(false);
             clearRecordForm();
             clearPlanForm();
+            clearRevisitForm(); // Clear revisit form on init
             document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); if (card.classList.contains('expanded') !== shouldBeExpanded) toggleCard(card); const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; });
             appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) toggleCard(h.closest('.card')); });
             document.querySelectorAll('.card-header').forEach(h=>{h.setAttribute('role','button');h.setAttribute('tabindex','0');h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ') {e.preventDefault();toggleCard(h.closest('.card'));}});});
@@ -775,8 +1154,15 @@
             recordHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>=0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
             planHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
             recordNotesInput?.addEventListener('input',e=>{if(e.target.value.length>NOTES_MAX_LENGTH){e.target.value=e.target.value.substring(0,NOTES_MAX_LENGTH);showFeedback('feedback.notesLengthLimit','info',{maxLength:NOTES_MAX_LENGTH});}});
+            // Revisit notes length check
+            revisitNotesInput?.addEventListener('input', e => { if (e.target.value.length > REVISIT_NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, REVISIT_NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: REVISIT_NOTES_MAX_LENGTH }); } });
+
             historySearchInput?.addEventListener('input',renderHistory); recordForm?.addEventListener('submit',handleRecordSubmit); planForm?.addEventListener('submit',handlePlanSubmit);
-            clearPlanFormBtn?.addEventListener('click',clearPlanForm); saveGoalBtn?.addEventListener('click',handleGoalSave);
+            revisitForm?.addEventListener('submit', handleRevisitSubmit); // Add listener for revisit form
+
+            clearPlanFormBtn?.addEventListener('click',clearPlanForm);
+            clearRevisitFormBtn?.addEventListener('click', clearRevisitForm); // Add listener for clear revisit form
+            saveGoalBtn?.addEventListener('click',handleGoalSave);
             monthlyGoalInput?.addEventListener('keypress',e=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();e.target.blur();}});
             chartMonthSelector?.addEventListener('change',updateAllDisplays);
             clearAllDataBtn?.addEventListener('click',handleClearAllData);
@@ -785,9 +1171,8 @@
             window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredInstallPrompt=e; console.log('install prompt ready');});
             // setInterval(updateDashboardPlannedDates, 60 * 1000); // Keep this for overdue check, but date change handles main update
 
-            // Start the date check interval (every minute)
-            if (dateCheckInterval) clearInterval(dateCheckInterval); // Clear any existing interval
-            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000); // Check every 60 seconds
+            if (dateCheckInterval) clearInterval(dateCheckInterval);
+            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000);
 
             // Final steps
             updateAllDisplays();
