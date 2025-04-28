@@ -1,5 +1,5 @@
 // Define um nome e versão para o cache
-const CACHE_NAME = 'pioneer-tracker-cache-v1.5'; // <<-- Mantenha esta versão para a última atualização
+const CACHE_NAME = 'pioneer-tracker-cache-v1.6'; // <<-- Mantenha esta versão para a última atualização
 
 // Lista de arquivos essenciais para cachear na instalação
 const urlsToCache = [
