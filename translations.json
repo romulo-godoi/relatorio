@@ -104,11 +104,6 @@
     },
     "settingsCard": {
       "title": "Ajustes",
-      "notificationsLabel": "Notificações",
-      "enableNotificationsButton": "Ativar Notificações",
-      "notificationsStatusDefault": "Permissão não solicitada.",
-      "notificationsStatusGranted": "Notificações ativadas.",
-      "notificationsStatusDenied": "Notificações bloqueadas.",
       "clearDataButton": "Limpar Todos Dados",
       "clearDataWarning": "Aviso: Apaga TUDO (registros, planos, revisitas, meta) PERMANENTEMENTE. Irreversível."
     },
@@ -143,13 +138,7 @@
       "revisitSavedSuccess": "Revisita salva.",
       "revisitNotFound": "Revisita não encontrada.",
       "revisitMarkedCompleteSuccess": "Revisita concluída.",
-      "revisitDeletedSuccess": "Revisita excluída.",
-      "notificationsNotSupported": "Notificações não suportadas.",
-      "notificationsAlreadyGranted": "Notificações já permitidas.",
-      "notificationsDenied": "Notificações bloqueadas.",
-      "notificationsGranted": "Notificações permitidas!",
-      "notificationsNotGranted": "Permissão não concedida.",
-      "notificationError": "Erro ao mostrar notificação."
+      "revisitDeletedSuccess": "Revisita excluída."
     },
     "common": {
       "editButton": "Editar",
@@ -181,11 +170,6 @@
       "nextPrefix": "Próx.",
       "monthNames": ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
       "weekdaysShort": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
-    },
-    "notifications": {
-        "dailyTitle": "Compromissos Hoje",
-        "todayRevisitsPrefix": "Revisitas: ",
-        "todayRevisitsSuffix": " e +{count}."
     }
   },
   "en": {
@@ -293,11 +277,6 @@
     },
     "settingsCard": {
       "title": "Settings",
-      "notificationsLabel": "Notifications",
-      "enableNotificationsButton": "Enable Notifications",
-      "notificationsStatusDefault": "Permission not requested.",
-      "notificationsStatusGranted": "Notifications enabled.",
-      "notificationsStatusDenied": "Notifications blocked.",
       "clearDataButton": "Clear All Data",
       "clearDataWarning": "Warning: Deletes ALL data (records, plans, revisits, goal) PERMANENTLY. Irreversible."
     },
@@ -332,13 +311,7 @@
       "revisitSavedSuccess": "Revisit saved.",
       "revisitNotFound": "Revisit not found.",
       "revisitMarkedCompleteSuccess": "Revisit completed.",
-      "revisitDeletedSuccess": "Revisit deleted.",
-      "notificationsNotSupported": "Notifications not supported.",
-      "notificationsAlreadyGranted": "Notifications already allowed.",
-      "notificationsDenied": "Notifications blocked.",
-      "notificationsGranted": "Notifications allowed!",
-      "notificationsNotGranted": "Permission not granted.",
-      "notificationError": "Error showing notification."
+      "revisitDeletedSuccess": "Revisit deleted."
     },
     "common": {
       "editButton": "Edit",
@@ -370,11 +343,6 @@
       "nextPrefix": "Next",
       "monthNames": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    },
-    "notifications": {
-        "dailyTitle": "Commitments Today",
-        "todayRevisitsPrefix": "Revisits: ",
-        "todayRevisitsSuffix": " and +{count} more."
     }
   },
   "es": {
@@ -482,11 +450,6 @@
     },
     "settingsCard": {
       "title": "Ajustes",
-      "notificationsLabel": "Notificaciones",
-      "enableNotificationsButton": "Activar Notificaciones",
-      "notificationsStatusDefault": "Permiso no solicitado.",
-      "notificationsStatusGranted": "Notificaciones activadas.",
-      "notificationsStatusDenied": "Notificaciones bloqueadas.",
       "clearDataButton": "Borrar Todos Datos",
       "clearDataWarning": "Aviso: Borra TODO (registros, planes, revisitas, meta) PERMANENTEMENTE. Irreversible."
     },
@@ -521,13 +484,7 @@
       "revisitSavedSuccess": "Revisita guardada.",
       "revisitNotFound": "Revisita no encontrada.",
       "revisitMarkedCompleteSuccess": "Revisita completada.",
-      "revisitDeletedSuccess": "Revisita eliminada.",
-      "notificationsNotSupported": "Notificaciones no soportadas.",
-      "notificationsAlreadyGranted": "Notificaciones ya permitidas.",
-      "notificationsDenied": "Notificaciones bloqueadas.",
-      "notificationsGranted": "¡Notificaciones permitidas!",
-      "notificationsNotGranted": "Permiso no concedido.",
-      "notificationError": "Error al mostrar notificación."
+      "revisitDeletedSuccess": "Revisita eliminada."
     },
     "common": {
       "editButton": "Editar",
@@ -559,11 +516,6 @@
       "nextPrefix": "Próx.",
       "monthNames": ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
       "weekdaysShort": ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
-    },
-    "notifications": {
-        "dailyTitle": "Compromisos Hoy",
-        "todayRevisitsPrefix": "Revisitas: ",
-        "todayRevisitsSuffix": " y +{count} más."
     }
   },
   "de": {
@@ -671,11 +623,6 @@
     },
     "settingsCard": {
       "title": "Einstellungen",
-      "notificationsLabel": "Benachrichtigungen",
-      "enableNotificationsButton": "Benachrichtigungen aktivieren",
-      "notificationsStatusDefault": "Berechtigung nicht angefordert.",
-      "notificationsStatusGranted": "Benachrichtigungen aktiviert.",
-      "notificationsStatusDenied": "Benachrichtigungen blockiert.",
       "clearDataButton": "Alle Daten löschen",
       "clearDataWarning": "Achtung: Löscht ALLE Daten (Berichte, Pläne, Rückbesuche, Ziel) ENDGÜLTIG. Unumkehrbar."
     },
@@ -710,13 +657,7 @@
       "revisitSavedSuccess": "Rückbesuch gespeichert.",
       "revisitNotFound": "Rückbesuch nicht gefund.",
       "revisitMarkedCompleteSuccess": "Rückbesuch abgeschlossen.",
-      "revisitDeletedSuccess": "Rückbesuch gelöscht.",
-      "notificationsNotSupported": "Benachrichtigungen nicht unterstützt.",
-      "notificationsAlreadyGranted": "Benachrichtigungen bereits erlaubt.",
-      "notificationsDenied": "Benachrichtigungen blockiert.",
-      "notificationsGranted": "Benachrichtigungen erlaubt!",
-      "notificationsNotGranted": "Berechtigung nicht erteilt.",
-      "notificationError": "Fehler beim Anzeigen der Benachrichtigung."
+      "revisitDeletedSuccess": "Rückbesuch gelöscht."
     },
     "common": {
       "editButton": "Bearbeiten",
@@ -748,11 +689,6 @@
       "nextPrefix": "Nächst.",
       "monthNames": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
       "weekdaysShort": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
-    },
-     "notifications": {
-        "dailyTitle": "Termine Heute",
-        "todayRevisitsPrefix": "Rückbesuche: ",
-        "todayRevisitsSuffix": " und +{count} weitere."
     }
   },
   "fr": {
@@ -860,11 +796,6 @@
     },
     "settingsCard": {
       "title": "Paramètres",
-      "notificationsLabel": "Notifications",
-      "enableNotificationsButton": "Activer les notifications",
-      "notificationsStatusDefault": "Autorisation non demandée.",
-      "notificationsStatusGranted": "Notifications activées.",
-      "notificationsStatusDenied": "Notifications bloquées.",
       "clearDataButton": "Effacer Toutes Données",
       "clearDataWarning": "Avert.: Supprime TOUT (rapports, plans, N.V., objectif) DÉFINITIVEMENT. Irréversible."
     },
@@ -899,13 +830,7 @@
       "revisitSavedSuccess": "N. Visite enregistrée.",
       "revisitNotFound": "N. Visite non trouvée.",
       "revisitMarkedCompleteSuccess": "N. Visite terminée.",
-      "revisitDeletedSuccess": "N. Visite supprimée.",
-      "notificationsNotSupported": "Notifications non prises en charge.",
-      "notificationsAlreadyGranted": "Notifications déjà autorisées.",
-      "notificationsDenied": "Notifications bloquées.",
-      "notificationsGranted": "Notifications autorisées !",
-      "notificationsNotGranted": "Autorisation non accordée.",
-      "notificationError": "Erreur d'affichage de la notification."
+      "revisitDeletedSuccess": "N. Visite supprimée."
     },
     "common": {
       "editButton": "Modifier",
@@ -937,11 +862,6 @@
       "nextPrefix": "Proch.",
       "monthNames": ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
       "weekdaysShort": ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
-    },
-    "notifications": {
-        "dailyTitle": "Engagements Aujourd'hui",
-        "todayRevisitsPrefix": "N. Visites : ",
-        "todayRevisitsSuffix": " et +{count} autres."
     }
   }
 }
