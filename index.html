@@ -34,139 +34,139 @@
             --transition-speed: 0.3s;
             --transition-speed-fast: 0.1s;
             --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
-        body { font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color); line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px; }
-        [data-translate-key]::before { content: ""; }
-        #loading-indicator { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; color: white; font-size: 1.2em; transition: opacity 0.3s ease-out;}
-        #loading-indicator.hidden { opacity: 0; pointer-events: none; }
-
-        /* Dashboard Box Changes */
-        #dashboard-box {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 15px var(--card-padding);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start; /* Align items to top */
-            text-align: center;
-            gap: 15px;
-        }
-        .dashboard-item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; /* Align content to top */
-            flex: 1;
-            min-height: 110px; /* Adjusted min height */
-        }
-        .dashboard-item--progress {
-            width: 90px; /* Keep fixed size for the ring container */
-            height: 90px;
-            flex-shrink: 0;
-            margin-top: 5px; /* Add some top margin */
-        }
-        .progress-ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-        .progress-ring__circle {
-            fill: none;
-            stroke-width: 5;
-            transition: stroke-dashoffset 0.5s ease-out;
-        }
-        .progress-ring__bg { stroke: var(--progress-track-color); }
-        .progress-ring__fg { stroke: var(--progress-bar-color); stroke-linecap: round; }
-        .dashboard-item--progress .dashboard-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #dashboard-month-percentage {
-            font-size: 1.6em;
-            color: var(--text-color);
-            margin-bottom: 0;
-            font-weight: 600;
-        }
-        .dashboard-item--progress .dashboard-label {
-            margin-top: 2px;
-            margin-bottom: 0;
-            font-size: 0.65em;
-        }
-        /* Styles for the left dashboard item */
-        .dashboard-item:not(.dashboard-item--progress) {
-            align-items: flex-start; /* Keep text aligned left */
-            text-align: left;
-        }
-        .dashboard-label {
-            font-size: 0.85em;
-            color: var(--text-color-secondary);
-            margin-bottom: 4px;
-            display: block;
-        }
-        .dashboard-value {
-            font-size: 1.4em;
-            font-weight: 500;
-            color: var(--primary-color);
-            line-height: 1.2;
-            margin-bottom: 5px;
-        }
-        #dashboard-summary {
-            margin-top: 8px; /* Reduced margin */
-            font-size: 0.85em;
-            color: var(--text-color-secondary);
-            line-height: 1.35;
-            margin-bottom: 10px; /* Add margin below summary */
-        }
-        #dashboard-summary strong { color: var(--text-color); font-weight: 500; }
-        #dashboard-summary span { display: block; margin-bottom: 3px;}
-
-        /* Revisit Count & Next Revisit Section */
-        #dashboard-revisits-section {
-            margin-top: 10px;
-            width: 100%;
-        }
-        #dashboard-revisits-section .dashboard-label {
-             margin-bottom: 2px;
-        }
-        #dashboard-revisits-section .dashboard-value {
-            font-size: 1.0em; /* Slightly smaller */
-            color: var(--text-color);
-            margin-bottom: 0;
-            line-height: 1.3;
-        }
-         #dashboard-revisits-section .dashboard-value strong {
-            color: var(--primary-color); /* Highlight date */
          }
-         #dashboard-revisits-section .dashboard-value .revisit-name {
+         * { box-sizing: border-box; margin: 0; padding: 0; }
+         html, body { height: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
+         body { font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color); line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px; }
+         [data-translate-key]::before { content: ""; }
+         #loading-indicator { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; color: white; font-size: 1.2em; transition: opacity 0.3s ease-out;}
+         #loading-indicator.hidden { opacity: 0; pointer-events: none; }
+
+         /* Dashboard Box Changes */
+         #dashboard-box {
+             background-color: var(--card-bg);
+             border-radius: var(--border-radius);
+             padding: 15px var(--card-padding);
+             margin-bottom: 20px;
+             display: flex;
+             justify-content: space-around;
+             align-items: flex-start; /* Align items to top */
+             text-align: center;
+             gap: 15px;
+         }
+         .dashboard-item {
+             position: relative;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             justify-content: flex-start; /* Align content to top */
+             flex: 1;
+             min-height: 110px; /* Adjusted min height */
+         }
+         .dashboard-item--progress {
+             width: 90px; /* Keep fixed size for the ring container */
+             height: 90px;
+             flex-shrink: 0;
+             margin-top: 5px; /* Add some top margin */
+         }
+         .progress-ring {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             transform: rotate(-90deg);
+         }
+         .progress-ring__circle {
+             fill: none;
+             stroke-width: 5;
+             transition: stroke-dashoffset 0.5s ease-out;
+         }
+         .progress-ring__bg { stroke: var(--progress-track-color); }
+         .progress-ring__fg { stroke: var(--progress-bar-color); stroke-linecap: round; }
+         .dashboard-item--progress .dashboard-content {
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+         }
+         #dashboard-month-percentage {
+             font-size: 1.6em;
+             color: var(--text-color);
+             margin-bottom: 0;
+             font-weight: 600;
+         }
+         .dashboard-item--progress .dashboard-label {
+             margin-top: 2px;
+             margin-bottom: 0;
+             font-size: 0.65em;
+         }
+         /* Styles for the left dashboard item */
+         .dashboard-item:not(.dashboard-item--progress) {
+             align-items: flex-start; /* Keep text aligned left */
+             text-align: left;
+         }
+         .dashboard-label {
+             font-size: 0.85em;
+             color: var(--text-color-secondary);
+             margin-bottom: 4px;
+             display: block;
+         }
+         .dashboard-value {
+             font-size: 1.4em;
+             font-weight: 500;
+             color: var(--primary-color);
+             line-height: 1.2;
+             margin-bottom: 5px;
+         }
+         #dashboard-summary {
+             margin-top: 8px; /* Reduced margin */
+             font-size: 0.85em;
+             color: var(--text-color-secondary);
+             line-height: 1.35;
+             margin-bottom: 10px; /* Add margin below summary */
+         }
+         #dashboard-summary strong { color: var(--text-color); font-weight: 500; }
+         #dashboard-summary span { display: block; margin-bottom: 3px;}
+
+         /* Revisit Count & Next Revisit Section */
+         #dashboard-revisits-section {
+             margin-top: 10px;
+             width: 100%;
+         }
+         #dashboard-revisits-section .dashboard-label {
+             margin-bottom: 2px;
+         }
+         #dashboard-revisits-section .dashboard-value {
+             font-size: 1.0em; /* Slightly smaller */
+             color: var(--text-color);
+             margin-bottom: 0;
+             line-height: 1.3;
+         }
+          #dashboard-revisits-section .dashboard-value strong {
+             color: var(--primary-color); /* Highlight date */
+          }
+          #dashboard-revisits-section .dashboard-value .revisit-name {
              white-space: nowrap;
              overflow: hidden;
              text-overflow: ellipsis;
              display: block; /* Ensure it takes full width for ellipsis */
              max-width: 100%;
-         }
-         #dashboard-revisits-section .no-revisits { /* Style removed, section hidden instead */ }
+          }
+          #dashboard-revisits-section .no-revisits { /* Style removed, section hidden instead */ }
 
 
-        #dashboard-planned-dates {
+         #dashboard-planned-dates {
              margin-top: 15px;
              width: 100%;
-        }
-        #dashboard-planned-dates .dashboard-label {
-            margin-bottom: 8px;
-        }
-         #dashboard-plan-list {
+         }
+         #dashboard-planned-dates .dashboard-label {
+             margin-bottom: 8px;
+         }
+          #dashboard-plan-list {
              list-style: none;
              padding: 0;
              margin: 0;
@@ -179,97 +179,97 @@
              overflow-y: auto;
              scrollbar-width: thin;
              scrollbar-color: var(--border-color) transparent;
-         }
-         #dashboard-plan-list::-webkit-scrollbar { width: 4px; }
-         #dashboard-plan-list::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 2px; }
-         #dashboard-plan-list li {
+          }
+          #dashboard-plan-list::-webkit-scrollbar { width: 4px; }
+          #dashboard-plan-list::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 2px; }
+          #dashboard-plan-list li {
              margin-bottom: 3px;
              white-space: nowrap;
              overflow: hidden;
              text-overflow: ellipsis;
-         }
-         #dashboard-plan-list li strong { color: var(--text-color); }
-         #dashboard-plan-list .plan-warning {
+          }
+          #dashboard-plan-list li strong { color: var(--text-color); }
+          #dashboard-plan-list .plan-warning {
              font-size: 0.9em;
              margin-left: 5px;
              opacity: 0.7;
              font-style: italic;
-         }
-        /* End Dashboard Box Changes */
+          }
+         /* End Dashboard Box Changes */
 
-        #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-        h1 { display: none; }
-        .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
-        .card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
-        .card.expanded .card-header::after { opacity: 0; }
-        .card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
-        .card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; }
-        .toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
-        .card.expanded .toggle-icon { transform: rotate(180deg); }
-        .card-content { padding: 0 var(--card-padding) 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
-        .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; /* Increased max-height */ opacity: 1; margin-top: 0; overflow: visible; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
-        input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
-        input[type="text"].time-input { font-variant-numeric: tabular-nums; }
-        input[type="search"] { padding-right: 35px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 16px; }
-        input[type="search"]::-webkit-search-cancel-button{ appearance: none; height: 14px; width: 14px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>'); background-size: 14px 14px; cursor: pointer; }
-        select { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 14px center; background-size: 12px 12px; padding-right: 40px; }
-        select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); }
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
-        input::placeholder, textarea::placeholder { color: var(--placeholder-color); opacity: 1; }
-        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
-        input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        textarea { resize: vertical; min-height: 90px; }
-        button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: auto; transform: scale(1); filter: brightness(1); -webkit-user-select: none; user-select: none; }
-        button:hover { filter: brightness(1.15); }
-        button:active { transform: scale(0.95); filter: brightness(0.8); transition-duration: 0.05s; }
-        button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; filter: none; } button.secondary:active { background-color: #48484a; transform: scale(0.96); filter: brightness(1); }
-        button.success { background-color: var(--success-color); color: var(--text-color); } button.success:hover { filter: brightness(1.15); } button.success:active { transform: scale(0.95); filter: brightness(0.8); }
-        button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.15); } button.danger:active { background-color: #E0352D; transform: scale(0.96); filter: brightness(0.85); }
-        #record-form .text-center button, #plan-form .text-center button, #revisit-form .text-center button { width: auto; margin-right: 8px; }
-         #record-form .text-center button:last-child, #plan-form .text-center button:last-child, #revisit-form .text-center button:last-child { margin-right: 0; }
-         @media (min-width: 600px) { #plan-form .text-center button { } }
-        .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
-        .stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
-        .stat-value { font-size: 1.7em; font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; }
-        .stat-label { font-size: 0.85em; color: var(--text-color-secondary); }
-        .progress-bar-container { background-color: var(--border-color); border-radius: 5px; overflow: hidden; height: 8px; margin-top: 8px; }
-        .progress-bar { background-color: var(--progress-bar-color); height: 100%; width: 0; transition: width var(--transition-speed) ease-out; }
-        #history-controls { margin-bottom: 15px; display: flex; gap: 10px; padding: 0 var(--card-padding) }
-        .history-search-input { flex-grow: 1; }
-        #showing-results-label { font-size: 0.85em; color: var(--text-color-secondary); margin-top: 5px; display: block; text-align: right; padding: 0 var(--card-padding) 5px var(--card-padding) ; min-height: 1.2em;}
-        .data-list { list-style: none; padding: 0; max-height: 400px; overflow-y: auto; margin-top: 0; }
-        .data-list li { background-color: transparent; border-bottom: 1px solid var(--border-color); padding: 14px var(--card-padding); margin: 0; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; transition: background-color var(--transition-speed-fast) ease; }
-        .data-list li:last-child { border-bottom: none; }
-        .data-list li:hover { background-color: rgba(255, 255, 255, 0.02); }
-        .entry-details { font-size: 0.95em; flex-grow: 1; margin-right: 10px; line-height: 1.4; padding-bottom: 5px; }
-        .entry-details strong { color: var(--text-color); font-weight: 500; }
-        .entry-details .hours { color: var(--primary-color); font-weight: 600; margin-left: 5px; margin-right: 5px; }
-        .entry-details .tag-badge { display: inline-block; background-color: var(--input-bg); color: var(--text-color-secondary); font-size: 0.75em; padding: 2px 6px; border-radius: 5px; margin-left: 8px; vertical-align: middle; }
-        .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 4.5em; overflow: hidden; }
-        .entry-details .revisit-completed-marker { display: inline-block; background-color: var(--success-color); color: var(--text-color); font-size: 0.7em; font-weight: 600; padding: 2px 5px; border-radius: 4px; margin-right: 8px; vertical-align: middle; text-transform: uppercase; }
-        .entry-details .revisit-scheduled-date { font-size: 0.85em; color: var(--text-color-secondary); margin-left: 8px; }
-        .entry-details .revisit-scheduled-date strong { color: var(--primary-color); font-weight: 500; }
-        .entry-actions { flex-shrink: 0; align-self: center; }
-        .entry-actions button, .plan-actions button, .revisit-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
-        .plan-actions button, .revisit-actions button { margin-top: 5px; }
-        .entry-actions button.secondary, .plan-actions button.secondary, .revisit-actions button.secondary { background-color: #3a3a3c; }
-        .chart-container { position: relative; min-height: 300px; max-height: 400px; width: 100%; margin-top: 15px; }
-        .chart-summary-text { text-align: center; font-size: 0.95em; font-weight: 500; color: var(--text-color-secondary); margin-bottom: 10px; margin-top: 5px; min-height: 1.3em; padding: 0 var(--card-padding); }
-        .dialog-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dialog-backdrop); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease; }
-        .dialog-backdrop.visible { opacity: 1; visibility: visible; }
-        .dialog-content { background-color: #2c2c2e; color: var(--text-color); padding: 25px; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 320px; transform: scale(0.95); transition: transform var(--transition-speed) ease; }
-        .dialog-backdrop.visible .dialog-content { transform: scale(1); }
-        .dialog-content p { margin-bottom: 25px; font-size: 1.05em; line-height: 1.5; }
-        .dialog-actions button { width: calc(50% - 5px); margin-top: 0; padding: 10px; font-size: 1em;}
-        .hidden { display: none !important; }
-        .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
-        .text-center { text-align: center; } .mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
-        h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding); }
-        .data-list li.placeholder { padding-left: var(--card-padding); color: var(--text-color-secondary); font-style: italic; }
+         #app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+         h1 { display: none; }
+         .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
+         .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
+         .card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
+         .card.expanded .card-header::after { opacity: 0; }
+         .card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
+         .card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; }
+         .toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
+         .card.expanded .toggle-icon { transform: rotate(180deg); }
+         .card-content { padding: 0 var(--card-padding) 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
+         .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; /* Increased max-height */ opacity: 1; margin-top: 0; overflow: visible; }
+         .form-group { margin-bottom: 16px; }
+         label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
+         input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
+         input[type="text"].time-input { font-variant-numeric: tabular-nums; }
+         input[type="search"] { padding-right: 35px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 16px; }
+         input[type="search"]::-webkit-search-cancel-button{ appearance: none; height: 14px; width: 14px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>'); background-size: 14px 14px; cursor: pointer; }
+         select { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 14px center; background-size: 12px 12px; padding-right: 40px; }
+         select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); }
+         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
+         input::placeholder, textarea::placeholder { color: var(--placeholder-color); opacity: 1; }
+         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
+         input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+         textarea { resize: vertical; min-height: 90px; }
+         button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: auto; transform: scale(1); filter: brightness(1); -webkit-user-select: none; user-select: none; }
+         button:hover { filter: brightness(1.15); }
+         button:active { transform: scale(0.95); filter: brightness(0.8); transition-duration: 0.05s; }
+         button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; filter: none; } button.secondary:active { background-color: #48484a; transform: scale(0.96); filter: brightness(1); }
+         button.success { background-color: var(--success-color); color: var(--text-color); } button.success:hover { filter: brightness(1.15); } button.success:active { transform: scale(0.95); filter: brightness(0.8); }
+         button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.15); } button.danger:active { background-color: #E0352D; transform: scale(0.96); filter: brightness(0.85); }
+         #record-form .text-center button, #plan-form .text-center button, #revisit-form .text-center button { width: auto; margin-right: 8px; }
+          #record-form .text-center button:last-child, #plan-form .text-center button:last-child, #revisit-form .text-center button:last-child { margin-right: 0; }
+          @media (min-width: 600px) { #plan-form .text-center button { } }
+         .change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
+         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
+         .stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
+         .stat-value { font-size: 1.7em; font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; }
+         .stat-label { font-size: 0.85em; color: var(--text-color-secondary); }
+         .progress-bar-container { background-color: var(--border-color); border-radius: 5px; overflow: hidden; height: 8px; margin-top: 8px; }
+         .progress-bar { background-color: var(--progress-bar-color); height: 100%; width: 0; transition: width var(--transition-speed) ease-out; }
+         #history-controls { margin-bottom: 15px; display: flex; gap: 10px; padding: 0 var(--card-padding) }
+         .history-search-input { flex-grow: 1; }
+         #showing-results-label { font-size: 0.85em; color: var(--text-color-secondary); margin-top: 5px; display: block; text-align: right; padding: 0 var(--card-padding) 5px var(--card-padding) ; min-height: 1.2em;}
+         .data-list { list-style: none; padding: 0; max-height: 400px; overflow-y: auto; margin-top: 0; }
+         .data-list li { background-color: transparent; border-bottom: 1px solid var(--border-color); padding: 14px var(--card-padding); margin: 0; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; transition: background-color var(--transition-speed-fast) ease; }
+         .data-list li:last-child { border-bottom: none; }
+         .data-list li:hover { background-color: rgba(255, 255, 255, 0.02); }
+         .entry-details { font-size: 0.95em; flex-grow: 1; margin-right: 10px; line-height: 1.4; padding-bottom: 5px; }
+         .entry-details strong { color: var(--text-color); font-weight: 500; }
+         .entry-details .hours { color: var(--primary-color); font-weight: 600; margin-left: 5px; margin-right: 5px; }
+         .entry-details .tag-badge { display: inline-block; background-color: var(--input-bg); color: var(--text-color-secondary); font-size: 0.75em; padding: 2px 6px; border-radius: 5px; margin-left: 8px; vertical-align: middle; }
+         .entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 4.5em; overflow: hidden; }
+         .entry-details .revisit-completed-marker { display: inline-block; background-color: var(--success-color); color: var(--text-color); font-size: 0.7em; font-weight: 600; padding: 2px 5px; border-radius: 4px; margin-right: 8px; vertical-align: middle; text-transform: uppercase; }
+         .entry-details .revisit-scheduled-date { font-size: 0.85em; color: var(--text-color-secondary); margin-left: 8px; }
+         .entry-details .revisit-scheduled-date strong { color: var(--primary-color); font-weight: 500; }
+         .entry-actions { flex-shrink: 0; align-self: center; }
+         .entry-actions button, .plan-actions button, .revisit-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
+         .plan-actions button, .revisit-actions button { margin-top: 5px; }
+         .entry-actions button.secondary, .plan-actions button.secondary, .revisit-actions button.secondary { background-color: #3a3a3c; }
+         .chart-container { position: relative; min-height: 300px; max-height: 400px; width: 100%; margin-top: 15px; }
+         .chart-summary-text { text-align: center; font-size: 0.95em; font-weight: 500; color: var(--text-color-secondary); margin-bottom: 10px; margin-top: 5px; min-height: 1.3em; padding: 0 var(--card-padding); }
+         .dialog-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dialog-backdrop); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease; }
+         .dialog-backdrop.visible { opacity: 1; visibility: visible; }
+         .dialog-content { background-color: #2c2c2e; color: var(--text-color); padding: 25px; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 320px; transform: scale(0.95); transition: transform var(--transition-speed) ease; }
+         .dialog-backdrop.visible .dialog-content { transform: scale(1); }
+         .dialog-content p { margin-bottom: 25px; font-size: 1.05em; line-height: 1.5; }
+         .dialog-actions button { width: calc(50% - 5px); margin-top: 0; padding: 10px; font-size: 1em;}
+         .hidden { display: none !important; }
+         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+         .text-center { text-align: center; } .mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
+         h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding); }
+         .data-list li.placeholder { padding-left: var(--card-padding); color: var(--text-color-secondary); font-style: italic; }
     </style>
 </head>
 <body>
@@ -283,9 +283,10 @@
                 <span id="dashboard-month-total"></span>
                 <span id="dashboard-forecast"></span>
             </div>
-            <div id="dashboard-revisits-section" class="hidden"> <span class="dashboard-label" data-translate-key="dashboard.nextRevisitLabel"></span>
+            <div id="dashboard-revisits-section" class="hidden">
+                <span class="dashboard-label" data-translate-key="dashboard.nextRevisitLabel"></span>
                 <div id="dashboard-next-revisit-details">
-                    </div>
+                </div>
             </div>
             <div class="hidden" id="dashboard-planned-dates">
                 <span class="dashboard-label" data-translate-key="dashboard.plannedTripsLabel"></span>
@@ -443,11 +444,6 @@
         <div class="card" id="settings-card">
             <div class="card-header"><h2 data-translate-key="settingsCard.title"></h2><span class="toggle-icon">▼</span></div>
             <div class="card-content">
-                 <div class="form-group">
-                     <label data-translate-key="settingsCard.notificationsLabel"></label>
-                     <button id="enable-notifications-btn" class="secondary" data-translate-key="settingsCard.enableNotificationsButton"></button>
-                     <p id="notification-status" style="font-size: 0.85em; color: var(--text-color-secondary); margin-top: 8px;"></p>
-                 </div>
                  <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
                 <div class="text-center">
                     <button id="clear-all-data-btn" class="danger" data-translate-key="settingsCard.clearDataButton"></button>
@@ -476,19 +472,77 @@
             const DEFAULT_TAG_VALUE = "Casa em casa";
             const REVISIT_NOTES_MAX_LENGTH = 500;
 
+            // Função auxiliar para obter valores aninhados de um objeto (ex: obj['a.b.c'])
             function getNestedValue(obj, key) { if (!key || typeof key !== 'string') return undefined; return key.split('.').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj); }
-            function t(key, variables = {}) { const langObj = translations?.[currentLang] || translations?.['en']; if (!langObj) { console.error(`Lang missing: ${currentLang} & 'en'. Key: ${key}`); return `[NO LANG: ${key}]`; } let translation = getNestedValue(langObj, key); if (translation === undefined) { console.warn(`Trans missing for key "${key}" in "${currentLang}", trying 'en'`); const fallbackLangObj = translations['en']; if (fallbackLangObj) translation = getNestedValue(fallbackLangObj, key); if (translation === undefined) return `[MISSING: ${key}]`; } if (typeof translation !== 'string') { console.warn(`Trans key "${key}" not string:`, translation); return `[TYPE ERR: ${key}]`; } for (const placeholder in variables) { if (Object.prototype.hasOwnProperty.call(variables, placeholder)) { translation = translation.replace(new RegExp(`\\{${placeholder}\\}`, 'g'), variables[placeholder]); } } return translation; }
-            function applyStaticTranslations() { document.querySelectorAll('[data-translate-key]').forEach(element => { const key = element.getAttribute('data-translate-key'); const attr = element.getAttribute('data-translate-attr') || 'textContent'; const translation = t(key); if (translation && !translation.startsWith('[')) { if (attr === 'textContent') element.textContent = translation; else if (['placeholder', 'title', 'value'].includes(attr)) element.setAttribute(attr, translation); } }); if (recordTagSelect) { const currentVal = recordTagSelect.value; recordTagSelect.innerHTML = ''; Object.keys(tagKeyMapping).forEach(internalValue => { const option = document.createElement('option'); option.value = internalValue; option.textContent = t(tagKeyMapping[internalValue] || 'tags.noTag'); recordTagSelect.appendChild(option); }); if (recordTagSelect.querySelector(`option[value="${currentVal}"]`)) recordTagSelect.value = currentVal; else recordTagSelect.value = DEFAULT_TAG_VALUE; } document.title = t('appTitle'); document.documentElement.lang = currentLang.split('-')[0]; if (recordNotesLabel) recordNotesLabel.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH }); if (recordNotesInput) recordNotesInput.maxLength = NOTES_MAX_LENGTH; if (revisitNotesInput) revisitNotesInput.maxLength = REVISIT_NOTES_MAX_LENGTH; if (loadingIndicator) loadingIndicator.textContent = t('common.loading'); updateNotificationStatusText(); }
 
+            // Função principal de tradução 't'
+            function t(key, variables = {}) {
+                const langObj = translations?.[currentLang] || translations?.['en']; // Usa idioma atual ou fallback 'en'
+                if (!langObj) { console.error(`Lang missing: ${currentLang} & 'en'. Key: ${key}`); return `[NO LANG: ${key}]`; } // Erro se nem 'en' existir
+                let translation = getNestedValue(langObj, key); // Pega a tradução aninhada
+                if (translation === undefined) { // Se não achar no idioma atual, tenta no 'en'
+                    console.warn(`Trans missing for key "${key}" in "${currentLang}", trying 'en'`);
+                    const fallbackLangObj = translations['en'];
+                    if (fallbackLangObj) translation = getNestedValue(fallbackLangObj, key);
+                    if (translation === undefined) return `[MISSING: ${key}]`; // Retorna erro se não achar nem no 'en'
+                }
+                if (typeof translation !== 'string') { console.warn(`Trans key "${key}" not string:`, translation); return `[TYPE ERR: ${key}]`; } // Erro se não for string
+                // Substitui placeholders como {variavel} pelos valores passados
+                for (const placeholder in variables) {
+                    if (Object.prototype.hasOwnProperty.call(variables, placeholder)) {
+                        translation = translation.replace(new RegExp(`\\{${placeholder}\\}`, 'g'), variables[placeholder]);
+                    }
+                }
+                return translation;
+            }
+
+            // Aplica traduções estáticas aos elementos HTML
+            function applyStaticTranslations() {
+                document.querySelectorAll('[data-translate-key]').forEach(element => {
+                    const key = element.getAttribute('data-translate-key');
+                    const attr = element.getAttribute('data-translate-attr') || 'textContent'; // Atributo a traduzir (default: texto)
+                    const translation = t(key);
+                    if (translation && !translation.startsWith('[')) { // Aplica só se a tradução for válida
+                        if (attr === 'textContent') element.textContent = translation;
+                        else if (['placeholder', 'title', 'value'].includes(attr)) element.setAttribute(attr, translation);
+                    }
+                });
+                // Atualiza as opções do <select> de tags
+                if (recordTagSelect) {
+                    const currentVal = recordTagSelect.value;
+                    recordTagSelect.innerHTML = ''; // Limpa opções antigas
+                    Object.keys(tagKeyMapping).forEach(internalValue => {
+                        const option = document.createElement('option');
+                        option.value = internalValue;
+                        option.textContent = t(tagKeyMapping[internalValue] || 'tags.noTag'); // Traduz o nome da tag
+                        recordTagSelect.appendChild(option);
+                    });
+                    // Restaura valor selecionado ou usa o padrão
+                    if (recordTagSelect.querySelector(`option[value="${currentVal}"]`)) recordTagSelect.value = currentVal;
+                    else recordTagSelect.value = DEFAULT_TAG_VALUE;
+                }
+                // Atualiza título da página e lang do HTML
+                document.title = t('appTitle');
+                document.documentElement.lang = currentLang.split('-')[0];
+                // Atualiza label de notas com limite de caracteres
+                if (recordNotesLabel) recordNotesLabel.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH });
+                if (recordNotesInput) recordNotesInput.maxLength = NOTES_MAX_LENGTH;
+                if (revisitNotesInput) revisitNotesInput.maxLength = REVISIT_NOTES_MAX_LENGTH;
+                // Atualiza texto de loading
+                if (loadingIndicator) loadingIndicator.textContent = t('common.loading');
+                // updateNotificationStatusText(); // Chamada removida
+            }
+
+            // --- Declaração de Variáveis Globais ---
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let revisitCard, revisitForm, revisitIdInput, revisitNameInput, revisitDateInput, revisitNotesInput, saveRevisitBtn, clearRevisitFormBtn, revisitListContainer, revisitList, revisitListPlaceholder, dashboardRevisitsSection, dashboardNextRevisitDetails;
-            let enableNotificationsBtn, notificationStatusParagraph;
+            // Variáveis de notificação removidas: enableNotificationsBtn, notificationStatusParagraph;
             let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
             let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
             let progressRingRadius = 0, progressRingCircumference = 0, MONTH_NAMES = [], WEEKDAY_NAMES = [];
             let lastCheckedDateString = '';
             let dateCheckInterval = null;
-            let notificationPermission = 'default';
+            // let notificationPermission = 'default'; // Variável removida
             const HISTORY_MONTH_LIMIT = 3;
             const NOTES_MAX_LENGTH = 300;
             const MIN_HOURS_PER_DAY_FORECAST = 1.0;
@@ -496,17 +550,63 @@
             const loadingIndicator = document.getElementById('loading-indicator');
             if (loadingIndicator) loadingIndicator.classList.remove('hidden');
 
-            try { const response = await fetch('translations.json'); if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`); translations = await response.json(); const browserLang = (navigator.language || 'en').split('-')[0]; const browserLocale = navigator.language || 'en'; if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) currentLang = browserLocale; else if (translations[browserLang] && supportedLanguages.includes(browserLang)) currentLang = browserLang; else if (translations['en']) currentLang = 'en'; else throw new Error("'en' missing"); console.log("Lang:", currentLang); MONTH_NAMES = getNestedValue(translations[currentLang], 'dates.monthNames') || getNestedValue(translations['en'], 'dates.monthNames'); WEEKDAY_NAMES = getNestedValue(translations[currentLang], 'dates.weekdaysShort') || getNestedValue(translations['en'], 'dates.weekdaysShort'); if (!Array.isArray(MONTH_NAMES) || MONTH_NAMES.length !== 12) { console.warn(`Month names invalid`); MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; } if (!Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length !== 7) { console.warn(`Weekday names invalid`); WEEKDAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; } } catch (error) { console.error('FATAL: Trans load err:', error); if (loadingIndicator) loadingIndicator.textContent = 'Lang file error!'; alert("Lang data err."); MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; WEEKDAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; }
+            // --- Carregamento Inicial das Traduções ---
+            try {
+                const response = await fetch('translations.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                translations = await response.json();
+                // Determina o idioma a ser usado (navegador > lang base > fallback 'en')
+                const browserLang = (navigator.language || 'en').split('-')[0];
+                const browserLocale = navigator.language || 'en';
+                if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) currentLang = browserLocale;
+                else if (translations[browserLang] && supportedLanguages.includes(browserLang)) currentLang = browserLang;
+                else if (translations['en']) currentLang = 'en';
+                else throw new Error("'en' language file missing"); // Erro crítico se nem 'en' existir
+                console.log("Language selected:", currentLang);
+                // Carrega nomes de meses e dias da semana traduzidos
+                MONTH_NAMES = getNestedValue(translations[currentLang], 'dates.monthNames') || getNestedValue(translations['en'], 'dates.monthNames');
+                WEEKDAY_NAMES = getNestedValue(translations[currentLang], 'dates.weekdaysShort') || getNestedValue(translations['en'], 'dates.weekdaysShort');
+                // Validação básica dos arrays de datas
+                if (!Array.isArray(MONTH_NAMES) || MONTH_NAMES.length !== 12) { console.warn(`Month names invalid for ${currentLang}`); MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; }
+                if (!Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length !== 7) { console.warn(`Weekday names invalid for ${currentLang}`); WEEKDAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; }
+            } catch (error) {
+                console.error('FATAL: Translation load error:', error);
+                if (loadingIndicator) loadingIndicator.textContent = 'Language file error!';
+                alert("Language data error. Check translations.json"); // Mensagem de erro mais específica
+                // Define fallbacks básicos para continuar minimamente
+                MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                WEEKDAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            }
 
-            appElement = document.getElementById('app'); dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list'); progressRingFg = document.getElementById('progress-ring-fg'); recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn'); planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder'); monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active'); chartMonthSelector = document.getElementById('chart-month-selector'); monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d'); historyList = document.getElementById('history-list'); historySearchInput = document.getElementById('history-search-input'); historyListPlaceholder = historyList?.querySelector('.placeholder'); showingResultsLabel = document.getElementById('showing-results-label'); clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn'); chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
+            // --- Seleção dos Elementos DOM ---
+            appElement = document.getElementById('app');
+            dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list'); progressRingFg = document.getElementById('progress-ring-fg');
+            recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn');
+            planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder');
+            monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active');
+            chartMonthSelector = document.getElementById('chart-month-selector'); monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d'); chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
+            historyList = document.getElementById('history-list'); historySearchInput = document.getElementById('history-search-input'); historyListPlaceholder = historyList?.querySelector('.placeholder'); showingResultsLabel = document.getElementById('showing-results-label');
+            clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn');
             revisitCard = document.getElementById('revisit-card'); revisitForm = document.getElementById('revisit-form'); revisitIdInput = document.getElementById('revisit-id'); revisitNameInput = document.getElementById('revisit-name'); revisitDateInput = document.getElementById('revisit-date'); revisitNotesInput = document.getElementById('revisit-notes'); saveRevisitBtn = document.getElementById('save-revisit-btn'); clearRevisitFormBtn = document.getElementById('clear-revisit-form-btn'); revisitListContainer = document.getElementById('revisit-list-container'); revisitList = document.getElementById('revisit-list'); revisitListPlaceholder = revisitList?.querySelector('.placeholder'); dashboardRevisitsSection = document.getElementById('dashboard-revisits-section'); dashboardNextRevisitDetails = document.getElementById('dashboard-next-revisit-details');
-            enableNotificationsBtn = document.getElementById('enable-notifications-btn'); notificationStatusParagraph = document.getElementById('notification-status');
+            // Seleção de elementos de notificação removida: enableNotificationsBtn = document.getElementById('enable-notifications-btn'); notificationStatusParagraph = document.getElementById('notification-status');
 
-            try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Style err"); computedStyles = {}; } textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff'; textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa'; tooltipBgColor = computedStyles.getPropertyValue?.('--card-bg')?.trim() || '#1c1c1e'; chartColors = ['#0A84FF', '#30D158', '#FF9F0A', '#AF52DE', '#5E5CE6', '#FF69B4', '#32CD32', '#FFD700'].map((fallback, i) => computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim() || fallback); if (progressRingFg && progressRingFg.r?.baseVal?.value) { progressRingRadius = progressRingFg.r.baseVal.value; progressRingCircumference = 2 * Math.PI * progressRingRadius; }
+            // --- Obtenção de Estilos Computados e Cores ---
+            try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Error getting computed styles:", e); computedStyles = {}; }
+            textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff';
+            textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa';
+            tooltipBgColor = computedStyles.getPropertyValue?.('--card-bg')?.trim() || '#1c1c1e';
+            // Carrega cores do gráfico ou usa fallbacks
+            chartColors = ['#0A84FF', '#30D158', '#FF9F0A', '#AF52DE', '#5E5CE6', '#FF69B4', '#32CD32', '#FFD700'].map((fallback, i) => computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim() || fallback);
+            // Calcula circunferência do anel de progresso
+            if (progressRingFg && progressRingFg.r?.baseVal?.value) {
+                progressRingRadius = progressRingFg.r.baseVal.value;
+                progressRingCircumference = 2 * Math.PI * progressRingRadius;
+            }
 
+            // --- Funções Utilitárias de Data e Hora ---
             function getCurrentDateString() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
             function parseLocalDate(dateString) { if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) { return new Date(NaN); } const [y, m, d] = dateString.split('-').map(Number); return new Date(y, m - 1, d); }
-            function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; try { const date = parseLocalDate(dateString); if (isNaN(date.valueOf())) throw new Error("Invalid date"); const options = { day: '2-digit', month: '2-digit', year: 'numeric' }; return new Intl.DateTimeFormat(currentLang.split('-')[0] || 'default', options).format(date); } catch (e) { console.error("Err fmt date:", dateString, e); const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; } }
+            function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; try { const date = parseLocalDate(dateString); if (isNaN(date.valueOf())) throw new Error("Invalid date"); const options = { day: '2-digit', month: '2-digit', year: 'numeric' }; return new Intl.DateTimeFormat(currentLang.split('-')[0] || 'default', options).format(date); } catch (e) { console.error("Error formatting date:", dateString, e); const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; } }
             function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
             function getStartOfWeek(date = new Date()) { const d = new Date(date); d.setHours(0, 0, 0, 0); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek; const sOW = new Date(d.setDate(diff)); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
             function getDateMonthsAgo(months) { const d = new Date(); d.setHours(0, 0, 0, 0); d.setMonth(d.getMonth() - months); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
@@ -515,16 +615,20 @@
             function formatDecimalToTimeInput(d) { if(isNaN(d)||d<=0)return""; const t=Math.round(d*60), h=Math.floor(t/60), m=t%60; return `${h}:${String(m).padStart(2,'0')}`; }
             function parseTimeInputToDecimal(s) { if(!s)return 0; const t=s.trim(); if(!t)return 0; const c=t.match(/^(\d{1,3}):(\d{1,2})$/); if(c){ const h=parseInt(c[1],10), m=parseInt(c[2],10); if(!isNaN(h)&&!isNaN(m)&&m>=0&&m<60&&h>=0)return h+(m/60); } const n=t.match(/^(\d+)$/); if(n){ const str=n[1],v=parseInt(str,10); if(isNaN(v))return NaN; if(str.length<=2){ if(v<60)return v/60; } if(str.length>=3){ const hs=str.slice(0,-2), ms=str.slice(-2); const h=parseInt(hs,10), m=parseInt(ms,10); if(!isNaN(h)&&!isNaN(m)&&m>=0&&m<60&&h>=0)return h+(m/60); } } return NaN; }
             function formatRelativeDate(dateString) { if (!dateString) return ''; const today = new Date(); today.setHours(0, 0, 0, 0); const inputDate = parseLocalDate(dateString); if (isNaN(inputDate.valueOf()) || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length < 7) { return formatDisplayDate(dateString); } const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const week = new Date(today); week.setDate(today.getDate() + 7); const inputTime = inputDate.getTime(); const todayTime = today.getTime(); const tomorrowTime = tomorrow.getTime(); if (inputTime === todayTime) return t('dates.today'); if (inputTime === tomorrowTime) return t('dates.tomorrow'); if (inputDate > tomorrow && inputDate < week) { return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
-            function saveData() { try{ localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES,JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS,JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS,JSON.stringify(revisits)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS,JSON.stringify(settings)); } catch(e) { console.error("Save Err:",e); showFeedback('feedback.saveError','danger'); } }
-            function loadData() { try{ let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if(sER){try{const p=JSON.parse(sER); recordedEntries=Array.isArray(p)?p.map(e=>({...e, notes:e.notes?.substring(0,NOTES_MAX_LENGTH)||'', tag:e.tag||DEFAULT_TAG_VALUE})):(()=>{throw new Error("Entries not array")})(); }catch(e){console.error("Parse Err:",e);recordedEntries=[]; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES);}} const sP=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries=sP?JSON.parse(sP):[]; plannedEntries.forEach(p=>{if(p.plannedHours!==undefined && typeof p.plannedHours==='number'){p.hours=p.plannedHours;delete p.plannedHours;}}); const sRV=localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS); revisits=sRV?JSON.parse(sRV):[]; revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null })); const sSR=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings={monthlyGoal:70,goalHasBeenSet:false, ...JSON.parse(sSR||'{}')}; if(isNaN(settings.monthlyGoal)||settings.monthlyGoal<=0)settings.monthlyGoal=70; if(typeof settings.goalHasBeenSet!=='boolean')settings.goalHasBeenSet=false; recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); }); console.log("Data loaded."); }catch(e){ console.error("Load Err:",e); recordedEntries=[];plannedEntries=[]; revisits=[]; settings={monthlyGoal:70,goalHasBeenSet:false}; try{localStorage.clear();}catch(se){} showFeedback('feedback.loadError','danger'); } }
-            function triggerInstallPromptIfAvailable(c='?') { if(deferredInstallPrompt && settings.goalHasBeenSet) {console.log(`Prompting install (${c})...`); setTimeout(() => { deferredInstallPrompt.prompt().then(r=>console.log('Prompt:',r.outcome)).catch(e=>console.error("Prompt err:",e)); deferredInstallPrompt=null;},300);}}
+
+            // --- Funções de Persistência de Dados (LocalStorage) ---
+            function saveData() { try{ localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES,JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS,JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS,JSON.stringify(revisits)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS,JSON.stringify(settings)); } catch(e) { console.error("Save Error:",e); showFeedback('feedback.saveError','danger'); } }
+            function loadData() { try{ let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if(sER){try{const p=JSON.parse(sER); recordedEntries=Array.isArray(p)?p.map(e=>({...e, notes:e.notes?.substring(0,NOTES_MAX_LENGTH)||'', tag:e.tag||DEFAULT_TAG_VALUE})):(()=>{throw new Error("Entries not array")})(); }catch(e){console.error("Parse Error (Entries):",e);recordedEntries=[]; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES);}} const sP=localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries=sP?JSON.parse(sP):[]; plannedEntries.forEach(p=>{if(p.plannedHours!==undefined && typeof p.plannedHours==='number'){p.hours=p.plannedHours;delete p.plannedHours;}}); const sRV=localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS); revisits=sRV?JSON.parse(sRV):[]; revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null })); const sSR=localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings={monthlyGoal:70,goalHasBeenSet:false, ...JSON.parse(sSR||'{}')}; if(isNaN(settings.monthlyGoal)||settings.monthlyGoal<=0)settings.monthlyGoal=70; if(typeof settings.goalHasBeenSet!=='boolean')settings.goalHasBeenSet=false; recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); }); console.log("Data loaded successfully."); }catch(e){ console.error("Load Data Error:",e); recordedEntries=[];plannedEntries=[]; revisits=[]; settings={monthlyGoal:70,goalHasBeenSet:false}; try{localStorage.clear();}catch(se){console.error("Error clearing localStorage after load fail:", se)} showFeedback('feedback.loadError','danger'); } }
+
+            // --- Funções de Interação com UI (Formulários, Cards, Diálogos) ---
+            function triggerInstallPromptIfAvailable(c='?') { if(deferredInstallPrompt && settings.goalHasBeenSet) {console.log(`Prompting install (${c})...`); setTimeout(() => { deferredInstallPrompt.prompt().then(r=>console.log('Install prompt outcome:',r.outcome)).catch(e=>console.error("Install prompt error:",e)); deferredInstallPrompt=null;},300);}}
             function promptForMonthlyGoal() { let ok=false; const msg=t('statsCard.goalLabel'); while(!ok){ const inp=prompt(msg, settings.monthlyGoal); if(inp===null){ ok=true; if(!settings.goalHasBeenSet){ settings.goalHasBeenSet=true; saveData(); updateAllDisplays();}} else{ const g=parseInt(inp,10); if(!isNaN(g)&&g>0){ settings.monthlyGoal=g; settings.goalHasBeenSet=true; monthlyGoalInput.value=g; saveData(); ok=true; updateAllDisplays(); showFeedback("feedback.goalSetSuccess","success"); triggerInstallPromptIfAvailable('initial goal');}else{alert(t("feedback.invalidGoalValue"));}}}}
             function setDateInputVisibility(v) { isDateInputVisible=v; if(v){ recordDateInput?.classList.remove('hidden'); dateLabel?.classList.add('visually-hidden'); recordDateInput?.focus(); } else{ recordDateInput?.classList.add('hidden'); dateLabel?.classList.remove('visually-hidden'); if (displayDate) displayDate.textContent=(!recordDateInput?.value || recordDateInput.value===getCurrentDateString())?t('dates.today'):formatDisplayDate(recordDateInput.value);}}
             function toggleCard(e) { if(!e)return;const ex=e.classList.contains('expanded');e.classList.toggle('expanded',!ex); const i=e.querySelector('.toggle-icon'); if(i) i.textContent=!ex?'▲':'▼';}
             function clearRecordForm() { recordForm?.reset(); if(recordIdInput)recordIdInput.value=''; if(recordDateInput)recordDateInput.value=getCurrentDateString(); setDateInputVisibility(false); if(recordTagSelect)recordTagSelect.value=DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=''; if(recordHoursInput)recordHoursInput.value=''; if(saveRecordBtn)saveRecordBtn.textContent=t('recordCard.saveButton'); saveRecordBtn?.classList.remove('editing'); currentEditingId=null;}
             function handleRecordSubmit(event) { event.preventDefault(); const id=recordIdInput?.value?parseInt(recordIdInput.value,10):Date.now(); const date=(isDateInputVisible||(recordDateInput?.value && recordDateInput.value!==getCurrentDateString()))?recordDateInput.value:getCurrentDateString(); const hours=parseTimeInputToDecimal(recordHoursInput?.value); const tag=recordTagSelect?.value||DEFAULT_TAG_VALUE; const notes=recordNotesInput?.value.trim().substring(0,NOTES_MAX_LENGTH); if(isNaN(hours)||hours<=0){alert(t('feedback.invalidTimeFormat'));recordHoursInput?.focus(); return;} if(!date){alert(t('feedback.invalidDate'));return;} const entry={id,date,hours,tag,notes, type: 'record'}; const idx=recordedEntries.findIndex(e=>e.id===id); if(idx>-1)recordedEntries[idx]=entry; else recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess','success'); }
             function editRecordEntry(id) { const entry=recordedEntries.find(e=>e.id===id && e.type !== 'revisit_completed'); if(entry){ if(!recordCard?.classList.contains('expanded'))toggleCard(recordCard); currentEditingId=id; if(recordIdInput)recordIdInput.value=entry.id; if(recordDateInput)recordDateInput.value=entry.date; setDateInputVisibility(entry.date!==getCurrentDateString()); if(recordHoursInput)recordHoursInput.value=formatDecimalToTimeInput(entry.hours); if(recordTagSelect)recordTagSelect.value=entry.tag||DEFAULT_TAG_VALUE; if(recordNotesInput)recordNotesInput.value=entry.notes||''; if(saveRecordBtn){saveRecordBtn.textContent=t('recordCard.updateButton');saveRecordBtn.classList.add('editing');} recordCard?.scrollIntoView({behavior:'smooth', block:'start'}); recordHoursInput?.focus();}}
-            function deleteRecordEntry(id) { showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'),()=>{const i=recordedEntries.findIndex(e=>e.id===id); if(i>-1){recordedEntries.splice(i,1);saveData();updateAllDisplays();showFeedback('feedback.recordDeletedSuccess','info');if(currentEditingId===id)clearRecordForm();}else console.warn("Not found for del:", id);});}
+            function deleteRecordEntry(id) { showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'),()=>{const i=recordedEntries.findIndex(e=>e.id===id); if(i>-1){recordedEntries.splice(i,1);saveData();updateAllDisplays();showFeedback('feedback.recordDeletedSuccess','info');if(currentEditingId===id)clearRecordForm();}else console.warn("Entry not found for deletion:", id);});}
             function clearPlanForm() { planForm?.reset(); if(planIdInput)planIdInput.value=''; if(planDateInput)planDateInput.value=''; if(planHoursInput)planHoursInput.value=''; if(savePlanBtn)savePlanBtn.textContent=t('planCard.saveButton'); currentEditingId=null; }
             function handlePlanSubmit(event) { event.preventDefault(); const id=planIdInput?.value?parseInt(planIdInput.value,10):Date.now(); const date=planDateInput?.value; const hours=parseTimeInputToDecimal(planHoursInput?.value); const todayStr=getCurrentDateString(); if(!date||isNaN(hours)||hours<=0){alert(t('feedback.planFormInvalid')); planHoursInput?.focus();return;} if(date<todayStr){alert(t('feedback.planDatePastError'));planDateInput?.focus();return;} const plan={id,date,hours}; const idx=plannedEntries.findIndex(p=>p.id===id); if(idx>-1)plannedEntries[idx]=plan; else plannedEntries.push(plan); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('feedback.planSavedSuccess','success'); }
             function markPlanAsDone(id) { const idx=plannedEntries.findIndex(p=>p.id===id); if(idx===-1){showFeedback('feedback.planNotFound','danger');return;} const plan=plannedEntries[idx]; const todayStr=getCurrentDateString(); const recDate=todayStr<plan.date?todayStr:plan.date; const note=t('recordCard.autoNoteFromPlan',{date:formatDisplayDate(plan.date),hours:formatHoursExtensive(plan.hours)}); const entry={id:Date.now(),date:recDate,hours:plan.hours,tag:DEFAULT_TAG_VALUE,notes:note, type: 'record'}; recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.splice(idx,1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess','success'); }
@@ -536,65 +640,81 @@
             function showFeedback(key,type='info',vars={}) { let msg=t(key,vars); console.log(`Feedback[${type}]: ${msg}`); const fb=document.createElement('div'); fb.textContent=msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type==='success'?'var(--success-color)':type==='danger'?'var(--danger-color)':'var(--primary-color)'}; color: var(--text-color);`; document.body.appendChild(fb); setTimeout(()=>{fb.style.opacity='1'; fb.style.bottom='30px';},10); setTimeout(()=>{fb.style.opacity='0'; fb.style.bottom='10px';},3500); setTimeout(()=>{fb.parentNode?.removeChild(fb)},4000);}
             function clearRevisitForm() { revisitForm?.reset(); if(revisitIdInput) revisitIdInput.value = ''; if(revisitNameInput) revisitNameInput.value = ''; if(revisitDateInput) revisitDateInput.value = ''; if(revisitNotesInput) revisitNotesInput.value = ''; if(saveRevisitBtn) saveRevisitBtn.textContent = t('revisitCard.addButton'); currentEditingId = null; }
             function handleRevisitSubmit(event) { event.preventDefault(); const id = revisitIdInput?.value ? parseInt(revisitIdInput.value, 10) : Date.now(); const name = revisitNameInput?.value.trim(); const scheduledDate = revisitDateInput?.value || null; const notes = revisitNotesInput?.value.trim().substring(0, REVISIT_NOTES_MAX_LENGTH); const dateAdded = getCurrentDateString(); if (!name) { alert(t('feedback.revisitNameRequired')); revisitNameInput?.focus(); return; } const revisit = { id, name, notes, dateAdded, scheduledDate, status: 'pending', dateCompleted: null }; const idx = revisits.findIndex(rv => rv.id === id); if (idx > -1) { revisits[idx] = revisit; } else { revisits.push(revisit); } revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); }); saveData(); clearRevisitForm(); updateAllDisplays(); showFeedback('feedback.revisitSavedSuccess', 'success'); }
-            function markRevisitComplete(id) { const idx = revisits.findIndex(rv => rv.id === id); if (idx === -1) { showFeedback('feedback.revisitNotFound', 'danger'); return; } const revisit = revisits[idx]; const completionDate = getCurrentDateString(); revisit.status = 'completed'; revisit.dateCompleted = completionDate; const historyEntry = { id: Date.now(), date: completionDate, hours: 0, tag: t('historyCard.revisitCompletedTag'), notes: `${t('historyCard.revisitCompletedNotePrefix')} ${revisit.name}${revisit.notes ? `\n${t('historyCard.revisitOriginalNotes')}: ${revisit.notes}` : ''}`, type: 'revisit_completed', revisitId: revisit.id }; recordedEntries.push(historyEntry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); revisits.splice(idx, 1); saveData(); updateAllDisplays(); showFeedback('feedback.revisitMarkedCompleteSuccess', 'success'); }
-            function deleteRevisit(id) { showConfirmationDialog(t('dialog.confirmDeleteRevisitMessage'), () => { const initialLength = revisits.length; revisits = revisits.filter(rv => rv.id !== id); if (revisits.length < initialLength) { saveData(); updateAllDisplays(); showFeedback('feedback.revisitDeletedSuccess', 'info'); if (currentEditingId === id) clearRevisitForm(); } else { console.warn("Revisit not found:", id); } }); }
-            async function requestNotificationPermission() { if (!('Notification' in window) || !navigator.serviceWorker) { showFeedback('feedback.notificationsNotSupported', 'danger'); return false; } let currentPermission = Notification.permission; if (currentPermission === 'granted') { showFeedback('feedback.notificationsAlreadyGranted', 'info'); return true; } if (currentPermission === 'denied') { showFeedback('feedback.notificationsDenied', 'warning'); return false; } const permission = await Notification.requestPermission(); notificationPermission = permission; updateNotificationStatusText(); if (permission === 'granted') { showFeedback('feedback.notificationsGranted', 'success'); return true; } else { showFeedback('feedback.notificationsNotGranted', 'info'); return false; } }
-            async function showDailyCommitmentsNotification() { if (notificationPermission !== 'granted') { console.log("Notification permission not granted, skipping daily notification."); return; } const todayStr = getCurrentDateString(); const todaysRevisits = revisits.filter(rv => rv.status === 'pending' && rv.scheduledDate === todayStr); if (todaysRevisits.length === 0) { console.log("No commitments scheduled for today."); return; } let body = ''; if (todaysRevisits.length > 0) { const revisitNames = todaysRevisits.map(rv => rv.name).slice(0, 3); body += t('notifications.todayRevisitsPrefix') + revisitNames.join(', '); if (todaysRevisits.length > 3) { body += t('notifications.todayRevisitsSuffix', { count: todaysRevisits.length - 3 }); } body += '\n'; } const title = t('notifications.dailyTitle'); const options = { body: body.trim(), icon: 'icon-192x192.png', badge: 'icon-72x72.png', tag: 'daily-commitments' }; try { const registration = await navigator.serviceWorker.ready; await registration.showNotification(title, options); console.log("Daily commitment notification shown."); } catch (err) { console.error("Error showing notification:", err); showFeedback('feedback.notificationError', 'danger'); } }
-            function updateNotificationStatusText() { if (!notificationStatusParagraph) return; let statusKey = 'settingsCard.notificationsStatusDefault'; if (notificationPermission === 'granted') statusKey = 'settingsCard.notificationsStatusGranted'; else if (notificationPermission === 'denied') statusKey = 'settingsCard.notificationsStatusDenied'; notificationStatusParagraph.textContent = t(statusKey); if (enableNotificationsBtn) enableNotificationsBtn.disabled = (notificationPermission === 'granted' || notificationPermission === 'denied'); }
+            function markRevisitComplete(id) { const idx = revisits.findIndex(rv => rv.id === id); if (idx === -1) { showFeedback('feedback.revisitNotFound', 'danger'); return; } const revisit = revisits[idx]; const completionDate = getCurrentDateString(); revisit.status = 'completed'; revisit.dateCompleted = completionDate; const historyEntry = { id: Date.now(), date: completionDate, hours: 0, tag: t('historyCard.revisitCompletedTag'), notes: `${t('historyCard.revisitCompletedNotePrefix')} ${revisit.name}${revisit.notes ? `\n${t('historyCard.revisitOriginalNotes')}: ${revisit.notes}` : ''}`, type: 'revisit_completed', revisitId: revisit.id }; recordedEntries.push(historyEntry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); revisits.splice(idx, 1); // Remove da lista de pendentes
+             saveData(); updateAllDisplays(); showFeedback('feedback.revisitMarkedCompleteSuccess', 'success'); }
+            function deleteRevisit(id) { showConfirmationDialog(t('dialog.confirmDeleteRevisitMessage'), () => { const initialLength = revisits.length; revisits = revisits.filter(rv => rv.id !== id); if (revisits.length < initialLength) { saveData(); updateAllDisplays(); showFeedback('feedback.revisitDeletedSuccess', 'info'); if (currentEditingId === id) clearRevisitForm(); } else { console.warn("Revisit not found for deletion:", id); } }); }
+
+            // --- Funções de Notificação Removidas ---
+            // async function requestNotificationPermission() { ... }
+            // async function showDailyCommitmentsNotification() { ... }
+            // function updateNotificationStatusText() { ... }
+
+            // --- Funções de Atualização da Interface ---
             function updateDashboard() { const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let monthHours = 0, weekHours = 0; const startOfWeekStr = getStartOfWeek(today); const todayStr = getCurrentDateString(); recordedEntries.forEach(entry => { if (entry.type !== 'revisit_completed') { const entryDate = parseLocalDate(entry.date); if (isNaN(entryDate.valueOf())) return; if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) { monthHours += entry.hours; } if (entry.date >= startOfWeekStr) { weekHours += entry.hours; } } }); if(dashboardWeekHours)dashboardWeekHours.textContent=formatHoursExtensive(weekHours); const goal=settings.monthlyGoal||70; const percentage = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0; if(dashboardMonthPercentage)dashboardMonthPercentage.textContent=`${Math.round(percentage)}%`; updateProgressRing(monthHours, goal); if(dashboardMonthTotal)dashboardMonthTotal.innerHTML=`${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(monthHours)}</strong>`; const lastDayOfMonthObj = new Date(currentYear, currentMonth + 1, 0); const lastDayOfMonth = lastDayOfMonthObj.getDate(); const todayDay = today.getDate(); const remainingDays = Math.max(0, lastDayOfMonth - todayDay); const remainingHoursNeeded = Math.max(0, goal - monthHours); let forecastText = ''; if (!settings.goalHasBeenSet) { forecastText = `<span>${t('dashboard.setGoalPrompt')}</span>`; } else if (remainingHoursNeeded <= 0) { forecastText = `<span>${t('dashboard.goalMet')}</span>`; } else if (remainingDays <= 0 && todayDay === lastDayOfMonth) { forecastText = `<span>${t('dashboard.goalNotMetMonthEnd')}</span>`; } else if (remainingDays <= 0) { forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span>`; } else { let avgNeededPerDay = remainingHoursNeeded / remainingDays; let daysToWork = remainingDays; if (avgNeededPerDay > 0 && avgNeededPerDay < MIN_HOURS_PER_DAY_FORECAST) { daysToWork = Math.ceil(remainingHoursNeeded / MIN_HOURS_PER_DAY_FORECAST); avgNeededPerDay = MIN_HOURS_PER_DAY_FORECAST; } const daysSuffix = t(daysToWork === 1 ? 'dashboard.forecastSuffixDaysSingular' : 'dashboard.forecastSuffixDaysPlural'); const suggestion = `${t('dashboard.attemptPrefix')}<strong>${formatHoursExtensive(avgNeededPerDay, true)}</strong> ${t('dashboard.perDay')} ${daysToWork} ${daysSuffix}.`; forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span><span>${suggestion}</span>`; } if(dashboardForecast) dashboardForecast.innerHTML = forecastText; const pendingRevisits = revisits.filter(rv => rv.status === 'pending'); const nextScheduledRevisit = pendingRevisits.filter(rv => rv.scheduledDate && rv.scheduledDate >= todayStr).sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))[0]; if (dashboardNextRevisitDetails && dashboardRevisitsSection) { if (nextScheduledRevisit) { dashboardNextRevisitDetails.innerHTML = `<span class="dashboard-value"><strong>${formatRelativeDate(nextScheduledRevisit.scheduledDate)}:</strong> <span class="revisit-name">${nextScheduledRevisit.name}</span></span>`; dashboardRevisitsSection.classList.remove('hidden'); } else { dashboardNextRevisitDetails.innerHTML = ''; dashboardRevisitsSection.classList.add('hidden'); } } updateDashboardPlannedDates(); }
             function updateProgressRing(cV, mV) { const p=mV>0?Math.min(100,(cV/mV)*100):0; const off=progressRingCircumference*(1-p/100); if(progressRingFg){progressRingFg.style.strokeDasharray=`${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset=Math.max(0,off);}}
             function updateDashboardPlannedDates() { const todayStr = getCurrentDateString(); const now = new Date(); const currentHour = now.getHours(); const overdueHourThreshold = 18; const pastDuePlans = plannedEntries.filter(p => p.date < todayStr).sort((a, b) => a.date.localeCompare(b.date)); const upcomingPlans = plannedEntries.filter(p => p.date >= todayStr).sort((a, b) => a.date.localeCompare(b.date)); const displayPlans = upcomingPlans.slice(0, 3); if (displayPlans.length < 3) { const neededFromPast = 3 - displayPlans.length; const recentPastDue = pastDuePlans.slice(-neededFromPast); displayPlans.unshift(...recentPastDue); } if (dashboardPlanList) dashboardPlanList.innerHTML = ''; if (displayPlans.length > 0) { dashboardPlannedDatesContainer?.classList.remove('hidden'); displayPlans.forEach(p => { const li = document.createElement('li'); li.dataset.id = p.id; let planText = `<strong>${formatRelativeDate(p.date)}:</strong> ${formatHoursExtensive(p.hours)}`; const isPastDate = p.date < todayStr; const isTodayPastThreshold = p.date === todayStr && currentHour >= overdueHourThreshold; if (isPastDate || isTodayPastThreshold) { planText += `<span class="plan-warning"> ${t('dashboard.overduePlanSuffix')}</span>`; } li.innerHTML = planText; dashboardPlanList?.appendChild(li); }); } else { dashboardPlannedDatesContainer?.classList.add('hidden'); } }
             function renderHistory() { if (!historyList) return; historyList.innerHTML=''; const searchTerm = historySearchInput?.value.trim().toLowerCase()||''; let results = []; let labelText = ''; const hasSearch = searchTerm.length > 0; const allHistoryItems = recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); if (hasSearch) { results = allHistoryItems.filter(e => { const isRevisit = e.type === 'revisit_completed'; const tagInternal = isRevisit ? t('historyCard.revisitCompletedTag') : (e.tag || DEFAULT_TAG_VALUE); const tagTranslated = isRevisit ? tagInternal.toLowerCase() : t(tagKeyMapping[tagInternal] || 'tags.noTag').toLowerCase(); const formattedDate = formatDisplayDate(e.date).toLowerCase(); const hoursStr = isRevisit ? '' : (e.hours || 0).toString().replace('.', ','); const hoursRoundedStr = isRevisit ? '' : Math.round(e.hours || 0).toString(); const hoursFormatted = isRevisit ? '' : formatHoursExtensive(e.hours).toLowerCase(); const notes = (e.notes || '').toLowerCase(); const name = (e.name || '').toLowerCase(); return ( formattedDate.includes(searchTerm) || (!isRevisit && (hoursStr.includes(searchTerm) || hoursRoundedStr.includes(searchTerm) || hoursFormatted.includes(searchTerm))) || tagTranslated.includes(searchTerm) || notes.includes(searchTerm) || (isRevisit && name.includes(searchTerm)) || tagInternal.toLowerCase().includes(searchTerm) ); }); const countKey = results.length === 1 ? 'historyCard.resultsCountForTermSingular' : 'historyCard.resultsCountForTermPlural'; labelText = t(countKey, { count: results.length, term: searchTerm }); } else { const dateLimitStr = getDateMonthsAgo(HISTORY_MONTH_LIMIT); results = allHistoryItems.filter(e => e.date >= dateLimitStr); if (allHistoryItems.length === 0) { labelText = t('historyCard.listPlaceholderNoRecords'); } else if (results.length === 0) { labelText = t('historyCard.noRecordsLastMonths', { limit: HISTORY_MONTH_LIMIT }); } else { labelText = t('historyCard.showingLastMonths', { limit: HISTORY_MONTH_LIMIT }); } } if (showingResultsLabel) showingResultsLabel.textContent = labelText; if (results.length === 0) { let placeholderKey = 'historyCard.listPlaceholderNoRecords'; if (allHistoryItems.length > 0) { placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent'; } if (historyListPlaceholder) { historyListPlaceholder.textContent = t(placeholderKey); historyListPlaceholder.classList.remove('hidden'); } } else { historyListPlaceholder?.classList.add('hidden'); results.forEach(e => { const li = document.createElement('li'); li.dataset.id = e.id; const isRevisit = e.type === 'revisit_completed'; let detailsHtml = ''; let actionsHtml = ''; if (isRevisit) { const revisitMarker = `<span class="revisit-completed-marker">${t('historyCard.revisitCompletedMarker')}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; detailsHtml = `<div class="entry-details">${revisitMarker}<strong>${formatDisplayDate(e.date)}:</strong> ${notesPreview}</div>`; actionsHtml = '<div class="entry-actions"></div>'; } else { const tagInternal = e.tag || DEFAULT_TAG_VALUE; const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag'); const tagBadge = `<span class="tag-badge" ${tagInternal===DEFAULT_TAG_VALUE?'style="opacity:0.6;"':''}>${tagText}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g,' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; const hoursFormatted = formatHoursExtensive(e.hours); detailsHtml = `<div class="entry-details"><strong>${formatDisplayDate(e.date)}:</strong> <span class="hours">${hoursFormatted}</span> ${tagBadge} ${notesPreview}</div>`; actionsHtml = `<div class="entry-actions"><button class="edit-btn secondary">${t('common.editButton')}</button> <button class="delete-btn danger">${t('common.deleteButton')}</button></div>`; } li.innerHTML = detailsHtml + actionsHtml; if (!isRevisit) { li.querySelector('.edit-btn')?.addEventListener('click', ev => {ev.stopPropagation(); editRecordEntry(e.id);}); li.querySelector('.delete-btn')?.addEventListener('click', ev => {ev.stopPropagation(); deleteRecordEntry(e.id);}); } historyList.appendChild(li); }); } }
-            function renderPlanning() { if(!planningList) return; planningList.innerHTML=''; const todayStr = getCurrentDateString(); const allPlans = [...plannedEntries]; if(allPlans.length===0){ if(planningListPlaceholder){ planningListPlaceholder.textContent=t('planCard.listPlaceholderNoPastOrFuture'); planningListPlaceholder.classList.remove('hidden');} return;} planningListPlaceholder?.classList.add('hidden'); allPlans.forEach(p=>{ const li=document.createElement('li'); li.dataset.id=p.id; const hoursDisplay = formatHoursExtensive(p.hours); const isPast = p.date < todayStr; const pastDateSuffix = isPast ? `<span style="opacity:0.7;margin-left:5px;">${t('planCard.pastDateSuffix')}</span>`:''; li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(p.date)} (${formatRelativeDate(p.date)}):</strong> <span class="hours">${hoursDisplay}</span> ${pastDateSuffix}</div><div class="plan-actions"><button class="done-plan-btn success">${t('planCard.markDoneButton')}</button> <button class="delete-plan-btn danger">${t('common.deleteButton')}</button></div>`; li.querySelector('.done-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();markPlanAsDone(p.id);}); li.querySelector('.delete-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();deletePlanEntry(p.id);}); planningList.appendChild(li); }); }
-            function renderRevisits() { if (!revisitList) return; revisitList.innerHTML = ''; const pendingRevisits = revisits.filter(rv => rv.status === 'pending'); if (pendingRevisits.length === 0) { if (revisitListPlaceholder) { revisitListPlaceholder.textContent = t('revisitCard.listPlaceholderNoPending'); revisitListPlaceholder.classList.remove('hidden'); } return; } revisitListPlaceholder?.classList.add('hidden'); pendingRevisits.forEach(rv => { const li = document.createElement('li'); li.dataset.id = rv.id; const notesPreview = rv.notes ? `<span class="notes-preview">${rv.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('revisitCard.noNotes')}</span>`; const scheduledDateHtml = rv.scheduledDate ? `<span class="revisit-scheduled-date">(${t('revisitCard.scheduledForLabel')} <strong>${formatRelativeDate(rv.scheduledDate)}</strong>)</span>` : ''; li.innerHTML = `<div class="entry-details"><strong>${rv.name}</strong>${scheduledDateHtml}${notesPreview}</div><div class="revisit-actions"><button class="complete-revisit-btn success">${t('revisitCard.markCompleteButton')}</button><button class="delete-revisit-btn danger">${t('common.deleteButton')}</button></div>`; li.querySelector('.complete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); markRevisitComplete(rv.id); }); li.querySelector('.delete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); deleteRevisit(rv.id); }); revisitList.appendChild(li); }); }
-            function updateStatistics() { const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let totalHoursMonth = 0; const activeDays = new Set(); recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === currentMonth && d.getFullYear() === currentYear; }).forEach(e => { totalHoursMonth += e.hours; activeDays.add(e.date); }); const goal = settings.monthlyGoal || 70; const percentProgress = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursMonth / goal) * 100), 100) : 0) : 0; const daysActiveCount = activeDays.size; const avgHoursPerActiveDay = daysActiveCount > 0 ? (totalHoursMonth / daysActiveCount) : 0; if (statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(totalHoursMonth); if (statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${percentProgress}%` : '--%'; if (statsMonthProgressBar) statsMonthProgressBar.style.width = `${percentProgress}%`; if (statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(avgHoursPerActiveDay); if (statsMonthDaysActive) statsMonthDaysActive.textContent = daysActiveCount; }
-            function populateMonthSelector() { if (!chartMonthSelector) return; const availableMonths = new Set(); recordedEntries.filter(e => e.type !== 'revisit_completed').forEach(e => { const dateObj = parseLocalDate(e.date); if (!isNaN(dateObj.valueOf())) { availableMonths.add(getMonthYearString(dateObj)); } }); const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/').map(Number); const [mB, yB] = b.split('/').map(Number); return (yB - yA) || (mB - mA); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = ''; if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = t('chartsCard.noDataOption'); chartMonthSelector.append(option); chartMonthSelector.disabled = true; return; } chartMonthSelector.disabled = false; const currentMonthStr = getMonthYearString(new Date()); let currentMonthFormatted = formatMonthYearExtensive(currentMonthStr); let hasCurrentMonthData = false; let didSelectOldValue = false; sortedMonths.forEach(monthYearValue => { const option = document.createElement('option'); let monthFormatted = formatMonthYearExtensive(monthYearValue); option.value = monthYearValue; option.textContent = monthFormatted || monthYearValue; if (monthYearValue === oldSelectedValue) { option.selected = true; didSelectOldValue = true; } else if (monthYearValue === currentMonthStr && !didSelectOldValue) { option.selected = true; } if (monthYearValue === currentMonthStr) { hasCurrentMonthData = true; } chartMonthSelector.append(option); }); if (!hasCurrentMonthData && currentMonthFormatted && Array.isArray(MONTH_NAMES) && MONTH_NAMES.length > 0) { const option = document.createElement('option'); option.value = currentMonthStr; option.textContent = `${currentMonthFormatted} ${t('chartsCard.currentMonthSuffix')}`; chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); if (!didSelectOldValue && !chartMonthSelector.querySelector('option[selected]')) { option.selected = true; } } if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
-            function renderCharts(selectedMonthYear) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (!selectedMonthYear) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; } try { const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number); const monthIndex = selectedMonth - 1; const entriesForMonth = recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === monthIndex && d.getFullYear() === selectedYear; }); if (entriesForMonth.length === 0) { clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) })); return; } let totalHours = 0; const hoursByTag = {}; entriesForMonth.forEach(e => { const tagName = e.tag || DEFAULT_TAG_VALUE; const hours = e.hours || 0; totalHours += hours; hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours; }); if (chartTotalHoursDisplay) chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHours)}</strong>`; const labels = Object.keys(hoursByTag).map(tagName => t(tagKeyMapping[tagName] || 'tags.noTag')); const values = Object.values(hoursByTag); const backgroundColors = labels.map((_, i) => chartColors[i % chartColors.length]); if (!monthlyHoursChartCtx) return; monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'pie', data: { labels: labels, datasets: [{ data: values, backgroundColor: backgroundColors, borderColor: tooltipBgColor || '#1c1c1e', borderWidth: 1.5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6, callbacks: { label: ctx => { const label = ctx.label || ''; const value = ctx.parsed || 0; const percentage = totalHours > 0 ? ((value / totalHours) * 100).toFixed(1) : 0; return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`; } } }, legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } } } } }); } catch (e) { console.error("Chart render err:", e); clearChartWithMessage(t('chartsCard.renderErrorMessage')); } }
-            function clearChartWithMessage(msg) { if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();monthlyHoursChartInstance=null;} if(chartTotalHoursDisplay)chartTotalHoursDisplay.textContent=''; const ctx=monthlyHoursChartCtx; if(ctx){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles?.fontFamily||'sans-serif'}`; ctx.fillText(msg,ctx.canvas.width/2,ctx.canvas.height/2); ctx.restore();}}
-            function updateAllDisplays() { if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Skip update: Trans not ready"); return;} try{applyStaticTranslations();updateDashboard();updateStatistics();populateMonthSelector();renderHistory();renderPlanning();renderRevisits(); const selVal=chartMonthSelector?.value; if(!chartMonthSelector?.disabled && selVal)renderCharts(selVal); else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length>0 && chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=true; renderCharts(chartMonthSelector.options[0].value);} else clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'));}catch(err){console.error("UpdateAll err:",err);}}
-            function formatTimeInputOnType(event) { const i=event.target;let v=i.value,op=i.selectionStart,n=v.replace(/[^\d]/g,'').substring(0,4),f=n;let ca=false;if(n.length>2){const hp=n.substring(0,n.length-2),mp=n.substring(n.length-2);f=`${hp}:${mp}`;if(v.length<f.length&&v.indexOf(':')===-1)ca=true;}if(i.value!==f){i.value=f;let np=op;if(ca&&op>=f.indexOf(':')+1)np++;np=Math.min(np,f.length);requestAnimationFrame(()=>{try{i.setSelectionRange(np,np);}catch(e){}});}}
-            function registerServiceWorker() { if('serviceWorker'in navigator)window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(r=>console.log('SW ok:',r.scope)).catch(e=>console.error('SW fail:',e));});}
-            function checkDateAndUpdate() { const newDateString = getCurrentDateString(); if (newDateString !== lastCheckedDateString) { console.log(`Date changed from ${lastCheckedDateString} to ${newDateString}. Updating display...`); lastCheckedDateString = newDateString; updateAllDisplays(); } else { console.log("Date check: Still same day."); } }
+            function renderPlanning() { if(!planningList) return; planningList.innerHTML=''; const todayStr = getCurrentDateString(); const allPlans = [...plannedEntries]; if(allPlans.length===0){ if(planningListPlaceholder){ planningListPlaceholder.textContent=t('planCard.listPlaceholderNoPastOrFuture'); planningListPlaceholder.classList.remove('hidden');} return;} planningListPlaceholder?.classList.add('hidden'); allPlans.forEach(p=>{ const li=document.createElement('li'); li.dataset.id=p.id; const hoursDisplay = formatHoursExtensive(p.hours); const isPast = p.date < todayStr; const pastDateSuffix = isPast ? `<span style="opacity:0.7;margin-left:5px;">${t('planCard.pastDateSuffix')}</span>`:''; li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(p.date)} (${formatRelativeDate(p.date)}):</strong> <span class="hours">${hoursDisplay}</span> ${pastDateSuffix}</div><div class="plan-actions"><button class="done-plan-btn success">${t('planCard.markDoneButton')}</button> <button class="delete-plan-btn danger">${t('common.deleteButton')}</button></div>`; li.querySelector('.done-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();markPlanAsDone(p.id);}); li.querySelector('.delete-plan-btn')?.addEventListener('click',e=>{e.stopPropagation();deletePlanEntry(p.id);}); planningList.appendChild(li); }); }
+            function renderRevisits() { if (!revisitList) return; revisitList.innerHTML = ''; const pendingRevisits = revisits.filter(rv => rv.status === 'pending'); if (pendingRevisits.length === 0) { if (revisitListPlaceholder) { revisitListPlaceholder.textContent = t('revisitCard.listPlaceholderNoPending'); revisitListPlaceholder.classList.remove('hidden'); } return; } revisitListPlaceholder?.classList.add('hidden'); pendingRevisits.forEach(rv => { const li = document.createElement('li'); li.dataset.id = rv.id; const notesPreview = rv.notes ? `<span class="notes-preview">${rv.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('revisitCard.noNotes')}</span>`; const scheduledDateHtml = rv.scheduledDate ? `<span class="revisit-scheduled-date">(${t('revisitCard.scheduledForLabel')} <strong>${formatRelativeDate(rv.scheduledDate)}</strong>)</span>` : ''; li.innerHTML = `<div class="entry-details"><strong>${rv.name}</strong>${scheduledDateHtml}${notesPreview}</div><div class="revisit-actions"><button class="complete-revisit-btn success">${t('revisitCard.markCompleteButton')}</button><button class="delete-revisit-btn danger">${t('common.deleteButton')}</button></div>`; li.querySelector('.complete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); markRevisitComplete(rv.id); }); li.querySelector('.delete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); deleteRevisit(rv.id); }); revisitList.appendChild(li); }); }
+            function updateStatistics() { const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let totalHoursMonth = 0; const activeDays = new Set(); recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === currentMonth && d.getFullYear() === currentYear; }).forEach(e => { totalHoursMonth += e.hours; activeDays.add(e.date); }); const goal = settings.monthlyGoal || 70; const percentProgress = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursMonth / goal) * 100), 100) : 0) : 0; const daysActiveCount = activeDays.size; const avgHoursPerActiveDay = daysActiveCount > 0 ? (totalHoursMonth / daysActiveCount) : 0; if (statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(totalHoursMonth); if (statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${percentProgress}%` : '--%'; if (statsMonthProgressBar) statsMonthProgressBar.style.width = `${percentProgress}%`; if (statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(avgHoursPerActiveDay); if (statsMonthDaysActive) statsMonthDaysActive.textContent = daysActiveCount; }
+            function populateMonthSelector() { if (!chartMonthSelector) return; const availableMonths = new Set(); recordedEntries.filter(e => e.type !== 'revisit_completed').forEach(e => { const dateObj = parseLocalDate(e.date); if (!isNaN(dateObj.valueOf())) { availableMonths.add(getMonthYearString(dateObj)); } }); const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/').map(Number); const [mB, yB] = b.split('/').map(Number); return (yB - yA) || (mB - mA); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = ''; if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = t('chartsCard.noDataOption'); chartMonthSelector.append(option); chartMonthSelector.disabled = true; return; } chartMonthSelector.disabled = false; const currentMonthStr = getMonthYearString(new Date()); let currentMonthFormatted = formatMonthYearExtensive(currentMonthStr); let hasCurrentMonthData = false; let didSelectOldValue = false; sortedMonths.forEach(monthYearValue => { const option = document.createElement('option'); let monthFormatted = formatMonthYearExtensive(monthYearValue); option.value = monthYearValue; option.textContent = monthFormatted || monthYearValue; if (monthYearValue === oldSelectedValue) { option.selected = true; didSelectOldValue = true; } else if (monthYearValue === currentMonthStr && !didSelectOldValue) { option.selected = true; } if (monthYearValue === currentMonthStr) { hasCurrentMonthData = true; } chartMonthSelector.append(option); }); if (!hasCurrentMonthData && currentMonthFormatted && Array.isArray(MONTH_NAMES) && MONTH_NAMES.length > 0) { const option = document.createElement('option'); option.value = currentMonthStr; option.textContent = `${currentMonthFormatted} ${t('chartsCard.currentMonthSuffix')}`; chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); if (!didSelectOldValue && !chartMonthSelector.querySelector('option[selected]')) { option.selected = true; } } if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
+            function renderCharts(selectedMonthYear) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (!selectedMonthYear) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; } try { const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number); const monthIndex = selectedMonth - 1; const entriesForMonth = recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === monthIndex && d.getFullYear() === selectedYear; }); if (entriesForMonth.length === 0) { clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) })); return; } let totalHours = 0; const hoursByTag = {}; entriesForMonth.forEach(e => { const tagName = e.tag || DEFAULT_TAG_VALUE; const hours = e.hours || 0; totalHours += hours; hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours; }); if (chartTotalHoursDisplay) chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHours)}</strong>`; const labels = Object.keys(hoursByTag).map(tagName => t(tagKeyMapping[tagName] || 'tags.noTag')); const values = Object.values(hoursByTag); const backgroundColors = labels.map((_, i) => chartColors[i % chartColors.length]); if (!monthlyHoursChartCtx) return; monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'pie', data: { labels: labels, datasets: [{ data: values, backgroundColor: backgroundColors, borderColor: tooltipBgColor || '#1c1c1e', borderWidth: 1.5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6, callbacks: { label: ctx => { const label = ctx.label || ''; const value = ctx.parsed || 0; const percentage = totalHours > 0 ? ((value / totalHours) * 100).toFixed(1) : 0; return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`; } } }, legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } } } } }); } catch (e) { console.error("Chart render error:", e); clearChartWithMessage(t('chartsCard.renderErrorMessage')); } }
+            function clearChartWithMessage(msg) { if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();monthlyHoursChartInstance=null;} if(chartTotalHoursDisplay)chartTotalHoursDisplay.textContent=''; const ctx=monthlyHoursChartCtx; if(ctx){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillStyle=textMutedColor; ctx.font=`14px ${computedStyles?.fontFamily||'sans-serif'}`; ctx.fillText(msg,ctx.canvas.width/2,ctx.canvas.height/2); ctx.restore();}}
+            function updateAllDisplays() { if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Skipping update: Translations not ready"); return;} try{applyStaticTranslations();updateDashboard();updateStatistics();populateMonthSelector();renderHistory();renderPlanning();renderRevisits(); const selVal=chartMonthSelector?.value; if(!chartMonthSelector?.disabled && selVal)renderCharts(selVal); else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length>0 && chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=true; renderCharts(chartMonthSelector.options[0].value);} else clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'));}catch(err){console.error("UpdateAllDisplays Error:",err);}}
+            function formatTimeInputOnType(event) { const i=event.target;let v=i.value,op=i.selectionStart,n=v.replace(/[^\d]/g,'').substring(0,4),f=n;let ca=false;if(n.length>2){const hp=n.substring(0,n.length-2),mp=n.substring(n.length-2);f=`${hp}:${mp}`;if(v.length<f.length&&v.indexOf(':')===-1)ca=true;}if(i.value!==f){i.value=f;let np=op;if(ca&&op>=f.indexOf(':')+1)np++;np=Math.min(np,f.length);requestAnimationFrame(()=>{try{i.setSelectionRange(np,np);}catch(e){}});}}
+            function registerServiceWorker() { if('serviceWorker'in navigator)window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(r=>console.log('Service Worker registered:',r.scope)).catch(e=>console.error('Service Worker registration failed:',e));});}
+            function checkDateAndUpdate() { const newDateString = getCurrentDateString(); if (newDateString !== lastCheckedDateString) { console.log(`Date changed from ${lastCheckedDateString} to ${newDateString}. Updating display...`); lastCheckedDateString = newDateString; updateAllDisplays(); } else { /* console.log("Date check: Still same day."); */ } }
 
-            // --- Initialization Sequence ---
-            loadData();
-            applyStaticTranslations();
-            if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
-            if (recordDateInput) recordDateInput.value = getCurrentDateString();
-            lastCheckedDateString = getCurrentDateString();
-            setDateInputVisibility(false);
-            clearRecordForm();
-            clearPlanForm();
-            clearRevisitForm();
-            document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); if (card.classList.contains('expanded') !== shouldBeExpanded) toggleCard(card); const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; });
-            appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) toggleCard(h.closest('.card')); });
-            document.querySelectorAll('.card-header').forEach(h=>{h.setAttribute('role','button');h.setAttribute('tabindex','0');h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ') {e.preventDefault();toggleCard(h.closest('.card'));}});});
-            changeDateBtn?.addEventListener('click',()=>setDateInputVisibility(true)); recordHoursInput?.addEventListener('input',formatTimeInputOnType); planHoursInput?.addEventListener('input',formatTimeInputOnType);
-            recordHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>=0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
-            planHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';});
-            recordNotesInput?.addEventListener('input',e=>{if(e.target.value.length>NOTES_MAX_LENGTH){e.target.value=e.target.value.substring(0,NOTES_MAX_LENGTH);showFeedback('feedback.notesLengthLimit','info',{maxLength:NOTES_MAX_LENGTH});}});
-            revisitNotesInput?.addEventListener('input', e => { if (e.target.value.length > REVISIT_NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, REVISIT_NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: REVISIT_NOTES_MAX_LENGTH }); } });
-            historySearchInput?.addEventListener('input',renderHistory); recordForm?.addEventListener('submit',handleRecordSubmit); planForm?.addEventListener('submit',handlePlanSubmit);
-            revisitForm?.addEventListener('submit', handleRevisitSubmit);
-            clearPlanFormBtn?.addEventListener('click',clearPlanForm);
-            clearRevisitFormBtn?.addEventListener('click', clearRevisitForm);
-            saveGoalBtn?.addEventListener('click',handleGoalSave);
-            monthlyGoalInput?.addEventListener('keypress',e=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();e.target.blur();}});
-            chartMonthSelector?.addEventListener('change',updateAllDisplays);
-            clearAllDataBtn?.addEventListener('click',handleClearAllData);
-            dialogConfirmBtn?.addEventListener('click',()=>{if(typeof currentConfirmCallback==='function')currentConfirmCallback(); hideConfirmationDialog();});
-            dialogCancelBtn?.addEventListener('click',hideConfirmationDialog); confirmationDialog?.addEventListener('click',e=>{if(e.target===confirmationDialog)hideConfirmationDialog();});
-            window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredInstallPrompt=e; console.log('install prompt ready');});
-            if (dateCheckInterval) clearInterval(dateCheckInterval);
-            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000);
-            updateAllDisplays();
-            registerServiceWorker();
-            if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) { setTimeout(promptForMonthlyGoal, 600); }
-            if (loadingIndicator) loadingIndicator.classList.add('hidden');
-            console.log("App initialization complete.");
+            // --- Initialization Sequence ---
+            loadData(); // Carrega dados salvos
+            applyStaticTranslations(); // Aplica traduções iniciais
+            if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal; // Define valor inicial da meta
+            if (recordDateInput) recordDateInput.value = getCurrentDateString(); // Define data inicial
+            lastCheckedDateString = getCurrentDateString(); // Armazena data atual para verificação
+            setDateInputVisibility(false); // Esconde input de data inicialmente
+            clearRecordForm(); // Limpa formulário de registro
+            clearPlanForm(); // Limpa formulário de plano
+            clearRevisitForm(); // Limpa formulário de revisita
+            // Define estado inicial dos cards (Registro expandido, outros fechados)
+            document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); if (card.classList.contains('expanded') !== shouldBeExpanded) toggleCard(card); const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; });
+            // Adiciona event listeners
+            appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) toggleCard(h.closest('.card')); }); // Toggle card ao clicar no header
+            document.querySelectorAll('.card-header').forEach(h=>{h.setAttribute('role','button');h.setAttribute('tabindex','0');h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ') {e.preventDefault();toggleCard(h.closest('.card'));}});}); // Acessibilidade para toggle
+            changeDateBtn?.addEventListener('click',()=>setDateInputVisibility(true)); // Mostrar input de data
+            recordHoursInput?.addEventListener('input',formatTimeInputOnType); // Formatar input de tempo ao digitar
+            planHoursInput?.addEventListener('input',formatTimeInputOnType); // Formatar input de tempo ao digitar
+            recordHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>=0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';}); // Validar/formatar tempo ao sair do campo
+            planHoursInput?.addEventListener('blur',e=>{ const d=parseTimeInputToDecimal(e.target.value); if(!isNaN(d)&&d>0)e.target.value=formatDecimalToTimeInput(d); else if(e.target.value.trim()!=='')e.target.value='';}); // Validar/formatar tempo ao sair do campo
+            recordNotesInput?.addEventListener('input',e=>{if(e.target.value.length>NOTES_MAX_LENGTH){e.target.value=e.target.value.substring(0,NOTES_MAX_LENGTH);showFeedback('feedback.notesLengthLimit','info',{maxLength:NOTES_MAX_LENGTH});}}); // Limitar notas
+            revisitNotesInput?.addEventListener('input', e => { if (e.target.value.length > REVISIT_NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, REVISIT_NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: REVISIT_NOTES_MAX_LENGTH }); } }); // Limitar notas revisita
+            historySearchInput?.addEventListener('input',renderHistory); // Filtrar histórico ao digitar
+            recordForm?.addEventListener('submit',handleRecordSubmit); // Salvar registro
+            planForm?.addEventListener('submit',handlePlanSubmit); // Salvar plano
+            revisitForm?.addEventListener('submit', handleRevisitSubmit); // Salvar revisita
+            clearPlanFormBtn?.addEventListener('click',clearPlanForm); // Limpar form plano
+            clearRevisitFormBtn?.addEventListener('click', clearRevisitForm); // Limpar form revisita
+            saveGoalBtn?.addEventListener('click',handleGoalSave); // Salvar meta
+            monthlyGoalInput?.addEventListener('keypress',e=>{if(e.key==='Enter'){e.preventDefault();handleGoalSave();e.target.blur();}}); // Salvar meta com Enter
+            chartMonthSelector?.addEventListener('change',updateAllDisplays); // Atualizar gráfico ao mudar mês
+            clearAllDataBtn?.addEventListener('click',handleClearAllData); // Limpar todos os dados
+            dialogConfirmBtn?.addEventListener('click',()=>{if(typeof currentConfirmCallback==='function')currentConfirmCallback(); hideConfirmationDialog();}); // Botão confirmar diálogo
+            dialogCancelBtn?.addEventListener('click',hideConfirmationDialog); // Botão cancelar diálogo
+            confirmationDialog?.addEventListener('click',e=>{if(e.target===confirmationDialog)hideConfirmationDialog();}); // Fechar diálogo ao clicar fora
+            window.addEventListener('beforeinstallprompt',e=>{e.preventDefault(); deferredInstallPrompt=e; console.log('Install prompt event captured.');}); // Captura evento para instalar PWA
+            // Verifica mudança de data periodicamente
+            if (dateCheckInterval) clearInterval(dateCheckInterval);
+            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000); // A cada 60 segundos
+            // Atualiza toda a interface
+            updateAllDisplays();
+            registerServiceWorker(); // Registra o Service Worker (para PWA offline)
+            // Pede a meta inicial se ainda não foi definida
+            if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) { setTimeout(promptForMonthlyGoal, 600); }
+            // Esconde indicador de loading
+            if (loadingIndicator) loadingIndicator.classList.add('hidden');
+            console.log("App initialization complete.");
 
-        })();
-    </script>
+        })();
+    </script>
 
 </body>
 </html>
