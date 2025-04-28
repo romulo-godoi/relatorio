@@ -1,6 +1,6 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-const CACHE_NAME = 'pioneer-tracker-cache-v2.6';
+const CACHE_NAME = 'pioneer-tracker-cache-v2.7';
 const offlineFallbackPage = './index.html';
 
 const urlsToCache = [
