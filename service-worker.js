@@ -2,7 +2,7 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
 // Define um nome e versão para o cache
-const CACHE_NAME = 'pioneer-tracker-cache-v2.4'; // <-- Incremente a versão se fizer mudanças significativas
+const CACHE_NAME = 'pioneer-tracker-cache-v2.5'; // <-- Incremente a versão se fizer mudanças significativas
 
 // Define a página principal como fallback offline para navegação
 const offlineFallbackPage = './index.html'; // Ou apenas './' se index.html for a raiz
