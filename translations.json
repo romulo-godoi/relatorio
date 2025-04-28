@@ -47,7 +47,8 @@
       "listPlaceholderNoPending": "Nenhuma revisita pendente.",
       "addedOnLabel": "Add. em",
       "scheduledForLabel": "Agendado p/",
-      "markCompleteButton": "Concluir"
+      "markCompleteButton": "Concluir",
+      "noNotes": "Sem anotações" // Chave adicionada
     },
     "planCard": {
       "title": "Planejar Horas",
@@ -103,6 +104,11 @@
     },
     "settingsCard": {
       "title": "Ajustes",
+      "notificationsLabel": "Notificações", // Adicionada chave faltante
+      "enableNotificationsButton": "Ativar Notificações", // Adicionada chave faltante
+      "notificationsStatusDefault": "Permissão não solicitada.", // Adicionada chave faltante
+      "notificationsStatusGranted": "Notificações ativadas.", // Adicionada chave faltante
+      "notificationsStatusDenied": "Notificações bloqueadas.", // Adicionada chave faltante
       "clearDataButton": "Limpar Todos Dados",
       "clearDataWarning": "Aviso: Apaga TUDO (registros, planos, revisitas, meta) PERMANENTEMENTE. Irreversível."
     },
@@ -137,7 +143,13 @@
       "revisitSavedSuccess": "Revisita salva.",
       "revisitNotFound": "Revisita não encontrada.",
       "revisitMarkedCompleteSuccess": "Revisita concluída.",
-      "revisitDeletedSuccess": "Revisita excluída."
+      "revisitDeletedSuccess": "Revisita excluída.",
+      "notificationsNotSupported": "Notificações não suportadas.", // Adicionada chave faltante
+      "notificationsAlreadyGranted": "Notificações já permitidas.", // Adicionada chave faltante
+      "notificationsDenied": "Notificações bloqueadas.", // Adicionada chave faltante
+      "notificationsGranted": "Notificações permitidas!", // Adicionada chave faltante
+      "notificationsNotGranted": "Permissão não concedida.", // Adicionada chave faltante
+      "notificationError": "Erro ao mostrar notificação." // Adicionada chave faltante
     },
     "common": {
       "editButton": "Editar",
@@ -169,6 +181,11 @@
       "nextPrefix": "Próx.",
       "monthNames": ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
       "weekdaysShort": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
+    },
+    "notifications": { // Adicionada seção faltante
+        "dailyTitle": "Compromissos Hoje",
+        "todayRevisitsPrefix": "Revisitas: ",
+        "todayRevisitsSuffix": " e +{count}."
     }
   },
   "en": {
@@ -219,7 +236,8 @@
       "listPlaceholderNoPending": "No pending revisits.",
       "addedOnLabel": "Added",
       "scheduledForLabel": "Scheduled",
-      "markCompleteButton": "Complete"
+      "markCompleteButton": "Complete",
+      "noNotes": "No notes" // Chave adicionada
     },
     "planCard": {
       "title": "Plan Hours",
@@ -275,6 +293,11 @@
     },
     "settingsCard": {
       "title": "Settings",
+      "notificationsLabel": "Notifications", // Adicionada chave faltante
+      "enableNotificationsButton": "Enable Notifications", // Adicionada chave faltante
+      "notificationsStatusDefault": "Permission not requested.", // Adicionada chave faltante
+      "notificationsStatusGranted": "Notifications enabled.", // Adicionada chave faltante
+      "notificationsStatusDenied": "Notifications blocked.", // Adicionada chave faltante
       "clearDataButton": "Clear All Data",
       "clearDataWarning": "Warning: Deletes ALL data (records, plans, revisits, goal) PERMANENTLY. Irreversible."
     },
@@ -309,7 +332,13 @@
       "revisitSavedSuccess": "Revisit saved.",
       "revisitNotFound": "Revisit not found.",
       "revisitMarkedCompleteSuccess": "Revisit completed.",
-      "revisitDeletedSuccess": "Revisit deleted."
+      "revisitDeletedSuccess": "Revisit deleted.",
+      "notificationsNotSupported": "Notifications not supported.", // Adicionada chave faltante
+      "notificationsAlreadyGranted": "Notifications already allowed.", // Adicionada chave faltante
+      "notificationsDenied": "Notifications blocked.", // Adicionada chave faltante
+      "notificationsGranted": "Notifications allowed!", // Adicionada chave faltante
+      "notificationsNotGranted": "Permission not granted.", // Adicionada chave faltante
+      "notificationError": "Error showing notification." // Adicionada chave faltante
     },
     "common": {
       "editButton": "Edit",
@@ -341,6 +370,11 @@
       "nextPrefix": "Next",
       "monthNames": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    },
+    "notifications": { // Adicionada seção faltante
+        "dailyTitle": "Commitments Today",
+        "todayRevisitsPrefix": "Revisits: ",
+        "todayRevisitsSuffix": " and +{count} more."
     }
   },
   "es": {
@@ -391,7 +425,8 @@
       "listPlaceholderNoPending": "Ninguna revisita pendiente.",
       "addedOnLabel": "Añad. el",
       "scheduledForLabel": "Program. para",
-      "markCompleteButton": "Completar"
+      "markCompleteButton": "Completar",
+      "noNotes": "Sin notas" // Chave adicionada
     },
     "planCard": {
       "title": "Planificar Horas",
@@ -447,6 +482,11 @@
     },
     "settingsCard": {
       "title": "Ajustes",
+      "notificationsLabel": "Notificaciones", // Adicionada chave faltante
+      "enableNotificationsButton": "Activar Notificaciones", // Adicionada chave faltante
+      "notificationsStatusDefault": "Permiso no solicitado.", // Adicionada chave faltante
+      "notificationsStatusGranted": "Notificaciones activadas.", // Adicionada chave faltante
+      "notificationsStatusDenied": "Notificaciones bloqueadas.", // Adicionada chave faltante
       "clearDataButton": "Borrar Todos Datos",
       "clearDataWarning": "Aviso: Borra TODO (registros, planes, revisitas, meta) PERMANENTEMENTE. Irreversible."
     },
@@ -481,7 +521,13 @@
       "revisitSavedSuccess": "Revisita guardada.",
       "revisitNotFound": "Revisita no encontrada.",
       "revisitMarkedCompleteSuccess": "Revisita completada.",
-      "revisitDeletedSuccess": "Revisita eliminada."
+      "revisitDeletedSuccess": "Revisita eliminada.",
+      "notificationsNotSupported": "Notificaciones no soportadas.", // Adicionada chave faltante
+      "notificationsAlreadyGranted": "Notificaciones ya permitidas.", // Adicionada chave faltante
+      "notificationsDenied": "Notificaciones bloqueadas.", // Adicionada chave faltante
+      "notificationsGranted": "¡Notificaciones permitidas!", // Adicionada chave faltante
+      "notificationsNotGranted": "Permiso no concedido.", // Adicionada chave faltante
+      "notificationError": "Error al mostrar notificación." // Adicionada chave faltante
     },
     "common": {
       "editButton": "Editar",
@@ -513,6 +559,11 @@
       "nextPrefix": "Próx.",
       "monthNames": ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
       "weekdaysShort": ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+    },
+    "notifications": { // Adicionada seção faltante
+        "dailyTitle": "Compromisos Hoy",
+        "todayRevisitsPrefix": "Revisitas: ",
+        "todayRevisitsSuffix": " y +{count} más."
     }
   },
   "de": {
@@ -563,7 +614,8 @@
         "listPlaceholderNoPending": "Keine offenen Rückbesuche.",
         "addedOnLabel": "Hinzug. am",
         "scheduledForLabel": "Geplant für",
-        "markCompleteButton": "Abschließen"
+        "markCompleteButton": "Abschließen",
+        "noNotes": "Keine Notizen" // Chave adicionada
     },
     "planCard": {
       "title": "Stunden planen",
@@ -619,6 +671,11 @@
     },
     "settingsCard": {
       "title": "Einstellungen",
+      "notificationsLabel": "Benachrichtigungen", // Adicionada chave faltante
+      "enableNotificationsButton": "Benachrichtigungen aktivieren", // Adicionada chave faltante
+      "notificationsStatusDefault": "Berechtigung nicht angefordert.", // Adicionada chave faltante
+      "notificationsStatusGranted": "Benachrichtigungen aktiviert.", // Adicionada chave faltante
+      "notificationsStatusDenied": "Benachrichtigungen blockiert.", // Adicionada chave faltante
       "clearDataButton": "Alle Daten löschen",
       "clearDataWarning": "Achtung: Löscht ALLE Daten (Berichte, Pläne, Rückbesuche, Ziel) ENDGÜLTIG. Unumkehrbar."
     },
@@ -653,7 +710,13 @@
       "revisitSavedSuccess": "Rückbesuch gespeichert.",
       "revisitNotFound": "Rückbesuch nicht gefund.",
       "revisitMarkedCompleteSuccess": "Rückbesuch abgeschlossen.",
-      "revisitDeletedSuccess": "Rückbesuch gelöscht."
+      "revisitDeletedSuccess": "Rückbesuch gelöscht.",
+      "notificationsNotSupported": "Benachrichtigungen nicht unterstützt.", // Adicionada chave faltante
+      "notificationsAlreadyGranted": "Benachrichtigungen bereits erlaubt.", // Adicionada chave faltante
+      "notificationsDenied": "Benachrichtigungen blockiert.", // Adicionada chave faltante
+      "notificationsGranted": "Benachrichtigungen erlaubt!", // Adicionada chave faltante
+      "notificationsNotGranted": "Berechtigung nicht erteilt.", // Adicionada chave faltante
+      "notificationError": "Fehler beim Anzeigen der Benachrichtigung." // Adicionada chave faltante
     },
     "common": {
       "editButton": "Bearbeiten",
@@ -685,6 +748,11 @@
       "nextPrefix": "Nächst.",
       "monthNames": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
       "weekdaysShort": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+    },
+     "notifications": { // Adicionada seção faltante
+        "dailyTitle": "Termine Heute",
+        "todayRevisitsPrefix": "Rückbesuche: ",
+        "todayRevisitsSuffix": " und +{count} weitere."
     }
   },
   "fr": {
@@ -735,7 +803,8 @@
         "listPlaceholderNoPending": "Aucune N.V. pendante.",
         "addedOnLabel": "Ajouté",
         "scheduledForLabel": "Planifié",
-        "markCompleteButton": "Terminer"
+        "markCompleteButton": "Terminer",
+        "noNotes": "Pas de notes" // Chave adicionada
     },
     "planCard": {
       "title": "Planifier Heures",
@@ -791,6 +860,11 @@
     },
     "settingsCard": {
       "title": "Paramètres",
+      "notificationsLabel": "Notifications", // Adicionada chave faltante
+      "enableNotificationsButton": "Activer les notifications", // Adicionada chave faltante
+      "notificationsStatusDefault": "Autorisation non demandée.", // Adicionada chave faltante
+      "notificationsStatusGranted": "Notifications activées.", // Adicionada chave faltante
+      "notificationsStatusDenied": "Notifications bloquées.", // Adicionada chave faltante
       "clearDataButton": "Effacer Toutes Données",
       "clearDataWarning": "Avert.: Supprime TOUT (rapports, plans, N.V., objectif) DÉFINITIVEMENT. Irréversible."
     },
@@ -825,7 +899,13 @@
       "revisitSavedSuccess": "N. Visite enregistrée.",
       "revisitNotFound": "N. Visite non trouvée.",
       "revisitMarkedCompleteSuccess": "N. Visite terminée.",
-      "revisitDeletedSuccess": "N. Visite supprimée."
+      "revisitDeletedSuccess": "N. Visite supprimée.",
+      "notificationsNotSupported": "Notifications non prises en charge.", // Adicionada chave faltante
+      "notificationsAlreadyGranted": "Notifications déjà autorisées.", // Adicionada chave faltante
+      "notificationsDenied": "Notifications bloquées.", // Adicionada chave faltante
+      "notificationsGranted": "Notifications autorisées !", // Adicionada chave faltante
+      "notificationsNotGranted": "Autorisation non accordée.", // Adicionada chave faltante
+      "notificationError": "Erreur d'affichage de la notification." // Adicionada chave faltante
     },
     "common": {
       "editButton": "Modifier",
@@ -857,6 +937,11 @@
       "nextPrefix": "Proch.",
       "monthNames": ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
       "weekdaysShort": ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
+    },
+    "notifications": { // Adicionada seção faltante
+        "dailyTitle": "Engagements Aujourd'hui",
+        "todayRevisitsPrefix": "N. Visites : ",
+        "todayRevisitsSuffix": " et +{count} autres."
     }
   }
 }
