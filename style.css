@@ -30,10 +30,12 @@
     /* Variável para o progresso (será atualizada via JS) */
     --progress-percent: 0;
 
-     /* Cores para animação de fundo */
-    --celebrate-color-1: #a8e063;
-    --celebrate-color-2: #56ab2f;
-    --celebrate-color-3: #84fab0;
+     /* Cores para animação de fundo "Goal Met" */
+    --celebrate-color-1: #fbc531; /* Amarelo */
+    --celebrate-color-2: #e84118; /* Laranja/Vermelho */
+    --celebrate-color-3: #4cd137; /* Verde */
+    --celebrate-color-4: #487eb0; /* Azul */
+    --celebrate-color-5: #9c88ff; /* Roxo */
 }
 
 /* Reset Básico e Estilos Globais */
@@ -99,7 +101,7 @@ h1 { display: none; }
         var(--progress-bar-color) calc(var(--progress-percent) * 1%),
         var(--progress-track-color) calc(var(--progress-percent) * 1%)
     );
-    transition: background-image 0.5s ease-out, opacity 0.3s ease-out;
+    transition: background-image 0.5s ease-out, opacity 0.4s ease-out; /* Transição suave */
     opacity: 1;
 }
 
@@ -111,38 +113,36 @@ h1 { display: none; }
     background: var(--card-bg);
     z-index: -1;
     border-radius: calc(var(--border-radius) - var(--dashboard-border-thickness));
-    transition: opacity 0.3s ease-out, background-color 0.5s ease-out; /* Adiciona transição de cor */
+    transition: opacity 0.4s ease-out, background 0.5s ease-out; /* Transição suave */
     opacity: 1;
 }
 
 /* Estilos quando a meta for atingida */
 #dashboard-box.goal-met {
-    /* O fundo principal não muda, a animação acontece no ::after */
+    /* Mantém o fundo base, a animação ocorre no ::after */
     background-color: var(--card-bg);
 }
-/* Esconde a borda */
+/* Esconde a borda instantaneamente */
 #dashboard-box.goal-met::before {
     opacity: 0;
-    transition-delay: 0s;
+    transition: opacity 0.1s linear; /* Desaparecimento rápido */
 }
-/* Anima o fundo da máscara interna */
+/* Anima o fundo da máscara interna com gradiente festivo */
 #dashboard-box.goal-met::after {
-    opacity: 1; /* Mantém a máscara visível */
-    background: repeating-linear-gradient(
-        -45deg,
-        var(--success-color-darker),
-        var(--success-color-darker) 15px,
-        var(--celebrate-color-1) 15px,
-        var(--celebrate-color-1) 30px,
-        var(--celebrate-color-3) 30px,
-        var(--celebrate-color-3) 45px
+    opacity: 1; /* Mantém a máscara visível para o fundo animado */
+    background: linear-gradient(135deg,
+        var(--celebrate-color-1) 0%,
+        var(--celebrate-color-3) 25%,
+        var(--celebrate-color-4) 50%,
+        var(--celebrate-color-5) 75%,
+        var(--celebrate-color-2) 100%
     );
-    background-size: 200% 200%; /* Tamanho maior para animação */
-    animation: celebrate-bg 5s linear infinite;
+    background-size: 400% 400%; /* Tamanho grande para animação suave */
+    animation: celebrate-gradient 8s ease infinite; /* Animação mais longa e suave */
 }
 
-/* Keyframes para a animação de fundo */
-@keyframes celebrate-bg {
+/* Keyframes para a animação de fundo gradiente */
+@keyframes celebrate-gradient {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
@@ -152,19 +152,31 @@ h1 { display: none; }
 #dashboard-box.goal-met .dashboard-label,
 #dashboard-box.goal-met #dashboard-summary,
 #dashboard-box.goal-met #dashboard-plan-list li {
-    color: rgba(255, 255, 255, 0.85); /* Texto secundário mais claro */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para legibilidade */
+    color: rgba(0, 0, 0, 0.7); /* Texto escuro para contraste com fundo claro/colorido */
+    text-shadow: none; /* Remove sombra */
 }
-#dashboard-box.goal-met .dashboard-value,
-#dashboard-box.goal-met #dashboard-summary strong,
-#dashboard-box.goal-met #dashboard-plan-list li strong,
-#dashboard-box.goal-met #dashboard-month-percentage {
-    color: var(--text-color); /* Texto principal branco */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para legibilidade */
+#dashboard-box.goal-met .dashboard-value, /* Valor principal (horas semana) */
+#dashboard-box.goal-met #dashboard-month-total strong, /* Valor total mes */
+#dashboard-box.goal-met #dashboard-plan-list li strong {
+    color: rgba(0, 0, 0, 0.9); /* Texto escuro forte */
+    text-shadow: none;
 }
-#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value strong {
-     color: rgba(255, 255, 255, 0.9);
-     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+#dashboard-box.goal-met #dashboard-month-percentage { /* Porcentagem */
+     color: #000000; /* Preto para destaque máximo */
+     font-weight: 700; /* Mais negrito */
+     text-shadow: none;
+}
+#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value strong { /* Data revisita */
+     color: rgba(0, 0, 0, 0.8);
+     text-shadow: none;
+}
+#dashboard-box.goal-met #dashboard-forecast { /* Texto da previsão */
+     color: rgba(0, 0, 0, 0.7);
+     text-shadow: none;
+}
+#dashboard-box.goal-met #dashboard-forecast strong { /* Valor na previsão */
+     color: rgba(0, 0, 0, 0.9);
+     text-shadow: none;
 }
 
 
