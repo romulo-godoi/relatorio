@@ -70,26 +70,28 @@ h1 { display: none; } /* Título principal oculto, usando o <title> */
     margin-bottom: 20px;
     display: flex;
     flex-direction: column; /* Empilha no mobile */
-    align-items: stretch; /* Estica itens para largura total */
+    align-items: center; /* Centraliza os itens horizontalmente */
     gap: 20px; /* Espaço entre itens empilhados */
 }
 .dashboard-item {
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alinha texto à esquerda por padrão */
-    text-align: left;
-    flex: 1; /* Ocupa espaço disponível */
+    width: 100%; /* Faz o item ocupar a largura disponível antes de centralizar */
+    align-items: flex-start; /* Alinha conteúdo interno à esquerda */
+    text-align: left; /* Alinha texto interno à esquerda */
+    flex: 1; /* Ocupa espaço vertical disponível */
 }
 .dashboard-item--progress {
-    align-items: center; /* Centraliza o anel de progresso */
+    /* align-items: center; */ /* Não é mais necessário aqui, o pai centraliza */
     min-height: 110px;
+    width: auto; /* Permite que o item do progresso tenha sua largura natural */
 }
 .dashboard-item--progress-container { /* Container para o anel SVG */
     width: 90px;
     height: 90px;
     position: relative; /* Para posicionar o conteúdo dentro */
-    margin: 5px auto 0 auto; /* Centraliza e adiciona margem superior */
+    margin: 5px auto 0 auto; /* Centraliza o container do anel */
 }
 .progress-ring {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -263,26 +265,42 @@ h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-second
 
     #dashboard-box {
         flex-direction: row; /* Coloca itens lado a lado */
-        align-items: flex-start; /* Alinha itens no topo */
+        align-items: center; /* Centraliza verticalmente os itens */
         gap: 30px; /* Aumenta o espaço entre os itens */
         padding: 20px var(--card-padding);
     }
 
     .dashboard-item {
         flex: 1 1 0; /* Permite que cresçam e encolham */
+        align-items: center; /* Centraliza o conteúdo interno por padrão */
+        text-align: center; /* Centraliza o texto por padrão */
+        width: auto; /* Reseta a largura para o flexbox controlar */
     }
     .dashboard-item:first-child { /* Item da esquerda (texto) */
         flex-basis: 60%; /* Dá mais espaço para o texto */
         max-width: 60%;
+        align-items: center; /* Garante alinhamento central */
     }
      .dashboard-item--progress { /* Item da direita (progresso) */
         flex-basis: 40%;
         max-width: 40%;
-        align-items: center; /* Centraliza o anel */
+        align-items: center; /* Garante alinhamento central */
         min-height: 150px; /* Aumenta altura mínima */
     }
+    /* Ajustes para elementos específicos dentro do item esquerdo para manter alinhamento à esquerda se necessário */
+    .dashboard-item:first-child .dashboard-label,
+    .dashboard-item:first-child #dashboard-summary,
+    .dashboard-item:first-child #dashboard-revisits-section,
+    .dashboard-item:first-child #dashboard-planned-dates {
+        width: 100%; /* Ocupa toda a largura disponível */
+        text-align: center; /* Centraliza o texto desses blocos */
+    }
+    .dashboard-item:first-child #dashboard-plan-list {
+        text-align: center; /* Centraliza itens da lista de planos */
+        padding-left: 0; /* Remove padding esquerdo se houver */
+    }
     .dashboard-item--progress-container {
-         margin: 15px auto 0 auto; /* Ajusta margem */
+         margin: 0 auto; /* Centraliza o container do anel */
     }
 
      /* Ajusta grid do formulário de registro para 2 colunas */
