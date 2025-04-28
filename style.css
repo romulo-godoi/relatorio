@@ -1,288 +1,354 @@
-/* --- Variáveis Globais --- */
 :root {
+    /* Variáveis de Cores e Estilos */
     --system-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --primary-color: #0A84FF;
     --secondary-color: #000000; /* Fundo principal */
-    --card-bg: #1c1c1e;         /* Fundo dos cards */
-    --input-bg: #2c2c2e;        /* Fundo dos inputs */
-    --text-color: #ffffff;         /* Texto principal */
-    --text-color-secondary: rgba(235, 235, 245, 0.6); /* Texto secundário */
-    --border-color: #3a3a3c;       /* Cor das bordas */
-    --shadow-color: rgba(0, 0, 0, 0.4); /* Sombra um pouco mais forte */
-    --danger-color: #FF453A;
-    --success-color: #30D158;
-    --placeholder-color: rgba(235, 235, 245, 0.3);
-    --dialog-backdrop: rgba(0, 0, 0, 0.7);
-    --progress-track-color: #38383a;
-    --progress-bar-color: var(--success-color);
-    --avg-line-color-1: #FF9F0A;
-    --avg-line-color-2: #AF52DE;
-    --avg-line-color-3: #5E5CE6;
+    --card-bg: #1c1c1e; /* Fundo dos cards */
+    --input-bg: #2c2c2e; /* Fundo dos inputs */
+    --text-color: #ffffff; /* Cor do texto principal */
+    --text-color-secondary: rgba(235, 235, 245, 0.6); /* Cor do texto secundário/labels */
+    --border-color: #3a3a3c; /* Cor das bordas/separadores */
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --danger-color: #FF453A; /* Cor para ações destrutivas */
+    --success-color: #30D158; /* Cor para ações de sucesso */
+    --placeholder-color: rgba(235, 235, 245, 0.3); /* Cor do placeholder */
+    --dialog-backdrop: rgba(0, 0, 0, 0.7); /* Fundo do diálogo modal */
+    --progress-track-color: #38383a; /* Cor de fundo da barra/anel de progresso */
+    --progress-bar-color: var(--success-color); /* Cor da barra/anel de progresso */
+    --chart-color-1: #0A84FF; --chart-color-2: #30D158; --chart-color-3: #FF9F0A; --chart-color-4: #AF52DE;
+    --chart-color-5: #5E5CE6; --chart-color-6: #FF69B4; --chart-color-7: #32CD32; --chart-color-8: #FFD700;
     --font-family: var(--system-font);
-    --border-radius: 12px; /* Aumenta levemente */
-    --card-padding: 18px;  /* Padding base mobile */
-    --outer-padding: 15px; /* Padding base mobile */
+    --border-radius: 10px; /* Raio da borda padrão */
+    --card-padding: 18px; /* Padding interno dos cards */
+    --outer-padding: 15px; /* Padding externo do body */
     --transition-speed: 0.3s;
     --transition-speed-fast: 0.1s;
     --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
 }
 
-/* --- Reset e Base --- */
+/* Reset Básico e Estilos Globais */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
+html, body { height: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); } /* Remove highlight azul no toque (iOS) */
 body {
-    font-family: var(--font-family); background-color: var(--secondary-color);
-    color: var(--text-color); line-height: 1.5; padding: var(--outer-padding);
-    overscroll-behavior-y: contain; -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; font-size: 16px;
+    font-family: var(--font-family);
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    padding: var(--outer-padding);
+    overscroll-behavior-y: contain; /* Evita pull-to-refresh indesejado */
+    -webkit-font-smoothing: antialiased; /* Melhora renderização de fontes */
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
 }
-h1 { display: none; }
 
-/* --- Dashboard (Base Mobile) --- */
+/* Placeholder para chaves de tradução (evita mostrar a chave antes da tradução) */
+[data-translate-key]::before { content: ""; }
+
+/* Indicador de Carregamento */
+#loading-indicator {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
+    z-index: 9999; color: white; font-size: 1.2em; transition: opacity 0.3s ease-out;
+}
+#loading-indicator.hidden { opacity: 0; pointer-events: none; }
+
+/* Layout Principal do App */
+#app {
+    max-width: 700px; /* Largura máxima padrão (mobile-first) */
+    margin: 0 auto; /* Centraliza o container */
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaçamento entre os cards */
+}
+h1 { display: none; } /* Título principal oculto, usando o <title> */
+
+/* --- Dashboard Box --- */
 #dashboard-box {
-    background-color: var(--card-bg); border-radius: var(--border-radius);
-    padding: var(--card-padding); margin-bottom: 20px; display: flex;
-    flex-wrap: wrap; justify-content: space-between; align-items: center;
-    gap: 20px; border: 1px solid var(--border-color);
-    box-shadow: 0 4px 10px var(--shadow-color); /* Sombra no dashboard */
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 15px var(--card-padding);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* Empilha no mobile */
+    align-items: stretch; /* Estica itens para largura total */
+    gap: 20px; /* Espaço entre itens empilhados */
 }
-#dashboard-box > .dashboard-item:first-child {
-    flex-grow: 1; flex-basis: 60%; order: 1; align-self: flex-start;
-    display: flex; flex-direction: column; gap: 8px; text-align: left;
+.dashboard-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinha texto à esquerda por padrão */
+    text-align: left;
+    flex: 1; /* Ocupa espaço disponível */
 }
-#dashboard-week-hours { font-size: 1.8em; margin-bottom: 5px; line-height: 1.2; color: var(--primary-color); }
-#dashboard-summary { margin-top: 8px; font-size: 0.9em; line-height: 1.4; width: 100%; color: var(--text-color-secondary);}
-#dashboard-summary strong { color: var(--text-color); }
-#dashboard-summary span { display: block; margin-bottom: 4px; }
-#dashboard-planned-dates { margin-top: 12px; width: 100%; }
-#dashboard-planned-dates .dashboard-label { font-weight: 500; color: var(--text-color);}
-#dashboard-plan-list { list-style: none; padding: 0; margin: 5px 0 0 0; font-size: 0.85em; line-height: 1.5; max-height: 65px; overflow: hidden; }
-#dashboard-plan-list li { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#dashboard-plan-list li strong { color: var(--text-color); }
-#dashboard-plan-list .plan-warning, .plan-past-date-indicator { font-size: 0.9em; margin-left: 6px; opacity: 0.75; color: var(--avg-line-color-1); /* Amarelo/Laranja para alerta */ }
-#dashboard-plan-list .plan-warning { font-style: italic; }
-/* Progresso */
-.dashboard-item--progress { order: 2; flex-basis: 95px; height: 95px; position: relative; align-self: center; }
-.progress-ring { width: 100%; height: 100%; transform: rotate(-90deg); position: absolute; top:0; left: 0; }
-.progress-ring__circle { fill: none; stroke-width: 7; /* Mais espesso */ transition: stroke-dashoffset 0.5s ease-out; }
+.dashboard-item--progress {
+    align-items: center; /* Centraliza o anel de progresso */
+    min-height: 110px;
+}
+.dashboard-item--progress-container { /* Container para o anel SVG */
+    width: 90px;
+    height: 90px;
+    position: relative; /* Para posicionar o conteúdo dentro */
+    margin: 5px auto 0 auto; /* Centraliza e adiciona margem superior */
+}
+.progress-ring {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    transform: rotate(-90deg);
+}
+.progress-ring__circle { fill: none; stroke-width: 5; transition: stroke-dashoffset 0.5s ease-out; }
 .progress-ring__bg { stroke: var(--progress-track-color); }
 .progress-ring__fg { stroke: var(--progress-bar-color); stroke-linecap: round; }
-.dashboard-item--progress .dashboard-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;}
-#dashboard-month-percentage { font-size: 1.8em; font-weight: 600; line-height: 1; color: var(--text-color); margin-bottom: 2px;}
-.dashboard-item--progress .dashboard-label { font-size: 0.7em; color: var(--text-color-secondary);}
+.dashboard-item--progress .dashboard-content {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+#dashboard-month-percentage {
+    font-size: 1.6em; color: var(--text-color); margin-bottom: 0; font-weight: 600;
+}
+.dashboard-item--progress .dashboard-label { /* Label abaixo da porcentagem */
+    margin-top: 2px; margin-bottom: 0; font-size: 0.65em; text-align: center; width: 100%;
+}
+.dashboard-label { /* Labels gerais do dashboard */
+    font-size: 0.85em; color: var(--text-color-secondary); margin-bottom: 4px; display: block;
+}
+.dashboard-value {
+    font-size: 1.4em; font-weight: 500; color: var(--primary-color); line-height: 1.2; margin-bottom: 5px;
+}
+#dashboard-summary {
+    margin-top: 8px; font-size: 0.85em; color: var(--text-color-secondary); line-height: 1.35; margin-bottom: 10px;
+}
+#dashboard-summary strong { color: var(--text-color); font-weight: 500; }
+#dashboard-summary span { display: block; margin-bottom: 3px;}
+#dashboard-revisits-section, #dashboard-planned-dates { margin-top: 15px; width: 100%; }
+#dashboard-revisits-section .dashboard-label, #dashboard-planned-dates .dashboard-label { margin-bottom: 2px; }
+#dashboard-revisits-section .dashboard-value { font-size: 1.0em; color: var(--text-color); margin-bottom: 0; line-height: 1.3; }
+#dashboard-revisits-section .dashboard-value strong { color: var(--primary-color); }
+#dashboard-revisits-section .dashboard-value .revisit-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; }
+#dashboard-plan-list { list-style: none; padding: 0; margin: 5px 0 0 0; text-align: left; font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+#dashboard-plan-list::-webkit-scrollbar { width: 4px; }
+#dashboard-plan-list::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 2px; }
+#dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#dashboard-plan-list li strong { color: var(--text-color); }
+#dashboard-plan-list .plan-warning { font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic; }
 
-
-/* --- App Container & Cards (Mobile) --- */
-#app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-.card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; display: flex; flex-direction: column; /* Para height 100% funcionar */ }
-.card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; border-bottom: 1px solid transparent; /* Prepara para borda desktop */ }
-.card-header::after { content: ''; position: absolute; bottom: -1px; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
-.card.expanded .card-header::after { opacity: 0; }
-.card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
-.card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.1em; /* Um pouco menor */ font-weight: 600; pointer-events: none; }
+/* --- Estilos dos Cards --- */
+.card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
+.card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
+/* Linha separadora sutil no header */
+.card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
+.card.expanded .card-header::after { opacity: 0; } /* Esconde linha quando expandido */
+.card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); } /* Efeito hover sutil */
+.card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; }
 .toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
 .card.expanded .toggle-icon { transform: rotate(180deg); }
-.card-content { padding: 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; transition: var(--content-transition); /* Transição no Mobile */}
-.card.expanded .card-content { padding: var(--card-padding); padding-top: 15px; max-height: 1500px; opacity: 1; overflow: visible; margin-top: 0; }
-.card:not(.expanded) .card-content { border-top: none; } /* Remove borda top se fechado */
-.card.expanded .card-content { border-top: 1px solid var(--border-color); }
-
+.card-content { padding: 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
+.card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
 
 /* --- Formulários --- */
 .form-group { margin-bottom: 16px; }
 label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
-input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select { width: 100%; padding: 12px 15px; /* Mais Padding */ border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
-input[type="text"].time-input { font-variant-numeric: tabular-nums; }
+input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px;
+    font-size: 1em; font-family: var(--font-family);
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    appearance: none; -webkit-appearance: none; -moz-appearance: none; /* Remove estilos nativos */
+    background-color: var(--input-bg); color: var(--text-color);
+}
+input[type="text"].time-input { font-variant-numeric: tabular-nums; } /* Alinha números no input de tempo */
+/* Ícone de busca (SVG embutido) */
 input[type="search"] { padding-right: 35px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 16px; }
+/* Ícone 'X' para limpar busca (SVG embutido) */
 input[type="search"]::-webkit-search-cancel-button{ appearance: none; height: 14px; width: 14px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>'); background-size: 14px 14px; cursor: pointer; }
+/* Seta dropdown para select (SVG embutido) */
 select { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 14px center; background-size: 12px 12px; padding-right: 40px; }
-select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); }
-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; opacity: 0.7; }
+select:focus { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230A84FF" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); } /* Muda cor da seta no foco */
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; } /* Estiliza ícone de calendário */
 input::placeholder, textarea::placeholder { color: var(--placeholder-color); opacity: 1; }
-input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); } /* Efeito de foco */
+/* Remove setas de number input */
 input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-textarea { resize: vertical; min-height: 100px; } /* Aumenta altura mínima */
-#record-notes { max-height: 250px; }
+textarea { resize: vertical; min-height: 90px; }
+
+/* Layout do grid para formulário de registro */
+#record-form-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Uma coluna por padrão (mobile) */
+    gap: 15px;
+}
 
 /* --- Botões --- */
-button { background-color: var(--primary-color); color: var(--text-color); border: none; padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease; display: inline-block; margin-right: 8px; margin-top: 10px; width: auto; transform: scale(1); filter: brightness(1); -webkit-user-select: none; user-select: none; }
-button:last-child { margin-right: 0; }
-button:hover { filter: brightness(1.15); }
-button:active { transform: scale(0.95); filter: brightness(0.8); transition-duration: 0.05s; }
+button {
+    background-color: var(--primary-color); color: var(--text-color); border: none;
+    padding: 11px 22px; border-radius: 8px; font-size: 1em; font-weight: 600;
+    cursor: pointer; transition: background-color var(--transition-speed-fast) ease, transform var(--transition-speed-fast) ease, filter var(--transition-speed-fast) ease;
+    display: inline-block; margin-right: 8px; margin-top: 10px; width: auto;
+    transform: scale(1); filter: brightness(1);
+    -webkit-user-select: none; user-select: none; /* Evita seleção de texto no botão */
+}
+button:hover { filter: brightness(1.15); } /* Efeito hover */
+button:active { transform: scale(0.95); filter: brightness(0.8); transition-duration: 0.05s; } /* Efeito ao clicar */
 button.secondary { background-color: var(--input-bg); color: var(--primary-color); border: 1px solid var(--border-color); } button.secondary:hover { background-color: #3a3a3c; filter: none; } button.secondary:active { background-color: #48484a; transform: scale(0.96); filter: brightness(1); }
 button.success { background-color: var(--success-color); color: var(--text-color); } button.success:hover { filter: brightness(1.15); } button.success:active { transform: scale(0.95); filter: brightness(0.8); }
-button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { filter: brightness(1.15); } button.danger:active { transform: scale(0.96); filter: brightness(0.85); }
-#record-form .text-center, #plan-form .text-center { margin-top: 20px; }
-#record-form .text-center button, #plan-form .text-center button { width: auto; margin-right: 8px; }
-#record-form .text-center button:last-child { margin-right: 0; }
-.change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; font-weight: normal; display: inline; } .change-date-button:hover { text-decoration: underline; filter: none; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
+button.danger { background-color: var(--danger-color); color: var(--text-color); } button.danger:hover { background-color: #ff3b30; filter: brightness(1.15); } button.danger:active { background-color: #E0352D; transform: scale(0.96); filter: brightness(0.85); }
+/* Botões dentro de .text-center */
+.text-center button { width: auto; margin-right: 8px; }
+.text-center button:last-child { margin-right: 0; }
+/* Botão para mudar data */
+.change-date-button { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 0.9em; padding: 5px 0; margin-left: 5px; text-align: left; width: auto; margin-right: 0; margin-top: 0; } .change-date-button:hover { text-decoration: underline; } .change-date-button:active { transform: scale(0.95); filter: brightness(0.8); }
 
 /* --- Estatísticas --- */
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Mais estreito para caber mais */ gap: 12px; text-align: center; margin-top: 15px;}
-.stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;}
-.stat-value { font-size: 1.9em; /* Maior */ font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; line-height: 1.1;}
-.stat-label { font-size: 0.8em; /* Menor */ color: var(--text-color-secondary); line-height: 1.2;}
-.progress-bar-container { background-color: var(--border-color); border-radius: 5px; overflow: hidden; height: 8px; margin-top: 8px; width: 80%; /* Barra não ocupa 100% */ }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; text-align: center; margin-top: 10px;}
+.stat-item { background-color: var(--input-bg); padding: 16px 12px; border-radius: 8px; }
+.stat-value { font-size: 1.7em; font-weight: 600; color: var(--text-color); display: block; margin-bottom: 2px; }
+.stat-label { font-size: 0.85em; color: var(--text-color-secondary); }
+.progress-bar-container { background-color: var(--border-color); border-radius: 5px; overflow: hidden; height: 8px; margin-top: 8px; }
 .progress-bar { background-color: var(--progress-bar-color); height: 100%; width: 0; transition: width var(--transition-speed) ease-out; }
 
-/* --- Histórico & Listas (Planejamento) --- */
-#history-controls { margin-bottom: 15px; display: flex; gap: 10px; padding: 0; }
+/* --- Histórico --- */
+#history-controls { margin-bottom: 15px; display: flex; gap: 10px; padding: 0 var(--card-padding) }
 .history-search-input { flex-grow: 1; }
-#showing-results-label { font-size: 0.85em; color: var(--text-color-secondary); margin-top: 5px; display: block; text-align: right; padding: 0 5px 5px 5px ; min-height: 1.2em;}
-.data-list { list-style: none; padding: 0; max-height: 400px; overflow-y: auto; margin-top: 0; }
+#showing-results-label { font-size: 0.85em; color: var(--text-color-secondary); margin-top: 5px; display: block; text-align: right; padding: 0 var(--card-padding) 5px var(--card-padding) ; min-height: 1.2em;}
+.data-list { list-style: none; padding: 0; max-height: 400px; overflow-y: auto; margin-top: 0; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+.data-list::-webkit-scrollbar { width: 5px; }
+.data-list::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 3px; }
 .data-list li { background-color: transparent; border-bottom: 1px solid var(--border-color); padding: 14px var(--card-padding); margin: 0; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; transition: background-color var(--transition-speed-fast) ease; }
 .data-list li:last-child { border-bottom: none; }
 .data-list li:hover { background-color: rgba(255, 255, 255, 0.02); }
-.entry-details { font-size: 0.95em; flex-grow: 1; margin-right: 10px; line-height: 1.4; padding-bottom: 5px; word-wrap: break-word; overflow-wrap: break-word; }
+.entry-details { font-size: 0.95em; flex-grow: 1; margin-right: 10px; line-height: 1.4; padding-bottom: 5px; word-break: break-word; /* Quebra palavras longas */ }
 .entry-details strong { color: var(--text-color); font-weight: 500; }
-.entry-details .hours { color: var(--primary-color); font-weight: 600; margin: 0 5px; }
-.entry-details .tag-badge { display: inline-block; background-color: var(--input-bg); color: var(--text-color-secondary); font-size: 0.75em; padding: 2px 6px; border-radius: 5px; margin-left: 8px; vertical-align: middle; }
-.entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 4.5em; overflow: hidden; }
-.entry-actions, .plan-actions { flex-shrink: 0; align-self: center; }
-.entry-actions button, .plan-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 5px; width: auto; border-radius: 6px; }
-.plan-actions button { margin-top: 5px; }
-.entry-actions button.secondary, .plan-actions button.secondary { background-color: #3a3a3c; }
+.entry-details .hours { color: var(--primary-color); font-weight: 600; margin-left: 5px; margin-right: 5px; white-space: nowrap; }
+.entry-details .tag-badge { display: inline-block; background-color: var(--input-bg); color: var(--text-color-secondary); font-size: 0.75em; padding: 2px 6px; border-radius: 5px; margin-left: 8px; vertical-align: middle; white-space: nowrap; }
+.entry-details .notes-preview { color: var(--text-color-secondary); font-size: 0.9em; display: block; margin-top: 5px; white-space: normal; overflow-wrap: break-word; max-height: 4.5em; /* Limita altura das notas */ overflow: hidden; }
+.entry-details .revisit-completed-marker { display: inline-block; background-color: var(--success-color); color: var(--text-color); font-size: 0.7em; font-weight: 600; padding: 2px 5px; border-radius: 4px; margin-right: 8px; vertical-align: middle; text-transform: uppercase; }
+.entry-details .revisit-scheduled-date { font-size: 0.85em; color: var(--text-color-secondary); margin-left: 8px; }
+.entry-details .revisit-scheduled-date strong { color: var(--primary-color); font-weight: 500; }
+.entry-actions, .plan-actions, .revisit-actions { flex-shrink: 0; align-self: center; margin-left: auto; /* Empurra para a direita */ }
+.entry-actions button, .plan-actions button, .revisit-actions button { padding: 6px 10px; font-size: 0.85em; margin-left: 5px; margin-top: 0; width: auto; border-radius: 6px; }
+.plan-actions button, .revisit-actions button { margin-top: 5px; }
+.entry-actions button.secondary, .plan-actions button.secondary, .revisit-actions button.secondary { background-color: #3a3a3c; }
 
-/* --- Gráficos (SIMPLIFICADO PARA CATEGORIA) --- */
-.chart-container {
-    position: relative;
-    width: 100%;
-    height: 300px; /* Altura padrão mobile/fallback */
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
+/* --- Gráficos --- */
+.chart-container { position: relative; min-height: 300px; max-height: 400px; width: 100%; margin-top: 15px; }
+.chart-summary-text { text-align: center; font-size: 0.95em; font-weight: 500; color: var(--text-color-secondary); margin-bottom: 10px; margin-top: 5px; min-height: 1.3em; padding: 0 var(--card-padding); }
 
-/* --- Dialog --- */
+/* --- Diálogo de Confirmação --- */
 .dialog-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dialog-backdrop); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease; }
 .dialog-backdrop.visible { opacity: 1; visibility: visible; }
 .dialog-content { background-color: #2c2c2e; color: var(--text-color); padding: 25px; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); text-align: center; max-width: 90%; width: 320px; transform: scale(0.95); transition: transform var(--transition-speed) ease; }
 .dialog-backdrop.visible .dialog-content { transform: scale(1); }
 .dialog-content p { margin-bottom: 25px; font-size: 1.05em; line-height: 1.5; }
 .dialog-actions button { width: calc(50% - 5px); margin-top: 0; padding: 10px; font-size: 1em;}
-.dialog-actions button:first-child { margin-right: 5px; }
-.dialog-actions button:last-child { margin-left: 5px; }
 
-/* --- Utilitários --- */
+/* --- Classes Utilitárias --- */
 .hidden { display: none !important; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
 .text-center { text-align: center; }
 .mt-1 { margin-top: 10px; }
 .mt-2 { margin-top: 20px; }
+h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding); }
+.data-list li.placeholder { padding-left: var(--card-padding); color: var(--text-color-secondary); font-style: italic; border-bottom: none; }
 
-/* ================================================= */
-/* === ESTILOS DESKTOP (@media min-width: 992px) === */
-/* ================================================= */
-@media (min-width: 992px) {
+/* --- Media Queries para Telas Maiores (Tablets/Desktops) --- */
+@media (min-width: 768px) {
+    :root {
+        /* Ajusta paddings para telas maiores */
+        --card-padding: 22px;
+        --outer-padding: 25px;
+    }
 
-    /* Globals */
-    :root { --card-padding: 22px; --outer-padding: 28px; }
-    body { font-size: 16px; padding: var(--outer-padding); }
-
-    /* --- Dashboard Desktop Layout --- */
-    #dashboard-box {
-        padding: var(--card-padding) 25px; display: flex; align-items: center; justify-content: space-between;
-        flex-wrap: nowrap; gap: 35px; margin-bottom: var(--outer-padding); text-align: left;
-    }
-    /* Item esquerdo (Infos) */
-    #dashboard-box > .dashboard-item:first-child {
-        order: 1; flex-grow: 1; flex-basis: 0; display: grid;
-        grid-template-columns: auto minmax(160px, auto) minmax(200px, 300px);
-        grid-template-rows: auto; gap: 0 30px; align-items: center;
-    }
-    /* Col 1: Horas Semanais */
-     #dashboard-box > .dashboard-item:first-child > span.dashboard-label:first-of-type { grid-column: 1 / 2; font-size: 0.95em; margin: 0; color: var(--text-color-secondary); }
-     #dashboard-box > .dashboard-item:first-child > span#dashboard-week-hours { grid-column: 1 / 2; grid-row: 2 / 3; font-size: 2.6em; color: var(--primary-color); font-weight: 500; line-height: 1.1; margin: 2px 0 0 0; }
-    /* Col 2: Sumário Mês/Meta */
-    #dashboard-summary {
-        grid-column: 2 / 3; grid-row: 1 / 3; margin: 0; padding: 0 0 0 30px; border: none;
-        border-left: 1px solid var(--border-color); align-self: stretch; display: flex;
-        flex-direction: column; justify-content: center;
-    }
-    #dashboard-summary span { font-size: 0.95em; display: block; margin-bottom: 3px;}
-    #dashboard-summary strong { font-size: 1.05em; }
-    #dashboard-summary > span.dashboard-label { display: none; }
-    /* Col 3: Planos Futuros */
-    #dashboard-planned-dates {
-        grid-column: 3 / 4; grid-row: 1 / 3; margin: 0; padding: 0 0 0 30px; border: none;
-        border-left: 1px solid var(--border-color); align-self: stretch; display: flex;
-        flex-direction: column; justify-content: center;
-    }
-    #dashboard-planned-dates .dashboard-label { font-size: 1em; font-weight: 600; margin:0 0 8px 0; color: var(--text-color);}
-    #dashboard-plan-list { max-height: 70px; font-size: 0.9em; overflow-y: auto; border: none; padding: 0; width: 100%;}
-    /* Item Direito (Progresso) */
-    .dashboard-item--progress {
-        order: 2; flex-shrink: 0; align-self: center; flex-basis: 120px; height: 120px; min-width: 120px;
-    }
-    #dashboard-month-percentage { font-size: 2.2em; }
-    .dashboard-item--progress .dashboard-label { font-size: 0.75em; margin-top: 4px;}
-    /* -------- FIM DASHBOARD -------- */
-
-
-    /* -------- Layout GRID dos Cards -------- */
     #app {
-        display: grid; grid-template-columns: 1fr 1fr; /* 2 colunas */
-        gap: 25px; max-width: 1300px; margin-left: auto; margin-right: auto;
-        align-items: stretch;
+        max-width: 960px; /* Aumenta a largura máxima do container */
+        gap: 18px; /* Aumenta o espaço entre cards */
     }
-     /* Cards sempre abertos */
-    .card { border: 1px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column; }
-    .card-header { cursor: default; border-bottom: 1px solid var(--border-color); }
-    .card:not(.expanded) .card-header:hover { background-color: transparent; }
-    .card .card-header::after { display: none; }
-    .card .card-content { max-height: none !important; opacity: 1 !important; padding: var(--card-padding) !important; margin-top: 0 !important; border-top: none !important; overflow: visible !important; transition: none !important; flex-grow: 1; }
-    .card .toggle-icon { display: none !important; }
-     /* Ajustes de altura específicos */
-     #record-notes { max-height: 200px;} /* Menor max-height */
-     #plan-card .data-list { max-height: 180px; }
-     #history-card .data-list { max-height: 320px; }
-     .chart-container { height: 320px; /* Altura gráfica ajustada */ max-width: 450px; margin-left: auto; margin-right: auto;}
-    /* -------- FIM CARDS -------- */
 
-
-    /* -------- Layout Interno dos Cards (mantém a maior parte) -------- */
-    #record-form .time-tag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    #record-form .time-tag-grid .form-group { margin-bottom: 0; }
-    #record-form .time-tag-grid + .form-group { margin-top: 18px; }
-
-    #plan-form .plan-inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: end; }
-    #plan-form .plan-inputs-grid .form-group { margin-bottom: 0; }
-    #plan-form .plan-inputs-grid + .text-center { margin-top: 20px; }
-    #plan-form .text-center button { width: auto; }
-
-    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    .stat-value { font-size: 1.9em; } .stat-label { font-size: 0.85em; }
-    #stats-card .card-content > .form-group { display: flex; align-items: center; gap: 12px; max-width: 100%; margin: 0 0 25px 0 !important; }
-    #stats-card .card-content > .form-group label { margin-bottom: 0; flex-shrink: 0; font-size: 0.95em; }
-    #stats-card .card-content > .form-group input[type="number"] { flex-grow: 1; max-width: 100px; }
-    #stats-card .card-content > .form-group button { margin-top: 0; flex-shrink: 0; width: auto !important; font-size: 1em !important; padding: 10px 20px !important; }
-
-    .data-list li { padding: 15px var(--card-padding); flex-wrap: nowrap; align-items: center; }
-    .entry-details { font-size: 1em; }
-    .entry-details .notes-preview { display: inline; margin-left: 10px; margin-top: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; opacity: 0.7; font-size: 0.9em; max-width: 120px; vertical-align: middle; }
-    .data-list li:hover .entry-details .notes-preview { max-width: 300px; background-color: #3a3a3c; padding: 4px 6px; position: absolute; z-index: 10; margin-left: -5px; margin-top: -5px; border-radius: 4px; white-space: normal; box-shadow: 0 1px 5px rgba(0,0,0,0.5); opacity: 1;}
-    .entry-actions, .plan-actions { white-space: nowrap; }
-    .entry-actions button, .plan-actions button { margin-top: 0; font-size: 0.8em; padding: 5px 9px; }
-
-    /* Dialog */
-    .dialog-content { width: 480px; padding: 35px; }
-    .dialog-content p { font-size: 1.1em; }
-    .dialog-actions button { font-size: 1em; padding: 12px; }
-
-} /* Fim @media 992px */
-
-
-/* Breakpoint Opcional: Desktop Extra Largo (3 colunas de cards) */
-@media (min-width: 1400px) {
-     #app {
-        grid-template-columns: 1fr 1fr 1fr; gap: 28px; max-width: 1600px;
+    #dashboard-box {
+        flex-direction: row; /* Coloca itens lado a lado */
+        align-items: flex-start; /* Alinha itens no topo */
+        gap: 30px; /* Aumenta o espaço entre os itens */
+        padding: 20px var(--card-padding);
     }
-    /* Dashboard */
-     #dashboard-box { gap: 40px; }
-     #dashboard-box > .dashboard-item:first-child { gap: 40px;}
-     #dashboard-summary, #dashboard-planned-dates { padding-left: 35px;}
-     .stats-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
-     /* Aumentar altura de listas e gráfico um pouco se desejado */
-     #plan-card .data-list { max-height: 180px; }
-     #history-card .data-list { max-height: 350px; }
-     .chart-container { height: 350px; max-width: 500px;}
+
+    .dashboard-item {
+        flex: 1 1 0; /* Permite que cresçam e encolham */
+    }
+    .dashboard-item:first-child { /* Item da esquerda (texto) */
+        flex-basis: 60%; /* Dá mais espaço para o texto */
+        max-width: 60%;
+    }
+     .dashboard-item--progress { /* Item da direita (progresso) */
+        flex-basis: 40%;
+        max-width: 40%;
+        align-items: center; /* Centraliza o anel */
+        min-height: 150px; /* Aumenta altura mínima */
+    }
+    .dashboard-item--progress-container {
+         margin: 15px auto 0 auto; /* Ajusta margem */
+    }
+
+     /* Ajusta grid do formulário de registro para 2 colunas */
+    #record-form-grid {
+        grid-template-columns: 1fr 1fr; /* Duas colunas */
+    }
+
+    /* Ajusta grid do formulário de planejamento para 2 colunas */
+    #plan-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto; /* Data | Horas | Botões */
+        gap: 15px;
+        align-items: end; /* Alinha itens na base */
+    }
+    #plan-form .form-group { margin-bottom: 0; } /* Remove margem inferior dos grupos */
+    #plan-form .text-center { grid-column: 3 / 4; text-align: right; } /* Posiciona botões na 3ª coluna */
+    #plan-form .text-center button { margin-top: 0; } /* Remove margem superior dos botões */
+
+    /* Ajusta grid de estatísticas para mais colunas */
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 colunas fixas */
+        gap: 15px;
+    }
+
+    /* Melhora alinhamento dos itens de lista em telas maiores */
+    .data-list li {
+        flex-wrap: nowrap; /* Impede quebra de linha dos botões */
+        align-items: center; /* Centraliza verticalmente */
+    }
+    .entry-details { padding-bottom: 0; } /* Remove padding inferior desnecessário */
+    .entry-actions, .plan-actions, .revisit-actions {
+        white-space: nowrap; /* Impede quebra de linha dos botões */
+        margin-top: 0; /* Remove margem superior */
+    }
+
+    .dialog-content {
+        max-width: 400px; /* Aumenta um pouco a largura do diálogo */
+    }
+
+     /* Ajusta layout do seletor de mês e total de horas no gráfico */
+    #charts-card .card-content > .form-group {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 10px; /* Reduz margem inferior */
+    }
+     #charts-card .card-content > .form-group label {
+         margin-bottom: 0; /* Remove margem inferior do label */
+         flex-shrink: 0; /* Impede que o label encolha */
+     }
+     #charts-card .card-content > .form-group select {
+         flex-grow: 1; /* Permite que o select cresça */
+         max-width: 250px; /* Limita largura máxima do select */
+     }
+     #chart-total-hours-display {
+         text-align: left; /* Alinha texto à esquerda */
+         margin-left: auto; /* Empurra para a direita */
+         margin-bottom: 0;
+         padding: 0;
+     }
+}
+
+ /* Media Query Adicional para Telas Muito Largas (Opcional) */
+@media (min-width: 1200px) {
+    #app {
+        max-width: 1140px; /* Largura ainda maior */
+    }
+    /* Poderia adicionar mais ajustes aqui se necessário */
 }
