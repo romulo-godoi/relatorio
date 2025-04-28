@@ -7,8 +7,9 @@
     --input-bg: #2c2c2e;
     --text-color: #ffffff;
     --text-color-secondary: rgba(235, 235, 245, 0.6);
-    --text-color-tertiary: rgba(235, 235, 245, 0.45); /* Nova cor mais sutil */
+    --text-color-tertiary: rgba(235, 235, 245, 0.45);
     --border-color: #3a3a3c;
+    --separator-color: rgba(58, 58, 60, 0.6); /* Cor para separadores delicados */
     --shadow-color: rgba(0, 0, 0, 0.2);
     --danger-color: #FF453A;
     --success-color: #30D158;
@@ -30,60 +31,34 @@
     --progress-percent: 0;
     --celebrate-color-1: #fbc531; --celebrate-color-2: #e84118; --celebrate-color-3: #4cd137;
     --celebrate-color-4: #487eb0; --celebrate-color-5: #9c88ff;
-    /* Nova variável para gradiente sutil */
-    --primary-gradient: linear-gradient(45deg, var(--primary-color), #5856d6); /* Azul para Roxo Sutil */
+    --primary-gradient: linear-gradient(45deg, var(--primary-color), #5856d6);
 }
 
 /* Reset Básico e Estilos Globais */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
 body {
-    font-family: var(--font-family);
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    line-height: 1.5;
-    padding: var(--outer-padding);
-    overscroll-behavior-y: contain;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-size: 16px;
+    font-family: var(--font-family); background-color: var(--secondary-color); color: var(--text-color);
+    line-height: 1.5; padding: var(--outer-padding); overscroll-behavior-y: contain;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 16px;
 }
 
-/* Placeholder para chaves de tradução */
 [data-translate-key]::before { content: ""; }
-
-/* Indicador de Carregamento */
 #loading-indicator {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
-    z-index: 9999; color: white; font-size: 1.2em; transition: opacity 0.3s ease-out;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+    display: flex; align-items: center; justify-content: center; z-index: 9999; color: white;
+    font-size: 1.2em; transition: opacity 0.3s ease-out;
 }
 #loading-indicator.hidden { opacity: 0; pointer-events: none; }
-
-/* Layout Principal do App */
-#app {
-    max-width: 700px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+#app { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 h1 { display: none; }
 
 /* --- Dashboard Box --- */
 #dashboard-box {
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 25px var(--card-padding); /* Mais padding vertical */
-    margin-bottom: 20px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 18px; /* Mais espaço entre seções */
-    z-index: 0;
-    transition: background-color 0.5s ease-out;
+    background-color: var(--card-bg); border-radius: var(--border-radius); padding: 25px var(--card-padding);
+    margin-bottom: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column;
+    align-items: center; gap: 0; /* Reduzido, espaçamento gerenciado pelos elementos e margens/separadores */
+    z-index: 0; transition: background-color 0.5s ease-out;
 }
 
 #dashboard-box::before {
@@ -92,213 +67,204 @@ h1 { display: none; }
     transition: background-image 0.5s ease-out, opacity 0.4s ease-out; opacity: 1;
 }
 #dashboard-box::after {
-    content: ''; position: absolute; inset: var(--dashboard-border-thickness); background: var(--card-bg); z-index: -1;
-    border-radius: calc(var(--border-radius) - var(--dashboard-border-thickness)); transition: opacity 0.4s ease-out, background 0.5s ease-out; opacity: 1;
+    content: ''; position: absolute; inset: var(--dashboard-border-thickness); background: var(--card-bg);
+    z-index: -1; border-radius: calc(var(--border-radius) - var(--dashboard-border-thickness));
+    transition: opacity 0.4s ease-out, background 0.5s ease-out; opacity: 1;
 }
 #dashboard-box.goal-met { background-color: var(--card-bg); }
 #dashboard-box.goal-met::before { opacity: 0; transition: opacity 0.1s linear; }
 #dashboard-box.goal-met::after {
-    opacity: 1;
-    background: linear-gradient(135deg, var(--celebrate-color-1) 0%, var(--celebrate-color-3) 25%, var(--celebrate-color-4) 50%, var(--celebrate-color-5) 75%, var(--celebrate-color-2) 100% );
+    opacity: 1; background: linear-gradient(135deg, var(--celebrate-color-1) 0%, var(--celebrate-color-3) 25%, var(--celebrate-color-4) 50%, var(--celebrate-color-5) 75%, var(--celebrate-color-2) 100% );
     background-size: 400% 400%; animation: celebrate-gradient 8s ease infinite;
 }
 @keyframes celebrate-gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-/* --- O Conteúdo do Dashboard (Filho direto) --- */
-.dashboard-item {
-    position: relative; display: flex; flex-direction: column; width: 100%; align-items: center; text-align: center; z-index: 1;
-}
+/* --- O Conteúdo do Dashboard --- */
+.dashboard-item { position: relative; display: flex; flex-direction: column; width: 100%; align-items: center; text-align: center; z-index: 1; }
 .dashboard-item--progress, .dashboard-item--progress-container, .progress-ring { display: none; }
 
-/* --- Estilos SUBSTANCIALMENTE MELHORADOS do texto do Dashboard --- */
+
+/* --- Estilos APRIMORADOS e ESTÉTICOS do texto do Dashboard --- */
 
 /* Elemento "Herói" - A Porcentagem */
 #dashboard-month-percentage {
-    font-size: 3.5em; /* Bem maior */
-    font-weight: 700; /* Bold para impacto */
-    line-height: 1; /* Ajusta linha para evitar espaçamento extra */
-    margin-bottom: 8px; /* Espaço abaixo consistente */
-    margin-top: 5px;
-    /* Aplica o gradiente como cor de texto */
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-    /* Sombra mais pronunciada para destacar sobre o fundo */
-    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    letter-spacing: -1px; /* Leve ajuste no espaçamento */
+    font-size: 3.5em; font-weight: 700; line-height: 1;
+    margin-bottom: 8px; margin-top: 5px; background: var(--primary-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; text-fill-color: transparent;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); letter-spacing: -1px;
+    order: 1; /* Ordem para garantir posicionamento */
 }
 
 /* Rótulo abaixo da Porcentagem */
 .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"] {
-    font-size: 0.8em;
-    font-weight: 500; /* Medium */
-    color: var(--text-color-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1.5px; /* Mais espaçado para ar */
-    margin-top: 0;
-    margin-bottom: 20px; /* Separa bem do próximo bloco */
+    font-size: 0.8em; font-weight: 500; color: var(--text-color-secondary);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;
+    margin-bottom: 10px; /* Reduzido, separador cuidará do espaço */
+    order: 2; /* Ordem */
+    position: relative; /* Para o pseudo-elemento */
+    padding-bottom: 15px; /* Espaço para a linha abaixo */
+}
+/* Linha Decorativa Curta Abaixo do Rótulo da Meta */
+.dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"]::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px; /* Linha curta */
+    height: 1px;
+    background-color: var(--separator-color);
+    opacity: 0.8;
 }
 
 /* Rótulos Gerais de Seção */
 .dashboard-label {
-    font-size: 0.75em;
-    font-weight: 600; /* Semi-Bold */
-    color: var(--text-color-tertiary); /* Cor mais sutil */
-    margin-bottom: 5px;
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.75em; font-weight: 600; color: var(--text-color-tertiary);
+    margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 1px;
 }
 
 /* Valores Gerais (Ex: Horas da Semana) */
+/* Agrupando o valor com o seu label para melhor controle */
+.dashboard-value-group {
+    order: 3; /* Ordem */
+    margin-top: 25px; /* Espaço acima do grupo */
+    margin-bottom: 25px; /* Espaço abaixo do grupo */
+    position: relative;
+}
 .dashboard-value {
-    font-size: 1.8em; /* Tamanho respeitável */
-    font-weight: 500; /* Medium weight */
-    color: var(--text-color); /* Branco principal */
-    line-height: 1.1;
-    margin-bottom: 10px;
+    font-size: 1.8em; font-weight: 500; color: var(--text-color);
+    line-height: 1.1; margin-bottom: 4px; /* Espaço menor pro label abaixo */
+}
+/* Linha Decorativa curta abaixo do Valor principal */
+.dashboard-value::after {
+     content: '';
+     display: block;
+     width: 40px;
+     height: 2px;
+     background: var(--primary-gradient); /* Usa gradiente principal */
+     border-radius: 1px;
+     margin: 8px auto 0; /* Espaço abaixo do valor */
+}
+/* Ajustando o label dentro do grupo */
+.dashboard-value-group > .dashboard-label {
+    margin-top: 8px; /* Espaço acima do label */
+    margin-bottom: 0; /* Reset margem inferior do label */
 }
 
-/* Seção de Sumário (Horas mês/semana) */
+
+/* Seção de Sumário */
 #dashboard-summary {
-    margin-top: 5px;
-    font-size: 0.9em;
-    color: var(--text-color-secondary);
-    line-height: 1.6; /* Boa legibilidade */
-    margin-bottom: 15px;
+    order: 4; /* Ordem */
+    font-size: 0.9em; color: var(--text-color-secondary); line-height: 1.6;
+    margin-bottom: 0; /* Margem controlada pelo separador abaixo */
+    margin-top: 0; /* Sem margem topo extra */
     max-width: 90%;
+    padding-bottom: 25px; /* Espaço para o separador */
+    position: relative;
 }
-#dashboard-summary strong {
-    color: var(--text-color);
-    font-weight: 600; /* Semi-Bold para números */
-}
-#dashboard-summary span {
-    display: block;
-    margin-bottom: 5px;
+#dashboard-summary strong { color: var(--text-color); font-weight: 600; }
+#dashboard-summary span { display: block; margin-bottom: 5px; }
+/* Separador com Gradiente após o Sumário */
+#dashboard-summary::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%; /* Linha larga com fade */
+    height: 1px;
+    background-image: linear-gradient(to right, transparent, var(--separator-color), transparent);
+    opacity: 0.7;
 }
 
 /* Seções de Revisitas e Datas Planejadas */
+#dashboard-revisits-section { order: 5; margin-top: 25px; } /* Espaço acima da seção */
+#dashboard-planned-dates { order: 6; margin-top: 25px; } /* Espaço acima da seção */
+
 #dashboard-revisits-section,
 #dashboard-planned-dates {
-    margin-top: 20px; /* Mais espaço para separar visualmente */
     width: 100%;
-    padding-top: 15px; /* Espaço interno acima */
-    border-top: 1px solid var(--border-color); /* Divisor sutil */
+    /* border-top e padding-top removidos - separadores cuidam disso */
 }
 
 #dashboard-revisits-section .dashboard-label,
 #dashboard-planned-dates .dashboard-label {
-    margin-bottom: 8px; /* Mais espaço abaixo do label da seção */
-    /* Estilos de .dashboard-label já aplicados */
+    margin-bottom: 8px;
 }
 
 #dashboard-revisits-section .dashboard-value {
-    font-size: 1.1em; /* Tamanho legível para data/hora */
-    color: var(--text-color);
-    margin-bottom: 0;
-    line-height: 1.4;
-    font-weight: 400; /* Regular */
+    font-size: 1.1em; color: var(--text-color); margin-bottom: 0;
+    line-height: 1.4; font-weight: 400;
 }
-#dashboard-revisits-section .dashboard-value strong {
-    color: var(--primary-color); /* Destaca data/hora principal */
-    font-weight: 600; /* Semi-Bold */
-    margin: 0 4px;
-}
+#dashboard-revisits-section .dashboard-value strong { color: var(--primary-color); font-weight: 600; margin: 0 4px; }
 #dashboard-revisits-section .dashboard-value .revisit-name {
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    display: block; max-width: 95%; margin: 4px auto 0 auto; /* Espaço acima */
-    font-size: 0.85em; /* Menor */
-    font-style: italic; /* Itálico para diferenciar */
-    color: var(--text-color-secondary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
+    max-width: 95%; margin: 4px auto 0 auto; font-size: 0.85em;
+    font-style: italic; color: var(--text-color-secondary);
 }
 
 /* Lista de Datas Planejadas */
 #dashboard-plan-list {
     list-style: none; padding: 0; margin: 5px 0 0 0; text-align: center;
-    font-size: 0.9em; line-height: 1.7; /* Espaçamento vertical melhor */
-    color: var(--text-color-secondary);
+    font-size: 0.9em; line-height: 1.7; color: var(--text-color-secondary);
     width: 100%; max-height: 70px; overflow-y: auto;
-    scrollbar-width: thin; scrollbar-color: var(--border-color) transparent;
+    scrollbar-width: thin; scrollbar-color: var(--separator-color) transparent;
 }
 #dashboard-plan-list::-webkit-scrollbar { width: 4px; }
-#dashboard-plan-list::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 2px; }
+#dashboard-plan-list::-webkit-scrollbar-thumb { background-color: var(--separator-color); border-radius: 2px; }
 #dashboard-plan-list li {
-    margin-bottom: 6px; /* Mais espaço entre itens */
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    padding: 2px 8px; /* Padding interno para respiro */
-    border-radius: 4px;
-    transition: background-color var(--transition-speed-fast) ease;
+    margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 2px 8px; border-radius: 4px; transition: background-color var(--transition-speed-fast) ease;
+    position: relative; /* Para potencial pseudo-elemento se necessário */
 }
-#dashboard-plan-list li:hover {
-    background-color: rgba(255, 255, 255, 0.05); /* Feedback visual no hover */
-}
-#dashboard-plan-list li strong {
-    color: var(--text-color);
-    font-weight: 600;
-}
-#dashboard-plan-list .plan-warning {
-    font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic;
-}
+#dashboard-plan-list li:hover { background-color: rgba(255, 255, 255, 0.05); }
+#dashboard-plan-list li strong { color: var(--text-color); font-weight: 600; }
+#dashboard-plan-list .plan-warning { font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic; }
 
-/* Texto da Previsão (se existir) */
+/* Texto da Previsão */
 #dashboard-forecast {
-     margin-top: 15px;
-     font-size: 0.9em;
-     color: var(--text-color-secondary);
+     order: 7; /* Último elemento */
+     margin-top: 25px; /* Espaço acima */
+     font-size: 0.9em; color: var(--text-color-secondary);
 }
-#dashboard-forecast strong {
-     color: var(--text-color);
-     font-weight: 600;
-}
+#dashboard-forecast strong { color: var(--text-color); font-weight: 600; }
+
 
 /* --- Reset e Ajustes para o estado GOAL-MET --- */
-/* Sobrescreve o gradiente e sombra da porcentagem */
-#dashboard-box.goal-met #dashboard-month-percentage {
-    background: none; /* Remove o gradiente */
-    -webkit-text-fill-color: initial; /* Restaura cor normal */
-    text-fill-color: initial;
-    color: #000000; /* Preto como definido antes */
-    text-shadow: none; /* Remove sombra */
-    font-weight: 700; /* Mantém bold */
+/* Esconde os novos separadores/acentos */
+#dashboard-box.goal-met .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"]::after,
+#dashboard-box.goal-met .dashboard-value::after,
+#dashboard-box.goal-met #dashboard-summary::after {
+    display: none;
 }
-/* Restaura cores escuras para textos, mantendo transformações */
+/* Remove padding adicionado para os separadores */
+#dashboard-box.goal-met .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"],
+#dashboard-box.goal-met #dashboard-summary {
+    padding-bottom: 0;
+}
+/* Restaura cores escuras (mantendo o restante do goal-met) */
+#dashboard-box.goal-met #dashboard-month-percentage {
+    background: none; -webkit-text-fill-color: initial; text-fill-color: initial;
+    color: #000000; text-shadow: none; font-weight: 700;
+}
 #dashboard-box.goal-met .dashboard-label,
 #dashboard-box.goal-met .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"],
 #dashboard-box.goal-met #dashboard-summary,
-#dashboard-box.goal-met #dashboard-plan-list li {
-    color: rgba(0, 0, 0, 0.7);
-    text-shadow: none;
+#dashboard-box.goal-met #dashboard-plan-list li,
+#dashboard-box.goal-met #dashboard-forecast {
+    color: rgba(0, 0, 0, 0.7); text-shadow: none;
 }
 #dashboard-box.goal-met .dashboard-value,
 #dashboard-box.goal-met #dashboard-summary strong,
-#dashboard-box.goal-met #dashboard-plan-list li strong {
-    color: rgba(0, 0, 0, 0.9);
-    text-shadow: none;
+#dashboard-box.goal-met #dashboard-plan-list li strong,
+#dashboard-box.goal-met #dashboard-forecast strong {
+    color: rgba(0, 0, 0, 0.9); text-shadow: none;
 }
-#dashboard-box.goal-met #dashboard-revisits-section,
-#dashboard-box.goal-met #dashboard-planned-dates {
-    border-top-color: rgba(0, 0, 0, 0.1); /* Torna divisor mais sutil no fundo claro */
-}
-#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value {
-    color: rgba(0, 0, 0, 0.7);
-    text-shadow: none;
-}
-#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value strong {
-     color: rgba(0, 0, 0, 0.9);
-     text-shadow: none;
-}
-#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value .revisit-name {
-     color: rgba(0, 0, 0, 0.6);
-     text-shadow: none;
-}
-#dashboard-box.goal-met #dashboard-forecast { color: rgba(0, 0, 0, 0.7); text-shadow: none; }
-#dashboard-box.goal-met #dashboard-forecast strong { color: rgba(0, 0, 0, 0.9); text-shadow: none; }
-/* Remove hover da lista no goal-met para simplicidade */
-#dashboard-box.goal-met #dashboard-plan-list li:hover {
-    background-color: transparent;
-}
+#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value { color: rgba(0, 0, 0, 0.7); text-shadow: none; }
+#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value strong { color: rgba(0, 0, 0, 0.9); text-shadow: none; }
+#dashboard-box.goal-met #dashboard-revisits-section .dashboard-value .revisit-name { color: rgba(0, 0, 0, 0.6); text-shadow: none; }
+#dashboard-box.goal-met #dashboard-plan-list li:hover { background-color: transparent; }
 
 
 /* --- Restante do CSS (sem alterações a partir daqui) --- */
@@ -318,13 +284,7 @@ h1 { display: none; }
 /* --- Formulários --- */
 .form-group { margin-bottom: 16px; }
 label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
-input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select {
-    width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px;
-    font-size: 1em; font-family: var(--font-family);
-    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-    appearance: none; -webkit-appearance: none; -moz-appearance: none;
-    background-color: var(--input-bg); color: var(--text-color);
-}
+input[type="date"], input[type="number"], input[type="text"], input[type="search"], textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1em; font-family: var(--font-family); transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-color: var(--input-bg); color: var(--text-color); }
 input[type="text"].time-input { font-variant-numeric: tabular-nums; }
 input[type="search"] { padding-right: 35px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px 16px; }
 input[type="search"]::-webkit-search-cancel-button{ appearance: none; height: 14px; width: 14px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(235, 235, 245, 0.6)" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>'); background-size: 14px 14px; cursor: pointer; }
@@ -335,7 +295,6 @@ input::placeholder, textarea::placeholder { color: var(--placeholder-color); opa
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3); }
 input[type="number"] { -moz-appearance: textfield; } input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 textarea { resize: vertical; min-height: 90px; }
-
 #record-form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
 
 /* --- Botões --- */
@@ -395,28 +354,26 @@ button.danger { background-color: var(--danger-color); color: var(--text-color);
 .hidden { display: none !important; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
 .text-center { text-align: center; }
-.mt-1 { margin-top: 10px; }
-.mt-2 { margin-top: 20px; }
+.mt-1 { margin-top: 10px; } .mt-2 { margin-top: 20px; }
 h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-secondary); margin-bottom: 10px; padding-left: var(--card-padding); }
 .data-list li.placeholder { padding-left: var(--card-padding); color: var(--text-color-secondary); font-style: italic; border-bottom: none; }
 
 /* --- Media Queries para Telas Maiores --- */
 @media (min-width: 768px) {
-    :root {
-        --card-padding: 22px;
-        --outer-padding: 25px;
-        --dashboard-border-thickness: 4px;
-    }
+    :root { --card-padding: 22px; --outer-padding: 25px; --dashboard-border-thickness: 4px; }
     #app { max-width: 960px; gap: 18px; }
-    #dashboard-box { padding: 30px var(--card-padding); gap: 25px; }
+    #dashboard-box { padding: 30px var(--card-padding); }
 
-    /* Ajustes Desktop */
+    /* Ajustes Desktop nos Textos e Separadores */
     #dashboard-month-percentage { font-size: 4.2em; letter-spacing: -1.5px; }
-    .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"] { font-size: 0.85em; letter-spacing: 1.8px; margin-bottom: 25px; }
-    .dashboard-label { font-size: 0.8em; letter-spacing: 1.2px; }
-    .dashboard-value { font-size: 2em; margin-bottom: 15px; }
-    #dashboard-summary { font-size: 0.95em; margin-bottom: 20px; max-width: 85%; }
-    #dashboard-revisits-section, #dashboard-planned-dates { margin-top: 25px; padding-top: 20px; }
+    .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"] { font-size: 0.85em; letter-spacing: 1.8px; padding-bottom: 20px; }
+    .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"]::after { width: 60px; } /* Separador maior */
+    .dashboard-value-group { margin-top: 30px; margin-bottom: 30px; }
+    .dashboard-value { font-size: 2em; }
+    .dashboard-value::after { width: 50px; margin-top: 10px; }
+    #dashboard-summary { font-size: 0.95em; max-width: 85%; padding-bottom: 30px; }
+    #dashboard-summary::after { margin-top: 5px; width: 90%; }
+    #dashboard-revisits-section, #dashboard-planned-dates { margin-top: 30px; }
     #dashboard-revisits-section .dashboard-value { font-size: 1.15em; }
     #dashboard-plan-list { font-size: 0.95em; max-height: 80px; }
 
@@ -434,9 +391,10 @@ h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-second
     #chart-total-hours-display { text-align: left; margin-left: auto; margin-bottom: 0; padding: 0; }
 }
 
- /* Media Query Adicional para Telas Muito Largas */
 @media (min-width: 1200px) {
     #app { max-width: 1140px; }
-    #dashboard-month-percentage { font-size: 4.8em; letter-spacing: -2px;}
+    #dashboard-month-percentage { font-size: 4.8em; letter-spacing: -2px; }
     .dashboard-value { font-size: 2.2em; }
+     .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"]::after { width: 70px; }
+    .dashboard-value::after { width: 60px; }
 }
