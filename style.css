@@ -24,6 +24,7 @@
     --transition-speed: 0.3s;
     --transition-speed-fast: 0.1s;
     --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
+    --dashboard-border-thickness: 4px; /* Espessura da borda de progresso */
 
     /* Variável para o progresso (será atualizada via JS) */
     --progress-percent: 0;
@@ -67,74 +68,79 @@ h1 { display: none; }
 
 /* --- Dashboard Box --- */
 #dashboard-box {
-    background-color: var(--card-bg);
+    background-color: var(--card-bg); /* Cor de fundo base */
     border-radius: var(--border-radius);
-    padding: 20px var(--card-padding); /* Aumenta padding vertical */
+    padding: 20px var(--card-padding); /* Padding interno */
     margin-bottom: 20px;
-    display: flex;
+    position: relative; /* Necessário para os pseudo-elementos */
+    overflow: hidden; /* Para conter os pseudo-elementos */
+    display: flex; /* Usado para centralizar o .dashboard-item interno */
     flex-direction: column;
-    align-items: center; /* Centraliza os itens filhos horizontalmente */
-    gap: 25px; /* Aumenta espaço entre texto e progresso */
+    align-items: center; /* Centraliza o .dashboard-item */
+    gap: 15px; /* Espaço abaixo do .dashboard-item */
+    z-index: 0; /* Garante que fique abaixo de outros elementos se necessário */
 }
-.dashboard-item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%; /* Ocupa a largura total para centralização do texto funcionar */
-    align-items: center; /* Centraliza conteúdo interno */
-    text-align: center; /* Centraliza texto interno */
-}
-.dashboard-item--progress {
-    width: 100px; /* Largura do quadrado de progresso */
-    aspect-ratio: 1 / 1; /* Garante que seja um quadrado */
-    border-radius: var(--border-radius); /* Bordas arredondadas */
-    position: relative; /* Para posicionar o pseudo-elemento e o conteúdo */
-    overflow: hidden; /* Para conter o pseudo-elemento */
-    display: flex; /* Para centralizar o .dashboard-content */
-    align-items: center;
-    justify-content: center;
-    /* Fundo com gradiente cônico para a borda */
+
+/* Camada de fundo com o gradiente cônico (a borda) */
+#dashboard-box::before {
+    content: '';
+    position: absolute;
+    inset: 0; /* Cobre toda a área */
+    z-index: -2; /* Fica bem no fundo */
+    border-radius: inherit; /* Herda o border-radius do pai */
     background-image: conic-gradient(
         var(--progress-bar-color) calc(var(--progress-percent) * 1%),
         var(--progress-track-color) calc(var(--progress-percent) * 1%)
     );
-    transition: background-image 0.5s ease-out; /* Transição suave */
+    transition: background-image 0.5s ease-out;
 }
-/* Pseudo-elemento para criar o "buraco" no meio, revelando a borda */
-.dashboard-item--progress::before {
+
+/* Camada de máscara interna (cor do card) que deixa a borda visível */
+#dashboard-box::after {
     content: '';
     position: absolute;
-    inset: 5px; /* Espessura da borda (5px) */
-    background-color: var(--card-bg); /* Cor de fundo do card */
-    border-radius: calc(var(--border-radius) - 5px); /* Raio interno */
-    z-index: 1; /* Fica acima do gradiente */
+    /* Define a área interna, deixando a "borda" */
+    inset: var(--dashboard-border-thickness);
+    background: var(--card-bg); /* Cor de fundo do card */
+    z-index: -1; /* Fica acima do gradiente, mas abaixo do conteúdo */
+    border-radius: calc(var(--border-radius) - var(--dashboard-border-thickness)); /* Raio interno */
 }
-/* Remove container do SVG que não é mais necessário */
-.dashboard-item--progress-container { display: none; }
-.progress-ring { display: none; }
 
-/* Conteúdo dentro do quadrado de progresso */
-.dashboard-item--progress .dashboard-content {
-    position: relative; /* Usa posicionamento relativo agora */
-    z-index: 2; /* Fica acima do pseudo-elemento ::before */
+/* O único item filho direto do dashboard agora */
+.dashboard-item {
+    position: relative; /* Mantém para contexto se necessário */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    /* Remove transform que não é mais necessário */
+    width: 100%; /* Ocupa a largura total disponível */
+    align-items: center; /* Centraliza conteúdo interno */
+    text-align: center; /* Centraliza texto interno */
+    z-index: 1; /* Garante que o conteúdo fique acima da "borda" */
 }
+
+/* Remove estilos do item de progresso que não existe mais */
+.dashboard-item--progress,
+.dashboard-item--progress-container,
+.progress-ring {
+    display: none;
+}
+
+/* Estilos do conteúdo que estava no item de progresso (agora no item principal) */
 #dashboard-month-percentage {
-    font-size: 1.8em; /* Aumenta um pouco */
+    font-size: 1.8em;
     color: var(--text-color);
-    margin-bottom: 2px; /* Ajusta margem */
+    margin-bottom: 2px;
     font-weight: 600;
+    margin-top: 10px; /* Adiciona espaço acima da porcentagem */
 }
-.dashboard-item--progress .dashboard-label {
+.dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"] {
+    /* Estilo específico para o label "Meta Mensal" */
     margin-top: 0;
-    margin-bottom: 0;
-    font-size: 0.7em; /* Aumenta um pouco */
+    margin-bottom: 5px; /* Espaço abaixo do label */
+    font-size: 0.7em;
     color: var(--text-color-secondary);
 }
+
+/* Estilos gerais do conteúdo do dashboard */
 .dashboard-label {
     font-size: 0.85em; color: var(--text-color-secondary); margin-bottom: 4px; display: block;
 }
@@ -150,15 +156,15 @@ h1 { display: none; }
 #dashboard-revisits-section .dashboard-label, #dashboard-planned-dates .dashboard-label { margin-bottom: 2px; }
 #dashboard-revisits-section .dashboard-value { font-size: 1.0em; color: var(--text-color); margin-bottom: 0; line-height: 1.3; }
 #dashboard-revisits-section .dashboard-value strong { color: var(--primary-color); }
-#dashboard-revisits-section .dashboard-value .revisit-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; }
-#dashboard-plan-list { list-style: none; padding: 0; margin: 5px 0 0 0; text-align: center; /* Centraliza lista */ font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+#dashboard-revisits-section .dashboard-value .revisit-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 90%; margin: 0 auto; } /* Limita largura e centraliza */
+#dashboard-plan-list { list-style: none; padding: 0; margin: 5px 0 0 0; text-align: center; font-size: 0.8em; line-height: 1.4; color: var(--text-color-secondary); width: 100%; max-height: 60px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
 #dashboard-plan-list::-webkit-scrollbar { width: 4px; }
 #dashboard-plan-list::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 2px; }
 #dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #dashboard-plan-list li strong { color: var(--text-color); }
 #dashboard-plan-list .plan-warning { font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic; }
 
-/* --- Estilos dos Cards --- */
+/* --- Estilos dos Cards (Restantes) --- */
 .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
 .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
 .card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
@@ -272,6 +278,7 @@ h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-second
     :root {
         --card-padding: 22px;
         --outer-padding: 25px;
+        --dashboard-border-thickness: 5px; /* Borda um pouco mais grossa no desktop */
     }
 
     #app {
@@ -280,43 +287,25 @@ h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-second
     }
 
     #dashboard-box {
-        flex-direction: row;
-        align-items: center;
-        gap: 30px;
-        padding: 20px var(--card-padding);
+        /* Mantém coluna, mas ajusta padding */
+        padding: 25px var(--card-padding);
+        gap: 20px;
     }
 
     .dashboard-item {
-        flex: 1 1 0;
+        /* Mantém centralizado */
         align-items: center;
         text-align: center;
-        width: auto; /* Reseta a largura para o flexbox controlar */
     }
-    .dashboard-item:first-child {
-        flex-basis: 60%;
-        max-width: 60%;
-        align-items: center;
+
+    /* Aumenta um pouco a fonte da porcentagem no desktop */
+    #dashboard-month-percentage {
+        font-size: 2em;
     }
-     .dashboard-item--progress {
-        flex-basis: 40%;
-        max-width: 40%;
-        align-items: center;
-        min-height: 150px;
-        width: 120px; /* Aumenta um pouco o quadrado no desktop */
+     .dashboard-item > .dashboard-label[data-translate-key="dashboard.monthGoalLabel"] {
+        font-size: 0.8em;
     }
-    .dashboard-item:first-child .dashboard-label,
-    .dashboard-item:first-child #dashboard-summary,
-    .dashboard-item:first-child #dashboard-revisits-section,
-    .dashboard-item:first-child #dashboard-planned-dates {
-        width: 100%;
-        text-align: center;
-    }
-    .dashboard-item:first-child #dashboard-plan-list {
-        text-align: center;
-        padding-left: 0;
-    }
-    /* Remove container do SVG que não é mais necessário */
-    .dashboard-item--progress-container { display: none; }
+
 
     #record-form-grid {
         grid-template-columns: 1fr 1fr;
