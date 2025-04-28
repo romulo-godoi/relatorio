@@ -1,17 +1,12 @@
-// Import Workbox (opcional, mas boa prática para PWAs)
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-// Define um nome e versão para o cache
-const CACHE_NAME = 'pioneer-tracker-cache-v2.5'; // <-- Incremente a versão se fizer mudanças significativas
+const CACHE_NAME = 'pioneer-tracker-cache-v2.6';
+const offlineFallbackPage = './index.html';
 
-// Define a página principal como fallback offline para navegação
-const offlineFallbackPage = './index.html'; // Ou apenas './' se index.html for a raiz
-
-// Lista de arquivos essenciais para cachear na instalação
 const urlsToCache = [
   './',
   './index.html',
-  './style.css',
+  /* './style.css', foi removido */
   './manifest.json',
   './translations.json',
   './icon-192x192.png',
@@ -19,14 +14,12 @@ const urlsToCache = [
   'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
 ];
 
-// Listener para pular a espera
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
 });
 
-// Evento de Instalação
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -40,7 +33,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Evento de Ativação
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -57,7 +49,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Habilita o Navigation Preload
 if (workbox.navigationPreload && workbox.navigationPreload.isSupported()) {
   try {
       workbox.navigationPreload.enable();
@@ -66,7 +57,6 @@ if (workbox.navigationPreload && workbox.navigationPreload.isSupported()) {
   }
 }
 
-// Evento Fetch
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
     return;
