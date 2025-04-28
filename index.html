@@ -21,30 +21,18 @@
                 <span id="dashboard-month-total">Total Mês: <strong>0h</strong></span>
                 <span id="dashboard-forecast">Defina sua meta...</span>
             </div>
+            <span id="dashboard-month-percentage" class="dashboard-value">0%</span>
+            <span class="dashboard-label" data-translate-key="dashboard.monthGoalLabel">Meta Mensal</span>
             <div id="dashboard-revisits-section" class="hidden">
                 <span class="dashboard-label" data-translate-key="dashboard.nextRevisitLabel">Próxima Revisita</span>
-                <div id="dashboard-next-revisit-details">
-                    </div>
+                <div id="dashboard-next-revisit-details"></div>
             </div>
             <div class="hidden" id="dashboard-planned-dates">
                 <span class="dashboard-label" data-translate-key="dashboard.plannedTripsLabel">Planos Próximos</span>
-                <ul id="dashboard-plan-list">
-                    </ul>
+                <ul id="dashboard-plan-list"></ul>
             </div>
         </div>
-        <div class="dashboard-item dashboard-item--progress">
-            <div class="dashboard-item--progress-container">
-                <svg viewBox="0 0 36 36" class="progress-ring">
-                    <circle class="progress-ring__circle progress-ring__bg" cx="18" cy="18" r="15.9155"></circle>
-                    <circle id="progress-ring-fg" class="progress-ring__circle progress-ring__fg" cx="18" cy="18" r="15.9155" stroke-dasharray="100 100" stroke-dashoffset="100"></circle>
-                </svg>
-                <div class="dashboard-content">
-                    <span id="dashboard-month-percentage" class="dashboard-value">0%</span>
-                    <span class="dashboard-label" data-translate-key="dashboard.monthGoalLabel">Meta Mensal</span>
-                </div>
-            </div>
         </div>
-    </div>
 
     <div id="app">
         <div class="card expanded" id="record-card">
@@ -66,8 +54,7 @@
                         </div>
                         <div class="form-group">
                             <label for="record-tag" data-translate-key="recordCard.tagLabel">Tipo</label>
-                            <select id="record-tag">
-                                </select>
+                            <select id="record-tag"></select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -76,7 +63,7 @@
                     </div>
                     <div class="text-center" style="margin-top: 20px;">
                         <button type="submit" id="save-record-btn" data-translate-key="recordCard.saveButton">Salvar</button>
-                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -107,7 +94,7 @@
                     <h3 class="list-title" data-translate-key="revisitCard.pendingListTitle">Pendentes</h3>
                     <ul id="revisit-list" class="data-list">
                         <li class="placeholder hidden" data-translate-key="revisitCard.listPlaceholderNoPending">Nenhuma revisita pendente.</li>
-                        </ul>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -134,7 +121,7 @@
                     <h3 class="list-title" data-translate-key="planCard.listTitle">Datas Planejadas</h3>
                     <ul id="planning-list" class="data-list">
                         <li class="placeholder hidden" data-translate-key="planCard.listPlaceholderNoPastOrFuture">Nenhum planejamento registrado.</li>
-                        </ul>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -160,8 +147,7 @@
             <div class="card-header"><h2 data-translate-key="chartsCard.title">Gráficos</h2><span class="toggle-icon">▼</span></div>
             <div class="card-content">
                 <div class="form-group"> <label for="chart-month-selector" data-translate-key="chartsCard.monthSelectorLabel">Selecionar Mês:</label>
-                    <select id="chart-month-selector">
-                        </select>
+                    <select id="chart-month-selector"></select>
                     <p id="chart-total-hours-display" class="chart-summary-text"></p> </div>
                 <div class="chart-container">
                     <canvas id="monthlyHoursChart"></canvas>
@@ -178,7 +164,7 @@
                 <span id="showing-results-label"></span>
                 <ul id="history-list" class="data-list">
                     <li class="placeholder hidden" data-translate-key="historyCard.listPlaceholderNoRecords">Nenhum registro encontrado.</li>
-                    </ul>
+                </ul>
             </div>
         </div>
 
@@ -231,11 +217,11 @@
             };
 
             // --- Variáveis Globais (Elementos DOM e Dados) ---
-            let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
+            let appElement, dashboardBox, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let revisitCard, revisitForm, revisitIdInput, revisitNameInput, revisitDateInput, revisitNotesInput, saveRevisitBtn, clearRevisitFormBtn, revisitListContainer, revisitList, revisitListPlaceholder, dashboardRevisitsSection, dashboardNextRevisitDetails;
             let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
             let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
-            let progressRingRadius = 0, progressRingCircumference = 0, MONTH_NAMES = [], WEEKDAY_NAMES = [];
+            let MONTH_NAMES = [], WEEKDAY_NAMES = [];
             let lastCheckedDateString = '';
             let dateCheckInterval = null;
             const loadingIndicator = document.getElementById('loading-indicator');
@@ -329,7 +315,9 @@
             // --- Seleção dos Elementos DOM ---
             function selectDOMElements() {
                 appElement = document.getElementById('app');
-                dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list'); progressRingFg = document.getElementById('progress-ring-fg');
+                dashboardBox = document.getElementById('dashboard-box'); // Seleciona o dashboard box
+                dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list');
+                // Remove seleção de progressRingFg
                 recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn');
                 planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder');
                 monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active');
@@ -338,10 +326,7 @@
                 clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn');
                 revisitCard = document.getElementById('revisit-card'); revisitForm = document.getElementById('revisit-form'); revisitIdInput = document.getElementById('revisit-id'); revisitNameInput = document.getElementById('revisit-name'); revisitDateInput = document.getElementById('revisit-date'); revisitNotesInput = document.getElementById('revisit-notes'); saveRevisitBtn = document.getElementById('save-revisit-btn'); clearRevisitFormBtn = document.getElementById('clear-revisit-form-btn'); revisitListContainer = document.getElementById('revisit-list-container'); revisitList = document.getElementById('revisit-list'); revisitListPlaceholder = revisitList?.querySelector('.placeholder'); dashboardRevisitsSection = document.getElementById('dashboard-revisits-section'); dashboardNextRevisitDetails = document.getElementById('dashboard-next-revisit-details');
 
-                if (progressRingFg && progressRingFg.r?.baseVal?.value) {
-                    progressRingRadius = progressRingFg.r.baseVal.value;
-                    progressRingCircumference = 2 * Math.PI * progressRingRadius;
-                }
+                // Remove cálculo de circunferência
                  try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Error getting computed styles:", e); computedStyles = {}; }
                  textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff';
                  textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa';
@@ -895,7 +880,11 @@
                 const goal = settings.monthlyGoal || 70;
                 const percentage = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0;
                 if (dashboardMonthPercentage) dashboardMonthPercentage.textContent = `${Math.round(percentage)}%`;
-                updateProgressRing(monthHours, goal);
+                // Atualiza a variável CSS no #dashboard-box
+                if (dashboardBox) {
+                    dashboardBox.style.setProperty('--progress-percent', percentage);
+                }
+                // Remove chamada para updateProgressRing
                 if (dashboardMonthTotal) dashboardMonthTotal.innerHTML = `${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(monthHours)}</strong>`;
                 const lastDayOfMonthObj = new Date(currentYear, currentMonth + 1, 0);
                 const lastDayOfMonth = lastDayOfMonthObj.getDate();
@@ -936,14 +925,7 @@
                 }
                 updateDashboardPlannedDates();
             }
-            function updateProgressRing(currentValue, maxValue) {
-                const percent = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0;
-                const offset = progressRingCircumference * (1 - percent / 100);
-                if (progressRingFg) {
-                    progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`;
-                    progressRingFg.style.strokeDashoffset = Math.max(0, offset);
-                }
-            }
+            // Remove a função updateProgressRing
             function updateDashboardPlannedDates() {
                 const todayStr = getCurrentDateString();
                 const now = new Date();
