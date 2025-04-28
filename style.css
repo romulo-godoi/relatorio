@@ -29,6 +29,11 @@
 
     /* Variável para o progresso (será atualizada via JS) */
     --progress-percent: 0;
+
+     /* Cores para animação de fundo */
+    --celebrate-color-1: #a8e063;
+    --celebrate-color-2: #56ab2f;
+    --celebrate-color-3: #84fab0;
 }
 
 /* Reset Básico e Estilos Globais */
@@ -87,15 +92,15 @@ h1 { display: none; }
 #dashboard-box::before {
     content: '';
     position: absolute;
-    inset: 0; /* Cobre toda a área */
-    z-index: -2; /* Fica bem no fundo */
-    border-radius: inherit; /* Herda o border-radius do pai */
+    inset: 0;
+    z-index: -2;
+    border-radius: inherit;
     background-image: conic-gradient(
         var(--progress-bar-color) calc(var(--progress-percent) * 1%),
         var(--progress-track-color) calc(var(--progress-percent) * 1%)
     );
-    transition: background-image 0.5s ease-out, opacity 0.3s ease-out; /* Adiciona transição de opacidade */
-    opacity: 1; /* Visível por padrão */
+    transition: background-image 0.5s ease-out, opacity 0.3s ease-out;
+    opacity: 1;
 }
 
 /* Camada de máscara interna (cor do card) que deixa a borda visível */
@@ -103,35 +108,63 @@ h1 { display: none; }
     content: '';
     position: absolute;
     inset: var(--dashboard-border-thickness);
-    background: var(--card-bg); /* Cor de fundo do card */
-    z-index: -1; /* Fica acima do gradiente, mas abaixo do conteúdo */
-    border-radius: calc(var(--border-radius) - var(--dashboard-border-thickness)); /* Raio interno */
-    transition: opacity 0.3s ease-out; /* Adiciona transição de opacidade */
-    opacity: 1; /* Visível por padrão */
+    background: var(--card-bg);
+    z-index: -1;
+    border-radius: calc(var(--border-radius) - var(--dashboard-border-thickness));
+    transition: opacity 0.3s ease-out, background-color 0.5s ease-out; /* Adiciona transição de cor */
+    opacity: 1;
 }
 
 /* Estilos quando a meta for atingida */
 #dashboard-box.goal-met {
-    background-color: var(--success-color-darker); /* Fundo verde */
+    /* O fundo principal não muda, a animação acontece no ::after */
+    background-color: var(--card-bg);
 }
-#dashboard-box.goal-met::before,
+/* Esconde a borda */
+#dashboard-box.goal-met::before {
+    opacity: 0;
+    transition-delay: 0s;
+}
+/* Anima o fundo da máscara interna */
 #dashboard-box.goal-met::after {
-    opacity: 0; /* Esconde a borda e a máscara */
+    opacity: 1; /* Mantém a máscara visível */
+    background: repeating-linear-gradient(
+        -45deg,
+        var(--success-color-darker),
+        var(--success-color-darker) 15px,
+        var(--celebrate-color-1) 15px,
+        var(--celebrate-color-1) 30px,
+        var(--celebrate-color-3) 30px,
+        var(--celebrate-color-3) 45px
+    );
+    background-size: 200% 200%; /* Tamanho maior para animação */
+    animation: celebrate-bg 5s linear infinite;
 }
+
+/* Keyframes para a animação de fundo */
+@keyframes celebrate-bg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 /* Ajusta cores do texto dentro do dashboard quando a meta é atingida */
 #dashboard-box.goal-met .dashboard-label,
 #dashboard-box.goal-met #dashboard-summary,
 #dashboard-box.goal-met #dashboard-plan-list li {
-    color: rgba(255, 255, 255, 0.8); /* Texto secundário mais claro */
+    color: rgba(255, 255, 255, 0.85); /* Texto secundário mais claro */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para legibilidade */
 }
 #dashboard-box.goal-met .dashboard-value,
 #dashboard-box.goal-met #dashboard-summary strong,
 #dashboard-box.goal-met #dashboard-plan-list li strong,
 #dashboard-box.goal-met #dashboard-month-percentage {
     color: var(--text-color); /* Texto principal branco */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para legibilidade */
 }
 #dashboard-box.goal-met #dashboard-revisits-section .dashboard-value strong {
-     color: rgba(255, 255, 255, 0.9); /* Cor primária um pouco menos intensa */
+     color: rgba(255, 255, 255, 0.9);
+     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -153,10 +186,10 @@ h1 { display: none; }
     display: none;
 }
 
-/* Estilos do conteúdo que estava no item de progresso (agora no item principal) */
+/* Estilos do conteúdo que estava no item de progresso */
 #dashboard-month-percentage {
     font-size: 1.8em;
-    color: var(--text-color); /* Cor padrão */
+    color: var(--text-color);
     margin-bottom: 2px;
     font-weight: 600;
     margin-top: 10px;
@@ -165,7 +198,7 @@ h1 { display: none; }
     margin-top: 0;
     margin-bottom: 5px;
     font-size: 0.7em;
-    color: var(--text-color-secondary); /* Cor padrão */
+    color: var(--text-color-secondary);
 }
 
 /* Estilos gerais do conteúdo do dashboard */
@@ -191,6 +224,8 @@ h1 { display: none; }
 #dashboard-plan-list li { margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #dashboard-plan-list li strong { color: var(--text-color); }
 #dashboard-plan-list .plan-warning { font-size: 0.9em; margin-left: 5px; opacity: 0.7; font-style: italic; }
+
+/* --- Confetti removido --- */
 
 /* --- Estilos dos Cards (Restantes) --- */
 .card { background-color: var(--card-bg); border-radius: var(--border-radius); overflow: hidden; transition: box-shadow var(--transition-speed) ease; }
@@ -315,18 +350,15 @@ h3.list-title { font-size: 1em; font-weight: 600; color: var(--text-color-second
     }
 
     #dashboard-box {
-        /* Mantém coluna, mas ajusta padding */
         padding: 25px var(--card-padding);
         gap: 20px;
     }
 
     .dashboard-item {
-        /* Mantém centralizado */
         align-items: center;
         text-align: center;
     }
 
-    /* Aumenta um pouco a fonte da porcentagem no desktop */
     #dashboard-month-percentage {
         font-size: 2em;
     }
