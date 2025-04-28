@@ -14,6 +14,7 @@
     <div id="loading-indicator">Loading...</div>
 
     <div id="dashboard-box">
+        <div id="confetti-container"></div>
         <div class="dashboard-item">
             <span class="dashboard-label" data-translate-key="dashboard.weekHoursLabel">Horas da Semana</span>
             <span id="dashboard-week-hours" class="dashboard-value">0</span>
@@ -32,7 +33,7 @@
                 <ul id="dashboard-plan-list"></ul>
             </div>
         </div>
-        </div>
+    </div>
 
     <div id="app">
         <div class="card expanded" id="record-card">
@@ -215,15 +216,17 @@
                 REVISITS: 'pioneerTracker_revisits_v1.1',
                 SETTINGS: 'pioneerTracker_settings_v1.1'
             };
+            const CONFETTI_COUNT = 30; // Número de confetes a gerar
 
             // --- Variáveis Globais (Elementos DOM e Dados) ---
-            let appElement, dashboardBox, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
+            let appElement, dashboardBox, confettiContainer, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let revisitCard, revisitForm, revisitIdInput, revisitNameInput, revisitDateInput, revisitNotesInput, saveRevisitBtn, clearRevisitFormBtn, revisitListContainer, revisitList, revisitListPlaceholder, dashboardRevisitsSection, dashboardNextRevisitDetails;
             let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
             let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
             let MONTH_NAMES = [], WEEKDAY_NAMES = [];
             let lastCheckedDateString = '';
             let dateCheckInterval = null;
+            let confettiTimeout = null; // Para controlar a remoção dos confetes
             const loadingIndicator = document.getElementById('loading-indicator');
 
             if (loadingIndicator) loadingIndicator.classList.remove('hidden');
@@ -316,6 +319,7 @@
             function selectDOMElements() {
                 appElement = document.getElementById('app');
                 dashboardBox = document.getElementById('dashboard-box');
+                confettiContainer = document.getElementById('confetti-container'); // Seleciona o container de confetes
                 dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list');
                 recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn');
                 planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder');
@@ -853,6 +857,38 @@
                     }
                 });
             }
+            // Função para criar confetes
+            function createConfetti() {
+                if (!confettiContainer) return;
+                confettiContainer.innerHTML = ''; // Limpa confetes antigos
+                for (let i = 0; i < CONFETTI_COUNT; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    // Define posição, cor e delay aleatórios
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.backgroundColor = `var(--confetti-color-${Math.floor(Math.random() * 6) + 1})`;
+                    confetti.style.animationDelay = `${Math.random() * 2}s`; // Delay inicial aleatório
+                    // Varia tamanho e forma (opcional)
+                    const size = Math.random() * 6 + 6; // Tamanho entre 6px e 12px
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size * (Math.random() * 0.5 + 0.75)}px`; // Altura um pouco variável
+                    if (Math.random() > 0.7) { // 30% de chance de ser redondo
+                        confetti.style.borderRadius = '50%';
+                    }
+                    confettiContainer.appendChild(confetti);
+                }
+                 // Limpa os confetes após a animação mais longa terminar + um buffer
+                if (confettiTimeout) clearTimeout(confettiTimeout);
+                confettiTimeout = setTimeout(() => {
+                    if (confettiContainer) confettiContainer.innerHTML = '';
+                }, 6000); // 4s da animação + 2s de delay máximo + buffer
+            }
+            // Função para remover confetes
+            function removeConfetti() {
+                 if (confettiTimeout) clearTimeout(confettiTimeout);
+                 if (confettiContainer) confettiContainer.innerHTML = '';
+            }
+
 
             // --- Funções de Atualização da Interface ---
             function updateDashboard() {
@@ -878,17 +914,20 @@
                 const goal = settings.monthlyGoal || 70;
                 const percentage = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0;
                 if (dashboardMonthPercentage) dashboardMonthPercentage.textContent = `${Math.round(percentage)}%`;
-                // Atualiza a variável CSS e a classe no #dashboard-box
                 if (dashboardBox) {
                     dashboardBox.style.setProperty('--progress-percent', percentage);
-                    // Adiciona ou remove a classe .goal-met
                     if (percentage >= 100) {
-                        dashboardBox.classList.add('goal-met');
+                        if (!dashboardBox.classList.contains('goal-met')) {
+                             dashboardBox.classList.add('goal-met');
+                             createConfetti(); // Cria confetes ao atingir a meta
+                        }
                     } else {
-                        dashboardBox.classList.remove('goal-met');
+                        if (dashboardBox.classList.contains('goal-met')) {
+                             dashboardBox.classList.remove('goal-met');
+                             removeConfetti(); // Remove confetes se a meta deixar de ser atingida
+                        }
                     }
                 }
-                // Remove chamada para updateProgressRing
                 if (dashboardMonthTotal) dashboardMonthTotal.innerHTML = `${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(monthHours)}</strong>`;
                 const lastDayOfMonthObj = new Date(currentYear, currentMonth + 1, 0);
                 const lastDayOfMonth = lastDayOfMonthObj.getDate();
@@ -929,7 +968,6 @@
                 }
                 updateDashboardPlannedDates();
             }
-            // Remove a função updateProgressRing
             function updateDashboardPlannedDates() {
                 const todayStr = getCurrentDateString();
                 const now = new Date();
