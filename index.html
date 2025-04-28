@@ -315,9 +315,8 @@
             // --- Seleção dos Elementos DOM ---
             function selectDOMElements() {
                 appElement = document.getElementById('app');
-                dashboardBox = document.getElementById('dashboard-box'); // Seleciona o dashboard box
+                dashboardBox = document.getElementById('dashboard-box');
                 dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list');
-                // Remove seleção de progressRingFg
                 recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn');
                 planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder');
                 monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active');
@@ -326,7 +325,6 @@
                 clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn');
                 revisitCard = document.getElementById('revisit-card'); revisitForm = document.getElementById('revisit-form'); revisitIdInput = document.getElementById('revisit-id'); revisitNameInput = document.getElementById('revisit-name'); revisitDateInput = document.getElementById('revisit-date'); revisitNotesInput = document.getElementById('revisit-notes'); saveRevisitBtn = document.getElementById('save-revisit-btn'); clearRevisitFormBtn = document.getElementById('clear-revisit-form-btn'); revisitListContainer = document.getElementById('revisit-list-container'); revisitList = document.getElementById('revisit-list'); revisitListPlaceholder = revisitList?.querySelector('.placeholder'); dashboardRevisitsSection = document.getElementById('dashboard-revisits-section'); dashboardNextRevisitDetails = document.getElementById('dashboard-next-revisit-details');
 
-                // Remove cálculo de circunferência
                  try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Error getting computed styles:", e); computedStyles = {}; }
                  textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff';
                  textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa';
@@ -880,9 +878,15 @@
                 const goal = settings.monthlyGoal || 70;
                 const percentage = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0;
                 if (dashboardMonthPercentage) dashboardMonthPercentage.textContent = `${Math.round(percentage)}%`;
-                // Atualiza a variável CSS no #dashboard-box
+                // Atualiza a variável CSS e a classe no #dashboard-box
                 if (dashboardBox) {
                     dashboardBox.style.setProperty('--progress-percent', percentage);
+                    // Adiciona ou remove a classe .goal-met
+                    if (percentage >= 100) {
+                        dashboardBox.classList.add('goal-met');
+                    } else {
+                        dashboardBox.classList.remove('goal-met');
+                    }
                 }
                 // Remove chamada para updateProgressRing
                 if (dashboardMonthTotal) dashboardMonthTotal.innerHTML = `${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(monthHours)}</strong>`;
