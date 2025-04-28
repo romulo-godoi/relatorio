@@ -565,9 +565,8 @@
         (async () => {
             // --- Configurações e Constantes Globais ---
             let translations = {};
-            let currentLang = 'en'; // Idioma padrão
-            const supportedLanguages = ["pt-BR", "en", "es", "de", "fr"]; // Idiomas suportados (deve corresponder ao translations.json)
-            // Mapeamento interno de tags para chaves de tradução
+            let currentLang = 'en';
+            const supportedLanguages = ["pt-BR", "en", "es", "de", "fr"];
             const tagKeyMapping = {
                 "Casa em casa": "tags.houseToHouse",
                 "Carrinho": "tags.cart",
@@ -575,38 +574,41 @@
                 "Testemunho informal": "tags.informalWitnessing",
                 "Outro": "tags.other"
             };
-            const DEFAULT_TAG_VALUE = "Casa em casa"; // Tag padrão se nenhuma for selecionada/encontrada
-            const NOTES_MAX_LENGTH = 300; // Limite de caracteres para notas de registro
-            const REVISIT_NOTES_MAX_LENGTH = 500; // Limite de caracteres para notas de revisita
-            const HISTORY_MONTH_LIMIT = 3; // Quantos meses de histórico mostrar por padrão
-            const MIN_HOURS_PER_DAY_FORECAST = 1.0; // Mínimo de horas/dia sugerido na previsão
-            const LOCAL_STORAGE_KEYS = { // Chaves para salvar dados no LocalStorage
-                ENTRIES: 'pioneerTracker_entries_v5.1', // Histórico de registros
-                PLANS: 'pioneerTracker_plans_v1.1',    // Planejamento futuro
-                REVISITS: 'pioneerTracker_revisits_v1.1', // Lista de revisitas
-                SETTINGS: 'pioneerTracker_settings_v1.1' // Configurações (meta, etc.)
+            const DEFAULT_TAG_VALUE = "Casa em casa";
+            const NOTES_MAX_LENGTH = 300;
+            const REVISIT_NOTES_MAX_LENGTH = 500;
+            const HISTORY_MONTH_LIMIT = 3;
+            const MIN_HOURS_PER_DAY_FORECAST = 1.0;
+            const LOCAL_STORAGE_KEYS = {
+                ENTRIES: 'pioneerTracker_entries_v5.1',
+                PLANS: 'pioneerTracker_plans_v1.1',
+                REVISITS: 'pioneerTracker_revisits_v1.1',
+                SETTINGS: 'pioneerTracker_settings_v1.1'
             };
 
             // --- Variáveis Globais (Elementos DOM e Dados) ---
             let appElement, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, progressRingFg, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let revisitCard, revisitForm, revisitIdInput, revisitNameInput, revisitDateInput, revisitNotesInput, saveRevisitBtn, clearRevisitFormBtn, revisitListContainer, revisitList, revisitListPlaceholder, dashboardRevisitsSection, dashboardNextRevisitDetails;
-            let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false }; // Arrays para armazenar os dados e objeto de configurações
-            let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null; // Variáveis de estado
-            let progressRingRadius = 0, progressRingCircumference = 0, MONTH_NAMES = [], WEEKDAY_NAMES = []; // Variáveis para UI e datas
-            let lastCheckedDateString = ''; // Para verificar mudança de dia
-            let dateCheckInterval = null; // Timer para verificar mudança de dia
-            const loadingIndicator = document.getElementById('loading-indicator'); // Elemento de loading
+            let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
+            let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
+            let progressRingRadius = 0, progressRingCircumference = 0, MONTH_NAMES = [], WEEKDAY_NAMES = [];
+            let lastCheckedDateString = '';
+            let dateCheckInterval = null;
+            const loadingIndicator = document.getElementById('loading-indicator');
 
-            // Exibe o indicador de loading imediatamente
             if (loadingIndicator) loadingIndicator.classList.remove('hidden');
 
             // --- Funções de Tradução (i18n) ---
-            // Função auxiliar para obter valores aninhados (ex: obj['a.b.c'])
-            function getNestedValue(obj, key) { if (!key || typeof key !== 'string') return undefined; return key.split('.').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj); }
-            // Função principal 't' para buscar traduções
+            function getNestedValue(obj, key) {
+                if (!key || typeof key !== 'string') return undefined;
+                return key.split('.').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj);
+            }
             function t(key, variables = {}) {
                 const langObj = translations?.[currentLang] || translations?.['en'];
-                if (!langObj) { console.error(`Lang missing: ${currentLang} & 'en'. Key: ${key}`); return `[NO LANG: ${key}]`; }
+                if (!langObj) {
+                    console.error(`Lang missing: ${currentLang} & 'en'. Key: ${key}`);
+                    return `[NO LANG: ${key}]`;
+                }
                 let translation = getNestedValue(langObj, key);
                 if (translation === undefined) {
                     console.warn(`Trans missing for key "${key}" in "${currentLang}", trying 'en'`);
@@ -614,7 +616,10 @@
                     if (fallbackLangObj) translation = getNestedValue(fallbackLangObj, key);
                     if (translation === undefined) return `[MISSING: ${key}]`;
                 }
-                if (typeof translation !== 'string') { console.warn(`Trans key "${key}" not string:`, translation); return `[TYPE ERR: ${key}]`; }
+                if (typeof translation !== 'string') {
+                    console.warn(`Trans key "${key}" not string:`, translation);
+                    return `[TYPE ERR: ${key}]`;
+                }
                 for (const placeholder in variables) {
                     if (Object.prototype.hasOwnProperty.call(variables, placeholder)) {
                         translation = translation.replace(new RegExp(`\\{${placeholder}\\}`, 'g'), variables[placeholder]);
@@ -622,7 +627,6 @@
                 }
                 return translation;
             }
-            // Aplica traduções aos elementos HTML com 'data-translate-key'
             function applyStaticTranslations() {
                 document.querySelectorAll('[data-translate-key]').forEach(element => {
                     const key = element.getAttribute('data-translate-key');
@@ -633,7 +637,6 @@
                         else if (['placeholder', 'title', 'value'].includes(attr)) element.setAttribute(attr, translation);
                     }
                 });
-                // Atualiza opções do select de tags
                 if (recordTagSelect) {
                     const currentVal = recordTagSelect.value;
                     recordTagSelect.innerHTML = '';
@@ -646,44 +649,36 @@
                     if (recordTagSelect.querySelector(`option[value="${currentVal}"]`)) recordTagSelect.value = currentVal;
                     else recordTagSelect.value = DEFAULT_TAG_VALUE;
                 }
-                // Atualiza título da página e lang do HTML
                 document.title = t('appTitle');
                 document.documentElement.lang = currentLang.split('-')[0];
-                // Atualiza label de notas com limite de caracteres
                 if (recordNotesLabel) recordNotesLabel.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH });
                 if (recordNotesInput) recordNotesInput.maxLength = NOTES_MAX_LENGTH;
                 if (revisitNotesInput) revisitNotesInput.maxLength = REVISIT_NOTES_MAX_LENGTH;
-                // Atualiza texto de loading
                 if (loadingIndicator && !loadingIndicator.classList.contains('hidden')) loadingIndicator.textContent = t('common.loading');
             }
-            // Carrega o arquivo JSON de traduções
             async function loadTranslations() {
                  try {
-                    const response = await fetch('translations.json'); // Assume que o arquivo está na mesma pasta
+                    const response = await fetch('translations.json');
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     translations = await response.json();
-                    // Determina o idioma a ser usado
-                    const browserLang = (navigator.language || 'en').split('-')[0]; // pt
-                    const browserLocale = navigator.language || 'en'; // pt-BR
+                    const browserLang = (navigator.language || 'en').split('-')[0];
+                    const browserLocale = navigator.language || 'en';
                     if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) currentLang = browserLocale;
                     else if (translations[browserLang] && supportedLanguages.includes(browserLang)) currentLang = browserLang;
                     else if (translations['en']) currentLang = 'en';
                     else throw new Error("'en' language file missing");
                     console.log("Language selected:", currentLang);
-                    // Carrega nomes de meses e dias da semana traduzidos
                     MONTH_NAMES = getNestedValue(translations[currentLang], 'dates.monthNames') || getNestedValue(translations['en'], 'dates.monthNames');
                     WEEKDAY_NAMES = getNestedValue(translations[currentLang], 'dates.weekdaysShort') || getNestedValue(translations['en'], 'dates.weekdaysShort');
-                    // Validação básica
                     if (!Array.isArray(MONTH_NAMES) || MONTH_NAMES.length !== 12) { console.warn(`Month names invalid for ${currentLang}`); MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; }
-                    if (!Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length !== 7) { console.warn(`Weekday names invalid for ${currentLang}`); WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']; } // Ajustado para Pt
+                    if (!Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length !== 7) { console.warn(`Weekday names invalid for ${currentLang}`); WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']; }
                 } catch (error) {
                     console.error('FATAL: Translation load error:', error);
                     if (loadingIndicator) loadingIndicator.textContent = 'Language file error!';
                     alert("Language data error. Check translations.json or network.");
-                    // Define fallbacks básicos
                     MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                    WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']; // Ajustado para Pt
-                    currentLang = 'en'; // Força fallback para inglês se houver erro
+                    WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+                    currentLang = 'en';
                 }
             }
 
@@ -699,12 +694,10 @@
                 clearAllDataBtn = document.getElementById('clear-all-data-btn'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn');
                 revisitCard = document.getElementById('revisit-card'); revisitForm = document.getElementById('revisit-form'); revisitIdInput = document.getElementById('revisit-id'); revisitNameInput = document.getElementById('revisit-name'); revisitDateInput = document.getElementById('revisit-date'); revisitNotesInput = document.getElementById('revisit-notes'); saveRevisitBtn = document.getElementById('save-revisit-btn'); clearRevisitFormBtn = document.getElementById('clear-revisit-form-btn'); revisitListContainer = document.getElementById('revisit-list-container'); revisitList = document.getElementById('revisit-list'); revisitListPlaceholder = revisitList?.querySelector('.placeholder'); dashboardRevisitsSection = document.getElementById('dashboard-revisits-section'); dashboardNextRevisitDetails = document.getElementById('dashboard-next-revisit-details');
 
-                // Calcula circunferência do anel de progresso (após DOM estar pronto)
                 if (progressRingFg && progressRingFg.r?.baseVal?.value) {
                     progressRingRadius = progressRingFg.r.baseVal.value;
                     progressRingCircumference = 2 * Math.PI * progressRingRadius;
                 }
-                // Obtém estilos computados
                  try { computedStyles = getComputedStyle(document.body); } catch (e) { console.error("Error getting computed styles:", e); computedStyles = {}; }
                  textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff';
                  textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa';
@@ -713,167 +706,1097 @@
             }
 
             // --- Funções Utilitárias de Data e Hora ---
-            function getCurrentDateString() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
-            function parseLocalDate(dateString) { if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return new Date(NaN); const [y, m, d] = dateString.split('-').map(Number); return new Date(y, m - 1, d); } // Considera fuso local
-            function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; try { const date = parseLocalDate(dateString); if (isNaN(date.valueOf())) throw new Error("Invalid date"); const options = { day: '2-digit', month: '2-digit', year: 'numeric' }; return new Intl.DateTimeFormat(currentLang || 'default', options).format(date); } catch (e) { console.error("Error formatting date:", dateString, e); const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; } }
-            function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
-            function getStartOfWeek(date = new Date()) { const d = new Date(date); d.setHours(0, 0, 0, 0); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); /* Ajuste para iniciar na Segunda */ const sOW = new Date(d.setDate(diff)); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
-            function getDateMonthsAgo(months) { const d = new Date(); d.setHours(0, 0, 0, 0); d.setMonth(d.getMonth() - months); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
-            function formatMonthYearExtensive(monthYearString) { if (!monthYearString || !monthYearString.includes('/') || !Array.isArray(MONTH_NAMES) || MONTH_NAMES.length < 12) return monthYearString; const [m, y] = monthYearString.split('/'); const idx = parseInt(m, 10) - 1; if (idx < 0 || idx > 11) return monthYearString; return `${MONTH_NAMES[idx]} ${y}`; }
-            // Formata horas decimais para "X horas e Y minutos" ou "Xh Ym" (curto)
-            function formatHoursExtensive(hoursDecimal, short = false) { if (isNaN(hoursDecimal) || hoursDecimal < 0) hoursDecimal = 0; const totalMinutes = Math.round(hoursDecimal * 60); const hours = Math.floor(totalMinutes / 60); const minutes = totalMinutes % 60; const hKey = short ? (hours === 1 ? 'units.hour_short' : 'units.hours_short') : (hours === 1 ? 'units.hour' : 'units.hours'); const mKey = short ? (minutes === 1 ? 'units.minute_short' : 'units.minutes_short') : (minutes === 1 ? 'units.minute' : 'units.minutes'); let result = '', hPart = '', mPart = ''; if (hours > 0) { const hUnit = t(hKey); hPart = `${hours}${short ? hUnit : ' ' + hUnit}`; } if (minutes > 0) { const mUnit = t(mKey); mPart = `${minutes}${short ? mUnit : ' ' + mUnit}`; } if (hPart && mPart) { const connector = short ? " " : ` ${t('units.andConnector')} `; result = `${hPart}${connector}${mPart}`; } else { result = hPart || mPart; } if (result === '') { const zeroKey = short ? 'units.hours_short' : 'units.hours'; result = `0${short ? t(zeroKey) : ' ' + t(zeroKey, { count: 0 })}`; } return result; }
-            // Converte horas decimais para formato de input HH:MM
-            function formatDecimalToTimeInput(d) { if (isNaN(d) || d <= 0) return ""; const t = Math.round(d * 60), h = Math.floor(t / 60), m = t % 60; return `${h}:${String(m).padStart(2, '0')}`; }
-            // Converte input HH:MM ou HMM (ex: 230 -> 2:30) para horas decimais
-            function parseTimeInputToDecimal(s) { if (!s) return 0; const t = s.trim(); if (!t) return 0; const colonMatch = t.match(/^(\d{1,3}):(\d{1,2})$/); if (colonMatch) { const h = parseInt(colonMatch[1], 10), m = parseInt(colonMatch[2], 10); if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60); } const numMatch = t.match(/^(\d+)$/); if (numMatch) { const str = numMatch[1], v = parseInt(str, 10); if (isNaN(v)) return NaN; if (str.length <= 2) { if (v < 60) return v / 60; /* Interpreta como minutos se <= 2 dígitos e < 60 */ } if (str.length >= 3 && str.length <= 4) { /* HMM ou HHMM */ const hs = str.slice(0, -2), ms = str.slice(-2); const h = parseInt(hs, 10), m = parseInt(ms, 10); if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60); } } return NaN; /* Inválido */ }
-            // Formata data para exibição relativa (Hoje, Amanhã, Próx. [Dia], DD/MM/AAAA)
-            function formatRelativeDate(dateString) { if (!dateString) return ''; const today = new Date(); today.setHours(0, 0, 0, 0); const inputDate = parseLocalDate(dateString); if (isNaN(inputDate.valueOf()) || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length < 7) { return formatDisplayDate(dateString); } const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const week = new Date(today); week.setDate(today.getDate() + 7); const inputTime = inputDate.getTime(); const todayTime = today.getTime(); const tomorrowTime = tomorrow.getTime(); if (inputTime === todayTime) return t('dates.today'); if (inputTime === tomorrowTime) return t('dates.tomorrow'); if (inputDate > tomorrow && inputDate < week) { return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
+            function getCurrentDateString() {
+                const t = new Date();
+                return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+            }
+            function parseLocalDate(dateString) {
+                if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return new Date(NaN);
+                const [y, m, d] = dateString.split('-').map(Number);
+                return new Date(y, m - 1, d);
+            }
+            function formatDisplayDate(dateString) {
+                if (!dateString || !dateString.includes('-')) return dateString;
+                try {
+                    const date = parseLocalDate(dateString);
+                    if (isNaN(date.valueOf())) throw new Error("Invalid date");
+                    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                    return new Intl.DateTimeFormat(currentLang || 'default', options).format(date);
+                } catch (e) {
+                    console.error("Error formatting date:", dateString, e);
+                    const [y, m, d] = dateString.split('-');
+                    return `${d}/${m}/${y}`;
+                }
+            }
+            function getMonthYearString(date) {
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const y = date.getFullYear();
+                return `${m}/${y}`;
+            }
+            function getStartOfWeek(date = new Date()) {
+                const d = new Date(date);
+                d.setHours(0, 0, 0, 0);
+                const dayOfWeek = d.getDay(); // 0 = Domingo, 1 = Segunda, ...
+                const diff = d.getDate() - dayOfWeek; // Subtrai o dia da semana para chegar ao Domingo
+                const sOW = new Date(d.setDate(diff));
+                return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`;
+            }
+            function getDateMonthsAgo(months) {
+                const d = new Date();
+                d.setHours(0, 0, 0, 0);
+                d.setMonth(d.getMonth() - months);
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            }
+            function formatMonthYearExtensive(monthYearString) {
+                if (!monthYearString || !monthYearString.includes('/') || !Array.isArray(MONTH_NAMES) || MONTH_NAMES.length < 12) return monthYearString;
+                const [m, y] = monthYearString.split('/');
+                const idx = parseInt(m, 10) - 1;
+                if (idx < 0 || idx > 11) return monthYearString;
+                return `${MONTH_NAMES[idx]} ${y}`;
+            }
+            function formatHoursExtensive(hoursDecimal, short = false) {
+                if (isNaN(hoursDecimal) || hoursDecimal < 0) hoursDecimal = 0;
+                const totalMinutes = Math.round(hoursDecimal * 60);
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                const hKey = short ? (hours === 1 ? 'units.hour_short' : 'units.hours_short') : (hours === 1 ? 'units.hour' : 'units.hours');
+                const mKey = short ? (minutes === 1 ? 'units.minute_short' : 'units.minutes_short') : (minutes === 1 ? 'units.minute' : 'units.minutes');
+                let result = '', hPart = '', mPart = '';
+                if (hours > 0) {
+                    const hUnit = t(hKey);
+                    hPart = `${hours}${short ? hUnit : ' ' + hUnit}`;
+                }
+                if (minutes > 0) {
+                    const mUnit = t(mKey);
+                    mPart = `${minutes}${short ? mUnit : ' ' + mUnit}`;
+                }
+                if (hPart && mPart) {
+                    const connector = short ? " " : ` ${t('units.andConnector')} `;
+                    result = `${hPart}${connector}${mPart}`;
+                } else {
+                    result = hPart || mPart;
+                }
+                if (result === '') {
+                    const zeroKey = short ? 'units.hours_short' : 'units.hours';
+                    result = `0${short ? t(zeroKey) : ' ' + t(zeroKey, { count: 0 })}`;
+                }
+                return result;
+            }
+            function formatDecimalToTimeInput(d) {
+                if (isNaN(d) || d <= 0) return "";
+                const t = Math.round(d * 60), h = Math.floor(t / 60), m = t % 60;
+                return `${h}:${String(m).padStart(2, '0')}`;
+            }
+            function parseTimeInputToDecimal(s) {
+                if (!s) return 0;
+                const t = s.trim();
+                if (!t) return 0;
+                const colonMatch = t.match(/^(\d{1,3}):(\d{1,2})$/);
+                if (colonMatch) {
+                    const h = parseInt(colonMatch[1], 10), m = parseInt(colonMatch[2], 10);
+                    if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60);
+                }
+                const numMatch = t.match(/^(\d+)$/);
+                if (numMatch) {
+                    const str = numMatch[1], v = parseInt(str, 10);
+                    if (isNaN(v)) return NaN;
+                    if (str.length <= 2) {
+                        if (v < 60) return v / 60;
+                    }
+                    if (str.length >= 3 && str.length <= 4) {
+                        const hs = str.slice(0, -2), ms = str.slice(-2);
+                        const h = parseInt(hs, 10), m = parseInt(ms, 10);
+                        if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60);
+                    }
+                }
+                return NaN;
+            }
+            function formatRelativeDate(dateString) {
+                if (!dateString) return '';
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const inputDate = parseLocalDate(dateString);
+                if (isNaN(inputDate.valueOf()) || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length < 7) {
+                    return formatDisplayDate(dateString);
+                }
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+                const week = new Date(today);
+                week.setDate(today.getDate() + 7);
+                const inputTime = inputDate.getTime();
+                const todayTime = today.getTime();
+                const tomorrowTime = tomorrow.getTime();
+                if (inputTime === todayTime) return t('dates.today');
+                if (inputTime === tomorrowTime) return t('dates.tomorrow');
+                if (inputDate > tomorrow && inputDate < week) {
+                    return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`;
+                }
+                return formatDisplayDate(dateString);
+            }
 
             // --- Funções de Persistência de Dados (LocalStorage) ---
-            function saveData() { try { localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS, JSON.stringify(revisits)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); } catch (e) { console.error("Save Error:", e); showFeedback('feedback.saveError', 'danger'); } }
-            function loadData() { try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const p = JSON.parse(sER); recordedEntries = Array.isArray(p) ? p.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : (() => { throw new Error("Entries not array") })(); } catch (e) { console.error("Parse Error (Entries):", e); recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } } const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } }); const sRV = localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS); revisits = sRV ? JSON.parse(sRV) : []; revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null })); const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings = { monthlyGoal: 70, goalHasBeenSet: false, ...JSON.parse(sSR || '{}') }; if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); }); console.log("Data loaded successfully."); } catch (e) { console.error("Load Data Error:", e); recordedEntries = []; plannedEntries = []; revisits = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.clear(); } catch (se) { console.error("Error clearing localStorage after load fail:", se) } showFeedback('feedback.loadError', 'danger'); } }
+            function saveData() {
+                try {
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS, JSON.stringify(revisits));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+                } catch (e) {
+                    console.error("Save Error:", e);
+                    showFeedback('feedback.saveError', 'danger');
+                }
+            }
+            function loadData() {
+                try {
+                    let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
+                    if (sER) {
+                        try {
+                            const p = JSON.parse(sER);
+                            recordedEntries = Array.isArray(p) ? p.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : (() => { throw new Error("Entries not array") })();
+                        } catch (e) {
+                            console.error("Parse Error (Entries):", e);
+                            recordedEntries = [];
+                            localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES);
+                        }
+                    }
+                    const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS);
+                    plannedEntries = sP ? JSON.parse(sP) : [];
+                    plannedEntries.forEach(p => {
+                        if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') {
+                            p.hours = p.plannedHours;
+                            delete p.plannedHours;
+                        }
+                    });
+                    const sRV = localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS);
+                    revisits = sRV ? JSON.parse(sRV) : [];
+                    revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null }));
+                    const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS);
+                    settings = { monthlyGoal: 70, goalHasBeenSet: false, ...JSON.parse(sSR || '{}') };
+                    if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70;
+                    if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false;
+                    recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+                    plannedEntries.sort((a, b) => a.date.localeCompare(b.date));
+                    revisits.sort((a, b) => {
+                        if (a.status !== b.status) return a.status === 'pending' ? -1 : 1;
+                        if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate);
+                        if (a.scheduledDate) return -1;
+                        if (b.scheduledDate) return 1;
+                        return (a.dateAdded || '').localeCompare(b.dateAdded || '');
+                    });
+                    console.log("Data loaded successfully.");
+                } catch (e) {
+                    console.error("Load Data Error:", e);
+                    recordedEntries = [];
+                    plannedEntries = [];
+                    revisits = [];
+                    settings = { monthlyGoal: 70, goalHasBeenSet: false };
+                    try {
+                        localStorage.clear();
+                    } catch (se) {
+                        console.error("Error clearing localStorage after load fail:", se)
+                    }
+                    showFeedback('feedback.loadError', 'danger');
+                }
+            }
 
             // --- Funções de Interação com UI (Formulários, Cards, Diálogos) ---
-            // Tenta exibir o prompt de instalação do PWA (se disponível e a meta já foi definida)
-            function triggerInstallPromptIfAvailable(context = '?') { if (deferredInstallPrompt && settings.goalHasBeenSet) { console.log(`Prompting install (${context})...`); setTimeout(() => { deferredInstallPrompt.prompt().then(r => console.log('Install prompt outcome:', r.outcome)).catch(e => console.error("Install prompt error:", e)); deferredInstallPrompt = null; }, 300); } }
-            // Pede a meta mensal ao usuário via prompt (usado na primeira vez)
-            function promptForMonthlyGoal() { let ok = false; const msg = t('statsCard.goalLabel'); while (!ok) { const inp = prompt(msg, settings.monthlyGoal); if (inp === null) { ok = true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); } } else { const g = parseInt(inp, 10); if (!isNaN(g) && g > 0) { settings.monthlyGoal = g; settings.goalHasBeenSet = true; if(monthlyGoalInput) monthlyGoalInput.value = g; saveData(); ok = true; updateAllDisplays(); showFeedback("feedback.goalSetSuccess", "success"); triggerInstallPromptIfAvailable('initial goal'); } else { alert(t("feedback.invalidGoalValue")); } } } }
-            // Controla a visibilidade do input de data vs. texto "Hoje"
-            function setDateInputVisibility(visible) { isDateInputVisible = visible; if (visible) { recordDateInput?.classList.remove('hidden'); dateLabel?.classList.add('visually-hidden'); recordDateInput?.focus(); } else { recordDateInput?.classList.add('hidden'); dateLabel?.classList.remove('visually-hidden'); if (displayDate) displayDate.textContent = (!recordDateInput?.value || recordDateInput.value === getCurrentDateString()) ? t('dates.today') : formatDisplayDate(recordDateInput.value); } }
-            // Alterna a expansão de um card
-            function toggleCard(cardElement) { if (!cardElement) return; const isExpanded = cardElement.classList.contains('expanded'); cardElement.classList.toggle('expanded', !isExpanded); const icon = cardElement.querySelector('.toggle-icon'); if (icon) icon.textContent = !isExpanded ? '▲' : '▼'; }
-            // Limpa o formulário de registro de atividade
-            function clearRecordForm() { recordForm?.reset(); if (recordIdInput) recordIdInput.value = ''; if (recordDateInput) recordDateInput.value = getCurrentDateString(); setDateInputVisibility(false); if (recordTagSelect) recordTagSelect.value = DEFAULT_TAG_VALUE; if (recordNotesInput) recordNotesInput.value = ''; if (recordHoursInput) recordHoursInput.value = ''; if (saveRecordBtn) saveRecordBtn.textContent = t('recordCard.saveButton'); saveRecordBtn?.classList.remove('editing'); currentEditingId = null; }
-            // Processa o envio do formulário de registro
-            function handleRecordSubmit(event) { event.preventDefault(); const id = recordIdInput?.value ? parseInt(recordIdInput.value, 10) : Date.now(); const date = (isDateInputVisible || (recordDateInput?.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString(); const hours = parseTimeInputToDecimal(recordHoursInput?.value); const tag = recordTagSelect?.value || DEFAULT_TAG_VALUE; const notes = recordNotesInput?.value.trim().substring(0, NOTES_MAX_LENGTH); if (isNaN(hours) || hours <= 0) { alert(t('feedback.invalidTimeFormat')); recordHoursInput?.focus(); return; } if (!date) { alert(t('feedback.invalidDate')); return; } const entry = { id, date, hours, tag, notes, type: 'record' }; const idx = recordedEntries.findIndex(e => e.id === id); if (idx > -1) recordedEntries[idx] = entry; else recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); saveData(); clearRecordForm(); updateAllDisplays(); showFeedback('feedback.recordSavedSuccess', 'success'); }
-            // Preenche o formulário para editar um registro existente
-            function editRecordEntry(id) { const entry = recordedEntries.find(e => e.id === id && e.type !== 'revisit_completed'); if (entry) { if (!recordCard?.classList.contains('expanded')) toggleCard(recordCard); currentEditingId = id; if (recordIdInput) recordIdInput.value = entry.id; if (recordDateInput) recordDateInput.value = entry.date; setDateInputVisibility(entry.date !== getCurrentDateString()); if (recordHoursInput) recordHoursInput.value = formatDecimalToTimeInput(entry.hours); if (recordTagSelect) recordTagSelect.value = entry.tag || DEFAULT_TAG_VALUE; if (recordNotesInput) recordNotesInput.value = entry.notes || ''; if (saveRecordBtn) { saveRecordBtn.textContent = t('recordCard.updateButton'); saveRecordBtn.classList.add('editing'); } recordCard?.scrollIntoView({ behavior: 'smooth', block: 'start' }); recordHoursInput?.focus(); } }
-            // Exclui um registro (pede confirmação)
-            function deleteRecordEntry(id) { showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'), () => { const i = recordedEntries.findIndex(e => e.id === id); if (i > -1) { recordedEntries.splice(i, 1); saveData(); updateAllDisplays(); showFeedback('feedback.recordDeletedSuccess', 'info'); if (currentEditingId === id) clearRecordForm(); } else console.warn("Entry not found for deletion:", id); }); }
-            // Limpa o formulário de planejamento
-            function clearPlanForm() { planForm?.reset(); if (planIdInput) planIdInput.value = ''; if (planDateInput) planDateInput.value = ''; if (planHoursInput) planHoursInput.value = ''; if (savePlanBtn) savePlanBtn.textContent = t('planCard.saveButton'); currentEditingId = null; }
-            // Processa o envio do formulário de planejamento
-            function handlePlanSubmit(event) { event.preventDefault(); const id = planIdInput?.value ? parseInt(planIdInput.value, 10) : Date.now(); const date = planDateInput?.value; const hours = parseTimeInputToDecimal(planHoursInput?.value); const todayStr = getCurrentDateString(); if (!date || isNaN(hours) || hours <= 0) { alert(t('feedback.planFormInvalid')); planHoursInput?.focus(); return; } if (date < todayStr) { alert(t('feedback.planDatePastError')); planDateInput?.focus(); return; } const plan = { id, date, hours }; const idx = plannedEntries.findIndex(p => p.id === id); if (idx > -1) plannedEntries[idx] = plan; else plannedEntries.push(plan); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); saveData(); clearPlanForm(); updateAllDisplays(); showFeedback('feedback.planSavedSuccess', 'success'); }
-            // Marca um plano como concluído (cria um registro e remove o plano)
-            function markPlanAsDone(id) { const idx = plannedEntries.findIndex(p => p.id === id); if (idx === -1) { showFeedback('feedback.planNotFound', 'danger'); return; } const plan = plannedEntries[idx]; const todayStr = getCurrentDateString(); const recDate = todayStr < plan.date ? todayStr : plan.date; // Usa data de hoje se for futuro, senão data do plano
-                const note = t('recordCard.autoNoteFromPlan', { date: formatDisplayDate(plan.date), hours: formatHoursExtensive(plan.hours) }); const entry = { id: Date.now(), date: recDate, hours: plan.hours, tag: DEFAULT_TAG_VALUE, notes: note, type: 'record' }; recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.splice(idx, 1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess', 'success'); }
-            // Exclui um plano (pede confirmação)
-            function deletePlanEntry(id) { showConfirmationDialog(t('dialog.confirmDeletePlanMessage'), () => { plannedEntries = plannedEntries.filter(p => p.id !== id); saveData(); updateAllDisplays(); showFeedback('feedback.planDeletedSuccess', 'info'); if (currentEditingId === id) clearPlanForm(); }); }
-            // Salva a meta mensal definida pelo usuário
-            function handleGoalSave() { const g = parseInt(monthlyGoalInput?.value, 10); if (!isNaN(g) && g > 0) { settings.monthlyGoal = g; settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); showFeedback('feedback.goalUpdateSuccess', 'success'); triggerInstallPromptIfAvailable('goal save'); } else { alert(t('feedback.invalidGoalValue')); if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal; } }
-            // Limpa todos os dados do aplicativo (pede confirmação)
-            function handleClearAllData() { showConfirmationDialog(t('dialog.confirmClearAllDataMessage'), () => { recordedEntries = []; plannedEntries = []; revisits = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); clearRevisitForm(); updateAllDisplays(); showFeedback('feedback.clearAllDataSuccess', 'danger'); document.querySelectorAll('.card').forEach(c => { if (c.id !== 'record-card' && c.classList.contains('expanded')) toggleCard(c); else if (c.id === 'record-card' && !c.classList.contains('expanded')) toggleCard(c); }); }); }
-            // Exibe o diálogo de confirmação modal
-            function showConfirmationDialog(message, onConfirm) { if (dialogMessage) dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog?.classList.add('visible'); dialogConfirmBtn?.focus(); }
-            // Esconde o diálogo de confirmação
-            function hideConfirmationDialog() { confirmationDialog?.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300); /* Delay para evitar cliques duplos */ }
-            // Mostra uma mensagem de feedback temporária na parte inferior da tela
-            function showFeedback(key, type = 'info', vars = {}) { let msg = t(key, vars); console.log(`Feedback[${type}]: ${msg}`); const fb = document.createElement('div'); fb.textContent = msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type === 'success' ? 'var(--success-color)' : type === 'danger' ? 'var(--danger-color)' : 'var(--primary-color)'}; color: var(--text-color); text-align: center; max-width: 90%;`; document.body.appendChild(fb); setTimeout(() => { fb.style.opacity = '1'; fb.style.bottom = '30px'; }, 10); setTimeout(() => { fb.style.opacity = '0'; fb.style.bottom = '10px'; }, 3500); setTimeout(() => { fb.parentNode?.removeChild(fb) }, 4000); }
-            // Limpa o formulário de revisitas
-            function clearRevisitForm() { revisitForm?.reset(); if (revisitIdInput) revisitIdInput.value = ''; if (revisitNameInput) revisitNameInput.value = ''; if (revisitDateInput) revisitDateInput.value = ''; if (revisitNotesInput) revisitNotesInput.value = ''; if (saveRevisitBtn) saveRevisitBtn.textContent = t('revisitCard.addButton'); currentEditingId = null; }
-            // Processa o envio do formulário de revisitas
-            function handleRevisitSubmit(event) { event.preventDefault(); const id = revisitIdInput?.value ? parseInt(revisitIdInput.value, 10) : Date.now(); const name = revisitNameInput?.value.trim(); const scheduledDate = revisitDateInput?.value || null; const notes = revisitNotesInput?.value.trim().substring(0, REVISIT_NOTES_MAX_LENGTH); const dateAdded = getCurrentDateString(); if (!name) { alert(t('feedback.revisitNameRequired')); revisitNameInput?.focus(); return; } const revisit = { id, name, notes, dateAdded, scheduledDate, status: 'pending', dateCompleted: null }; const idx = revisits.findIndex(rv => rv.id === id); if (idx > -1) { revisits[idx] = revisit; } else { revisits.push(revisit); } revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); }); saveData(); clearRevisitForm(); updateAllDisplays(); showFeedback('feedback.revisitSavedSuccess', 'success'); }
-            // Marca uma revisita como concluída
-            function markRevisitComplete(id) { const idx = revisits.findIndex(rv => rv.id === id); if (idx === -1) { showFeedback('feedback.revisitNotFound', 'danger'); return; } const revisit = revisits[idx]; const completionDate = getCurrentDateString(); revisit.status = 'completed'; revisit.dateCompleted = completionDate; // Adiciona registro no histórico para a revisita concluída
-                const historyEntry = { id: Date.now(), date: completionDate, hours: 0, // Horas zeradas para revisita concluída
-                    tag: t('historyCard.revisitCompletedTag'), notes: `${t('historyCard.revisitCompletedNotePrefix')} ${revisit.name}${revisit.notes ? `\n${t('historyCard.revisitOriginalNotes')}: ${revisit.notes}` : ''}`, type: 'revisit_completed', revisitId: revisit.id }; recordedEntries.push(historyEntry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); revisits.splice(idx, 1); // Remove da lista de pendentes
-                saveData(); updateAllDisplays(); showFeedback('feedback.revisitMarkedCompleteSuccess', 'success'); }
-            // Exclui uma revisita (pede confirmação)
-            function deleteRevisit(id) { showConfirmationDialog(t('dialog.confirmDeleteRevisitMessage'), () => { const initialLength = revisits.length; revisits = revisits.filter(rv => rv.id !== id); if (revisits.length < initialLength) { saveData(); updateAllDisplays(); showFeedback('feedback.revisitDeletedSuccess', 'info'); if (currentEditingId === id) clearRevisitForm(); } else { console.warn("Revisit not found for deletion:", id); } }); }
+            function triggerInstallPromptIfAvailable(context = '?') {
+                if (deferredInstallPrompt && settings.goalHasBeenSet) {
+                    console.log(`Prompting install (${context})...`);
+                    setTimeout(() => {
+                        deferredInstallPrompt.prompt().then(r => console.log('Install prompt outcome:', r.outcome)).catch(e => console.error("Install prompt error:", e));
+                        deferredInstallPrompt = null;
+                    }, 300);
+                }
+            }
+            function promptForMonthlyGoal() {
+                let ok = false;
+                const msg = t('statsCard.goalLabel');
+                while (!ok) {
+                    const inp = prompt(msg, settings.monthlyGoal);
+                    if (inp === null) {
+                        ok = true;
+                        if (!settings.goalHasBeenSet) {
+                            settings.goalHasBeenSet = true;
+                            saveData();
+                            updateAllDisplays();
+                        }
+                    } else {
+                        const g = parseInt(inp, 10);
+                        if (!isNaN(g) && g > 0) {
+                            settings.monthlyGoal = g;
+                            settings.goalHasBeenSet = true;
+                            if(monthlyGoalInput) monthlyGoalInput.value = g;
+                            saveData();
+                            ok = true;
+                            updateAllDisplays();
+                            showFeedback("feedback.goalSetSuccess", "success");
+                            triggerInstallPromptIfAvailable('initial goal');
+                        } else {
+                            alert(t("feedback.invalidGoalValue"));
+                        }
+                    }
+                }
+            }
+            function setDateInputVisibility(visible) {
+                isDateInputVisible = visible;
+                if (visible) {
+                    recordDateInput?.classList.remove('hidden');
+                    dateLabel?.classList.add('visually-hidden');
+                    recordDateInput?.focus();
+                } else {
+                    recordDateInput?.classList.add('hidden');
+                    dateLabel?.classList.remove('visually-hidden');
+                    if (displayDate) displayDate.textContent = (!recordDateInput?.value || recordDateInput.value === getCurrentDateString()) ? t('dates.today') : formatDisplayDate(recordDateInput.value);
+                }
+            }
+            function toggleCard(cardElement) {
+                if (!cardElement) return;
+                const isExpanded = cardElement.classList.contains('expanded');
+                cardElement.classList.toggle('expanded', !isExpanded);
+                const icon = cardElement.querySelector('.toggle-icon');
+                if (icon) icon.textContent = !isExpanded ? '▲' : '▼';
+            }
+            function clearRecordForm() {
+                recordForm?.reset();
+                if (recordIdInput) recordIdInput.value = '';
+                if (recordDateInput) recordDateInput.value = getCurrentDateString();
+                setDateInputVisibility(false);
+                if (recordTagSelect) recordTagSelect.value = DEFAULT_TAG_VALUE;
+                if (recordNotesInput) recordNotesInput.value = '';
+                if (recordHoursInput) recordHoursInput.value = '';
+                if (saveRecordBtn) saveRecordBtn.textContent = t('recordCard.saveButton');
+                saveRecordBtn?.classList.remove('editing');
+                currentEditingId = null;
+            }
+            function handleRecordSubmit(event) {
+                event.preventDefault();
+                const id = recordIdInput?.value ? parseInt(recordIdInput.value, 10) : Date.now();
+                const date = (isDateInputVisible || (recordDateInput?.value && recordDateInput.value !== getCurrentDateString())) ? recordDateInput.value : getCurrentDateString();
+                const hours = parseTimeInputToDecimal(recordHoursInput?.value);
+                const tag = recordTagSelect?.value || DEFAULT_TAG_VALUE;
+                const notes = recordNotesInput?.value.trim().substring(0, NOTES_MAX_LENGTH);
+                if (isNaN(hours) || hours <= 0) {
+                    alert(t('feedback.invalidTimeFormat'));
+                    recordHoursInput?.focus();
+                    return;
+                }
+                if (!date) {
+                    alert(t('feedback.invalidDate'));
+                    return;
+                }
+                const entry = { id, date, hours, tag, notes, type: 'record' };
+                const idx = recordedEntries.findIndex(e => e.id === id);
+                if (idx > -1) recordedEntries[idx] = entry;
+                else recordedEntries.push(entry);
+                recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+                saveData();
+                clearRecordForm();
+                updateAllDisplays();
+                showFeedback('feedback.recordSavedSuccess', 'success');
+            }
+            function editRecordEntry(id) {
+                const entry = recordedEntries.find(e => e.id === id && e.type !== 'revisit_completed');
+                if (entry) {
+                    if (!recordCard?.classList.contains('expanded')) toggleCard(recordCard);
+                    currentEditingId = id;
+                    if (recordIdInput) recordIdInput.value = entry.id;
+                    if (recordDateInput) recordDateInput.value = entry.date;
+                    setDateInputVisibility(entry.date !== getCurrentDateString());
+                    if (recordHoursInput) recordHoursInput.value = formatDecimalToTimeInput(entry.hours);
+                    if (recordTagSelect) recordTagSelect.value = entry.tag || DEFAULT_TAG_VALUE;
+                    if (recordNotesInput) recordNotesInput.value = entry.notes || '';
+                    if (saveRecordBtn) {
+                        saveRecordBtn.textContent = t('recordCard.updateButton');
+                        saveRecordBtn.classList.add('editing');
+                    }
+                    recordCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    recordHoursInput?.focus();
+                }
+            }
+            function deleteRecordEntry(id) {
+                showConfirmationDialog(t('dialog.confirmDeleteRecordMessage'), () => {
+                    const i = recordedEntries.findIndex(e => e.id === id);
+                    if (i > -1) {
+                        recordedEntries.splice(i, 1);
+                        saveData();
+                        updateAllDisplays();
+                        showFeedback('feedback.recordDeletedSuccess', 'info');
+                        if (currentEditingId === id) clearRecordForm();
+                    } else console.warn("Entry not found for deletion:", id);
+                });
+            }
+            function clearPlanForm() {
+                planForm?.reset();
+                if (planIdInput) planIdInput.value = '';
+                if (planDateInput) planDateInput.value = '';
+                if (planHoursInput) planHoursInput.value = '';
+                if (savePlanBtn) savePlanBtn.textContent = t('planCard.saveButton');
+                currentEditingId = null;
+            }
+            function handlePlanSubmit(event) {
+                event.preventDefault();
+                const id = planIdInput?.value ? parseInt(planIdInput.value, 10) : Date.now();
+                const date = planDateInput?.value;
+                const hours = parseTimeInputToDecimal(planHoursInput?.value);
+                const todayStr = getCurrentDateString();
+                if (!date || isNaN(hours) || hours <= 0) {
+                    alert(t('feedback.planFormInvalid'));
+                    planHoursInput?.focus();
+                    return;
+                }
+                if (date < todayStr) {
+                    alert(t('feedback.planDatePastError'));
+                    planDateInput?.focus();
+                    return;
+                }
+                const plan = { id, date, hours };
+                const idx = plannedEntries.findIndex(p => p.id === id);
+                if (idx > -1) plannedEntries[idx] = plan;
+                else plannedEntries.push(plan);
+                plannedEntries.sort((a, b) => a.date.localeCompare(b.date));
+                saveData();
+                clearPlanForm();
+                updateAllDisplays();
+                showFeedback('feedback.planSavedSuccess', 'success');
+            }
+            function markPlanAsDone(id) {
+                const idx = plannedEntries.findIndex(p => p.id === id);
+                if (idx === -1) {
+                    showFeedback('feedback.planNotFound', 'danger');
+                    return;
+                }
+                const plan = plannedEntries[idx];
+                const todayStr = getCurrentDateString();
+                const recDate = todayStr < plan.date ? todayStr : plan.date;
+                const note = t('recordCard.autoNoteFromPlan', { date: formatDisplayDate(plan.date), hours: formatHoursExtensive(plan.hours) });
+                const entry = { id: Date.now(), date: recDate, hours: plan.hours, tag: DEFAULT_TAG_VALUE, notes: note, type: 'record' };
+                recordedEntries.push(entry);
+                recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+                plannedEntries.splice(idx, 1);
+                saveData();
+                updateAllDisplays();
+                showFeedback('feedback.planMarkedDoneSuccess', 'success');
+            }
+            function deletePlanEntry(id) {
+                showConfirmationDialog(t('dialog.confirmDeletePlanMessage'), () => {
+                    plannedEntries = plannedEntries.filter(p => p.id !== id);
+                    saveData();
+                    updateAllDisplays();
+                    showFeedback('feedback.planDeletedSuccess', 'info');
+                    if (currentEditingId === id) clearPlanForm();
+                });
+            }
+            function handleGoalSave() {
+                const g = parseInt(monthlyGoalInput?.value, 10);
+                if (!isNaN(g) && g > 0) {
+                    settings.monthlyGoal = g;
+                    settings.goalHasBeenSet = true;
+                    saveData();
+                    updateAllDisplays();
+                    showFeedback('feedback.goalUpdateSuccess', 'success');
+                    triggerInstallPromptIfAvailable('goal save');
+                } else {
+                    alert(t('feedback.invalidGoalValue'));
+                    if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
+                }
+            }
+            function handleClearAllData() {
+                showConfirmationDialog(t('dialog.confirmClearAllDataMessage'), () => {
+                    recordedEntries = [];
+                    plannedEntries = [];
+                    revisits = [];
+                    settings = { monthlyGoal: 70, goalHasBeenSet: false };
+                    if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
+                    saveData();
+                    clearRecordForm();
+                    clearPlanForm();
+                    clearRevisitForm();
+                    updateAllDisplays();
+                    showFeedback('feedback.clearAllDataSuccess', 'danger');
+                    document.querySelectorAll('.card').forEach(c => {
+                        if (c.id !== 'record-card' && c.classList.contains('expanded')) toggleCard(c);
+                        else if (c.id === 'record-card' && !c.classList.contains('expanded')) toggleCard(c);
+                    });
+                });
+            }
+            function showConfirmationDialog(message, onConfirm) {
+                if (dialogMessage) dialogMessage.textContent = message;
+                currentConfirmCallback = onConfirm;
+                confirmationDialog?.classList.add('visible');
+                dialogConfirmBtn?.focus();
+            }
+            function hideConfirmationDialog() {
+                confirmationDialog?.classList.remove('visible');
+                setTimeout(() => {
+                    currentConfirmCallback = null;
+                }, 300);
+            }
+            function showFeedback(key, type = 'info', vars = {}) {
+                let msg = t(key, vars);
+                console.log(`Feedback[${type}]: ${msg}`);
+                const fb = document.createElement('div');
+                fb.textContent = msg;
+                fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type === 'success' ? 'var(--success-color)' : type === 'danger' ? 'var(--danger-color)' : 'var(--primary-color)'}; color: var(--text-color); text-align: center; max-width: 90%;`;
+                document.body.appendChild(fb);
+                setTimeout(() => {
+                    fb.style.opacity = '1';
+                    fb.style.bottom = '30px';
+                }, 10);
+                setTimeout(() => {
+                    fb.style.opacity = '0';
+                    fb.style.bottom = '10px';
+                }, 3500);
+                setTimeout(() => {
+                    fb.parentNode?.removeChild(fb)
+                }, 4000);
+            }
+            function clearRevisitForm() {
+                revisitForm?.reset();
+                if (revisitIdInput) revisitIdInput.value = '';
+                if (revisitNameInput) revisitNameInput.value = '';
+                if (revisitDateInput) revisitDateInput.value = '';
+                if (revisitNotesInput) revisitNotesInput.value = '';
+                if (saveRevisitBtn) saveRevisitBtn.textContent = t('revisitCard.addButton');
+                currentEditingId = null;
+            }
+            function handleRevisitSubmit(event) {
+                event.preventDefault();
+                const id = revisitIdInput?.value ? parseInt(revisitIdInput.value, 10) : Date.now();
+                const name = revisitNameInput?.value.trim();
+                const scheduledDate = revisitDateInput?.value || null;
+                const notes = revisitNotesInput?.value.trim().substring(0, REVISIT_NOTES_MAX_LENGTH);
+                const dateAdded = getCurrentDateString();
+                if (!name) {
+                    alert(t('feedback.revisitNameRequired'));
+                    revisitNameInput?.focus();
+                    return;
+                }
+                const revisit = { id, name, notes, dateAdded, scheduledDate, status: 'pending', dateCompleted: null };
+                const idx = revisits.findIndex(rv => rv.id === id);
+                if (idx > -1) {
+                    revisits[idx] = revisit;
+                } else {
+                    revisits.push(revisit);
+                }
+                revisits.sort((a, b) => {
+                    if (a.status !== b.status) return a.status === 'pending' ? -1 : 1;
+                    if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate);
+                    if (a.scheduledDate) return -1;
+                    if (b.scheduledDate) return 1;
+                    return (a.dateAdded || '').localeCompare(b.dateAdded || '');
+                });
+                saveData();
+                clearRevisitForm();
+                updateAllDisplays();
+                showFeedback('feedback.revisitSavedSuccess', 'success');
+            }
+            function markRevisitComplete(id) {
+                const idx = revisits.findIndex(rv => rv.id === id);
+                if (idx === -1) {
+                    showFeedback('feedback.revisitNotFound', 'danger');
+                    return;
+                }
+                const revisit = revisits[idx];
+                const completionDate = getCurrentDateString();
+                revisit.status = 'completed';
+                revisit.dateCompleted = completionDate;
+                const historyEntry = {
+                    id: Date.now(), date: completionDate, hours: 0,
+                    tag: t('historyCard.revisitCompletedTag'), notes: `${t('historyCard.revisitCompletedNotePrefix')} ${revisit.name}${revisit.notes ? `\n${t('historyCard.revisitOriginalNotes')}: ${revisit.notes}` : ''}`, type: 'revisit_completed', revisitId: revisit.id
+                };
+                recordedEntries.push(historyEntry);
+                recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+                revisits.splice(idx, 1);
+                saveData();
+                updateAllDisplays();
+                showFeedback('feedback.revisitMarkedCompleteSuccess', 'success');
+            }
+            function deleteRevisit(id) {
+                showConfirmationDialog(t('dialog.confirmDeleteRevisitMessage'), () => {
+                    const initialLength = revisits.length;
+                    revisits = revisits.filter(rv => rv.id !== id);
+                    if (revisits.length < initialLength) {
+                        saveData();
+                        updateAllDisplays();
+                        showFeedback('feedback.revisitDeletedSuccess', 'info');
+                        if (currentEditingId === id) clearRevisitForm();
+                    } else {
+                        console.warn("Revisit not found for deletion:", id);
+                    }
+                });
+            }
 
             // --- Funções de Atualização da Interface ---
-            // Atualiza o dashboard superior
-            function updateDashboard() { const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let monthHours = 0, weekHours = 0; const startOfWeekStr = getStartOfWeek(today); const todayStr = getCurrentDateString(); recordedEntries.forEach(entry => { if (entry.type !== 'revisit_completed') { const entryDate = parseLocalDate(entry.date); if (isNaN(entryDate.valueOf())) return; if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) { monthHours += entry.hours; } if (entry.date >= startOfWeekStr) { weekHours += entry.hours; } } }); if (dashboardWeekHours) dashboardWeekHours.textContent = formatHoursExtensive(weekHours); const goal = settings.monthlyGoal || 70; const percentage = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0; if (dashboardMonthPercentage) dashboardMonthPercentage.textContent = `${Math.round(percentage)}%`; updateProgressRing(monthHours, goal); if (dashboardMonthTotal) dashboardMonthTotal.innerHTML = `${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(monthHours)}</strong>`; const lastDayOfMonthObj = new Date(currentYear, currentMonth + 1, 0); const lastDayOfMonth = lastDayOfMonthObj.getDate(); const todayDay = today.getDate(); const remainingDays = Math.max(0, lastDayOfMonth - todayDay); const remainingHoursNeeded = Math.max(0, goal - monthHours); let forecastText = ''; if (!settings.goalHasBeenSet) { forecastText = `<span>${t('dashboard.setGoalPrompt')}</span>`; } else if (remainingHoursNeeded <= 0) { forecastText = `<span>${t('dashboard.goalMet')}</span>`; } else if (remainingDays <= 0 && todayDay === lastDayOfMonth) { forecastText = `<span>${t('dashboard.goalNotMetMonthEnd')}</span>`; } else if (remainingDays <= 0) { forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span>`; } else { let avgNeededPerDay = remainingHoursNeeded / remainingDays; let daysToWork = remainingDays; if (avgNeededPerDay > 0 && avgNeededPerDay < MIN_HOURS_PER_DAY_FORECAST) { daysToWork = Math.ceil(remainingHoursNeeded / MIN_HOURS_PER_DAY_FORECAST); avgNeededPerDay = MIN_HOURS_PER_DAY_FORECAST; } const daysSuffix = t(daysToWork === 1 ? 'dashboard.forecastSuffixDaysSingular' : 'dashboard.forecastSuffixDaysPlural'); const suggestion = `${t('dashboard.attemptPrefix')}<strong>${formatHoursExtensive(avgNeededPerDay, true)}</strong> ${t('dashboard.perDay')} ${daysToWork} ${daysSuffix}.`; forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span><span>${suggestion}</span>`; } if (dashboardForecast) dashboardForecast.innerHTML = forecastText; const pendingRevisits = revisits.filter(rv => rv.status === 'pending'); const nextScheduledRevisit = pendingRevisits.filter(rv => rv.scheduledDate && rv.scheduledDate >= todayStr).sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))[0]; if (dashboardNextRevisitDetails && dashboardRevisitsSection) { if (nextScheduledRevisit) { dashboardNextRevisitDetails.innerHTML = `<span class="dashboard-value"><strong>${formatRelativeDate(nextScheduledRevisit.scheduledDate)}:</strong> <span class="revisit-name">${nextScheduledRevisit.name}</span></span>`; dashboardRevisitsSection.classList.remove('hidden'); } else { dashboardNextRevisitDetails.innerHTML = ''; dashboardRevisitsSection.classList.add('hidden'); } } updateDashboardPlannedDates(); }
-            // Atualiza o anel de progresso SVG
-            function updateProgressRing(currentValue, maxValue) { const percent = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0; const offset = progressRingCircumference * (1 - percent / 100); if (progressRingFg) { progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`; progressRingFg.style.strokeDashoffset = Math.max(0, offset); } }
-            // Atualiza a lista de planos no dashboard
-            function updateDashboardPlannedDates() { const todayStr = getCurrentDateString(); const now = new Date(); const currentHour = now.getHours(); const overdueHourThreshold = 18; // Considera atrasado após as 18h do dia
-                const pastDuePlans = plannedEntries.filter(p => p.date < todayStr).sort((a, b) => a.date.localeCompare(b.date)); const upcomingPlans = plannedEntries.filter(p => p.date >= todayStr).sort((a, b) => a.date.localeCompare(b.date)); const displayPlans = upcomingPlans.slice(0, 3); // Mostra os 3 próximos
-                 // Se não houver 3 futuros, preenche com os mais recentes atrasados
-                if (displayPlans.length < 3) { const neededFromPast = 3 - displayPlans.length; const recentPastDue = pastDuePlans.slice(-neededFromPast); displayPlans.unshift(...recentPastDue); } if (dashboardPlanList) dashboardPlanList.innerHTML = ''; if (displayPlans.length > 0) { dashboardPlannedDatesContainer?.classList.remove('hidden'); displayPlans.forEach(p => { const li = document.createElement('li'); li.dataset.id = p.id; let planText = `<strong>${formatRelativeDate(p.date)}:</strong> ${formatHoursExtensive(p.hours, true)}`; const isPastDate = p.date < todayStr; const isTodayPastThreshold = p.date === todayStr && currentHour >= overdueHourThreshold; if (isPastDate || isTodayPastThreshold) { planText += `<span class="plan-warning"> ${t('dashboard.overduePlanSuffix')}</span>`; } li.innerHTML = planText; dashboardPlanList?.appendChild(li); }); } else { dashboardPlannedDatesContainer?.classList.add('hidden'); } }
-            // Renderiza a lista de histórico (com filtro de busca)
-            function renderHistory() { if (!historyList) return; historyList.innerHTML = ''; const searchTerm = historySearchInput?.value.trim().toLowerCase() || ''; let results = []; let labelText = ''; const hasSearch = searchTerm.length > 0; const allHistoryItems = recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); if (hasSearch) { results = allHistoryItems.filter(e => { const isRevisit = e.type === 'revisit_completed'; const tagInternal = isRevisit ? t('historyCard.revisitCompletedTag') : (e.tag || DEFAULT_TAG_VALUE); const tagTranslated = isRevisit ? tagInternal.toLowerCase() : t(tagKeyMapping[tagInternal] || 'tags.noTag').toLowerCase(); const formattedDate = formatDisplayDate(e.date).toLowerCase(); const hoursStr = isRevisit ? '' : (e.hours || 0).toString().replace('.', ','); const hoursRoundedStr = isRevisit ? '' : Math.round(e.hours || 0).toString(); const hoursFormatted = isRevisit ? '' : formatHoursExtensive(e.hours).toLowerCase(); const notes = (e.notes || '').toLowerCase(); const name = (e.name || '').toLowerCase(); // Nome da revisita
-                    return (formattedDate.includes(searchTerm) || (!isRevisit && (hoursStr.includes(searchTerm) || hoursRoundedStr.includes(searchTerm) || hoursFormatted.includes(searchTerm))) || tagTranslated.includes(searchTerm) || notes.includes(searchTerm) || (isRevisit && name.includes(searchTerm)) || tagInternal.toLowerCase().includes(searchTerm)); }); const countKey = results.length === 1 ? 'historyCard.resultsCountForTermSingular' : 'historyCard.resultsCountForTermPlural'; labelText = t(countKey, { count: results.length, term: searchTerm }); } else { const dateLimitStr = getDateMonthsAgo(HISTORY_MONTH_LIMIT); results = allHistoryItems.filter(e => e.date >= dateLimitStr); if (allHistoryItems.length === 0) { labelText = t('historyCard.listPlaceholderNoRecords'); } else if (results.length === 0) { labelText = t('historyCard.noRecordsLastMonths', { limit: HISTORY_MONTH_LIMIT }); } else { labelText = t('historyCard.showingLastMonths', { limit: HISTORY_MONTH_LIMIT }); } } if (showingResultsLabel) showingResultsLabel.textContent = labelText; if (results.length === 0) { let placeholderKey = 'historyCard.listPlaceholderNoRecords'; if (allHistoryItems.length > 0) { placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent'; } if (historyListPlaceholder) { historyListPlaceholder.textContent = t(placeholderKey); historyListPlaceholder.classList.remove('hidden'); } } else { historyListPlaceholder?.classList.add('hidden'); results.forEach(e => { const li = document.createElement('li'); li.dataset.id = e.id; const isRevisit = e.type === 'revisit_completed'; let detailsHtml = ''; let actionsHtml = ''; if (isRevisit) { const revisitMarker = `<span class="revisit-completed-marker">${t('historyCard.revisitCompletedMarker')}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; detailsHtml = `<div class="entry-details">${revisitMarker}<strong>${formatDisplayDate(e.date)}:</strong> ${notesPreview}</div>`; actionsHtml = '<div class="entry-actions"></div>'; // Sem ações para revisita concluída no histórico
-                    } else { const tagInternal = e.tag || DEFAULT_TAG_VALUE; const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag'); const tagBadge = `<span class="tag-badge" ${tagInternal === DEFAULT_TAG_VALUE ? 'style="opacity:0.6;"' : ''}>${tagText}</span>`; const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`; const hoursFormatted = formatHoursExtensive(e.hours); detailsHtml = `<div class="entry-details"><strong>${formatDisplayDate(e.date)}:</strong> <span class="hours">${hoursFormatted}</span> ${tagBadge} ${notesPreview}</div>`; actionsHtml = `<div class="entry-actions"><button class="edit-btn secondary">${t('common.editButton')}</button> <button class="delete-btn danger">${t('common.deleteButton')}</button></div>`; } li.innerHTML = detailsHtml + actionsHtml; if (!isRevisit) { li.querySelector('.edit-btn')?.addEventListener('click', ev => { ev.stopPropagation(); editRecordEntry(e.id); }); li.querySelector('.delete-btn')?.addEventListener('click', ev => { ev.stopPropagation(); deleteRecordEntry(e.id); }); } historyList.appendChild(li); }); } }
-            // Renderiza a lista de planejamento
-            function renderPlanning() { if (!planningList) return; planningList.innerHTML = ''; const todayStr = getCurrentDateString(); const allPlans = [...plannedEntries]; if (allPlans.length === 0) { if (planningListPlaceholder) { planningListPlaceholder.textContent = t('planCard.listPlaceholderNoPastOrFuture'); planningListPlaceholder.classList.remove('hidden'); } return; } planningListPlaceholder?.classList.add('hidden'); allPlans.forEach(p => { const li = document.createElement('li'); li.dataset.id = p.id; const hoursDisplay = formatHoursExtensive(p.hours); const isPast = p.date < todayStr; const pastDateSuffix = isPast ? `<span style="opacity:0.7;margin-left:5px;">${t('planCard.pastDateSuffix')}</span>` : ''; li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(p.date)} (${formatRelativeDate(p.date)}):</strong> <span class="hours">${hoursDisplay}</span> ${pastDateSuffix}</div><div class="plan-actions"><button class="done-plan-btn success">${t('planCard.markDoneButton')}</button> <button class="delete-plan-btn danger">${t('common.deleteButton')}</button></div>`; li.querySelector('.done-plan-btn')?.addEventListener('click', e => { e.stopPropagation(); markPlanAsDone(p.id); }); li.querySelector('.delete-plan-btn')?.addEventListener('click', e => { e.stopPropagation(); deletePlanEntry(p.id); }); planningList.appendChild(li); }); }
-            // Renderiza a lista de revisitas pendentes
-            function renderRevisits() { if (!revisitList) return; revisitList.innerHTML = ''; const pendingRevisits = revisits.filter(rv => rv.status === 'pending'); if (pendingRevisits.length === 0) { if (revisitListPlaceholder) { revisitListPlaceholder.textContent = t('revisitCard.listPlaceholderNoPending'); revisitListPlaceholder.classList.remove('hidden'); } return; } revisitListPlaceholder?.classList.add('hidden'); pendingRevisits.forEach(rv => { const li = document.createElement('li'); li.dataset.id = rv.id; const notesPreview = rv.notes ? `<span class="notes-preview">${rv.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('revisitCard.noNotes')}</span>`; const scheduledDateHtml = rv.scheduledDate ? `<span class="revisit-scheduled-date">(${t('revisitCard.scheduledForLabel')} <strong>${formatRelativeDate(rv.scheduledDate)}</strong>)</span>` : ''; li.innerHTML = `<div class="entry-details"><strong>${rv.name}</strong>${scheduledDateHtml}${notesPreview}</div><div class="revisit-actions"><button class="complete-revisit-btn success">${t('revisitCard.markCompleteButton')}</button><button class="delete-revisit-btn danger">${t('common.deleteButton')}</button></div>`; li.querySelector('.complete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); markRevisitComplete(rv.id); }); li.querySelector('.delete-revisit-btn')?.addEventListener('click', e => { e.stopPropagation(); deleteRevisit(rv.id); }); revisitList.appendChild(li); }); }
-            // Atualiza as estatísticas do mês atual
-            function updateStatistics() { const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let totalHoursMonth = 0; const activeDays = new Set(); recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === currentMonth && d.getFullYear() === currentYear; }).forEach(e => { totalHoursMonth += e.hours; activeDays.add(e.date); }); const goal = settings.monthlyGoal || 70; const percentProgress = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursMonth / goal) * 100), 100) : 0) : 0; const daysActiveCount = activeDays.size; const avgHoursPerActiveDay = daysActiveCount > 0 ? (totalHoursMonth / daysActiveCount) : 0; if (statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(totalHoursMonth); if (statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${percentProgress}%` : '--%'; if (statsMonthProgressBar) statsMonthProgressBar.style.width = `${percentProgress}%`; if (statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(avgHoursPerActiveDay); if (statsMonthDaysActive) statsMonthDaysActive.textContent = daysActiveCount; }
-            // Preenche o seletor de meses para o gráfico
-            function populateMonthSelector() { if (!chartMonthSelector) return; const availableMonths = new Set(); recordedEntries.filter(e => e.type !== 'revisit_completed').forEach(e => { const dateObj = parseLocalDate(e.date); if (!isNaN(dateObj.valueOf())) { availableMonths.add(getMonthYearString(dateObj)); } }); const sortedMonths = Array.from(availableMonths).sort((a, b) => { const [mA, yA] = a.split('/').map(Number); const [mB, yB] = b.split('/').map(Number); return (yB - yA) || (mB - mA); }); const oldSelectedValue = chartMonthSelector.value; chartMonthSelector.innerHTML = ''; if (sortedMonths.length === 0) { const option = document.createElement('option'); option.value = ''; option.textContent = t('chartsCard.noDataOption'); chartMonthSelector.append(option); chartMonthSelector.disabled = true; return; } chartMonthSelector.disabled = false; const currentMonthStr = getMonthYearString(new Date()); let currentMonthFormatted = formatMonthYearExtensive(currentMonthStr); let hasCurrentMonthData = false; let didSelectOldValue = false; sortedMonths.forEach(monthYearValue => { const option = document.createElement('option'); let monthFormatted = formatMonthYearExtensive(monthYearValue); option.value = monthYearValue; option.textContent = monthFormatted || monthYearValue; if (monthYearValue === oldSelectedValue) { option.selected = true; didSelectOldValue = true; } else if (monthYearValue === currentMonthStr && !didSelectOldValue) { option.selected = true; } if (monthYearValue === currentMonthStr) { hasCurrentMonthData = true; } chartMonthSelector.append(option); }); // Adiciona opção para o mês atual se não houver dados nele
-                if (!hasCurrentMonthData && currentMonthFormatted && Array.isArray(MONTH_NAMES) && MONTH_NAMES.length > 0) { const option = document.createElement('option'); option.value = currentMonthStr; option.textContent = `${currentMonthFormatted} ${t('chartsCard.currentMonthSuffix')}`; chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild); if (!didSelectOldValue && !chartMonthSelector.querySelector('option[selected]')) { option.selected = true; } } // Garante que algo esteja selecionado
-                if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) { chartMonthSelector.options[0].selected = true; } }
-            // Renderiza o gráfico de pizza para o mês selecionado
-            function renderCharts(selectedMonthYear) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (!selectedMonthYear) { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; } try { const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number); const monthIndex = selectedMonth - 1; const entriesForMonth = recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === monthIndex && d.getFullYear() === selectedYear; }); if (entriesForMonth.length === 0) { clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) })); return; } let totalHours = 0; const hoursByTag = {}; entriesForMonth.forEach(e => { const tagName = e.tag || DEFAULT_TAG_VALUE; const hours = e.hours || 0; totalHours += hours; hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours; }); if (chartTotalHoursDisplay) chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHours)}</strong>`; const labels = Object.keys(hoursByTag).map(tagName => t(tagKeyMapping[tagName] || 'tags.noTag')); const values = Object.values(hoursByTag); const backgroundColors = labels.map((_, i) => chartColors[i % chartColors.length]); if (!monthlyHoursChartCtx) return; monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'pie', data: { labels: labels, datasets: [{ data: values, backgroundColor: backgroundColors, borderColor: tooltipBgColor || '#1c1c1e', borderWidth: 1.5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6, callbacks: { label: ctx => { const label = ctx.label || ''; const value = ctx.parsed || 0; const percentage = totalHours > 0 ? ((value / totalHours) * 100).toFixed(1) : 0; return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`; } } }, legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } } } } }); } catch (e) { console.error("Chart render error:", e); clearChartWithMessage(t('chartsCard.renderErrorMessage')); } }
-            // Limpa a área do gráfico e exibe uma mensagem
-            function clearChartWithMessage(msg) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (chartTotalHoursDisplay) chartTotalHoursDisplay.textContent = ''; const ctx = monthlyHoursChartCtx; if (ctx) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = `14px ${computedStyles?.fontFamily || 'sans-serif'}`; ctx.fillText(msg, ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); } }
-            // Atualiza todos os displays da UI (chamada central)
-            function updateAllDisplays() { if (typeof t !== 'function' || !translations?.[currentLang]) { console.warn("Skipping update: Translations not ready"); return; } try { applyStaticTranslations(); updateDashboard(); updateStatistics(); populateMonthSelector(); renderHistory(); renderPlanning(); renderRevisits(); const selVal = chartMonthSelector?.value; if (!chartMonthSelector?.disabled && selVal) renderCharts(selVal); else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length > 0 && chartMonthSelector.options[0]?.value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.options[0].value); } else clearChartWithMessage(t(recordedEntries.length === 0 ? 'chartsCard.noDataYetMessage' : 'chartsCard.selectMonthMessage')); } catch (err) { console.error("UpdateAllDisplays Error:", err); } }
-            // Formata input de tempo enquanto digita (HH:MM ou HMM)
-            function formatTimeInputOnType(event) { const input = event.target; let value = input.value; let originalPosition = input.selectionStart; let numericValue = value.replace(/[^\d]/g, '').substring(0, 4); // Limita a 4 dígitos
-                let formattedValue = numericValue; let cursorAdjust = false; if (numericValue.length > 2) { const hoursPart = numericValue.substring(0, numericValue.length - 2); const minutesPart = numericValue.substring(numericValue.length - 2); formattedValue = `${hoursPart}:${minutesPart}`; // Adiciona ':'
-                    // Ajusta cursor se ':' foi adicionado e o cursor estava depois dele
-                    if (value.length < formattedValue.length && value.indexOf(':') === -1 && originalPosition >= formattedValue.indexOf(':')) { cursorAdjust = true; } } if (input.value !== formattedValue) { input.value = formattedValue; let newPosition = originalPosition; if (cursorAdjust) { newPosition++; } newPosition = Math.min(newPosition, formattedValue.length); // Garante que não ultrapasse
-                    // Usa requestAnimationFrame para definir a posição do cursor após a atualização do valor
-                    requestAnimationFrame(() => { try { input.setSelectionRange(newPosition, newPosition); } catch (e) { /* Ignora erros em browsers que não suportam */ } }); } }
-            // Registra o Service Worker (para funcionalidade offline PWA)
-            function registerServiceWorker() { if ('serviceWorker' in navigator) window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js').then(r => console.log('Service Worker registered:', r.scope)).catch(e => console.error('Service Worker registration failed:', e)); }); }
-            // Verifica se a data mudou e atualiza a UI se necessário
-            function checkDateAndUpdate() { const newDateString = getCurrentDateString(); if (newDateString !== lastCheckedDateString) { console.log(`Date changed from ${lastCheckedDateString} to ${newDateString}. Updating display...`); lastCheckedDateString = newDateString; updateAllDisplays(); } }
+            function updateDashboard() {
+                const today = new Date();
+                const currentMonth = today.getMonth();
+                const currentYear = today.getFullYear();
+                let monthHours = 0, weekHours = 0;
+                const startOfWeekStr = getStartOfWeek(today);
+                const todayStr = getCurrentDateString();
+                recordedEntries.forEach(entry => {
+                    if (entry.type !== 'revisit_completed') {
+                        const entryDate = parseLocalDate(entry.date);
+                        if (isNaN(entryDate.valueOf())) return;
+                        if (entryDate.getMonth() === currentMonth && entryDate.getFullYear() === currentYear) {
+                            monthHours += entry.hours;
+                        }
+                        if (entry.date >= startOfWeekStr) {
+                            weekHours += entry.hours;
+                        }
+                    }
+                });
+                if (dashboardWeekHours) dashboardWeekHours.textContent = formatHoursExtensive(weekHours);
+                const goal = settings.monthlyGoal || 70;
+                const percentage = goal > 0 ? Math.min(100, (monthHours / goal) * 100) : 0;
+                if (dashboardMonthPercentage) dashboardMonthPercentage.textContent = `${Math.round(percentage)}%`;
+                updateProgressRing(monthHours, goal);
+                if (dashboardMonthTotal) dashboardMonthTotal.innerHTML = `${t('dashboard.monthTotalLabel')} <strong>${formatHoursExtensive(monthHours)}</strong>`;
+                const lastDayOfMonthObj = new Date(currentYear, currentMonth + 1, 0);
+                const lastDayOfMonth = lastDayOfMonthObj.getDate();
+                const todayDay = today.getDate();
+                const remainingDays = Math.max(0, lastDayOfMonth - todayDay);
+                const remainingHoursNeeded = Math.max(0, goal - monthHours);
+                let forecastText = '';
+                if (!settings.goalHasBeenSet) {
+                    forecastText = `<span>${t('dashboard.setGoalPrompt')}</span>`;
+                } else if (remainingHoursNeeded <= 0) {
+                    forecastText = `<span>${t('dashboard.goalMet')}</span>`;
+                } else if (remainingDays <= 0 && todayDay === lastDayOfMonth) {
+                    forecastText = `<span>${t('dashboard.goalNotMetMonthEnd')}</span>`;
+                } else if (remainingDays <= 0) {
+                    forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span>`;
+                } else {
+                    let avgNeededPerDay = remainingHoursNeeded / remainingDays;
+                    let daysToWork = remainingDays;
+                    if (avgNeededPerDay > 0 && avgNeededPerDay < MIN_HOURS_PER_DAY_FORECAST) {
+                        daysToWork = Math.ceil(remainingHoursNeeded / MIN_HOURS_PER_DAY_FORECAST);
+                        avgNeededPerDay = MIN_HOURS_PER_DAY_FORECAST;
+                    }
+                    const daysSuffix = t(daysToWork === 1 ? 'dashboard.forecastSuffixDaysSingular' : 'dashboard.forecastSuffixDaysPlural');
+                    const suggestion = `${t('dashboard.attemptPrefix')}<strong>${formatHoursExtensive(avgNeededPerDay, true)}</strong> ${t('dashboard.perDay')} ${daysToWork} ${daysSuffix}.`;
+                    forecastText = `<span>${t('dashboard.forecastPrefix')} ${formatHoursExtensive(remainingHoursNeeded)}.</span><span>${suggestion}</span>`;
+                }
+                if (dashboardForecast) dashboardForecast.innerHTML = forecastText;
+                const pendingRevisits = revisits.filter(rv => rv.status === 'pending');
+                const nextScheduledRevisit = pendingRevisits.filter(rv => rv.scheduledDate && rv.scheduledDate >= todayStr).sort((a, b) => a.scheduledDate.localeCompare(b.scheduledDate))[0];
+                if (dashboardNextRevisitDetails && dashboardRevisitsSection) {
+                    if (nextScheduledRevisit) {
+                        dashboardNextRevisitDetails.innerHTML = `<span class="dashboard-value"><strong>${formatRelativeDate(nextScheduledRevisit.scheduledDate)}:</strong> <span class="revisit-name">${nextScheduledRevisit.name}</span></span>`;
+                        dashboardRevisitsSection.classList.remove('hidden');
+                    } else {
+                        dashboardNextRevisitDetails.innerHTML = '';
+                        dashboardRevisitsSection.classList.add('hidden');
+                    }
+                }
+                updateDashboardPlannedDates();
+            }
+            function updateProgressRing(currentValue, maxValue) {
+                const percent = maxValue > 0 ? Math.min(100, (currentValue / maxValue) * 100) : 0;
+                const offset = progressRingCircumference * (1 - percent / 100);
+                if (progressRingFg) {
+                    progressRingFg.style.strokeDasharray = `${progressRingCircumference} ${progressRingCircumference}`;
+                    progressRingFg.style.strokeDashoffset = Math.max(0, offset);
+                }
+            }
+            function updateDashboardPlannedDates() {
+                const todayStr = getCurrentDateString();
+                const now = new Date();
+                const currentHour = now.getHours();
+                const overdueHourThreshold = 18;
+                const pastDuePlans = plannedEntries.filter(p => p.date < todayStr).sort((a, b) => a.date.localeCompare(b.date));
+                const upcomingPlans = plannedEntries.filter(p => p.date >= todayStr).sort((a, b) => a.date.localeCompare(b.date));
+                const displayPlans = upcomingPlans.slice(0, 3);
+                if (displayPlans.length < 3) {
+                    const neededFromPast = 3 - displayPlans.length;
+                    const recentPastDue = pastDuePlans.slice(-neededFromPast);
+                    displayPlans.unshift(...recentPastDue);
+                }
+                if (dashboardPlanList) dashboardPlanList.innerHTML = '';
+                if (displayPlans.length > 0) {
+                    dashboardPlannedDatesContainer?.classList.remove('hidden');
+                    displayPlans.forEach(p => {
+                        const li = document.createElement('li');
+                        li.dataset.id = p.id;
+                        let planText = `<strong>${formatRelativeDate(p.date)}:</strong> ${formatHoursExtensive(p.hours, true)}`;
+                        const isPastDate = p.date < todayStr;
+                        const isTodayPastThreshold = p.date === todayStr && currentHour >= overdueHourThreshold;
+                        if (isPastDate || isTodayPastThreshold) {
+                            planText += `<span class="plan-warning"> ${t('dashboard.overduePlanSuffix')}</span>`;
+                        }
+                        li.innerHTML = planText;
+                        dashboardPlanList?.appendChild(li);
+                    });
+                } else {
+                    dashboardPlannedDatesContainer?.classList.add('hidden');
+                }
+            }
+            function renderHistory() {
+                if (!historyList) return;
+                historyList.innerHTML = '';
+                const searchTerm = historySearchInput?.value.trim().toLowerCase() || '';
+                let results = [];
+                let labelText = '';
+                const hasSearch = searchTerm.length > 0;
+                const allHistoryItems = recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+                if (hasSearch) {
+                    results = allHistoryItems.filter(e => {
+                        const isRevisit = e.type === 'revisit_completed';
+                        const tagInternal = isRevisit ? t('historyCard.revisitCompletedTag') : (e.tag || DEFAULT_TAG_VALUE);
+                        const tagTranslated = isRevisit ? tagInternal.toLowerCase() : t(tagKeyMapping[tagInternal] || 'tags.noTag').toLowerCase();
+                        const formattedDate = formatDisplayDate(e.date).toLowerCase();
+                        const hoursStr = isRevisit ? '' : (e.hours || 0).toString().replace('.', ',');
+                        const hoursRoundedStr = isRevisit ? '' : Math.round(e.hours || 0).toString();
+                        const hoursFormatted = isRevisit ? '' : formatHoursExtensive(e.hours).toLowerCase();
+                        const notes = (e.notes || '').toLowerCase();
+                        const name = (e.name || '').toLowerCase();
+                        return (formattedDate.includes(searchTerm) || (!isRevisit && (hoursStr.includes(searchTerm) || hoursRoundedStr.includes(searchTerm) || hoursFormatted.includes(searchTerm))) || tagTranslated.includes(searchTerm) || notes.includes(searchTerm) || (isRevisit && name.includes(searchTerm)) || tagInternal.toLowerCase().includes(searchTerm));
+                    });
+                    const countKey = results.length === 1 ? 'historyCard.resultsCountForTermSingular' : 'historyCard.resultsCountForTermPlural';
+                    labelText = t(countKey, { count: results.length, term: searchTerm });
+                } else {
+                    const dateLimitStr = getDateMonthsAgo(HISTORY_MONTH_LIMIT);
+                    results = allHistoryItems.filter(e => e.date >= dateLimitStr);
+                    if (allHistoryItems.length === 0) {
+                        labelText = t('historyCard.listPlaceholderNoRecords');
+                    } else if (results.length === 0) {
+                        labelText = t('historyCard.noRecordsLastMonths', { limit: HISTORY_MONTH_LIMIT });
+                    } else {
+                        labelText = t('historyCard.showingLastMonths', { limit: HISTORY_MONTH_LIMIT });
+                    }
+                }
+                if (showingResultsLabel) showingResultsLabel.textContent = labelText;
+                if (results.length === 0) {
+                    let placeholderKey = 'historyCard.listPlaceholderNoRecords';
+                    if (allHistoryItems.length > 0) {
+                        placeholderKey = hasSearch ? 'historyCard.listPlaceholderNoSearchResults' : 'historyCard.listPlaceholderNoRecent';
+                    }
+                    if (historyListPlaceholder) {
+                        historyListPlaceholder.textContent = t(placeholderKey);
+                        historyListPlaceholder.classList.remove('hidden');
+                    }
+                } else {
+                    historyListPlaceholder?.classList.add('hidden');
+                    results.forEach(e => {
+                        const li = document.createElement('li');
+                        li.dataset.id = e.id;
+                        const isRevisit = e.type === 'revisit_completed';
+                        let detailsHtml = '';
+                        let actionsHtml = '';
+                        if (isRevisit) {
+                            const revisitMarker = `<span class="revisit-completed-marker">${t('historyCard.revisitCompletedMarker')}</span>`;
+                            const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`;
+                            detailsHtml = `<div class="entry-details">${revisitMarker}<strong>${formatDisplayDate(e.date)}:</strong> ${notesPreview}</div>`;
+                            actionsHtml = '<div class="entry-actions"></div>';
+                        } else {
+                            const tagInternal = e.tag || DEFAULT_TAG_VALUE;
+                            const tagText = t(tagKeyMapping[tagInternal] || 'tags.noTag');
+                            const tagBadge = `<span class="tag-badge" ${tagInternal === DEFAULT_TAG_VALUE ? 'style="opacity:0.6;"' : ''}>${tagText}</span>`;
+                            const notesPreview = e.notes ? `<span class="notes-preview">${e.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('historyCard.noNotes')}</span>`;
+                            const hoursFormatted = formatHoursExtensive(e.hours);
+                            detailsHtml = `<div class="entry-details"><strong>${formatDisplayDate(e.date)}:</strong> <span class="hours">${hoursFormatted}</span> ${tagBadge} ${notesPreview}</div>`;
+                            actionsHtml = `<div class="entry-actions"><button class="edit-btn secondary">${t('common.editButton')}</button> <button class="delete-btn danger">${t('common.deleteButton')}</button></div>`;
+                        }
+                        li.innerHTML = detailsHtml + actionsHtml;
+                        if (!isRevisit) {
+                            li.querySelector('.edit-btn')?.addEventListener('click', ev => {
+                                ev.stopPropagation();
+                                editRecordEntry(e.id);
+                            });
+                            li.querySelector('.delete-btn')?.addEventListener('click', ev => {
+                                ev.stopPropagation();
+                                deleteRecordEntry(e.id);
+                            });
+                        }
+                        historyList.appendChild(li);
+                    });
+                }
+            }
+            function renderPlanning() {
+                if (!planningList) return;
+                planningList.innerHTML = '';
+                const todayStr = getCurrentDateString();
+                const allPlans = [...plannedEntries];
+                if (allPlans.length === 0) {
+                    if (planningListPlaceholder) {
+                        planningListPlaceholder.textContent = t('planCard.listPlaceholderNoPastOrFuture');
+                        planningListPlaceholder.classList.remove('hidden');
+                    }
+                    return;
+                }
+                planningListPlaceholder?.classList.add('hidden');
+                allPlans.forEach(p => {
+                    const li = document.createElement('li');
+                    li.dataset.id = p.id;
+                    const hoursDisplay = formatHoursExtensive(p.hours);
+                    const isPast = p.date < todayStr;
+                    const pastDateSuffix = isPast ? `<span style="opacity:0.7;margin-left:5px;">${t('planCard.pastDateSuffix')}</span>` : '';
+                    li.innerHTML = `<div class="entry-details"><strong>${formatDisplayDate(p.date)} (${formatRelativeDate(p.date)}):</strong> <span class="hours">${hoursDisplay}</span> ${pastDateSuffix}</div><div class="plan-actions"><button class="done-plan-btn success">${t('planCard.markDoneButton')}</button> <button class="delete-plan-btn danger">${t('common.deleteButton')}</button></div>`;
+                    li.querySelector('.done-plan-btn')?.addEventListener('click', e => {
+                        e.stopPropagation();
+                        markPlanAsDone(p.id);
+                    });
+                    li.querySelector('.delete-plan-btn')?.addEventListener('click', e => {
+                        e.stopPropagation();
+                        deletePlanEntry(p.id);
+                    });
+                    planningList.appendChild(li);
+                });
+            }
+            function renderRevisits() {
+                if (!revisitList) return;
+                revisitList.innerHTML = '';
+                const pendingRevisits = revisits.filter(rv => rv.status === 'pending');
+                if (pendingRevisits.length === 0) {
+                    if (revisitListPlaceholder) {
+                        revisitListPlaceholder.textContent = t('revisitCard.listPlaceholderNoPending');
+                        revisitListPlaceholder.classList.remove('hidden');
+                    }
+                    return;
+                }
+                revisitListPlaceholder?.classList.add('hidden');
+                pendingRevisits.forEach(rv => {
+                    const li = document.createElement('li');
+                    li.dataset.id = rv.id;
+                    const notesPreview = rv.notes ? `<span class="notes-preview">${rv.notes.replace(/\n/g, ' ')}</span>` : `<span class="notes-preview" style="opacity:0.5;">${t('revisitCard.noNotes')}</span>`;
+                    const scheduledDateHtml = rv.scheduledDate ? `<span class="revisit-scheduled-date">(${t('revisitCard.scheduledForLabel')} <strong>${formatRelativeDate(rv.scheduledDate)}</strong>)</span>` : '';
+                    li.innerHTML = `<div class="entry-details"><strong>${rv.name}</strong>${scheduledDateHtml}${notesPreview}</div><div class="revisit-actions"><button class="complete-revisit-btn success">${t('revisitCard.markCompleteButton')}</button><button class="delete-revisit-btn danger">${t('common.deleteButton')}</button></div>`;
+                    li.querySelector('.complete-revisit-btn')?.addEventListener('click', e => {
+                        e.stopPropagation();
+                        markRevisitComplete(rv.id);
+                    });
+                    li.querySelector('.delete-revisit-btn')?.addEventListener('click', e => {
+                        e.stopPropagation();
+                        deleteRevisit(rv.id);
+                    });
+                    revisitList.appendChild(li);
+                });
+            }
+            function updateStatistics() {
+                const today = new Date();
+                const currentMonth = today.getMonth();
+                const currentYear = today.getFullYear();
+                let totalHoursMonth = 0;
+                const activeDays = new Set();
+                recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => {
+                    const d = parseLocalDate(e.date);
+                    if (isNaN(d.valueOf())) return false;
+                    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+                }).forEach(e => {
+                    totalHoursMonth += e.hours;
+                    activeDays.add(e.date);
+                });
+                const goal = settings.monthlyGoal || 70;
+                const percentProgress = settings.goalHasBeenSet ? (goal > 0 ? Math.min(Math.round((totalHoursMonth / goal) * 100), 100) : 0) : 0;
+                const daysActiveCount = activeDays.size;
+                const avgHoursPerActiveDay = daysActiveCount > 0 ? (totalHoursMonth / daysActiveCount) : 0;
+                if (statsMonthHours) statsMonthHours.textContent = formatHoursExtensive(totalHoursMonth);
+                if (statsMonthGoalProgress) statsMonthGoalProgress.textContent = settings.goalHasBeenSet ? `${percentProgress}%` : '--%';
+                if (statsMonthProgressBar) statsMonthProgressBar.style.width = `${percentProgress}%`;
+                if (statsAvgHoursDay) statsAvgHoursDay.textContent = formatHoursExtensive(avgHoursPerActiveDay);
+                if (statsMonthDaysActive) statsMonthDaysActive.textContent = daysActiveCount;
+            }
+            function populateMonthSelector() {
+                if (!chartMonthSelector) return;
+                const availableMonths = new Set();
+                recordedEntries.filter(e => e.type !== 'revisit_completed').forEach(e => {
+                    const dateObj = parseLocalDate(e.date);
+                    if (!isNaN(dateObj.valueOf())) {
+                        availableMonths.add(getMonthYearString(dateObj));
+                    }
+                });
+                const sortedMonths = Array.from(availableMonths).sort((a, b) => {
+                    const [mA, yA] = a.split('/').map(Number);
+                    const [mB, yB] = b.split('/').map(Number);
+                    return (yB - yA) || (mB - mA);
+                });
+                const oldSelectedValue = chartMonthSelector.value;
+                chartMonthSelector.innerHTML = '';
+                if (sortedMonths.length === 0) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = t('chartsCard.noDataOption');
+                    chartMonthSelector.append(option);
+                    chartMonthSelector.disabled = true;
+                    return;
+                }
+                chartMonthSelector.disabled = false;
+                const currentMonthStr = getMonthYearString(new Date());
+                let currentMonthFormatted = formatMonthYearExtensive(currentMonthStr);
+                let hasCurrentMonthData = false;
+                let didSelectOldValue = false;
+                sortedMonths.forEach(monthYearValue => {
+                    const option = document.createElement('option');
+                    let monthFormatted = formatMonthYearExtensive(monthYearValue);
+                    option.value = monthYearValue;
+                    option.textContent = monthFormatted || monthYearValue;
+                    if (monthYearValue === oldSelectedValue) {
+                        option.selected = true;
+                        didSelectOldValue = true;
+                    } else if (monthYearValue === currentMonthStr && !didSelectOldValue) {
+                        option.selected = true;
+                    }
+                    if (monthYearValue === currentMonthStr) {
+                        hasCurrentMonthData = true;
+                    }
+                    chartMonthSelector.append(option);
+                });
+                if (!hasCurrentMonthData && currentMonthFormatted && Array.isArray(MONTH_NAMES) && MONTH_NAMES.length > 0) {
+                    const option = document.createElement('option');
+                    option.value = currentMonthStr;
+                    option.textContent = `${currentMonthFormatted} ${t('chartsCard.currentMonthSuffix')}`;
+                    chartMonthSelector.insertBefore(option, chartMonthSelector.firstChild);
+                    if (!didSelectOldValue && !chartMonthSelector.querySelector('option[selected]')) {
+                        option.selected = true;
+                    }
+                }
+                if (!chartMonthSelector.value && chartMonthSelector.options.length > 0) {
+                    chartMonthSelector.options[0].selected = true;
+                }
+            }
+            function renderCharts(selectedMonthYear) {
+                if (monthlyHoursChartInstance) {
+                    monthlyHoursChartInstance.destroy();
+                    monthlyHoursChartInstance = null;
+                }
+                if (!selectedMonthYear) {
+                    clearChartWithMessage(t('chartsCard.selectMonthMessage'));
+                    return;
+                }
+                try {
+                    const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number);
+                    const monthIndex = selectedMonth - 1;
+                    const entriesForMonth = recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => {
+                        const d = parseLocalDate(e.date);
+                        if (isNaN(d.valueOf())) return false;
+                        return d.getMonth() === monthIndex && d.getFullYear() === selectedYear;
+                    });
+                    if (entriesForMonth.length === 0) {
+                        clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) }));
+                        return;
+                    }
+                    let totalHours = 0;
+                    const hoursByTag = {};
+                    entriesForMonth.forEach(e => {
+                        const tagName = e.tag || DEFAULT_TAG_VALUE;
+                        const hours = e.hours || 0;
+                        totalHours += hours;
+                        hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours;
+                    });
+                    if (chartTotalHoursDisplay) chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHours)}</strong>`;
+                    const labels = Object.keys(hoursByTag).map(tagName => t(tagKeyMapping[tagName] || 'tags.noTag'));
+                    const values = Object.values(hoursByTag);
+                    const backgroundColors = labels.map((_, i) => chartColors[i % chartColors.length]);
+                    if (!monthlyHoursChartCtx) return;
+                    monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{ data: values, backgroundColor: backgroundColors, borderColor: tooltipBgColor || '#1c1c1e', borderWidth: 1.5 }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } },
+                                tooltip: {
+                                    backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6,
+                                    callbacks: {
+                                        label: ctx => {
+                                            const label = ctx.label || '';
+                                            const value = ctx.parsed || 0;
+                                            const percentage = totalHours > 0 ? ((value / totalHours) * 100).toFixed(1) : 0;
+                                            return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`;
+                                        }
+                                    }
+                                },
+                                legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } }
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error("Chart render error:", e);
+                    clearChartWithMessage(t('chartsCard.renderErrorMessage'));
+                }
+            }
+            function clearChartWithMessage(msg) {
+                if (monthlyHoursChartInstance) {
+                    monthlyHoursChartInstance.destroy();
+                    monthlyHoursChartInstance = null;
+                }
+                if (chartTotalHoursDisplay) chartTotalHoursDisplay.textContent = '';
+                const ctx = monthlyHoursChartCtx;
+                if (ctx) {
+                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = textMutedColor;
+                    ctx.font = `14px ${computedStyles?.fontFamily || 'sans-serif'}`;
+                    ctx.fillText(msg, ctx.canvas.width / 2, ctx.canvas.height / 2);
+                    ctx.restore();
+                }
+            }
+            function updateAllDisplays() {
+                if (typeof t !== 'function' || !translations?.[currentLang]) {
+                    console.warn("Skipping update: Translations not ready");
+                    return;
+                }
+                try {
+                    applyStaticTranslations();
+                    updateDashboard();
+                    updateStatistics();
+                    populateMonthSelector();
+                    renderHistory();
+                    renderPlanning();
+                    renderRevisits();
+                    const selVal = chartMonthSelector?.value;
+                    if (!chartMonthSelector?.disabled && selVal) renderCharts(selVal);
+                    else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length > 0 && chartMonthSelector.options[0]?.value) {
+                        chartMonthSelector.options[0].selected = true;
+                        renderCharts(chartMonthSelector.options[0].value);
+                    } else clearChartWithMessage(t(recordedEntries.length === 0 ? 'chartsCard.noDataYetMessage' : 'chartsCard.selectMonthMessage'));
+                } catch (err) {
+                    console.error("UpdateAllDisplays Error:", err);
+                }
+            }
+            function formatTimeInputOnType(event) {
+                const input = event.target;
+                let value = input.value;
+                let originalPosition = input.selectionStart;
+                let numericValue = value.replace(/[^\d]/g, '').substring(0, 4);
+                let formattedValue = numericValue;
+                let cursorAdjust = false;
+                if (numericValue.length > 2) {
+                    const hoursPart = numericValue.substring(0, numericValue.length - 2);
+                    const minutesPart = numericValue.substring(numericValue.length - 2);
+                    formattedValue = `${hoursPart}:${minutesPart}`;
+                    if (value.length < formattedValue.length && value.indexOf(':') === -1 && originalPosition >= formattedValue.indexOf(':')) {
+                        cursorAdjust = true;
+                    }
+                }
+                if (input.value !== formattedValue) {
+                    input.value = formattedValue;
+                    let newPosition = originalPosition;
+                    if (cursorAdjust) {
+                        newPosition++;
+                    }
+                    newPosition = Math.min(newPosition, formattedValue.length);
+                    requestAnimationFrame(() => {
+                        try {
+                            input.setSelectionRange(newPosition, newPosition);
+                        } catch (e) { }
+                    });
+                }
+            }
+            function registerServiceWorker() {
+                if ('serviceWorker' in navigator) window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./service-worker.js').then(r => console.log('Service Worker registered:', r.scope)).catch(e => console.error('Service Worker registration failed:', e));
+                });
+            }
+            function checkDateAndUpdate() {
+                const newDateString = getCurrentDateString();
+                if (newDateString !== lastCheckedDateString) {
+                    console.log(`Date changed from ${lastCheckedDateString} to ${newDateString}. Updating display...`);
+                    lastCheckedDateString = newDateString;
+                    updateAllDisplays();
+                }
+            }
 
             // --- Sequência de Inicialização ---
-            await loadTranslations(); // 1. Carrega traduções PRIMEIRO
-            selectDOMElements(); // 2. Seleciona elementos DOM
-            loadData(); // 3. Carrega dados salvos
-            applyStaticTranslations(); // 4. Aplica traduções iniciais aos elementos
-            if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal; // Define valor inicial da meta
-            if (recordDateInput) recordDateInput.value = getCurrentDateString(); // Define data inicial
-            lastCheckedDateString = getCurrentDateString(); // Armazena data atual para verificação
-            setDateInputVisibility(false); // Esconde input de data inicialmente
-            clearRecordForm(); // Limpa formulário de registro
-            clearPlanForm(); // Limpa formulário de plano
-            clearRevisitForm(); // Limpa formulário de revisita
-            // Define estado inicial dos cards (Registro expandido, outros fechados)
-            document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); if (card.classList.contains('expanded') !== shouldBeExpanded) toggleCard(card); const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; });
-            // Adiciona event listeners
-            appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) toggleCard(h.closest('.card')); }); // Toggle card
-            document.querySelectorAll('.card-header').forEach(h => { h.setAttribute('role', 'button'); h.setAttribute('tabindex', '0'); h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(h.closest('.card')); } }); }); // Acessibilidade
-            changeDateBtn?.addEventListener('click', () => setDateInputVisibility(true)); // Mostrar input de data
-            recordHoursInput?.addEventListener('input', formatTimeInputOnType); // Formatar tempo ao digitar
-            planHoursInput?.addEventListener('input', formatTimeInputOnType); // Formatar tempo ao digitar
-            // Validar/formatar tempo ao sair do campo
-            recordHoursInput?.addEventListener('blur', e => { const d = parseTimeInputToDecimal(e.target.value); if (!isNaN(d) && d >= 0) e.target.value = formatDecimalToTimeInput(d); else if (e.target.value.trim() !== '') e.target.value = ''; });
-            planHoursInput?.addEventListener('blur', e => { const d = parseTimeInputToDecimal(e.target.value); if (!isNaN(d) && d > 0) e.target.value = formatDecimalToTimeInput(d); else if (e.target.value.trim() !== '') e.target.value = ''; });
-            // Limitar notas
-            recordNotesInput?.addEventListener('input', e => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: NOTES_MAX_LENGTH }); } });
-            revisitNotesInput?.addEventListener('input', e => { if (e.target.value.length > REVISIT_NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, REVISIT_NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: REVISIT_NOTES_MAX_LENGTH }); } });
-            historySearchInput?.addEventListener('input', renderHistory); // Filtrar histórico
-            recordForm?.addEventListener('submit', handleRecordSubmit); // Salvar registro
-            planForm?.addEventListener('submit', handlePlanSubmit); // Salvar plano
-            revisitForm?.addEventListener('submit', handleRevisitSubmit); // Salvar revisita
-            clearPlanFormBtn?.addEventListener('click', clearPlanForm); // Limpar form plano
-            clearRevisitFormBtn?.addEventListener('click', clearRevisitForm); // Limpar form revisita
-            saveGoalBtn?.addEventListener('click', handleGoalSave); // Salvar meta
-            monthlyGoalInput?.addEventListener('keypress', e => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); e.target.blur(); } }); // Salvar meta com Enter
-            chartMonthSelector?.addEventListener('change', updateAllDisplays); // Atualizar gráfico
-            clearAllDataBtn?.addEventListener('click', handleClearAllData); // Limpar dados
-            // Diálogo de confirmação
-            dialogConfirmBtn?.addEventListener('click', () => { if (typeof currentConfirmCallback === 'function') currentConfirmCallback(); hideConfirmationDialog(); });
+            await loadTranslations();
+            selectDOMElements();
+            loadData();
+            applyStaticTranslations();
+            if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
+            if (recordDateInput) recordDateInput.value = getCurrentDateString();
+            lastCheckedDateString = getCurrentDateString();
+            setDateInputVisibility(false);
+            clearRecordForm();
+            clearPlanForm();
+            clearRevisitForm();
+            document.querySelectorAll('.card').forEach(card => {
+                const shouldBeExpanded = (card.id === 'record-card');
+                if (card.classList.contains('expanded') !== shouldBeExpanded) toggleCard(card);
+                const icon = card.querySelector('.toggle-icon');
+                if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼';
+            });
+            appElement?.addEventListener('click', (e) => {
+                const h = e.target.closest('.card-header');
+                if (h) toggleCard(h.closest('.card'));
+            });
+            document.querySelectorAll('.card-header').forEach(h => {
+                h.setAttribute('role', 'button');
+                h.setAttribute('tabindex', '0');
+                h.addEventListener('keydown', e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleCard(h.closest('.card'));
+                    }
+                });
+            });
+            changeDateBtn?.addEventListener('click', () => setDateInputVisibility(true));
+            recordHoursInput?.addEventListener('input', formatTimeInputOnType);
+            planHoursInput?.addEventListener('input', formatTimeInputOnType);
+            recordHoursInput?.addEventListener('blur', e => {
+                const d = parseTimeInputToDecimal(e.target.value);
+                if (!isNaN(d) && d >= 0) e.target.value = formatDecimalToTimeInput(d);
+                else if (e.target.value.trim() !== '') e.target.value = '';
+            });
+            planHoursInput?.addEventListener('blur', e => {
+                const d = parseTimeInputToDecimal(e.target.value);
+                if (!isNaN(d) && d > 0) e.target.value = formatDecimalToTimeInput(d);
+                else if (e.target.value.trim() !== '') e.target.value = '';
+            });
+            recordNotesInput?.addEventListener('input', e => {
+                if (e.target.value.length > NOTES_MAX_LENGTH) {
+                    e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH);
+                    showFeedback('feedback.notesLengthLimit', 'info', { maxLength: NOTES_MAX_LENGTH });
+                }
+            });
+            revisitNotesInput?.addEventListener('input', e => {
+                if (e.target.value.length > REVISIT_NOTES_MAX_LENGTH) {
+                    e.target.value = e.target.value.substring(0, REVISIT_NOTES_MAX_LENGTH);
+                    showFeedback('feedback.notesLengthLimit', 'info', { maxLength: REVISIT_NOTES_MAX_LENGTH });
+                }
+            });
+            historySearchInput?.addEventListener('input', renderHistory);
+            recordForm?.addEventListener('submit', handleRecordSubmit);
+            planForm?.addEventListener('submit', handlePlanSubmit);
+            revisitForm?.addEventListener('submit', handleRevisitSubmit);
+            clearPlanFormBtn?.addEventListener('click', clearPlanForm);
+            clearRevisitFormBtn?.addEventListener('click', clearRevisitForm);
+            saveGoalBtn?.addEventListener('click', handleGoalSave);
+            monthlyGoalInput?.addEventListener('keypress', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleGoalSave();
+                    e.target.blur();
+                }
+            });
+            chartMonthSelector?.addEventListener('change', updateAllDisplays);
+            clearAllDataBtn?.addEventListener('click', handleClearAllData);
+            dialogConfirmBtn?.addEventListener('click', () => {
+                if (typeof currentConfirmCallback === 'function') currentConfirmCallback();
+                hideConfirmationDialog();
+            });
             dialogCancelBtn?.addEventListener('click', hideConfirmationDialog);
-            confirmationDialog?.addEventListener('click', e => { if (e.target === confirmationDialog) hideConfirmationDialog(); }); // Fechar ao clicar fora
-            // Captura evento para instalar PWA
-            window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstallPrompt = e; console.log('Install prompt event captured.'); });
-            // Verifica mudança de data periodicamente
+            confirmationDialog?.addEventListener('click', e => {
+                if (e.target === confirmationDialog) hideConfirmationDialog();
+            });
+            window.addEventListener('beforeinstallprompt', e => {
+                e.preventDefault();
+                deferredInstallPrompt = e;
+                console.log('Install prompt event captured.');
+            });
             if (dateCheckInterval) clearInterval(dateCheckInterval);
-            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000); // A cada 60 segundos
-            // Atualiza toda a interface
+            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000);
             updateAllDisplays();
-            registerServiceWorker(); // Registra o Service Worker
-            // Pede a meta inicial se ainda não foi definida
-            if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) { setTimeout(promptForMonthlyGoal, 600); }
-            // Esconde indicador de loading
+            registerServiceWorker();
+            if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) {
+                setTimeout(promptForMonthlyGoal, 600);
+            }
             if (loadingIndicator) loadingIndicator.classList.add('hidden');
             console.log("App initialization complete.");
 
