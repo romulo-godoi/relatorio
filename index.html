@@ -185,6 +185,8 @@
         .dialog-backdrop.visible .dialog-content { transform: scale(1); }
         .dialog-content p { margin-bottom: 25px; font-size: 1.05em; line-height: 1.5; }
         .dialog-actions button { width: calc(50% - 5px); margin-top: 0; padding: 10px; font-size: 1em;}
+        #data-management-buttons { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; } /* Container for Import/Export buttons */
+        #last-export-date { font-size: 0.85em; color: var(--text-color-secondary); text-align: center; margin-top: 15px; min-height: 1.2em; } /* Style for last export date */
         .hidden { display: none !important; }
         .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
         .text-center { text-align: center; }
@@ -389,11 +391,19 @@
         <div class="card" id="settings-card">
             <div class="card-header"><h2 data-translate-key="settingsCard.title">Configurações</h2><span class="toggle-icon">▼</span></div>
             <div class="card-content">
-                 <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
-                <div class="text-center">
-                    <button id="clear-all-data-btn" class="danger" data-translate-key="settingsCard.clearDataButton">Limpar Todos os Dados</button>
+                <h3 class="list-title" data-translate-key="settingsCard.dataManagementTitle">Gerenciamento de Dados</h3>
+                <div id="data-management-buttons">
+                    <button id="import-data-btn" class="secondary" data-translate-key="settingsCard.importButton">Importar Dados</button>
+                    <button id="export-data-btn" data-translate-key="settingsCard.exportButton">Exportar Dados</button>
                 </div>
-                <p id="settings-warning-text" style="margin-top: 15px; font-size: 0.9em; color: var(--text-color-secondary); text-align: center; line-height: 1.4;" data-translate-key="settingsCard.clearDataWarning">Atenção: Esta ação é irreversível e apagará todos os registros, planos e revisitas.</p>
+                <input type="file" id="import-file-input" class="hidden" accept=".json">
+                <p id="last-export-date" data-translate-key="settingsCard.lastExportLabel">Última exportação: Nunca</p>
+
+                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                <div class="form-group">
+                    <label for="language-selector" data-translate-key="settingsCard.languageLabel">Idioma</label>
+                    <select id="language-selector"></select>
+                </div>
             </div>
         </div>
     </div>
@@ -415,13 +425,16 @@
             let translations = {}; let currentLang = 'en'; const supportedLanguages = ["pt-BR", "en", "es", "de", "fr"];
             const tagKeyMapping = {"Casa em casa": "tags.houseToHouse", "Carrinho": "tags.cart", "Cartas": "tags.letters", "Testemunho informal": "tags.informalWitnessing", "Outro": "tags.other" };
             const DEFAULT_TAG_VALUE = "Casa em casa"; const NOTES_MAX_LENGTH = 300; const REVISIT_NOTES_MAX_LENGTH = 500; const HISTORY_MONTH_LIMIT = 3; const MIN_HOURS_PER_DAY_FORECAST = 1.0;
-            const LOCAL_STORAGE_KEYS = { ENTRIES: 'pioneerTracker_entries_v5.1', PLANS: 'pioneerTracker_plans_v1.1', REVISITS: 'pioneerTracker_revisits_v1.1', SETTINGS: 'pioneerTracker_settings_v1.1' };
+            const LOCAL_STORAGE_KEYS = { ENTRIES: 'pioneerTracker_entries_v5.1', PLANS: 'pioneerTracker_plans_v1.1', REVISITS: 'pioneerTracker_revisits_v1.1', SETTINGS: 'pioneerTracker_settings_v1.2', LAST_EXPORT_DATE: 'pioneerTracker_lastExport_v1.0' }; // Updated settings version, added last export key
             const CONFETTI_COUNT = 30; const DASHBOARD_REVISIT_LIMIT = 3;
 
-            let appElement, dashboardBox, confettiContainer, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, clearAllDataBtn, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
+            let appElement, dashboardBox, confettiContainer, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let revisitCard, revisitForm, revisitIdInput, revisitNameInput, revisitDateInput, revisitNotesInput, saveRevisitBtn, clearRevisitFormBtn, revisitListContainer, revisitList, revisitListPlaceholder, dashboardRevisitsSection, dashboardRevisitList, plansSection;
+            // New elements for import/export
+            let exportDataBtn, importDataBtn, importFileInput, lastExportDateDisplay, languageSelector;
 
-            let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false };
+            let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false, language: null }; // Added language to settings
+            let lastExportTimestamp = null; // Store timestamp of last export
 
             let monthlyHoursChartInstance = null, currentEditingId = null, currentConfirmCallback = null, isDateInputVisible = false, deferredInstallPrompt = null;
             let MONTH_NAMES = [], WEEKDAY_NAMES = []; let lastCheckedDateString = ''; let dateCheckInterval = null; let confettiTimeout = null; const loadingIndicator = document.getElementById('loading-indicator');
@@ -430,21 +443,70 @@
 
             function getNestedValue(obj, key) { if (!key || typeof key !== 'string') return undefined; return key.split('.').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj); }
             function t(key, variables = {}) { const langObj = translations?.[currentLang] || translations?.['en']; if (!langObj) { console.error(`Lang missing: ${currentLang} & 'en'. Key: ${key}`); return `[NO LANG: ${key}]`; } let translation = getNestedValue(langObj, key); if (translation === undefined) { const fallbackLangObj = translations['en']; if (fallbackLangObj) translation = getNestedValue(fallbackLangObj, key); if (translation === undefined) return `[MISSING: ${key}]`; } if (typeof translation !== 'string') { return `[TYPE ERR: ${key}]`; } for (const placeholder in variables) { if (Object.prototype.hasOwnProperty.call(variables, placeholder)) { translation = translation.replace(new RegExp(`\\{${placeholder}\\}`, 'g'), variables[placeholder]); } } return translation; }
-            function applyStaticTranslations() { document.querySelectorAll('[data-translate-key]').forEach(element => { const key = element.getAttribute('data-translate-key'); const attr = element.getAttribute('data-translate-attr') || 'textContent'; const translation = t(key); if (translation && !translation.startsWith('[')) { if (attr === 'textContent') element.textContent = translation; else if (['placeholder', 'title', 'value'].includes(attr)) element.setAttribute(attr, translation); } }); if (recordTagSelect) { const currentVal = recordTagSelect.value; recordTagSelect.innerHTML = ''; Object.keys(tagKeyMapping).forEach(internalValue => { const option = document.createElement('option'); option.value = internalValue; option.textContent = t(tagKeyMapping[internalValue] || 'tags.noTag'); recordTagSelect.appendChild(option); }); if (recordTagSelect.querySelector(`option[value="${currentVal}"]`)) recordTagSelect.value = currentVal; else recordTagSelect.value = DEFAULT_TAG_VALUE; } document.title = t('appTitle'); document.documentElement.lang = currentLang.split('-')[0]; if (recordNotesLabel) recordNotesLabel.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH }); if (recordNotesInput) recordNotesInput.maxLength = NOTES_MAX_LENGTH; if (revisitNotesInput) revisitNotesInput.maxLength = REVISIT_NOTES_MAX_LENGTH; if (loadingIndicator && !loadingIndicator.classList.contains('hidden')) loadingIndicator.textContent = t('common.loading'); }
+            function applyStaticTranslations() {
+                document.querySelectorAll('[data-translate-key]').forEach(element => {
+                    const key = element.getAttribute('data-translate-key');
+                    const attr = element.getAttribute('data-translate-attr') || 'textContent';
+                    const translation = t(key);
+                    if (translation && !translation.startsWith('[')) {
+                        if (attr === 'textContent') element.textContent = translation;
+                        else if (['placeholder', 'title', 'value'].includes(attr)) element.setAttribute(attr, translation);
+                    }
+                });
+                if (recordTagSelect) {
+                    const currentVal = recordTagSelect.value;
+                    recordTagSelect.innerHTML = '';
+                    Object.keys(tagKeyMapping).forEach(internalValue => {
+                        const option = document.createElement('option');
+                        option.value = internalValue;
+                        option.textContent = t(tagKeyMapping[internalValue] || 'tags.noTag');
+                        recordTagSelect.appendChild(option);
+                    });
+                    if (recordTagSelect.querySelector(`option[value="${currentVal}"]`)) recordTagSelect.value = currentVal;
+                    else recordTagSelect.value = DEFAULT_TAG_VALUE;
+                }
+                document.title = t('appTitle');
+                document.documentElement.lang = currentLang.split('-')[0];
+                if (recordNotesLabel) recordNotesLabel.textContent = t('recordCard.notesLabel', { maxLength: NOTES_MAX_LENGTH });
+                if (recordNotesInput) recordNotesInput.maxLength = NOTES_MAX_LENGTH;
+                if (revisitNotesInput) revisitNotesInput.maxLength = REVISIT_NOTES_MAX_LENGTH;
+                if (loadingIndicator && !loadingIndicator.classList.contains('hidden')) loadingIndicator.textContent = t('common.loading');
+                // Update last export date display
+                updateLastExportDateDisplay();
+                // Populate language selector
+                populateLanguageSelector();
+            }
 
-            // loadTranslations já é async, pode usar await dentro dela.
             async function loadTranslations() {
                 try {
-                    const response = await fetch('translations.json'); // 'await' é válido aqui
+                    const response = await fetch('translations.json');
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    translations = await response.json(); // 'await' é válido aqui
-                    const browserLang = (navigator.language || 'en').split('-')[0];
+                    translations = await response.json();
+
+                    // Determine language based on saved setting first, then browser, then fallback
+                    const savedLang = settings.language;
                     const browserLocale = navigator.language || 'en';
-                    if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) currentLang = browserLocale;
-                    else if (translations[browserLang] && supportedLanguages.includes(browserLang)) currentLang = browserLang;
-                    else if (translations['en']) currentLang = 'en';
-                    else throw new Error("'en' language file missing");
+                    const browserLang = browserLocale.split('-')[0];
+
+                    if (savedLang && translations[savedLang] && supportedLanguages.includes(savedLang)) {
+                        currentLang = savedLang;
+                    } else if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) {
+                        currentLang = browserLocale;
+                    } else if (translations[browserLang] && supportedLanguages.includes(browserLang)) {
+                        currentLang = browserLang;
+                    } else if (translations['en']) {
+                        currentLang = 'en';
+                    } else {
+                        throw new Error("'en' language file missing");
+                    }
                     console.log("Language selected:", currentLang);
+
+                    // Update settings if language was determined by browser/fallback
+                    if (settings.language !== currentLang) {
+                        settings.language = currentLang;
+                        // No need to save here, will be saved later if needed
+                    }
+
                     MONTH_NAMES = getNestedValue(translations[currentLang], 'dates.monthNames') || getNestedValue(translations['en'], 'dates.monthNames');
                     WEEKDAY_NAMES = getNestedValue(translations[currentLang], 'dates.weekdaysShort') || getNestedValue(translations['en'], 'dates.weekdaysShort');
                     if (!Array.isArray(MONTH_NAMES) || MONTH_NAMES.length !== 12) { MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; }
@@ -456,6 +518,7 @@
                     MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
                     WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
                     currentLang = 'en';
+                    settings.language = 'en'; // Set default language in settings on error
                 }
             }
 
@@ -504,7 +567,6 @@
                 historySearchInput = document.getElementById('history-search-input');
                 historyListPlaceholder = historyList?.querySelector('.placeholder');
                 showingResultsLabel = document.getElementById('showing-results-label');
-                clearAllDataBtn = document.getElementById('clear-all-data-btn');
                 confirmationDialog = document.getElementById('confirmation-dialog');
                 dialogMessage = document.getElementById('dialog-message');
                 dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
@@ -523,6 +585,13 @@
                 dashboardRevisitsSection = document.getElementById('dashboard-revisits-section');
                 dashboardRevisitList = document.getElementById('dashboard-revisit-list');
                 plansSection = document.querySelector('.plans-section');
+                // Select new elements
+                exportDataBtn = document.getElementById('export-data-btn');
+                importDataBtn = document.getElementById('import-data-btn');
+                importFileInput = document.getElementById('import-file-input');
+                lastExportDateDisplay = document.getElementById('last-export-date');
+                languageSelector = document.getElementById('language-selector');
+
                 try { computedStyles = getComputedStyle(document.body); } catch (e) { computedStyles = {}; }
                 textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff';
                 textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa';
@@ -532,6 +601,17 @@
             function getCurrentDateString() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
             function parseLocalDate(dateString) { if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return new Date(NaN); const [y, m, d] = dateString.split('-').map(Number); return new Date(y, m - 1, d); }
             function formatDisplayDate(dateString) { if (!dateString || !dateString.includes('-')) return dateString; try { const date = parseLocalDate(dateString); if (isNaN(date.valueOf())) throw new Error("Invalid date"); const options = { day: '2-digit', month: '2-digit', year: 'numeric' }; return new Intl.DateTimeFormat(currentLang || 'default', options).format(date); } catch (e) { const [y, m, d] = dateString.split('-'); return `${d}/${m}/${y}`; } }
+            function formatTimestamp(timestamp) {
+                if (!timestamp) return t('common.never');
+                try {
+                    const date = new Date(timestamp);
+                    if (isNaN(date.valueOf())) return t('common.invalidDate');
+                    const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                    return new Intl.DateTimeFormat(currentLang || 'default', options).format(date);
+                } catch (e) {
+                    return t('common.invalidDate');
+                }
+            }
             function getMonthYearString(date) { const m = String(date.getMonth() + 1).padStart(2, '0'); const y = date.getFullYear(); return `${m}/${y}`; }
             function getStartOfWeek(date = new Date()) { const d = new Date(date); d.setHours(0, 0, 0, 0); const dayOfWeek = d.getDay(); const diff = d.getDate() - dayOfWeek; const sOW = new Date(d.setDate(diff)); return `${sOW.getFullYear()}-${String(sOW.getMonth() + 1).padStart(2, '0')}-${String(sOW.getDate()).padStart(2, '0')}`; }
             function getDateMonthsAgo(months) { const d = new Date(); d.setHours(0, 0, 0, 0); d.setMonth(d.getMonth() - months); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
@@ -540,8 +620,66 @@
             function formatDecimalToTimeInput(d) { if (isNaN(d) || d <= 0) return ""; const t = Math.round(d * 60), h = Math.floor(t / 60), m = t % 60; return `${h}:${String(m).padStart(2, '0')}`; }
             function parseTimeInputToDecimal(s) { if (!s) return 0; const t = s.trim(); if (!t) return 0; const colonMatch = t.match(/^(\d{1,3}):(\d{1,2})$/); if (colonMatch) { const h = parseInt(colonMatch[1], 10), m = parseInt(colonMatch[2], 10); if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60); } const numMatch = t.match(/^(\d+)$/); if (numMatch) { const str = numMatch[1], v = parseInt(str, 10); if (isNaN(v)) return NaN; if (str.length <= 2) { if (v < 60) return v / 60; } if (str.length >= 3 && str.length <= 4) { const hs = str.slice(0, -2), ms = str.slice(-2); const h = parseInt(hs, 10), m = parseInt(ms, 10); if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60); } } return NaN; }
             function formatRelativeDate(dateString) { if (!dateString) return ''; const today = new Date(); today.setHours(0, 0, 0, 0); const inputDate = parseLocalDate(dateString); if (isNaN(inputDate.valueOf()) || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length < 7) { return formatDisplayDate(dateString); } const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const week = new Date(today); week.setDate(today.getDate() + 7); const inputTime = inputDate.getTime(); const todayTime = today.getTime(); const tomorrowTime = tomorrow.getTime(); if (inputTime === todayTime) return t('dates.today'); if (inputTime === tomorrowTime) return t('dates.tomorrow'); if (inputDate > tomorrow && inputDate < week) { return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
-            function saveData() { try { localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS, JSON.stringify(revisits)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings)); } catch (e) { showFeedback('feedback.saveError', 'danger'); } }
-            function loadData() { try { let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const p = JSON.parse(sER); recordedEntries = Array.isArray(p) ? p.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : (() => { throw new Error("Entries not array") })(); } catch (e) { recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } } const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } }); const sRV = localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS); revisits = sRV ? JSON.parse(sRV) : []; revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null })); const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings = { monthlyGoal: 70, goalHasBeenSet: false, ...JSON.parse(sSR || '{}') }; if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false; recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.sort((a, b) => a.date.localeCompare(b.date)); revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); }); } catch (e) { recordedEntries = []; plannedEntries = []; revisits = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; try { localStorage.clear(); } catch (se) {} showFeedback('feedback.loadError', 'danger'); } }
+
+            // Main save function (saves everything except last export date)
+            function saveData() {
+                try {
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS, JSON.stringify(revisits));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+                    // DO NOT save lastExportTimestamp here, it's saved only during export
+                } catch (e) {
+                    showFeedback('feedback.saveError', 'danger');
+                }
+            }
+
+            // Save only the last export date
+            function saveLastExportDate() {
+                 try {
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_EXPORT_DATE, JSON.stringify(lastExportTimestamp));
+                 } catch (e) {
+                    console.error("Error saving last export date:", e);
+                    // Don't bother the user with a feedback message for this
+                 }
+            }
+
+            function loadData() {
+                try {
+                    // Load Settings first, as it might contain language preference
+                    const sSR = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS);
+                    settings = { monthlyGoal: 70, goalHasBeenSet: false, language: null, ...JSON.parse(sSR || '{}') };
+                    if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70;
+                    if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false;
+                    if (!settings.language || !supportedLanguages.includes(settings.language)) settings.language = null; // Reset if invalid
+
+                    // Load other data
+                    let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
+                    if (sER) { try { const p = JSON.parse(sER); recordedEntries = Array.isArray(p) ? p.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : (() => { throw new Error("Entries not array") })(); } catch (e) { recordedEntries = []; localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); } }
+                    const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS);
+                    plannedEntries = sP ? JSON.parse(sP) : [];
+                    plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } });
+                    const sRV = localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS);
+                    revisits = sRV ? JSON.parse(sRV) : [];
+                    revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null }));
+
+                    // Load last export date
+                    const sLED = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_EXPORT_DATE);
+                    lastExportTimestamp = sLED ? JSON.parse(sLED) : null;
+                    if (typeof lastExportTimestamp !== 'number' && lastExportTimestamp !== null) {
+                        lastExportTimestamp = null; // Ensure it's a number or null
+                    }
+
+                    // Sort data
+                    recordedEntries.sort((a, b) => b.date.localeCompare(a.date));
+                    plannedEntries.sort((a, b) => a.date.localeCompare(b.date));
+                    revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); });
+                } catch (e) {
+                    recordedEntries = []; plannedEntries = []; revisits = []; settings = { monthlyGoal: 70, goalHasBeenSet: false, language: null }; lastExportTimestamp = null;
+                    try { localStorage.clear(); } catch (se) {}
+                    showFeedback('feedback.loadError', 'danger');
+                }
+            }
             function triggerInstallPromptIfAvailable(context = '?') { if (deferredInstallPrompt && settings.goalHasBeenSet) { setTimeout(() => { deferredInstallPrompt.prompt().catch(e => {}); deferredInstallPrompt = null; }, 300); } }
             function promptForMonthlyGoal() { let ok = false; const msg = t('statsCard.goalLabel'); while (!ok) { const inp = prompt(msg, settings.monthlyGoal); if (inp === null) { ok = true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); } } else { const g = parseInt(inp, 10); if (!isNaN(g) && g > 0) { settings.monthlyGoal = g; settings.goalHasBeenSet = true; if(monthlyGoalInput) monthlyGoalInput.value = g; saveData(); ok = true; updateAllDisplays(); showFeedback("feedback.goalSetSuccess", "success"); triggerInstallPromptIfAvailable('initial goal'); } else { alert(t("feedback.invalidGoalValue")); } } } }
             function setDateInputVisibility(visible) { isDateInputVisible = visible; if (visible) { recordDateInput?.classList.remove('hidden'); dateLabel?.classList.add('visually-hidden'); recordDateInput?.focus(); } else { recordDateInput?.classList.add('hidden'); dateLabel?.classList.remove('visually-hidden'); if (displayDate) displayDate.textContent = (!recordDateInput?.value || recordDateInput.value === getCurrentDateString()) ? t('dates.today') : formatDisplayDate(recordDateInput.value); } }
@@ -555,7 +693,8 @@
             function markPlanAsDone(id) { const idx = plannedEntries.findIndex(p => p.id === id); if (idx === -1) { showFeedback('feedback.planNotFound', 'danger'); return; } const plan = plannedEntries[idx]; const todayStr = getCurrentDateString(); const recDate = todayStr < plan.date ? todayStr : plan.date; const note = t('recordCard.autoNoteFromPlan', { date: formatDisplayDate(plan.date), hours: formatHoursExtensive(plan.hours) }); const entry = { id: Date.now(), date: recDate, hours: plan.hours, tag: DEFAULT_TAG_VALUE, notes: note, type: 'record' }; recordedEntries.push(entry); recordedEntries.sort((a, b) => b.date.localeCompare(a.date)); plannedEntries.splice(idx, 1); saveData(); updateAllDisplays(); showFeedback('feedback.planMarkedDoneSuccess', 'success'); }
             function deletePlanEntry(id) { showConfirmationDialog(t('dialog.confirmDeletePlanMessage'), () => { plannedEntries = plannedEntries.filter(p => p.id !== id); saveData(); updateAllDisplays(); showFeedback('feedback.planDeletedSuccess', 'info'); if (currentEditingId === id) clearPlanForm(); }); }
             function handleGoalSave() { const g = parseInt(monthlyGoalInput?.value, 10); if (!isNaN(g) && g > 0) { settings.monthlyGoal = g; settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); showFeedback('feedback.goalUpdateSuccess', 'success'); triggerInstallPromptIfAvailable('goal save'); } else { alert(t('feedback.invalidGoalValue')); if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal; } }
-            function handleClearAllData() { showConfirmationDialog(t('dialog.confirmClearAllDataMessage'), () => { recordedEntries = []; plannedEntries = []; revisits = []; settings = { monthlyGoal: 70, goalHasBeenSet: false }; if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal; saveData(); clearRecordForm(); clearPlanForm(); clearRevisitForm(); updateAllDisplays(); showFeedback('feedback.clearAllDataSuccess', 'danger'); document.querySelectorAll('.card').forEach(c => { if (c.id !== 'record-card' && c.classList.contains('expanded')) toggleCard(c); else if (c.id === 'record-card' && !c.classList.contains('expanded')) toggleCard(c); }); }); }
+            // Removed handleClearAllData function
+
             function showConfirmationDialog(message, onConfirm) { if (dialogMessage) dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog?.classList.add('visible'); dialogConfirmBtn?.focus(); }
             function hideConfirmationDialog() { confirmationDialog?.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300); }
             function showFeedback(key, type = 'info', vars = {}) { let msg = t(key, vars); const fb = document.createElement('div'); fb.textContent = msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type === 'success' ? 'var(--success-color)' : type === 'danger' ? 'var(--danger-color)' : 'var(--primary-color)'}; color: var(--text-color); text-align: center; max-width: 90%;`; document.body.appendChild(fb); setTimeout(() => { fb.style.opacity = '1'; fb.style.bottom = '30px'; }, 10); setTimeout(() => { fb.style.opacity = '0'; fb.style.bottom = '10px'; }, 3500); setTimeout(() => { fb.parentNode?.removeChild(fb) }, 4000); }
@@ -565,6 +704,169 @@
             function deleteRevisit(id) { showConfirmationDialog(t('dialog.confirmDeleteRevisitMessage'), () => { const initialLength = revisits.length; revisits = revisits.filter(rv => rv.id !== id); if (revisits.length < initialLength) { saveData(); updateAllDisplays(); showFeedback('feedback.revisitDeletedSuccess', 'info'); if (currentEditingId === id) clearRevisitForm(); } }); }
             function createConfetti() { if (!confettiContainer) return; confettiContainer.innerHTML = ''; for (let i = 0; i < CONFETTI_COUNT; i++) { const confetti = document.createElement('div'); confetti.classList.add('confetti'); confetti.style.left = `${Math.random() * 100}%`; confetti.style.backgroundColor = `var(--confetti-color-${Math.floor(Math.random() * 6) + 1})`; confetti.style.animationDelay = `${Math.random() * 2}s`; const size = Math.random() * 6 + 6; confetti.style.width = `${size}px`; confetti.style.height = `${size * (Math.random() * 0.5 + 0.75)}px`; if (Math.random() > 0.7) { confetti.style.borderRadius = '50%'; } confettiContainer.appendChild(confetti); } if (confettiTimeout) clearTimeout(confettiTimeout); confettiTimeout = setTimeout(() => { if (confettiContainer) confettiContainer.innerHTML = ''; }, 6000); }
             function removeConfetti() { if (confettiTimeout) clearTimeout(confettiTimeout); if (confettiContainer) confettiContainer.innerHTML = ''; }
+
+            // --- Import/Export Functions ---
+            function handleExportData() {
+                try {
+                    const dataToExport = {
+                        version: '1.0', // Add a version for potential future migrations
+                        exportedAt: new Date().toISOString(),
+                        entries: recordedEntries,
+                        plans: plannedEntries,
+                        revisits: revisits,
+                        settings: settings
+                    };
+                    const jsonData = JSON.stringify(dataToExport, null, 2); // Pretty print JSON
+                    const blob = new Blob([jsonData], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    const dateStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+                    a.href = url;
+                    a.download = `pioneer-field-service-log_backup_${dateStr}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    // Update and save last export date
+                    lastExportTimestamp = Date.now();
+                    saveLastExportDate();
+                    updateLastExportDateDisplay();
+
+                    showFeedback('feedback.exportSuccess', 'success');
+                } catch (error) {
+                    console.error("Export failed:", error);
+                    showFeedback('feedback.exportError', 'danger');
+                }
+            }
+
+            function handleImportData() {
+                importFileInput?.click(); // Trigger the hidden file input
+            }
+
+            function processImportFile(event) {
+                const file = event.target.files?.[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const text = e.target?.result;
+                        if (typeof text !== 'string') throw new Error("File content is not text");
+
+                        const importedData = JSON.parse(text);
+
+                        // Basic validation
+                        if (typeof importedData !== 'object' || importedData === null ||
+                            !Array.isArray(importedData.entries) ||
+                            !Array.isArray(importedData.plans) ||
+                            !Array.isArray(importedData.revisits) ||
+                            typeof importedData.settings !== 'object' || importedData.settings === null) {
+                            throw new Error("Invalid file structure");
+                        }
+
+                        // Confirmation before overwriting
+                        showConfirmationDialog(t('dialog.confirmImportMessage'), () => {
+                            try {
+                                // Replace current data with imported data
+                                recordedEntries = importedData.entries.map(entry => ({
+                                    ...entry,
+                                    notes: entry.notes?.substring(0, NOTES_MAX_LENGTH) || '',
+                                    tag: entry.tag || DEFAULT_TAG_VALUE
+                                }));
+                                plannedEntries = importedData.plans.map(plan => {
+                                    // Handle potential old format
+                                    if (plan.plannedHours !== undefined && typeof plan.plannedHours === 'number') {
+                                        plan.hours = plan.plannedHours;
+                                        delete plan.plannedHours;
+                                    }
+                                    return plan;
+                                });
+                                revisits = importedData.revisits.map(rv => ({
+                                    ...rv,
+                                    status: rv.status || 'pending',
+                                    notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '',
+                                    dateAdded: rv.dateAdded || getCurrentDateString(),
+                                    scheduledDate: rv.scheduledDate || null
+                                }));
+                                // Merge settings, keeping goalHasBeenSet logic if needed, update language
+                                const importedSettings = importedData.settings;
+                                settings.monthlyGoal = (!isNaN(importedSettings.monthlyGoal) && importedSettings.monthlyGoal > 0) ? importedSettings.monthlyGoal : 70;
+                                settings.goalHasBeenSet = typeof importedSettings.goalHasBeenSet === 'boolean' ? importedSettings.goalHasBeenSet : false;
+                                settings.language = (importedSettings.language && supportedLanguages.includes(importedSettings.language)) ? importedSettings.language : currentLang; // Use imported lang if valid, else keep current
+
+                                // Update UI elements based on imported settings
+                                if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
+                                if (settings.language !== currentLang) {
+                                    // Language changed, need to reload translations and update UI
+                                    currentLang = settings.language;
+                                    loadTranslations().then(() => { // Reload translations for the new language
+                                        saveData(); // Save all new data
+                                        updateAllDisplays(); // Refresh UI with new data and language
+                                        showFeedback('feedback.importSuccess', 'success');
+                                    });
+                                } else {
+                                     // Language didn't change, just save and update
+                                     saveData(); // Save all new data
+                                     updateAllDisplays(); // Refresh UI with new data
+                                     showFeedback('feedback.importSuccess', 'success');
+                                }
+
+                            } catch (innerError) {
+                                console.error("Error applying imported data:", innerError);
+                                showFeedback('feedback.importProcessError', 'danger');
+                            }
+                        });
+
+                    } catch (error) {
+                        console.error("Import failed:", error);
+                        showFeedback('feedback.importErrorInvalidFile', 'danger');
+                    } finally {
+                        // Reset file input to allow importing the same file again
+                        event.target.value = null;
+                    }
+                };
+                reader.onerror = () => {
+                    showFeedback('feedback.importErrorReadFile', 'danger');
+                    event.target.value = null; // Reset file input
+                };
+                reader.readAsText(file);
+            }
+            // --- End Import/Export Functions ---
+
+            // --- Language Selection ---
+            function populateLanguageSelector() {
+                if (!languageSelector || !translations) return;
+                const availableLangs = Object.keys(translations).filter(lang => supportedLanguages.includes(lang));
+                languageSelector.innerHTML = ''; // Clear existing options
+
+                availableLangs.forEach(langCode => {
+                    const option = document.createElement('option');
+                    option.value = langCode;
+                    // Attempt to get the language name from its own translation file
+                    const langName = getNestedValue(translations[langCode], 'languageName') || langCode;
+                    option.textContent = langName;
+                    if (langCode === currentLang) {
+                        option.selected = true;
+                    }
+                    languageSelector.appendChild(option);
+                });
+            }
+
+            async function handleLanguageChange(event) {
+                const newLang = event.target.value;
+                if (newLang && newLang !== currentLang && supportedLanguages.includes(newLang)) {
+                    currentLang = newLang;
+                    settings.language = newLang; // Save preference
+                    saveData(); // Save updated settings
+                    if (loadingIndicator) loadingIndicator.classList.remove('hidden');
+                    await loadTranslations(); // Reload translations for the new language
+                    updateAllDisplays(); // Update UI with new language
+                    if (loadingIndicator) loadingIndicator.classList.add('hidden');
+                    showFeedback('feedback.languageChanged', 'success', { lang: getNestedValue(translations[currentLang], 'languageName') || currentLang });
+                }
+            }
+            // --- End Language Selection ---
 
             function updateDashboard() {
                 const today = new Date(); const currentMonth = today.getMonth(); const currentYear = today.getFullYear(); let monthHours = 0, weekHours = 0; const startOfWeekStr = getStartOfWeek(today); const todayStr = getCurrentDateString();
@@ -597,10 +899,18 @@
             function renderCharts(selectedMonthYear) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (!selectedMonthYear || selectedMonthYear === '') { clearChartWithMessage(t('chartsCard.selectMonthMessage')); return; } try { const [selectedMonth, selectedYear] = selectedMonthYear.split('/').map(Number); const monthIndex = selectedMonth - 1; const entriesForMonth = recordedEntries.filter(e => e.type !== 'revisit_completed').filter(e => { const d = parseLocalDate(e.date); if (isNaN(d.valueOf())) return false; return d.getMonth() === monthIndex && d.getFullYear() === selectedYear; }); if (entriesForMonth.length === 0) { clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage', { month: formatMonthYearExtensive(selectedMonthYear) })); return; } let totalHours = 0; const hoursByTag = {}; entriesForMonth.forEach(e => { const tagName = e.tag || DEFAULT_TAG_VALUE; const hours = e.hours || 0; totalHours += hours; hoursByTag[tagName] = (hoursByTag[tagName] || 0) + hours; }); if (chartTotalHoursDisplay) chartTotalHoursDisplay.innerHTML = `${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(totalHours)}</strong>`; const aggregatedData = Object.entries(hoursByTag).map(([tag, hours]) => ({ label: t(tagKeyMapping[tag] || 'tags.noTag'), value: hours })); aggregatedData.sort((a, b) => b.value - a.value); const labels = aggregatedData.map(item => item.label); const values = aggregatedData.map(item => item.value); const backgroundColors = labels.map((_, i) => chartColors[i % chartColors.length]); if (!monthlyHoursChartCtx) return; monthlyHoursChartInstance = new Chart(monthlyHoursChartCtx, { type: 'pie', data: { labels: labels, datasets: [{ data: values, backgroundColor: backgroundColors, borderColor: tooltipBgColor || '#1c1c1e', borderWidth: 1.5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: t('chartsCard.percentageDistributionTitle'), color: textMutedColor, font: { size: 12, weight: 'normal' }, padding: { bottom: 15 } }, tooltip: { backgroundColor: tooltipBgColor, titleColor: textColor, bodyColor: textColor, displayColors: true, padding: 10, cornerRadius: 6, callbacks: { label: ctx => { const label = ctx.label || ''; const value = ctx.parsed || 0; const percentage = totalHours > 0 ? ((value / totalHours) * 100).toFixed(1) : 0; return `${label}: ${formatHoursExtensive(value)} (${percentage}%)`; } } }, legend: { position: 'bottom', align: 'center', labels: { color: textMutedColor, boxWidth: 12, padding: 15 } } } } }); } catch (e) { clearChartWithMessage(t('chartsCard.renderErrorMessage')); } }
             function clearChartWithMessage(msg) { if (monthlyHoursChartInstance) { monthlyHoursChartInstance.destroy(); monthlyHoursChartInstance = null; } if (chartTotalHoursDisplay) chartTotalHoursDisplay.textContent = ''; const ctx = monthlyHoursChartCtx; if (ctx) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = textMutedColor; ctx.font = `14px ${computedStyles?.fontFamily || 'sans-serif'}`; ctx.fillText(msg, ctx.canvas.width / 2, ctx.canvas.height / 2); ctx.restore(); } }
 
+            // Update the display for the last export date
+            function updateLastExportDateDisplay() {
+                if (lastExportDateDisplay) {
+                    const formattedDate = formatTimestamp(lastExportTimestamp);
+                    lastExportDateDisplay.textContent = t('settingsCard.lastExportLabel') + ' ' + formattedDate;
+                }
+            }
+
             function updateAllDisplays() {
                 if (typeof t !== 'function' || !translations?.[currentLang]) { console.warn("Translations not ready, skipping update."); return; }
                 try {
-                    applyStaticTranslations();
+                    applyStaticTranslations(); // Includes language selector and last export date now
                     updateDashboard();
                     updateDashboardPlannedDates();
                     updateStatistics();
@@ -620,11 +930,10 @@
             function checkDateAndUpdate() { const newDateString = getCurrentDateString(); if (newDateString !== lastCheckedDateString) { lastCheckedDateString = newDateString; updateAllDisplays(); } }
 
             // --- App Initialization Sequence ---
-            // O 'await' AQUI é válido porque está dentro da IIAFE async
-            await loadTranslations();
-            selectDOMElements();
-            loadData();
-            applyStaticTranslations();
+            loadData(); // Load settings first to get language preference
+            selectDOMElements(); // Select elements after loading data
+            await loadTranslations(); // Load translations based on potentially loaded preference
+            applyStaticTranslations(); // Apply translations after loading them
 
             if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
             if (recordDateInput) recordDateInput.value = getCurrentDateString();
@@ -641,6 +950,7 @@
                 if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼';
             });
 
+            // --- Event Listeners ---
             appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) { toggleCard(h.closest('.card')); } });
             document.querySelectorAll('.card-header').forEach(h => { h.setAttribute('role', 'button'); h.setAttribute('tabindex', '0'); h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(h.closest('.card')); } }); });
             changeDateBtn?.addEventListener('click', () => setDateInputVisibility(true));
@@ -659,16 +969,22 @@
             saveGoalBtn?.addEventListener('click', handleGoalSave);
             monthlyGoalInput?.addEventListener('keypress', e => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); e.target.blur(); } });
             chartMonthSelector?.addEventListener('change', (e) => { renderCharts(e.target.value); });
-            clearAllDataBtn?.addEventListener('click', handleClearAllData);
+            // Removed listener for clearAllDataBtn
             dialogConfirmBtn?.addEventListener('click', () => { if (typeof currentConfirmCallback === 'function') { currentConfirmCallback(); } hideConfirmationDialog(); });
             dialogCancelBtn?.addEventListener('click', hideConfirmationDialog);
             confirmationDialog?.addEventListener('click', e => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
             window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstallPrompt = e; console.log('Install prompt event captured.'); });
+            // Add listeners for import/export
+            exportDataBtn?.addEventListener('click', handleExportData);
+            importDataBtn?.addEventListener('click', handleImportData);
+            importFileInput?.addEventListener('change', processImportFile);
+            // Add listener for language change
+            languageSelector?.addEventListener('change', handleLanguageChange);
 
             if (dateCheckInterval) clearInterval(dateCheckInterval);
             dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000);
 
-            updateAllDisplays();
+            updateAllDisplays(); // Initial display update
             registerServiceWorker();
 
             if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) {
