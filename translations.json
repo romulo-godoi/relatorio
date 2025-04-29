@@ -1,5 +1,6 @@
 {
   "pt-BR": {
+    "languageName": "Português (Brasil)",
     "appTitle": "Registro Pioneiro",
     "dashboard": {
       "weekHoursLabel": "Horas Semana",
@@ -14,12 +15,8 @@
       "perDay": "por",
       "plannedTripsLabel": "Serviço Planejado",
       "monthGoalLabel": "Meta Mês",
-      "overduePlanSuffix": "(Passado: Concluir?)",
-      "pendingRevisitsLabel": "Revisitas Pendentes",
-      "nextRevisitLabel": "Próxima Revisita",
-      "noUpcomingRevisits": "Sem revisitas agendadas.",
-      "pendingTotalSingular": "pendente",
-      "pendingTotalPlural": "pendentes"
+      "upcomingRevisitsLabel": "Próximas Revisitas",
+      "noUpcomingRevisits": "Sem revisitas agendadas."
     },
     "recordCard": {
       "title": "Registrar",
@@ -45,7 +42,6 @@
       "clearButton": "Limpar",
       "pendingListTitle": "Revisitas Pendentes",
       "listPlaceholderNoPending": "Nenhuma revisita pendente.",
-      "addedOnLabel": "Add. em",
       "scheduledForLabel": "Agendado p/",
       "markCompleteButton": "Concluir",
       "noNotes": "Sem anotações"
@@ -104,15 +100,17 @@
     },
     "settingsCard": {
       "title": "Ajustes",
-      "clearDataButton": "Limpar Todos Dados",
-      "clearDataWarning": "Aviso: Apaga TUDO (registros, planos, revisitas, meta) PERMANENTEMENTE. Irreversível."
+      "dataManagementTitle": "Gerenciamento de Dados",
+      "importButton": "Importar Dados",
+      "exportButton": "Exportar Dados",
+      "lastExportLabel": "Última exportação:",
+      "languageLabel": "Idioma"
     },
     "dialog": {
-      "defaultConfirmMessage": "Confirma?",
       "confirmDeleteRecordMessage": "Excluir registro? (Irreversível)",
       "confirmDeletePlanMessage": "Excluir plano?",
       "confirmDeleteRevisitMessage": "Excluir revisita?",
-      "confirmClearAllDataMessage": "APAGAR TUDO PERMANENTEMENTE? IRREVERSÍVEL!",
+      "confirmImportMessage": "Isto substituirá TODOS os dados atuais pelos dados do arquivo. Continuar?",
       "confirmButton": "Confirmar",
       "cancelButton": "Cancelar"
     },
@@ -132,18 +130,26 @@
       "planDeletedSuccess": "Plano excluído.",
       "goalUpdateSuccess": "Meta atualizada.",
       "invalidGoalValue": "Meta inválida (>0).",
-      "clearAllDataSuccess": "Dados apagados.",
       "notesLengthLimit": "Limite de {maxLength} chars.",
       "revisitNameRequired": "Nome revisita obrigatório.",
       "revisitSavedSuccess": "Revisita salva.",
       "revisitNotFound": "Revisita não encontrada.",
       "revisitMarkedCompleteSuccess": "Revisita concluída.",
-      "revisitDeletedSuccess": "Revisita excluída."
+      "revisitDeletedSuccess": "Revisita excluída.",
+      "exportSuccess": "Dados exportados com sucesso!",
+      "exportError": "Falha ao exportar dados.",
+      "importSuccess": "Dados importados com sucesso!",
+      "importProcessError": "Erro ao processar dados importados.",
+      "importErrorInvalidFile": "Arquivo inválido ou corrompido.",
+      "importErrorReadFile": "Erro ao ler o arquivo.",
+      "languageChanged": "Idioma alterado para {lang}."
     },
     "common": {
       "editButton": "Editar",
       "deleteButton": "Excluir",
-      "loading": "Carregando..."
+      "loading": "Carregando...",
+      "never": "Nunca",
+      "invalidDate": "Data Inválida"
     },
     "tags": {
       "houseToHouse": "Casa em casa",
@@ -173,6 +179,7 @@
     }
   },
   "en": {
+    "languageName": "English",
     "appTitle": "Pioneer Log",
     "dashboard": {
       "weekHoursLabel": "Week Hours",
@@ -187,12 +194,8 @@
       "perDay": "per",
       "plannedTripsLabel": "Planned Service",
       "monthGoalLabel": "Month Goal",
-      "overduePlanSuffix": "(Past: Complete?)",
-      "pendingRevisitsLabel": "Pending Revisits",
-      "nextRevisitLabel": "Next Revisit",
-      "noUpcomingRevisits": "No scheduled revisits.",
-      "pendingTotalSingular": "pending",
-      "pendingTotalPlural": "pending"
+      "upcomingRevisitsLabel": "Upcoming Revisits",
+      "noUpcomingRevisits": "No scheduled revisits."
     },
     "recordCard": {
       "title": "Record",
@@ -218,7 +221,6 @@
       "clearButton": "Clear",
       "pendingListTitle": "Pending Revisits",
       "listPlaceholderNoPending": "No pending revisits.",
-      "addedOnLabel": "Added",
       "scheduledForLabel": "Scheduled",
       "markCompleteButton": "Complete",
       "noNotes": "No notes"
@@ -277,15 +279,17 @@
     },
     "settingsCard": {
       "title": "Settings",
-      "clearDataButton": "Clear All Data",
-      "clearDataWarning": "Warning: Deletes ALL data (records, plans, revisits, goal) PERMANENTLY. Irreversible."
+      "dataManagementTitle": "Data Management",
+      "importButton": "Import Data",
+      "exportButton": "Export Data",
+      "lastExportLabel": "Last export:",
+      "languageLabel": "Language"
     },
     "dialog": {
-      "defaultConfirmMessage": "Are you sure?",
       "confirmDeleteRecordMessage": "Delete record? (Cannot undo)",
       "confirmDeletePlanMessage": "Delete plan?",
       "confirmDeleteRevisitMessage": "Delete revisit?",
-      "confirmClearAllDataMessage": "DELETE ALL DATA PERMANENTLY? IRREVERSIBLE!",
+      "confirmImportMessage": "This will replace ALL current data with the data from the file. Continue?",
       "confirmButton": "Confirm",
       "cancelButton": "Cancel"
     },
@@ -305,18 +309,26 @@
       "planDeletedSuccess": "Plan deleted.",
       "goalUpdateSuccess": "Goal updated.",
       "invalidGoalValue": "Invalid goal (>0).",
-      "clearAllDataSuccess": "Data cleared.",
       "notesLengthLimit": "{maxLength} char limit.",
       "revisitNameRequired": "Revisit name required.",
       "revisitSavedSuccess": "Revisit saved.",
       "revisitNotFound": "Revisit not found.",
       "revisitMarkedCompleteSuccess": "Revisit completed.",
-      "revisitDeletedSuccess": "Revisit deleted."
+      "revisitDeletedSuccess": "Revisit deleted.",
+      "exportSuccess": "Data exported successfully!",
+      "exportError": "Failed to export data.",
+      "importSuccess": "Data imported successfully!",
+      "importProcessError": "Error processing imported data.",
+      "importErrorInvalidFile": "Invalid or corrupted file.",
+      "importErrorReadFile": "Error reading file.",
+      "languageChanged": "Language changed to {lang}."
     },
     "common": {
       "editButton": "Edit",
       "deleteButton": "Delete",
-      "loading": "Loading..."
+      "loading": "Loading...",
+      "never": "Never",
+      "invalidDate": "Invalid Date"
     },
     "tags": {
       "houseToHouse": "House to house",
@@ -346,6 +358,7 @@
     }
   },
   "es": {
+    "languageName": "Español",
     "appTitle": "Registro Precursor",
     "dashboard": {
       "weekHoursLabel": "Horas Semana",
@@ -360,12 +373,8 @@
       "perDay": "por",
       "plannedTripsLabel": "Servicio Planeado",
       "monthGoalLabel": "Meta Mes",
-      "overduePlanSuffix": "(Pasado: ¿Completar?)",
-      "pendingRevisitsLabel": "Revisitas Pendientes",
-      "nextRevisitLabel": "Próxima Revisita",
-      "noUpcomingRevisits": "Sin revisitas programadas.",
-      "pendingTotalSingular": "pendiente",
-      "pendingTotalPlural": "pendientes"
+      "upcomingRevisitsLabel": "Próximas Revisitas",
+      "noUpcomingRevisits": "Sin revisitas programadas."
     },
     "recordCard": {
       "title": "Registrar",
@@ -391,7 +400,6 @@
       "clearButton": "Limpiar",
       "pendingListTitle": "Revisitas Pendientes",
       "listPlaceholderNoPending": "Ninguna revisita pendiente.",
-      "addedOnLabel": "Añad. el",
       "scheduledForLabel": "Program. para",
       "markCompleteButton": "Completar",
       "noNotes": "Sin notas"
@@ -450,15 +458,17 @@
     },
     "settingsCard": {
       "title": "Ajustes",
-      "clearDataButton": "Borrar Todos Datos",
-      "clearDataWarning": "Aviso: Borra TODO (registros, planes, revisitas, meta) PERMANENTEMENTE. Irreversible."
+      "dataManagementTitle": "Gestión de Datos",
+      "importButton": "Importar Datos",
+      "exportButton": "Exportar Datos",
+      "lastExportLabel": "Última exportación:",
+      "languageLabel": "Idioma"
     },
     "dialog": {
-      "defaultConfirmMessage": "¿Seguro?",
       "confirmDeleteRecordMessage": "¿Eliminar registro? (Irreversible)",
       "confirmDeletePlanMessage": "¿Eliminar plan?",
       "confirmDeleteRevisitMessage": "¿Eliminar revisita?",
-      "confirmClearAllDataMessage": "¡BORRAR TODO PERMANENTEMENTE? ¡IRREVERSIBLE!",
+      "confirmImportMessage": "Esto reemplazará TODOS los datos actuales con los datos del archivo. ¿Continuar?",
       "confirmButton": "Confirmar",
       "cancelButton": "Cancelar"
     },
@@ -478,18 +488,26 @@
       "planDeletedSuccess": "Plan eliminado.",
       "goalUpdateSuccess": "Meta actualizada.",
       "invalidGoalValue": "Meta inválida (>0).",
-      "clearAllDataSuccess": "Datos borrados.",
       "notesLengthLimit": "Límite {maxLength} carac.",
       "revisitNameRequired": "Nombre revisita requerido.",
       "revisitSavedSuccess": "Revisita guardada.",
       "revisitNotFound": "Revisita no encontrada.",
       "revisitMarkedCompleteSuccess": "Revisita completada.",
-      "revisitDeletedSuccess": "Revisita eliminada."
+      "revisitDeletedSuccess": "Revisita eliminada.",
+      "exportSuccess": "¡Datos exportados con éxito!",
+      "exportError": "Error al exportar datos.",
+      "importSuccess": "¡Datos importados con éxito!",
+      "importProcessError": "Error al procesar datos importados.",
+      "importErrorInvalidFile": "Archivo inválido o corrupto.",
+      "importErrorReadFile": "Error al leer el archivo.",
+      "languageChanged": "Idioma cambiado a {lang}."
     },
     "common": {
       "editButton": "Editar",
       "deleteButton": "Eliminar",
-      "loading": "Cargando..."
+      "loading": "Cargando...",
+      "never": "Nunca",
+      "invalidDate": "Fecha Inválida"
     },
     "tags": {
       "houseToHouse": "Casa en casa",
@@ -519,6 +537,7 @@
     }
   },
   "de": {
+    "languageName": "Deutsch",
     "appTitle": "Pionier-Bericht",
     "dashboard": {
       "weekHoursLabel": "Std. Woche",
@@ -533,12 +552,8 @@
       "perDay": "pro",
       "plannedTripsLabel": "Geplanter Dienst",
       "monthGoalLabel": "Monatsziel",
-      "overduePlanSuffix": "(Veraltet: Erledigt?)",
-      "pendingRevisitsLabel": "Offene Rückbesuche",
-      "nextRevisitLabel": "Nächster Rückbesuch",
-      "noUpcomingRevisits": "Keine geplanten Rückbesuche.",
-      "pendingTotalSingular": "offen",
-      "pendingTotalPlural": "offen"
+      "upcomingRevisitsLabel": "Nächste Rückbesuche",
+      "noUpcomingRevisits": "Keine geplanten Rückbesuche."
     },
     "recordCard": {
       "title": "Erfassen",
@@ -554,20 +569,19 @@
       "autoNoteFromPlan": "[AUTO] {hours} Plan {date}"
     },
     "revisitCard": {
-        "title": "Rückbesuch hinzu.",
-        "nameLabel": "Name",
-        "namePlaceholder": "Name od. Ref.",
-        "dateLabel": "Planen (Opt.)",
-        "notesLabel": "Notizen Rückbesuch",
-        "notesPlaceholder": "Details, Thema...",
-        "addButton": "Hinzufügen",
-        "clearButton": "Leeren",
-        "pendingListTitle": "Offene Rückbesuche",
-        "listPlaceholderNoPending": "Keine offenen Rückbesuche.",
-        "addedOnLabel": "Hinzug. am",
-        "scheduledForLabel": "Geplant für",
-        "markCompleteButton": "Abschließen",
-        "noNotes": "Keine Notizen"
+      "title": "Rückbesuch hinzu.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Name od. Ref.",
+      "dateLabel": "Planen (Opt.)",
+      "notesLabel": "Notizen Rückbesuch",
+      "notesPlaceholder": "Details, Thema...",
+      "addButton": "Hinzufügen",
+      "clearButton": "Leeren",
+      "pendingListTitle": "Offene Rückbesuche",
+      "listPlaceholderNoPending": "Keine offenen Rückbesuche.",
+      "scheduledForLabel": "Geplant für",
+      "markCompleteButton": "Abschließen",
+      "noNotes": "Keine Notizen"
     },
     "planCard": {
       "title": "Stunden planen",
@@ -623,15 +637,17 @@
     },
     "settingsCard": {
       "title": "Einstellungen",
-      "clearDataButton": "Alle Daten löschen",
-      "clearDataWarning": "Achtung: Löscht ALLE Daten (Berichte, Pläne, Rückbesuche, Ziel) ENDGÜLTIG. Unumkehrbar."
+      "dataManagementTitle": "Datenverwaltung",
+      "importButton": "Daten importieren",
+      "exportButton": "Daten exportieren",
+      "lastExportLabel": "Letzter Export:",
+      "languageLabel": "Sprache"
     },
     "dialog": {
-      "defaultConfirmMessage": "Sicher?",
       "confirmDeleteRecordMessage": "Bericht löschen? (Unumkehrbar)",
       "confirmDeletePlanMessage": "Plan löschen?",
       "confirmDeleteRevisitMessage": "Rückbesuch löschen?",
-      "confirmClearAllDataMessage": "ALLE DATEN ENDGÜLTIG LÖSCHEN? UNUMKEHRBAR!",
+      "confirmImportMessage": "Dies ersetzt ALLE aktuellen Daten durch die Daten aus der Datei. Fortfahren?",
       "confirmButton": "Bestätigen",
       "cancelButton": "Abbrechen"
     },
@@ -651,18 +667,26 @@
       "planDeletedSuccess": "Plan gelöscht.",
       "goalUpdateSuccess": "Ziel aktualisiert.",
       "invalidGoalValue": "Ungült. Ziel (>0).",
-      "clearAllDataSuccess": "Daten gelöscht.",
       "notesLengthLimit": "Limit {maxLength} Zeich.",
       "revisitNameRequired": "Name (Rückbesuch) fehlt.",
       "revisitSavedSuccess": "Rückbesuch gespeichert.",
       "revisitNotFound": "Rückbesuch nicht gefund.",
       "revisitMarkedCompleteSuccess": "Rückbesuch abgeschlossen.",
-      "revisitDeletedSuccess": "Rückbesuch gelöscht."
+      "revisitDeletedSuccess": "Rückbesuch gelöscht.",
+      "exportSuccess": "Daten erfolgreich exportiert!",
+      "exportError": "Datenexport fehlgeschlagen.",
+      "importSuccess": "Daten erfolgreich importiert!",
+      "importProcessError": "Fehler beim Verarbeiten der importierten Daten.",
+      "importErrorInvalidFile": "Ungültige oder beschädigte Datei.",
+      "importErrorReadFile": "Fehler beim Lesen der Datei.",
+      "languageChanged": "Sprache geändert zu {lang}."
     },
     "common": {
       "editButton": "Bearbeiten",
       "deleteButton": "Löschen",
-      "loading": "Lädt..."
+      "loading": "Lädt...",
+      "never": "Nie",
+      "invalidDate": "Ungültiges Datum"
     },
     "tags": {
       "houseToHouse": "Haus zu Haus",
@@ -692,6 +716,7 @@
     }
   },
   "fr": {
+    "languageName": "Français",
     "appTitle": "Rapport Pionnier",
     "dashboard": {
       "weekHoursLabel": "Heures Semaine",
@@ -706,12 +731,8 @@
       "perDay": "par",
       "plannedTripsLabel": "Prédication Plan.",
       "monthGoalLabel": "Objectif Mois",
-      "overduePlanSuffix": "(Passé : Terminer ?)",
-      "pendingRevisitsLabel": "Nouvelles Visites Pend.",
-      "nextRevisitLabel": "Proch. N. Visite",
-      "noUpcomingRevisits": "Pas de N.V. planifiées.",
-      "pendingTotalSingular": "en attente",
-      "pendingTotalPlural": "en attente"
+      "upcomingRevisitsLabel": "Prochaines N. Visites",
+      "noUpcomingRevisits": "Pas de N.V. planifiées."
     },
     "recordCard": {
       "title": "Enregistrer",
@@ -727,20 +748,19 @@
       "autoNoteFromPlan": "[AUTO] {hours} plan {date}"
     },
     "revisitCard": {
-        "title": "Ajouter N. Visite",
-        "nameLabel": "Nom",
-        "namePlaceholder": "Nom ou réf.",
-        "dateLabel": "Planifier (Opt.)",
-        "notesLabel": "Notes N. Visite",
-        "notesPlaceholder": "Détails, sujet...",
-        "addButton": "Ajouter",
-        "clearButton": "Effacer",
-        "pendingListTitle": "N. Visites Pend.",
-        "listPlaceholderNoPending": "Aucune N.V. pendante.",
-        "addedOnLabel": "Ajouté",
-        "scheduledForLabel": "Planifié",
-        "markCompleteButton": "Terminer",
-        "noNotes": "Pas de notes"
+      "title": "Ajouter N. Visite",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Nom ou réf.",
+      "dateLabel": "Planifier (Opt.)",
+      "notesLabel": "Notes N. Visite",
+      "notesPlaceholder": "Détails, sujet...",
+      "addButton": "Ajouter",
+      "clearButton": "Effacer",
+      "pendingListTitle": "N. Visites Pend.",
+      "listPlaceholderNoPending": "Aucune N.V. pendante.",
+      "scheduledForLabel": "Planifié",
+      "markCompleteButton": "Terminer",
+      "noNotes": "Pas de notes"
     },
     "planCard": {
       "title": "Planifier Heures",
@@ -796,15 +816,17 @@
     },
     "settingsCard": {
       "title": "Paramètres",
-      "clearDataButton": "Effacer Toutes Données",
-      "clearDataWarning": "Avert.: Supprime TOUT (rapports, plans, N.V., objectif) DÉFINITIVEMENT. Irréversible."
+      "dataManagementTitle": "Gestion des Données",
+      "importButton": "Importer Données",
+      "exportButton": "Exporter Données",
+      "lastExportLabel": "Dernière exportation :",
+      "languageLabel": "Langue"
     },
     "dialog": {
-      "defaultConfirmMessage": "Sûr ?",
       "confirmDeleteRecordMessage": "Supprimer rapport ? (Irréversible)",
       "confirmDeletePlanMessage": "Supprimer plan ?",
       "confirmDeleteRevisitMessage": "Supprimer N. Visite ?",
-      "confirmClearAllDataMessage": "TOUT SUPPRIMER DÉFINITIVEMENT ? IRRÉVERSIBLE !",
+      "confirmImportMessage": "Ceci remplacera TOUTES les données actuelles par les données du fichier. Continuer ?",
       "confirmButton": "Confirmer",
       "cancelButton": "Annuler"
     },
@@ -824,18 +846,26 @@
       "planDeletedSuccess": "Plan supprimé.",
       "goalUpdateSuccess": "Objectif mis à jour.",
       "invalidGoalValue": "Objectif invalide (>0).",
-      "clearAllDataSuccess": "Données effacées.",
       "notesLengthLimit": "Limite {maxLength} car.",
       "revisitNameRequired": "Nom N. Visite requis.",
       "revisitSavedSuccess": "N. Visite enregistrée.",
       "revisitNotFound": "N. Visite non trouvée.",
       "revisitMarkedCompleteSuccess": "N. Visite terminée.",
-      "revisitDeletedSuccess": "N. Visite supprimée."
+      "revisitDeletedSuccess": "N. Visite supprimée.",
+      "exportSuccess": "Données exportées avec succès !",
+      "exportError": "Échec de l'exportation des données.",
+      "importSuccess": "Données importées avec succès !",
+      "importProcessError": "Erreur lors du traitement des données importées.",
+      "importErrorInvalidFile": "Fichier invalide ou corrompu.",
+      "importErrorReadFile": "Erreur lors de la lecture du fichier.",
+      "languageChanged": "Langue changée en {lang}."
     },
     "common": {
       "editButton": "Modifier",
       "deleteButton": "Suppr.",
-      "loading": "Chargement..."
+      "loading": "Chargement...",
+      "never": "Jamais",
+      "invalidDate": "Date Invalide"
     },
     "tags": {
       "houseToHouse": "Porte à porte",
