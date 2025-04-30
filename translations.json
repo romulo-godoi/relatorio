@@ -96,6 +96,7 @@
       "revisitCompletedTag": "Revisita",
       "revisitCompletedNotePrefix": "Revisita:",
       "revisitOriginalNotes": "Notas orig.",
+      "originalNotesPreviewSuffix": "...",
       "revisitCompletedMarker": "CONCLUÍDA"
     },
     "settingsCard": {
@@ -275,6 +276,7 @@
       "revisitCompletedTag": "Revisit",
       "revisitCompletedNotePrefix": "Revisit:",
       "revisitOriginalNotes": "Orig. notes",
+      "originalNotesPreviewSuffix": "...",
       "revisitCompletedMarker": "COMPLETED"
     },
     "settingsCard": {
@@ -454,6 +456,7 @@
       "revisitCompletedTag": "Revisita",
       "revisitCompletedNotePrefix": "Revisita:",
       "revisitOriginalNotes": "Notas orig.",
+      "originalNotesPreviewSuffix": "...",
       "revisitCompletedMarker": "COMPLETADA"
     },
     "settingsCard": {
@@ -633,6 +636,7 @@
       "revisitCompletedTag": "Rückbesuch",
       "revisitCompletedNotePrefix": "Rückbesuch:",
       "revisitOriginalNotes": "Orig. Notizen",
+      "originalNotesPreviewSuffix": "...",
       "revisitCompletedMarker": "ABGESCHLOSSEN"
     },
     "settingsCard": {
@@ -812,6 +816,7 @@
       "revisitCompletedTag": "N. Visite",
       "revisitCompletedNotePrefix": "N. Visite:",
       "revisitOriginalNotes": "Notes orig.",
+      "originalNotesPreviewSuffix": "...",
       "revisitCompletedMarker": "TERMINÉE"
     },
     "settingsCard": {
