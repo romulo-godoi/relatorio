@@ -7,7 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0A84FF">
     <link rel="apple-touch-icon" href="icon-192x192.png">
-    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script> <!-- GUN.JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
@@ -427,7 +427,6 @@
         </div>
     </div>
 
-    <!-- SYNC KEY MODAL -->
     <div id="sync-key-modal" class="dialog-backdrop">
         <div class="dialog-content" style="width: 380px;">
             <h3 id="sync-key-modal-title" style="margin-bottom: 15px; font-size: 1.2em;" data-translate-key="syncKeyModal.titleEnter">Definir Chave de Sincronização</h3>
@@ -455,13 +454,12 @@
             const DEFAULT_TAG_VALUE = "Casa em casa"; const NOTES_MAX_LENGTH = 300; const REVISIT_NOTES_MAX_LENGTH = 500; const HISTORY_MONTH_LIMIT = 3; const MIN_HOURS_PER_DAY_FORECAST = 1.0;
             const LOCAL_STORAGE_KEYS = { ENTRIES: 'pioneerTracker_entries_v5.1', PLANS: 'pioneerTracker_plans_v1.1', REVISITS: 'pioneerTracker_revisits_v1.1', SETTINGS: 'pioneerTracker_settings_v1.2', LAST_EXPORT_DATE: 'pioneerTracker_lastExport_v1.0', SYNC_KEY: 'pioneerTracker_syncKey_v1.0'};
             const CONFETTI_COUNT = 30; const DASHBOARD_REVISIT_LIMIT = 3;
-            const GUN_PEERS = ['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun']; // Padrão, mas pode adicionar mais via Gun UI or config
+            const GUN_PEERS = ['https://gun-manhattan.herokuapp.com/gun', 'https://gun-us.herokuapp.com/gun'];
             const MIN_SYNC_KEY_LENGTH = 5;
 
             let appElement, dashboardBox, confettiContainer, dashboardWeekHours, dashboardMonthPercentage, dashboardMonthTotal, dashboardForecast, dashboardPlannedDatesContainer, dashboardPlanList, recordCard, recordForm, recordIdInput, recordDateInput, dateLabel, displayDate, changeDateBtn, recordHoursInput, recordTagSelect, recordNotesInput, recordNotesLabel, saveRecordBtn, planCard, planForm, planIdInput, planDateInput, planHoursInput, savePlanBtn, clearPlanFormBtn, planningList, planningListPlaceholder, monthlyGoalInput, saveGoalBtn, statsMonthHours, statsMonthGoalProgress, statsMonthProgressBar, statsAvgHoursDay, statsMonthDaysActive, chartMonthSelector, monthlyHoursChartCtx, historyList, historySearchInput, historyListPlaceholder, showingResultsLabel, confirmationDialog, dialogMessage, dialogConfirmBtn, dialogCancelBtn, computedStyles, textColor, textMutedColor, tooltipBgColor, chartTotalHoursDisplay, chartColors = [];
             let revisitCard, revisitForm, revisitIdInput, revisitNameInput, revisitDateInput, revisitNotesInput, saveRevisitBtn, clearRevisitFormBtn, revisitListContainer, revisitList, revisitListPlaceholder, dashboardRevisitsSection, dashboardRevisitList, plansSection;
             let exportDataBtn, importDataBtn, importFileInput, lastExportDateDisplay, languageSelector;
-            // Sync elements
             let syncKeyModal, syncKeyModalTitle, syncKeyModalInstructions, syncKeyInputModal, syncKeySubmitBtn, syncKeyDisplay, changeSyncKeyBtn, toggleSyncKeyVisibilityBtn, syncKeyErrorMsg;
 
             let recordedEntries = [], plannedEntries = [], revisits = [], settings = { monthlyGoal: 70, goalHasBeenSet: false, language: null };
@@ -471,12 +469,11 @@
             let MONTH_NAMES = [], WEEKDAY_NAMES = []; let lastCheckedDateString = ''; let dateCheckInterval = null; let confettiTimeout = null;
             const loadingIndicator = document.getElementById('loading-indicator');
 
-            // Gun.js related
             let gunInstance = null;
             let currentSyncKey = null;
             let recordsGunNode, plansGunNode, revisitsGunNode, settingsGunNode;
             let initialGunLoadComplete = { settings: false, records: false, plans: false, revisits: false };
-            let gunDataLoadedAtLeastOnce = false; // To help with initial loading strategy
+            let gunDataLoadedAtLeastOnce = false;
 
 
             function showLoading(messageKeyOrText = 'common.loading', isKey = true) {
@@ -490,7 +487,7 @@
                 if (loadingIndicator) loadingIndicator.classList.add('hidden');
             }
 
-            showLoading(); // Show loading at the very beginning
+            showLoading();
 
             function getNestedValue(obj, key) { if (!key || typeof key !== 'string') return undefined; return key.split('.').reduce((acc, part) => acc && acc[part] !== undefined ? acc[part] : undefined, obj); }
             function t(key, variables = {}) { const langObj = translations?.[currentLang] || translations?.['en']; if (!langObj) { console.warn(`Lang missing: ${currentLang} & 'en'. Key: ${key}`); return `[NO LANG: ${key}]`; } let translation = getNestedValue(langObj, key); if (translation === undefined) { const fallbackLangObj = translations['en']; if (fallbackLangObj) translation = getNestedValue(fallbackLangObj, key); if (translation === undefined) { console.warn(`Translation missing for key: ${key} in ${currentLang} and fallback 'en'`); return `[MISSING: ${key}]`;}} if (typeof translation !== 'string') { return `[TYPE ERR: ${key}]`; } for (const placeholder in variables) { if (Object.prototype.hasOwnProperty.call(variables, placeholder)) { translation = translation.replace(new RegExp(`\\{${placeholder}\\}`, 'g'), variables[placeholder]); } } return translation; }
@@ -524,9 +521,8 @@
                 if (loadingIndicator && !loadingIndicator.classList.contains('hidden') && loadingIndicator.textContent.toLowerCase().includes("loading")) loadingIndicator.textContent = t('common.loading');
                 updateLastExportDateDisplay();
                 populateLanguageSelector();
-                updateSyncKeyDisplay(); // Update sync key display field
-                // Translate sync key modal if open or for future opening
-                if(syncKeyModalTitle) syncKeyModalTitle.textContent = t('syncKeyModal.titleEnter');
+                updateSyncKeyDisplay();
+                if(syncKeyModalTitle) syncKeyModalTitle.textContent = t('syncKeyModal.titleEnter'); // Keep translating these when modal related elements change
                 if(syncKeyModalInstructions) syncKeyModalInstructions.textContent = t('syncKeyModal.instructions');
             }
 
@@ -535,128 +531,31 @@
                     const response = await fetch('translations.json');
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     translations = await response.json();
-
-                    const savedLang = langToLoad || settings.language; // Prioritize explicitly passed lang (e.g. from Gun settings)
+                    const savedLang = langToLoad || settings.language;
                     const browserLocale = navigator.language || 'en';
                     const browserLang = browserLocale.split('-')[0];
-
-                    if (savedLang && translations[savedLang] && supportedLanguages.includes(savedLang)) {
-                        currentLang = savedLang;
-                    } else if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) {
-                        currentLang = browserLocale;
-                    } else if (translations[browserLang] && supportedLanguages.includes(browserLang)) {
-                        currentLang = browserLang;
-                    } else if (translations['en']) {
-                        currentLang = 'en';
-                    } else {
-                        currentLang = 'en'; // Default to 'en'
-                        throw new Error("'en' language file missing or no suitable language found.");
-                    }
-                   // console.log("Language selected:", currentLang);
-
-                    if (settings.language !== currentLang) {
-                        settings.language = currentLang;
-                        // Do not save here, it will be saved as part of a larger save operation if needed
-                    }
-
+                    if (savedLang && translations[savedLang] && supportedLanguages.includes(savedLang)) { currentLang = savedLang; }
+                    else if (translations[browserLocale] && supportedLanguages.includes(browserLocale)) { currentLang = browserLocale; }
+                    else if (translations[browserLang] && supportedLanguages.includes(browserLang)) { currentLang = browserLang; }
+                    else if (translations['en']) { currentLang = 'en'; }
+                    else { currentLang = 'en'; throw new Error("'en' language file missing or no suitable language found."); }
+                    if (settings.language !== currentLang) { settings.language = currentLang; }
                     MONTH_NAMES = getNestedValue(translations[currentLang], 'dates.monthNames') || getNestedValue(translations['en'], 'dates.monthNames');
                     WEEKDAY_NAMES = getNestedValue(translations[currentLang], 'dates.weekdaysShort') || getNestedValue(translations['en'], 'dates.weekdaysShort');
                     if (!Array.isArray(MONTH_NAMES) || MONTH_NAMES.length !== 12) { MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; }
                     if (!Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length !== 7) { WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']; }
                 } catch (error) {
-                    console.error('Translations load error:', error);
-                    alert("Language data error. Check translations.json or network. Defaulting to English.");
-                    MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                    WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-                    currentLang = 'en';
-                    settings.language = 'en'; // Set default language in settings on error
+                    console.error('Translations load error:', error); alert("Language data error. Defaulting to English.");
+                    MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; WEEKDAY_NAMES = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+                    currentLang = 'en'; settings.language = 'en';
                 }
             }
 
             function selectDOMElements() {
-                appElement = document.getElementById('app');
-                dashboardBox = document.getElementById('dashboard-box');
-                confettiContainer = document.getElementById('confetti-container');
-                dashboardWeekHours = document.getElementById('dashboard-week-hours');
-                dashboardMonthPercentage = document.getElementById('dashboard-month-percentage');
-                dashboardMonthTotal = document.getElementById('dashboard-month-total');
-                dashboardForecast = document.getElementById('dashboard-forecast');
-                dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates');
-                dashboardPlanList = document.getElementById('dashboard-plan-list');
-                recordCard = document.getElementById('record-card');
-                recordForm = document.getElementById('record-form');
-                recordIdInput = document.getElementById('record-id');
-                recordDateInput = document.getElementById('record-date');
-                dateLabel = document.getElementById('date-label');
-                displayDate = document.getElementById('display-date');
-                changeDateBtn = document.getElementById('change-date-btn');
-                recordHoursInput = document.getElementById('record-hours');
-                recordTagSelect = document.getElementById('record-tag');
-                recordNotesInput = document.getElementById('record-notes');
-                recordNotesLabel = document.getElementById('record-notes-label');
-                saveRecordBtn = document.getElementById('save-record-btn');
-                planCard = document.getElementById('plan-card');
-                planForm = document.getElementById('plan-form');
-                planIdInput = document.getElementById('plan-id');
-                planDateInput = document.getElementById('plan-date');
-                planHoursInput = document.getElementById('plan-hours');
-                savePlanBtn = document.getElementById('save-plan-btn');
-                clearPlanFormBtn = document.getElementById('clear-plan-form-btn');
-                planningList = document.getElementById('planning-list');
-                planningListPlaceholder = planningList?.querySelector('.placeholder');
-                monthlyGoalInput = document.getElementById('monthly-goal');
-                saveGoalBtn = document.getElementById('save-goal-btn');
-                statsMonthHours = document.getElementById('stats-month-hours');
-                statsMonthGoalProgress = document.getElementById('stats-month-goal-progress');
-                statsMonthProgressBar = document.getElementById('stats-month-progress-bar');
-                statsAvgHoursDay = document.getElementById('stats-avg-hours-day');
-                statsMonthDaysActive = document.getElementById('stats-month-days-active');
-                chartMonthSelector = document.getElementById('chart-month-selector');
-                monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d');
-                chartTotalHoursDisplay = document.getElementById('chart-total-hours-display');
-                historyList = document.getElementById('history-list');
-                historySearchInput = document.getElementById('history-search-input');
-                historyListPlaceholder = historyList?.querySelector('.placeholder');
-                showingResultsLabel = document.getElementById('showing-results-label');
-                confirmationDialog = document.getElementById('confirmation-dialog');
-                dialogMessage = document.getElementById('dialog-message');
-                dialogConfirmBtn = document.getElementById('dialog-confirm-btn');
-                dialogCancelBtn = document.getElementById('dialog-cancel-btn');
-                revisitCard = document.getElementById('revisit-card');
-                revisitForm = document.getElementById('revisit-form');
-                revisitIdInput = document.getElementById('revisit-id');
-                revisitNameInput = document.getElementById('revisit-name');
-                revisitDateInput = document.getElementById('revisit-date');
-                revisitNotesInput = document.getElementById('revisit-notes');
-                saveRevisitBtn = document.getElementById('save-revisit-btn');
-                clearRevisitFormBtn = document.getElementById('clear-revisit-form-btn');
-                revisitListContainer = document.getElementById('revisit-list-container');
-                revisitList = document.getElementById('revisit-list');
-                revisitListPlaceholder = revisitList?.querySelector('.placeholder');
-                dashboardRevisitsSection = document.getElementById('dashboard-revisits-section');
-                dashboardRevisitList = document.getElementById('dashboard-revisit-list');
-                plansSection = document.querySelector('.plans-section');
-                exportDataBtn = document.getElementById('export-data-btn');
-                importDataBtn = document.getElementById('import-data-btn');
-                importFileInput = document.getElementById('import-file-input');
-                lastExportDateDisplay = document.getElementById('last-export-date');
-                languageSelector = document.getElementById('language-selector');
-                // Sync Elements
-                syncKeyModal = document.getElementById('sync-key-modal');
-                syncKeyModalTitle = document.getElementById('sync-key-modal-title');
-                syncKeyModalInstructions = document.getElementById('sync-key-modal-instructions');
-                syncKeyInputModal = document.getElementById('sync-key-input-modal');
-                syncKeySubmitBtn = document.getElementById('sync-key-submit-btn');
-                syncKeyDisplay = document.getElementById('sync-key-display');
-                changeSyncKeyBtn = document.getElementById('change-sync-key-btn');
-                toggleSyncKeyVisibilityBtn = document.getElementById('toggle-sync-key-visibility');
-                syncKeyErrorMsg = document.getElementById('sync-key-error');
-
+                appElement = document.getElementById('app'); dashboardBox = document.getElementById('dashboard-box'); confettiContainer = document.getElementById('confetti-container'); dashboardWeekHours = document.getElementById('dashboard-week-hours'); dashboardMonthPercentage = document.getElementById('dashboard-month-percentage'); dashboardMonthTotal = document.getElementById('dashboard-month-total'); dashboardForecast = document.getElementById('dashboard-forecast'); dashboardPlannedDatesContainer = document.getElementById('dashboard-planned-dates'); dashboardPlanList = document.getElementById('dashboard-plan-list'); recordCard = document.getElementById('record-card'); recordForm = document.getElementById('record-form'); recordIdInput = document.getElementById('record-id'); recordDateInput = document.getElementById('record-date'); dateLabel = document.getElementById('date-label'); displayDate = document.getElementById('display-date'); changeDateBtn = document.getElementById('change-date-btn'); recordHoursInput = document.getElementById('record-hours'); recordTagSelect = document.getElementById('record-tag'); recordNotesInput = document.getElementById('record-notes'); recordNotesLabel = document.getElementById('record-notes-label'); saveRecordBtn = document.getElementById('save-record-btn'); planCard = document.getElementById('plan-card'); planForm = document.getElementById('plan-form'); planIdInput = document.getElementById('plan-id'); planDateInput = document.getElementById('plan-date'); planHoursInput = document.getElementById('plan-hours'); savePlanBtn = document.getElementById('save-plan-btn'); clearPlanFormBtn = document.getElementById('clear-plan-form-btn'); planningList = document.getElementById('planning-list'); planningListPlaceholder = planningList?.querySelector('.placeholder'); monthlyGoalInput = document.getElementById('monthly-goal'); saveGoalBtn = document.getElementById('save-goal-btn'); statsMonthHours = document.getElementById('stats-month-hours'); statsMonthGoalProgress = document.getElementById('stats-month-goal-progress'); statsMonthProgressBar = document.getElementById('stats-month-progress-bar'); statsAvgHoursDay = document.getElementById('stats-avg-hours-day'); statsMonthDaysActive = document.getElementById('stats-month-days-active'); chartMonthSelector = document.getElementById('chart-month-selector'); monthlyHoursChartCtx = document.getElementById('monthlyHoursChart')?.getContext('2d'); chartTotalHoursDisplay = document.getElementById('chart-total-hours-display'); historyList = document.getElementById('history-list'); historySearchInput = document.getElementById('history-search-input'); historyListPlaceholder = historyList?.querySelector('.placeholder'); showingResultsLabel = document.getElementById('showing-results-label'); confirmationDialog = document.getElementById('confirmation-dialog'); dialogMessage = document.getElementById('dialog-message'); dialogConfirmBtn = document.getElementById('dialog-confirm-btn'); dialogCancelBtn = document.getElementById('dialog-cancel-btn'); revisitCard = document.getElementById('revisit-card'); revisitForm = document.getElementById('revisit-form'); revisitIdInput = document.getElementById('revisit-id'); revisitNameInput = document.getElementById('revisit-name'); revisitDateInput = document.getElementById('revisit-date'); revisitNotesInput = document.getElementById('revisit-notes'); saveRevisitBtn = document.getElementById('save-revisit-btn'); clearRevisitFormBtn = document.getElementById('clear-revisit-form-btn'); revisitListContainer = document.getElementById('revisit-list-container'); revisitList = document.getElementById('revisit-list'); revisitListPlaceholder = revisitList?.querySelector('.placeholder'); dashboardRevisitsSection = document.getElementById('dashboard-revisits-section'); dashboardRevisitList = document.getElementById('dashboard-revisit-list'); plansSection = document.querySelector('.plans-section'); exportDataBtn = document.getElementById('export-data-btn'); importDataBtn = document.getElementById('import-data-btn'); importFileInput = document.getElementById('import-file-input'); lastExportDateDisplay = document.getElementById('last-export-date'); languageSelector = document.getElementById('language-selector');
+                syncKeyModal = document.getElementById('sync-key-modal'); syncKeyModalTitle = document.getElementById('sync-key-modal-title'); syncKeyModalInstructions = document.getElementById('sync-key-modal-instructions'); syncKeyInputModal = document.getElementById('sync-key-input-modal'); syncKeySubmitBtn = document.getElementById('sync-key-submit-btn'); syncKeyDisplay = document.getElementById('sync-key-display'); changeSyncKeyBtn = document.getElementById('change-sync-key-btn'); toggleSyncKeyVisibilityBtn = document.getElementById('toggle-sync-key-visibility'); syncKeyErrorMsg = document.getElementById('sync-key-error');
                 try { computedStyles = getComputedStyle(document.body); } catch (e) { computedStyles = {}; }
-                textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff';
-                textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa';
-                tooltipBgColor = computedStyles.getPropertyValue?.('--card-bg')?.trim() || '#1c1c1e';
-                chartColors = ['#0A84FF', '#30D158', '#FF9F0A', '#AF52DE', '#5E5CE6', '#FF69B4', '#32CD32', '#FFD700'].map((fallback, i) => computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim() || fallback);
+                textColor = computedStyles.getPropertyValue?.('--text-color')?.trim() || '#ffffff'; textMutedColor = computedStyles.getPropertyValue?.('--text-color-secondary')?.trim() || '#aaaaaa'; tooltipBgColor = computedStyles.getPropertyValue?.('--card-bg')?.trim() || '#1c1c1e'; chartColors = ['#0A84FF', '#30D158', '#FF9F0A', '#AF52DE', '#5E5CE6', '#FF69B4', '#32CD32', '#FFD700'].map((fallback, i) => computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim() || fallback);
             }
 
             function getCurrentDateString() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`; }
@@ -672,119 +571,89 @@
             function parseTimeInputToDecimal(s) { if (!s) return 0; const t = s.trim(); if (!t) return 0; const colonMatch = t.match(/^(\d{1,3}):(\d{1,2})$/); if (colonMatch) { const h = parseInt(colonMatch[1], 10), m = parseInt(colonMatch[2], 10); if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60); } const numMatch = t.match(/^(\d+)$/); if (numMatch) { const str = numMatch[1], v = parseInt(str, 10); if (isNaN(v)) return NaN; if (str.length <= 2) { if (v < 60) return v / 60; } if (str.length >= 3 && str.length <= 4) { const hs = str.slice(0, -2), ms = str.slice(-2); const h = parseInt(hs, 10), m = parseInt(ms, 10); if (!isNaN(h) && !isNaN(m) && m >= 0 && m < 60 && h >= 0) return h + (m / 60); } } return NaN; }
             function formatRelativeDate(dateString) { if (!dateString) return ''; const today = new Date(); today.setHours(0, 0, 0, 0); const inputDate = parseLocalDate(dateString); if (isNaN(inputDate.valueOf()) || !Array.isArray(WEEKDAY_NAMES) || WEEKDAY_NAMES.length < 7) { return formatDisplayDate(dateString); } const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1); const week = new Date(today); week.setDate(today.getDate() + 7); const inputTime = inputDate.getTime(); const todayTime = today.getTime(); const tomorrowTime = tomorrow.getTime(); if (inputTime === todayTime) return t('dates.today'); if (inputTime === tomorrowTime) return t('dates.tomorrow'); if (inputDate > tomorrow && inputDate < week) { return `${t('dates.nextPrefix')} ${WEEKDAY_NAMES[inputDate.getDay()]}`; } return formatDisplayDate(dateString); }
 
-            function saveSyncKeyToLocalStorage(key) {
-                try { localStorage.setItem(LOCAL_STORAGE_KEYS.SYNC_KEY, key); currentSyncKey = key; }
-                catch (e) { console.error("Error saving sync key to localStorage:", e); }
-            }
-            function loadSyncKeyFromLocalStorage() {
-                currentSyncKey = localStorage.getItem(LOCAL_STORAGE_KEYS.SYNC_KEY);
-                return currentSyncKey;
-            }
-            function updateSyncKeyDisplay() {
-                if (syncKeyDisplay) {
-                    syncKeyDisplay.value = currentSyncKey ? '********' : t('settingsCard.noKeySet');
-                }
-            }
+            function saveSyncKeyToLocalStorage(key) { try { localStorage.setItem(LOCAL_STORAGE_KEYS.SYNC_KEY, key); currentSyncKey = key; } catch (e) { console.error("Error saving sync key to localStorage:", e); } }
+            function loadSyncKeyFromLocalStorage() { currentSyncKey = localStorage.getItem(LOCAL_STORAGE_KEYS.SYNC_KEY); return currentSyncKey; }
+            function updateSyncKeyDisplay() { if (syncKeyDisplay) { syncKeyDisplay.value = currentSyncKey ? '********' : t('settingsCard.noKeySet'); } }
             async function clearLocalDataForNewSyncKey() {
                 recordedEntries = []; plannedEntries = []; revisits = [];
-                // Optionally reset settings or merge specific ones like language
-                settings = { monthlyGoal: 70, goalHasBeenSet: false, language: currentLang }; // Keep current language
+                settings = { monthlyGoal: 70, goalHasBeenSet: false, language: currentLang };
                 try {
-                    localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES);
-                    localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS);
-                    localStorage.removeItem(LOCAL_STORAGE_KEYS.REVISITS);
-                    // Keep settings, as it contains language and potentially other non-synced preferences initially
+                    localStorage.removeItem(LOCAL_STORAGE_KEYS.ENTRIES); localStorage.removeItem(LOCAL_STORAGE_KEYS.PLANS); localStorage.removeItem(LOCAL_STORAGE_KEYS.REVISITS);
                     localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
                 } catch (e) { console.error("Error clearing local data:", e); }
                 updateAllDisplays();
             }
-            function sanitizeDataForGun(data) { // Gun doesn't like `undefined` values. Convert to `null`.
-                return JSON.parse(JSON.stringify(data, (key, value) => (value === undefined ? null : value)));
-            }
+            function sanitizeDataForGun(data) { return JSON.parse(JSON.stringify(data, (key, value) => (value === undefined ? null : value))); }
             function saveDataToLocalStorage() {
                 try {
-                    localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries));
-                    localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries));
-                    localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS, JSON.stringify(revisits));
-                    localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.ENTRIES, JSON.stringify(recordedEntries)); localStorage.setItem(LOCAL_STORAGE_KEYS.PLANS, JSON.stringify(plannedEntries));
+                    localStorage.setItem(LOCAL_STORAGE_KEYS.REVISITS, JSON.stringify(revisits)); localStorage.setItem(LOCAL_STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
                 } catch (e) { console.error('Error saving data to localStorage:', e); showFeedback('feedback.saveError', 'danger');}
             }
-            async function saveData(dataOrigin = 'local') { // dataOrigin can be 'local' or 'gun'
-                if (dataOrigin === 'local') { // User made a change locally
-                    saveDataToLocalStorage(); // Always save to localStorage
-                    if (gunInstance && currentSyncKey) { // If Gun is active, send updates
+            async function saveData(dataOrigin = 'local') {
+                if (dataOrigin === 'local') {
+                    saveDataToLocalStorage();
+                    if (gunInstance && currentSyncKey) {
                         showLoading(t("common.syncing"), false);
                         const sSettings = sanitizeDataForGun(settings); settingsGunNode?.put({data: sSettings});
                         const sRecords = sanitizeDataForGun(recordedEntries); recordsGunNode?.put({data: sRecords});
                         const sPlans = sanitizeDataForGun(plannedEntries); plansGunNode?.put({data: sPlans});
                         const sRevisits = sanitizeDataForGun(revisits); revisitsGunNode?.put({data: sRevisits});
-                        // Add a small delay for Gun to process, then hide loading
                         await new Promise(resolve => setTimeout(resolve, 500));
                         hideLoading();
                     }
-                } else if (dataOrigin === 'gun') { // Data came from Gun, just update localStorage
-                    saveDataToLocalStorage();
-                }
+                } else if (dataOrigin === 'gun') { saveDataToLocalStorage(); }
             }
             function saveLastExportDate() { try { localStorage.setItem(LOCAL_STORAGE_KEYS.LAST_EXPORT_DATE, JSON.stringify(lastExportTimestamp)); } catch (e) { console.error("Error saving last export date:", e); } }
-
-            function loadDataFromLocalStorage() { // Called as fallback or if Gun is not used
+            function loadDataFromLocalStorage() {
                 try {
-                    const sSet = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS);
-                    settings = { monthlyGoal: 70, goalHasBeenSet: false, language: currentLang, ...JSON.parse(sSet || '{}') }; // Merge with currentLang default
-                    if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70;
-                    if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false;
-
-                    let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES);
-                    if (sER) { try { const p = JSON.parse(sER); recordedEntries = Array.isArray(p) ? p.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : []; } catch (e) { recordedEntries = []; }}
-                    const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : [];
-                    plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } });
-                    const sRV = localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS); revisits = sRV ? JSON.parse(sRV) : [];
-                    revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null }));
-                    const sLED = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_EXPORT_DATE); lastExportTimestamp = sLED ? JSON.parse(sLED) : null;
-                    if (typeof lastExportTimestamp !== 'number' && lastExportTimestamp !== null) lastExportTimestamp = null;
-
-                    // Sort data
-                    recordedEntries.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-                    plannedEntries.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+                    const sSet = localStorage.getItem(LOCAL_STORAGE_KEYS.SETTINGS); settings = { monthlyGoal: 70, goalHasBeenSet: false, language: currentLang, ...JSON.parse(sSet || '{}') };
+                    if (isNaN(settings.monthlyGoal) || settings.monthlyGoal <= 0) settings.monthlyGoal = 70; if (typeof settings.goalHasBeenSet !== 'boolean') settings.goalHasBeenSet = false;
+                    let sER = localStorage.getItem(LOCAL_STORAGE_KEYS.ENTRIES); if (sER) { try { const p = JSON.parse(sER); recordedEntries = Array.isArray(p) ? p.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : []; } catch (e) { recordedEntries = []; }}
+                    const sP = localStorage.getItem(LOCAL_STORAGE_KEYS.PLANS); plannedEntries = sP ? JSON.parse(sP) : []; plannedEntries.forEach(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') { p.hours = p.plannedHours; delete p.plannedHours; } });
+                    const sRV = localStorage.getItem(LOCAL_STORAGE_KEYS.REVISITS); revisits = sRV ? JSON.parse(sRV) : []; revisits = revisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null }));
+                    const sLED = localStorage.getItem(LOCAL_STORAGE_KEYS.LAST_EXPORT_DATE); lastExportTimestamp = sLED ? JSON.parse(sLED) : null; if (typeof lastExportTimestamp !== 'number' && lastExportTimestamp !== null) lastExportTimestamp = null;
+                    recordedEntries.sort((a, b) => (b.date || '').localeCompare(a.date || '')); plannedEntries.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
                     revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); });
                 } catch (e) {
                     recordedEntries=[]; plannedEntries=[]; revisits=[]; settings={monthlyGoal:70,goalHasBeenSet:false,language:currentLang}; lastExportTimestamp=null;
-                    try { localStorage.clear(); saveSyncKeyToLocalStorage(currentSyncKey); /* Re-save sync key if cleared */ } catch (se) {}
+                    try { localStorage.clear(); saveSyncKeyToLocalStorage(currentSyncKey); } catch (se) {}
                     showFeedback('feedback.loadError', 'danger');
                 }
             }
 
             async function initializeAppWithSyncKey() {
-                if (!currentSyncKey) { // Should not happen if prompt sequence is correct
-                    promptForSyncKey();
-                    return;
-                }
-                showLoading(t("common.initializingSync"));
+                if (!currentSyncKey) { promptForSyncKey(); return; }
                 await initializeGunInstance();
-                await loadInitialDataFromGun();
+                await loadInitialDataFromGun(); // This will also call updateAllDisplays once after loading attempts
                 setupGunDataListeners();
-                updateAllDisplays();
+                // updateAllDisplays already called within loadInitialDataFromGun or its alternatives
                 if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) { setTimeout(promptForMonthlyGoal, 600); }
-                // Check if all initial loads are complete. For robustness, add a timeout.
+
+                // Graceful completion for initial Gun load
                 const allLoaded = () => Object.values(initialGunLoadComplete).every(Boolean);
-                let gracePeriod = 5000; // 5 seconds for Gun data to arrive
+                let gracePeriod = 3000; // Reduced grace period as once() should be quicker without bad options
+                const checkInterval = 200;
                 while (gracePeriod > 0 && !allLoaded()) {
-                    await new Promise(r => setTimeout(r, 200));
-                    gracePeriod -= 200;
+                    await new Promise(r => setTimeout(r, checkInterval));
+                    gracePeriod -= checkInterval;
                 }
-                if(!allLoaded()) console.warn("Initial Gun load may be incomplete for some nodes.");
+                if(!allLoaded()) console.warn("Initial Gun load may be incomplete for some nodes after grace period.");
+
                 hideLoading();
-                gunDataLoadedAtLeastOnce = true; // Signify initial sync attempt is complete
+                gunDataLoadedAtLeastOnce = true;
             }
+
             async function promptForSyncKey(isChangingKey = false) {
-                return new Promise(resolve => {
-                    if (!syncKeyModal) { console.error("Sync key modal not found."); resolve(false); return;}
+                hideLoading(); // Hide main loading before showing modal
+                return new Promise(resolvePrompt => {
+                    if (!syncKeyModal) { console.error("Sync key modal not found."); resolvePrompt(false); return;}
                     if (syncKeyErrorMsg) syncKeyErrorMsg.textContent = '';
                     if (syncKeyInputModal) syncKeyInputModal.value = '';
                     if (syncKeyModalTitle) syncKeyModalTitle.textContent = isChangingKey ? t('syncKeyModal.titleChange') : t('syncKeyModal.titleEnter');
                     if (syncKeyModalInstructions && isChangingKey) syncKeyModalInstructions.textContent = t('syncKeyModal.instructionsChange');
                     else if (syncKeyModalInstructions) syncKeyModalInstructions.textContent = t('syncKeyModal.instructions');
+
                     syncKeyModal.classList.add('visible');
                     syncKeyInputModal?.focus();
 
@@ -792,172 +661,133 @@
                         const key = syncKeyInputModal?.value.trim() || '';
                         if (key.length < MIN_SYNC_KEY_LENGTH) {
                             if(syncKeyErrorMsg) syncKeyErrorMsg.textContent = t('syncKeyModal.errorMinLength', { length: MIN_SYNC_KEY_LENGTH });
-                            syncKeyInputModal?.focus();
-                            return;
+                            syncKeyInputModal?.focus(); return;
                         }
                         syncKeyModal.classList.remove('visible');
-                        syncKeySubmitBtn.removeEventListener('click', handleSubmit);
-                        toggleSyncKeyVisibilityBtn?.removeEventListener('click', toggleTempVisibility);
+                        showLoading(t("common.syncing"), false); // Show syncing message
 
-                        if (isChangingKey && currentSyncKey !== key) {
-                            await clearLocalDataForNewSyncKey();
-                        }
+                        // Clean up listeners to avoid multiple fires if modal is reopened
+                        syncKeySubmitBtn.removeEventListener('click', handleSubmit);
+                        if(syncKeyInputModal) syncKeyInputModal.removeEventListener('keypress', handleKeyPress);
+                        if (toggleSyncKeyVisibilityBtn) toggleSyncKeyVisibilityBtn.removeEventListener('click', toggleTempVisibility);
+
+
+                        if (isChangingKey && currentSyncKey !== key) { await clearLocalDataForNewSyncKey(); }
                         saveSyncKeyToLocalStorage(key);
                         updateSyncKeyDisplay();
                         showFeedback("feedback.syncKeySet", "success");
-                        resolve(true); // Resolve the promise indicating success
-                        await initializeAppWithSyncKey();
+                        await initializeAppWithSyncKey(); // This will eventually call hideLoading()
+                        resolvePrompt(true);
                     };
-
-                    const toggleTempVisibility = () => {
-                        if (!syncKeyInputModal) return;
+                     const handleKeyPress = (e) => { if (e.key === 'Enter') handleSubmit(); };
+                     const toggleTempVisibility = () => {
+                        if (!syncKeyInputModal || !toggleSyncKeyVisibilityBtn) return;
                         const isPassword = syncKeyInputModal.type === 'password';
                         syncKeyInputModal.type = isPassword ? 'text' : 'password';
-                        toggleSyncKeyVisibilityBtn.textContent = isPassword ? t('syncKeyModal.hideKeyButton', undefined) || '🙈' : t('syncKeyModal.showKeyButton', undefined) || '👁️';
+                        toggleSyncKeyVisibilityBtn.textContent = isPassword ? (t('syncKeyModal.hideKeyButton') || '🙈') : (t('syncKeyModal.showKeyButton') || '👁️');
                     };
 
                     syncKeySubmitBtn.addEventListener('click', handleSubmit);
-                    if(syncKeyInputModal) syncKeyInputModal.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSubmit(); });
+                    if(syncKeyInputModal) syncKeyInputModal.addEventListener('keypress', handleKeyPress);
                     if (toggleSyncKeyVisibilityBtn) toggleSyncKeyVisibilityBtn.addEventListener('click', toggleTempVisibility);
                 });
             }
 
+
             async function initializeGunInstance() {
                 if (!window.Gun) { console.error("Gun.js not loaded!"); showFeedback("feedback.gunErrorLoad", "danger"); return Promise.resolve(); }
-                if (!currentSyncKey) { console.error("Sync key is missing. Cannot initialize Gun."); return Promise.resolve(); }
-
-                if (gunInstance) { // If re-initializing (e.g. key change), clear old listeners potentially
-                    // Gun doesn't have a formal "disconnect" or "remove all listeners on node" method easily.
-                    // Re-assigning the instance is the common way. Old listeners might linger if not careful.
-                    // For simplicity here, we'll re-assign node variables which should make old listeners target old objects.
-                }
-
-                gunInstance = Gun({ peers: GUN_PEERS, localStorage: false, radisk: false }); // Disable Gun's own localStorage as we manage it
-
-                // Define node names based on the sync key
-                const keyPrefix = `pfs_${currentSyncKey}_`; // pfs for Pioneer Field Service
-                recordsGunNode = gunInstance.get(keyPrefix + 'records');
-                plansGunNode = gunInstance.get(keyPrefix + 'plans');
-                revisitsGunNode = gunInstance.get(keyPrefix + 'revisits');
-                settingsGunNode = gunInstance.get(keyPrefix + 'settings');
-                //console.log("Gun initialized with key:", currentSyncKey);
+                if (!currentSyncKey) { console.error("Sync key is missing."); return Promise.resolve(); }
+                gunInstance = Gun({ peers: GUN_PEERS, localStorage: false, radisk: false });
+                const keyPrefix = `pfs_${currentSyncKey}_`;
+                recordsGunNode = gunInstance.get(keyPrefix + 'records'); plansGunNode = gunInstance.get(keyPrefix + 'plans');
+                revisitsGunNode = gunInstance.get(keyPrefix + 'revisits'); settingsGunNode = gunInstance.get(keyPrefix + 'settings');
                 initialGunLoadComplete = { settings: false, records: false, plans: false, revisits: false };
                 return Promise.resolve();
             }
 
             async function loadInitialDataFromGun() {
                 if (!gunInstance || !currentSyncKey) {
-                     console.warn("Gun not initialized or no sync key, loading from localStorage only.");
-                     loadDataFromLocalStorage(); // Load local data as fallback
-                     settings.language = currentLang; // Ensure language from initial loadTranslations is kept
-                     updateAllDisplays();
-                     return;
+                     loadDataFromLocalStorage(); settings.language = currentLang; updateAllDisplays(); hideLoading(); return;
                 }
                 let languageChangedByGun = false;
-                showLoading(t('common.loadingFromCloud'));
+                // showLoading(t('common.loadingFromCloud')); // Moved to before calling initializeAppWithSyncKey
 
-                const loadPromises = [
-                    new Promise(resolve => {
-                        settingsGunNode.once(async (data) => {
-                            const gunSettings = data?.data;
-                            if (gunSettings && typeof gunSettings === 'object') {
-                                const previousLang = settings.language;
-                                settings = { ...settings, ...gunSettings }; // Merge, Gun data takes precedence
-                                if (settings.language && settings.language !== previousLang) {
-                                   languageChangedByGun = true;
-                                   await loadTranslations(settings.language); // Reload translations if lang changed
-                                   // Don't applyStaticTranslations yet, do it once at the end
+                const createLoadPromise = (gunNode, dataType, dataRefSetter) => {
+                    return new Promise(resolve => {
+                        gunNode.once(async (gundata) => {
+                            const gunValue = gundata?.data; // Assuming data is wrapped
+                            if (dataType === 'settings') {
+                                if (gunValue && typeof gunValue === 'object') {
+                                    const previousLang = settings.language;
+                                    settings = { ...settings, ...gunValue };
+                                    if (settings.language && settings.language !== previousLang && supportedLanguages.includes(settings.language)) {
+                                       languageChangedByGun = true;
+                                       currentLang = settings.language; // Update currentLang immediately
+                                       await loadTranslations(settings.language);
+                                    }
                                 }
-                            } else { // No settings in Gun or invalid, use local
-                                // Settings already loaded into `settings` var by `loadDataFromLocalStorage` or default
+                            } else if (dataType === 'records') {
+                                recordedEntries = Array.isArray(gunValue) ? gunValue.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : recordedEntries;
+                            } else if (dataType === 'plans') {
+                                plannedEntries = Array.isArray(gunValue) ? gunValue.map(p => { if (p.plannedHours !== undefined) {p.hours=p.plannedHours; delete p.plannedHours;} return p;}) : plannedEntries;
+                            } else if (dataType === 'revisits') {
+                                revisits = Array.isArray(gunValue) ? gunValue.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null })) : revisits;
                             }
-                            initialGunLoadComplete.settings = true; resolve();
-                        }, {wait: 2000}); // Add a timeout
-                    }),
-                    new Promise(resolve => {
-                        recordsGunNode.once((data) => {
-                            const gunRecords = data?.data;
-                            if (Array.isArray(gunRecords)) recordedEntries = gunRecords.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE }));
-                            else {/* Use localStorage data already loaded if Gun data is not array or null */}
-                            initialGunLoadComplete.records = true; resolve();
-                        }, {wait: 2000});
-                    }),
-                    new Promise(resolve => {
-                        plansGunNode.once((data) => {
-                            const gunPlans = data?.data;
-                            if (Array.isArray(gunPlans)) {
-                                plannedEntries = gunPlans.map(p => {
-                                    if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') {p.hours=p.plannedHours; delete p.plannedHours;}
-                                    return p;
-                                });
-                            }
-                            initialGunLoadComplete.plans = true; resolve();
-                        }, {wait: 2000});
-                    }),
-                    new Promise(resolve => {
-                        revisitsGunNode.once((data) => {
-                            const gunRevisits = data?.data;
-                            if (Array.isArray(gunRevisits)) {
-                                revisits = gunRevisits.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null }));
-                            }
-                            initialGunLoadComplete.revisits = true; resolve();
-                        }, {wait: 2000});
-                    })
-                ];
+                            initialGunLoadComplete[dataType] = true;
+                            resolve();
+                        });
+                    });
+                };
 
-                await Promise.all(loadPromises);
-                if(languageChangedByGun) { // If language was changed by gun settings
-                    applyStaticTranslations(); // Re-apply all static translations
-                }
-                saveData('gun'); // Save merged/Gun data to localStorage
-                updateAllDisplays();
+                await Promise.all([
+                    createLoadPromise(settingsGunNode, 'settings'),
+                    createLoadPromise(recordsGunNode, 'records'),
+                    createLoadPromise(plansGunNode, 'plans'),
+                    createLoadPromise(revisitsGunNode, 'revisits')
+                ]);
+
+                // Apply static translations if language changed after all data loads.
+                // applyStaticTranslations() is also part of updateAllDisplays(), but good to ensure for language change.
+                if(languageChangedByGun) { applyStaticTranslations(); }
+
+                saveData('gun'); // Persist merged/Gun data to localStorage
+                updateAllDisplays(); // Update UI with fresh data
+                // hideLoading(); // Moved to end of initializeAppWithSyncKey
             }
-
 
             function setupGunDataListeners() {
                 if (!gunInstance || !currentSyncKey) return;
-               // console.log("Setting up Gun data listeners for key:", currentSyncKey);
-
-                const createHandler = (dataType, dataArrayOrObjectRef) => {
+                const createHandler = (dataType) => {
                     return async (gundata, key) => {
-                        if(!gunDataLoadedAtLeastOnce) return; // Skip updates during initial load chaos
+                        if(!gunDataLoadedAtLeastOnce && !Object.values(initialGunLoadComplete).every(Boolean) ) return;
 
-                        const actualData = gundata?.data; // Assuming data is wrapped in a 'data' property
-                        if (actualData === undefined || actualData === null) {
-                           // console.log(`Gun listener for ${dataType}: No data or null, possibly deleted node.`);
-                            return;
-                        }
-                       // console.log(`Gun update for ${dataType}:`, actualData);
+                        const actualData = gundata?.data;
+                        if (actualData === undefined) return; // Gun sends undefined for non-existent, null for explicitly deleted
 
                         let langChangedInSettings = false;
                         if (dataType === 'settings') {
                             const previousLang = settings.language;
                             settings = { ... (typeof settings === 'object' ? settings : {}), ...actualData };
-                            if(settings.language !== previousLang){ langChangedInSettings = true; }
+                            if(settings.language && settings.language !== previousLang && supportedLanguages.includes(settings.language)){
+                                langChangedInSettings = true; currentLang = settings.language;
+                            }
                         } else if (dataType === 'records') {
                             recordedEntries = Array.isArray(actualData) ? actualData.map(e => ({ ...e, notes: e.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: e.tag || DEFAULT_TAG_VALUE })) : [];
                         } else if (dataType === 'plans') {
-                            plannedEntries = Array.isArray(actualData) ? actualData.map(p => { if (p.plannedHours !== undefined && typeof p.plannedHours === 'number') {p.hours=p.plannedHours; delete p.plannedHours;} return p;}) : [];
+                            plannedEntries = Array.isArray(actualData) ? actualData.map(p => { if (p.plannedHours !== undefined) {p.hours=p.plannedHours; delete p.plannedHours;} return p;}) : [];
                         } else if (dataType === 'revisits') {
                             revisits = Array.isArray(actualData) ? actualData.map(rv => ({ ...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null })) : [];
                         }
 
-                        saveData('gun'); // Save to localStorage
-                        if (langChangedInSettings) {
-                            await loadTranslations(settings.language);
-                            applyStaticTranslations(); // Important to re-apply for new language
-                        }
+                        saveData('gun');
+                        if (langChangedInSettings) { await loadTranslations(); applyStaticTranslations(); }
                         updateAllDisplays();
                         showFeedback(t('feedback.dataSynced'), 'success');
                     };
                 };
-
-                settingsGunNode.on(createHandler('settings', settings));
-                recordsGunNode.on(createHandler('records', recordedEntries));
-                plansGunNode.on(createHandler('plans', plannedEntries));
-                revisitsGunNode.on(createHandler('revisits', revisits));
+                settingsGunNode.on(createHandler('settings')); recordsGunNode.on(createHandler('records'));
+                plansGunNode.on(createHandler('plans')); revisitsGunNode.on(createHandler('revisits'));
             }
-
 
             function triggerInstallPromptIfAvailable(context = '?') { if (deferredInstallPrompt && settings.goalHasBeenSet) { setTimeout(() => { deferredInstallPrompt.prompt().catch(e => {}); deferredInstallPrompt = null; }, 300); } }
             function promptForMonthlyGoal() { let ok = false; const msg = t('statsCard.goalLabel'); while (!ok) { const inp = prompt(msg, settings.monthlyGoal); if (inp === null) { ok = true; if (!settings.goalHasBeenSet) { settings.goalHasBeenSet = true; saveData(); updateAllDisplays(); } } else { const g = parseInt(inp, 10); if (!isNaN(g) && g > 0) { settings.monthlyGoal = g; settings.goalHasBeenSet = true; if(monthlyGoalInput) monthlyGoalInput.value = g; saveData(); ok = true; updateAllDisplays(); showFeedback("feedback.goalSetSuccess", "success"); triggerInstallPromptIfAvailable('initial goal'); } else { alert(t("feedback.invalidGoalValue")); } } } }
@@ -975,7 +805,7 @@
 
             function showConfirmationDialog(message, onConfirm) { if (dialogMessage) dialogMessage.textContent = message; currentConfirmCallback = onConfirm; confirmationDialog?.classList.add('visible'); dialogConfirmBtn?.focus(); }
             function hideConfirmationDialog() { confirmationDialog?.classList.remove('visible'); setTimeout(() => { currentConfirmCallback = null; }, 300); }
-            function showFeedback(keyOrText, type = 'info', vars = {}) { let msg = (keyOrText.startsWith('feedback.') || keyOrText.startsWith('common.') || keyOrText.startsWith('dialog.')) ? t(keyOrText, vars) : keyOrText; const fb = document.createElement('div'); fb.textContent = msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type === 'success' ? 'var(--success-color)' : type === 'danger' ? 'var(--danger-color)' : 'var(--primary-color)'}; color: var(--text-color); text-align: center; max-width: 90%;`; document.body.appendChild(fb); setTimeout(() => { fb.style.opacity = '1'; fb.style.bottom = '30px'; }, 10); setTimeout(() => { fb.style.opacity = '0'; fb.style.bottom = '10px'; }, 3500); setTimeout(() => { fb.parentNode?.removeChild(fb) }, 4000); }
+            function showFeedback(keyOrText, type = 'info', vars = {}) { let msg = (typeof keyOrText === 'string' && (keyOrText.startsWith('feedback.') || keyOrText.startsWith('common.') || keyOrText.startsWith('dialog.'))) ? t(keyOrText, vars) : keyOrText; const fb = document.createElement('div'); fb.textContent = msg; fb.style.cssText = `position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; z-index:1100; box-shadow:0 4px 15px rgba(0,0,0,0.2); font-size:0.95em; transition:opacity 0.5s ease, bottom 0.5s ease; opacity:0; background-color: ${type === 'success' ? 'var(--success-color)' : type === 'danger' ? 'var(--danger-color)' : 'var(--primary-color)'}; color: var(--text-color); text-align: center; max-width: 90%;`; document.body.appendChild(fb); setTimeout(() => { fb.style.opacity = '1'; fb.style.bottom = '30px'; }, 10); setTimeout(() => { fb.style.opacity = '0'; fb.style.bottom = '10px'; }, 3500); setTimeout(() => { fb.parentNode?.removeChild(fb) }, 4000); }
             function clearRevisitForm() { revisitForm?.reset(); if (revisitIdInput) revisitIdInput.value = ''; if (revisitNameInput) revisitNameInput.value = ''; if (revisitDateInput) revisitDateInput.value = ''; if (revisitNotesInput) revisitNotesInput.value = ''; if (saveRevisitBtn) saveRevisitBtn.textContent = t('revisitCard.addButton'); currentEditingId = null; }
             function handleRevisitSubmit(event) { event.preventDefault(); const id = revisitIdInput?.value ? parseInt(revisitIdInput.value, 10) : Date.now(); const name = revisitNameInput?.value.trim(); const scheduledDate = revisitDateInput?.value || null; const notes = revisitNotesInput?.value.trim().substring(0, REVISIT_NOTES_MAX_LENGTH); const dateAdded = getCurrentDateString(); if (!name) { alert(t('feedback.revisitNameRequired')); revisitNameInput?.focus(); return; } const revisit = { id, name, notes, dateAdded, scheduledDate, status: 'pending', dateCompleted: null }; const idx = revisits.findIndex(rv => rv.id === id); if (idx > -1) { revisits[idx] = revisit; } else { revisits.push(revisit); } revisits.sort((a, b) => { if (a.status !== b.status) return a.status === 'pending' ? -1 : 1; if (a.scheduledDate && b.scheduledDate) return a.scheduledDate.localeCompare(b.scheduledDate); if (a.scheduledDate) return -1; if (b.scheduledDate) return 1; return (a.dateAdded || '').localeCompare(b.dateAdded || ''); }); saveData(); clearRevisitForm(); updateAllDisplays(); showFeedback('feedback.revisitSavedSuccess', 'success'); }
             function markRevisitComplete(id) { const idx = revisits.findIndex(rv => rv.id === id); if (idx === -1) { showFeedback('feedback.revisitNotFound', 'danger'); return; } const revisit = revisits[idx]; const completionDate = getCurrentDateString(); revisit.status = 'completed'; revisit.dateCompleted = completionDate; const historyEntry = { id: Date.now(), date: completionDate, hours: 0, tag: t('historyCard.revisitCompletedTag'), notes: `${t('historyCard.revisitCompletedNotePrefix')} ${revisit.name}${revisit.notes ? `\n${t('historyCard.revisitOriginalNotes')}: ${revisit.notes}` : ''}`, type: 'revisit_completed', revisitId: revisit.id }; recordedEntries.push(historyEntry); recordedEntries.sort((a, b) => (b.date || '').localeCompare(a.date || '')); revisits.splice(idx, 1); saveData(); updateAllDisplays(); showFeedback('feedback.revisitMarkedCompleteSuccess', 'success'); }
@@ -984,7 +814,7 @@
             function removeConfetti() { if (confettiTimeout) clearTimeout(confettiTimeout); if (confettiContainer) confettiContainer.innerHTML = ''; }
 
             function handleExportData() {
-                try { const dataToExport = { version: '1.1', exportedAt: new Date().toISOString(), entries: recordedEntries, plans: plannedEntries, revisits: revisits, settings: settings, syncKey: currentSyncKey /* Optionally include key for restore aid */ };
+                try { const dataToExport = { version: '1.1', exportedAt: new Date().toISOString(), entries: recordedEntries, plans: plannedEntries, revisits: revisits, settings: settings, syncKey: currentSyncKey };
                     const jsonData = JSON.stringify(dataToExport, null, 2); const blob = new Blob([jsonData], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); const dateStr = new Date().toISOString().split('T')[0]; a.href = url; a.download = `pioneer-field-service-log_backup_${dateStr}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); lastExportTimestamp = Date.now(); saveLastExportDate(); updateLastExportDateDisplay(); showFeedback('feedback.exportSuccess', 'success');
                 } catch (error) { console.error("Export failed:", error); showFeedback('feedback.exportError', 'danger');}
             }
@@ -997,44 +827,33 @@
                         if (typeof importedData !== 'object' || importedData === null || !Array.isArray(importedData.entries) || !Array.isArray(importedData.plans) || !Array.isArray(importedData.revisits) || typeof importedData.settings !== 'object' || importedData.settings === null) { throw new Error("Invalid file structure");}
                         showConfirmationDialog(t('dialog.confirmImportMessage'), async () => {
                             try {
-                                let languageToLoadAfterImport = currentLang; // Default to current language
-                                let syncKeyToUseAfterImport = currentSyncKey; // Default to current sync key
-
-                                // Prioritize settings and sync key from imported file IF they exist
+                                let languageToLoadAfterImport = currentLang; let syncKeyToUseAfterImport = currentSyncKey;
                                 const importedSettings = importedData.settings;
                                 settings.monthlyGoal = (!isNaN(importedSettings.monthlyGoal) && importedSettings.monthlyGoal > 0) ? importedSettings.monthlyGoal : 70;
                                 settings.goalHasBeenSet = typeof importedSettings.goalHasBeenSet === 'boolean' ? importedSettings.goalHasBeenSet : false;
                                 if (importedSettings.language && supportedLanguages.includes(importedSettings.language)) { languageToLoadAfterImport = importedSettings.language; }
-                                settings.language = languageToLoadAfterImport;
+                                settings.language = languageToLoadAfterImport; currentLang = languageToLoadAfterImport; // Update currentLang for immediate use by t()
 
-                                // Handle sync key from import
                                 if (importedData.syncKey && typeof importedData.syncKey === 'string' && importedData.syncKey.length >= MIN_SYNC_KEY_LENGTH) {
-                                    if (importedData.syncKey !== currentSyncKey) {
-                                       await clearLocalDataForNewSyncKey(); // Clear old key's data if keys differ
-                                    }
+                                    if (importedData.syncKey !== currentSyncKey) { await clearLocalDataForNewSyncKey(); } // Key changed
                                     syncKeyToUseAfterImport = importedData.syncKey;
-                                    saveSyncKeyToLocalStorage(syncKeyToUseAfterImport); // Save new sync key
+                                    saveSyncKeyToLocalStorage(syncKeyToUseAfterImport);
+                                    currentSyncKey = syncKeyToUseAfterImport; // Update global currentSyncKey
                                 }
-
-                                // Now that settings (esp language and sync key) are determined, load data
                                 recordedEntries = importedData.entries.map(entry => ({...entry, notes: entry.notes?.substring(0, NOTES_MAX_LENGTH) || '', tag: entry.tag || DEFAULT_TAG_VALUE}));
-                                plannedEntries = importedData.plans.map(plan => { if (plan.plannedHours !== undefined && typeof plan.plannedHours === 'number') {plan.hours=plan.plannedHours; delete plan.plannedHours;} return plan; });
+                                plannedEntries = importedData.plans.map(plan => { if (plan.plannedHours !== undefined) {plan.hours=plan.plannedHours; delete plan.plannedHours;} return plan; });
                                 revisits = importedData.revisits.map(rv => ({...rv, status: rv.status || 'pending', notes: rv.notes?.substring(0, REVISIT_NOTES_MAX_LENGTH) || '', dateAdded: rv.dateAdded || getCurrentDateString(), scheduledDate: rv.scheduledDate || null}));
 
                                 if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
-                                if (settings.language !== currentLang) {
-                                    currentLang = settings.language;
-                                    await loadTranslations(); // Reload translations for the new language
-                                }
-                                // Re-initialize Gun if sync key changed or if it was not initialized
-                                if ((importedData.syncKey && importedData.syncKey !== currentSyncKey) || !gunInstance) {
-                                   currentSyncKey = syncKeyToUseAfterImport;
-                                   await initializeAppWithSyncKey(); // This will initialize Gun and load initial data if available on new key
+                                await loadTranslations(); // Reload translations with potentially new currentLang
+                                updateSyncKeyDisplay(); // Display new sync key status
+
+                                if ((importedData.syncKey && importedData.syncKey !== localStorage.getItem(LOCAL_STORAGE_KEYS.SYNC_KEY)) || !gunInstance ) {
+                                   await initializeAppWithSyncKey();
                                 } else {
-                                   // Gun instance is fine, just save new data to it
                                    await saveData(); // Save imported data to localStorage and current Gun node
                                 }
-                                updateAllDisplays();
+                                updateAllDisplays(); // This calls applyStaticTranslations
                                 showFeedback('feedback.importSuccess', 'success');
                             } catch (innerError) { console.error("Error applying imported data:", innerError); showFeedback('feedback.importProcessError', 'danger');}
                         });
@@ -1045,15 +864,14 @@
                 reader.readAsText(file);
             }
             function populateLanguageSelector() {
-                if (!languageSelector || !translations) return; const availableLangs = Object.keys(translations).filter(lang => supportedLanguages.includes(lang)); languageSelector.innerHTML = '';
+                if (!languageSelector || !translations || Object.keys(translations).length === 0) return; const availableLangs = Object.keys(translations).filter(lang => supportedLanguages.includes(lang)); languageSelector.innerHTML = '';
                 availableLangs.forEach(langCode => { const option = document.createElement('option'); option.value = langCode; const langName = getNestedValue(translations[langCode], 'languageName') || langCode; option.textContent = langName; if (langCode === currentLang) { option.selected = true; } languageSelector.appendChild(option); });
             }
             async function handleLanguageChange(event) {
                 const newLang = event.target.value;
                 if (newLang && newLang !== currentLang && supportedLanguages.includes(newLang)) {
-                    currentLang = newLang; settings.language = newLang; showLoading(t('common.loading')); await loadTranslations(); applyStaticTranslations(); // Apply after loading
-                    saveData(); // Save updated settings to local and Gun
-                    updateAllDisplays(); hideLoading(); showFeedback('feedback.languageChanged', 'success', { lang: getNestedValue(translations[currentLang], 'languageName') || currentLang });
+                    currentLang = newLang; settings.language = newLang; showLoading(t('common.loading')); await loadTranslations();
+                    saveData(); updateAllDisplays(); hideLoading(); showFeedback('feedback.languageChanged', 'success', { lang: getNestedValue(translations[currentLang], 'languageName') || currentLang });
                 }
             }
 
@@ -1091,14 +909,7 @@
             function updateAllDisplays() {
                 if (typeof t !== 'function' || !Object.keys(translations).length || !translations[currentLang]) { console.warn("Translations not ready or currentLang invalid, skipping UI update."); return; }
                 try {
-                    applyStaticTranslations();
-                    updateDashboard();
-                    updateDashboardPlannedDates();
-                    updateStatistics();
-                    renderHistory();
-                    renderPlanning();
-                    renderRevisits();
-                    populateMonthSelector();
+                    applyStaticTranslations(); updateDashboard(); updateDashboardPlannedDates(); updateStatistics(); renderHistory(); renderPlanning(); renderRevisits(); populateMonthSelector();
                     const selVal = chartMonthSelector?.value;
                     if (!chartMonthSelector?.disabled && selVal) { renderCharts(selVal); }
                     else if (!chartMonthSelector?.disabled && chartMonthSelector?.options?.length > 0 && chartMonthSelector.options[0]?.value) { chartMonthSelector.options[0].selected = true; renderCharts(chartMonthSelector.options[0].value); }
@@ -1112,66 +923,49 @@
 
             // --- APP INITIALIZATION SEQUENCE ---
             selectDOMElements();
-            loadDataFromLocalStorage(); // Load local data first, including any saved language and sync key.
-            await loadTranslations(); // Load translations based on local settings or browser default.
-            applyStaticTranslations(); // Apply initial translations (important for sync key modal).
+            loadDataFromLocalStorage();
+            await loadTranslations(); // Ensure translations are loaded before anything tries to use t() extensively
+            applyStaticTranslations(); // First pass of translations (including modal default texts if it were visible)
 
-            loadSyncKeyFromLocalStorage();
+            loadSyncKeyFromLocalStorage(); updateSyncKeyDisplay();
             if (monthlyGoalInput) monthlyGoalInput.value = settings.monthlyGoal;
             if (recordDateInput) recordDateInput.value = getCurrentDateString();
             lastCheckedDateString = getCurrentDateString();
-            setDateInputVisibility(false);
-            clearRecordForm(); clearPlanForm(); clearRevisitForm();
+            setDateInputVisibility(false); clearRecordForm(); clearPlanForm(); clearRevisitForm();
 
-            document.querySelectorAll('.card').forEach(card => {
-                const shouldBeExpanded = (card.id === 'record-card');
-                card.classList.toggle('expanded', shouldBeExpanded);
-                const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼';
-            });
+            document.querySelectorAll('.card').forEach(card => { const shouldBeExpanded = (card.id === 'record-card'); card.classList.toggle('expanded', shouldBeExpanded); const icon = card.querySelector('.toggle-icon'); if (icon) icon.textContent = shouldBeExpanded ? '▲' : '▼'; });
 
             appElement?.addEventListener('click', (e) => { const h = e.target.closest('.card-header'); if (h) { toggleCard(h.closest('.card')); } });
             document.querySelectorAll('.card-header').forEach(h => { h.setAttribute('role', 'button'); h.setAttribute('tabindex', '0'); h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(h.closest('.card')); } }); });
             changeDateBtn?.addEventListener('click', () => setDateInputVisibility(true));
-            [recordHoursInput, planHoursInput].forEach(input => {
-                input?.addEventListener('input', formatTimeInputOnType);
-                input?.addEventListener('blur', e => { const d = parseTimeInputToDecimal(e.target.value); if (!isNaN(d) && (input === recordHoursInput ? d >= 0 : d > 0) ) { e.target.value = formatDecimalToTimeInput(d); } else if (e.target.value.trim() !== '') { e.target.value = ''; } });
-            });
+            [recordHoursInput, planHoursInput].forEach(input => { input?.addEventListener('input', formatTimeInputOnType); input?.addEventListener('blur', e => { const d = parseTimeInputToDecimal(e.target.value); if (!isNaN(d) && (input === recordHoursInput ? d >= 0 : d > 0) ) { e.target.value = formatDecimalToTimeInput(d); } else if (e.target.value.trim() !== '') { e.target.value = ''; } }); });
             recordNotesInput?.addEventListener('input', e => { if (e.target.value.length > NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: NOTES_MAX_LENGTH }); } });
             revisitNotesInput?.addEventListener('input', e => { if (e.target.value.length > REVISIT_NOTES_MAX_LENGTH) { e.target.value = e.target.value.substring(0, REVISIT_NOTES_MAX_LENGTH); showFeedback('feedback.notesLengthLimit', 'info', { maxLength: REVISIT_NOTES_MAX_LENGTH }); } });
             historySearchInput?.addEventListener('input', renderHistory);
-            recordForm?.addEventListener('submit', handleRecordSubmit);
-            planForm?.addEventListener('submit', handlePlanSubmit);
-            revisitForm?.addEventListener('submit', handleRevisitSubmit);
-            clearPlanFormBtn?.addEventListener('click', clearPlanForm);
-            clearRevisitFormBtn?.addEventListener('click', clearRevisitForm);
-            saveGoalBtn?.addEventListener('click', handleGoalSave);
-            monthlyGoalInput?.addEventListener('keypress', e => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); e.target.blur(); } });
+            recordForm?.addEventListener('submit', handleRecordSubmit); planForm?.addEventListener('submit', handlePlanSubmit); revisitForm?.addEventListener('submit', handleRevisitSubmit);
+            clearPlanFormBtn?.addEventListener('click', clearPlanForm); clearRevisitFormBtn?.addEventListener('click', clearRevisitForm);
+            saveGoalBtn?.addEventListener('click', handleGoalSave); monthlyGoalInput?.addEventListener('keypress', e => { if (e.key === 'Enter') { e.preventDefault(); handleGoalSave(); e.target.blur(); } });
             chartMonthSelector?.addEventListener('change', (e) => { renderCharts(e.target.value); });
             dialogConfirmBtn?.addEventListener('click', () => { if (typeof currentConfirmCallback === 'function') { currentConfirmCallback(); } hideConfirmationDialog(); });
-            dialogCancelBtn?.addEventListener('click', hideConfirmationDialog);
-            confirmationDialog?.addEventListener('click', e => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
+            dialogCancelBtn?.addEventListener('click', hideConfirmationDialog); confirmationDialog?.addEventListener('click', e => { if (e.target === confirmationDialog) { hideConfirmationDialog(); } });
             window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstallPrompt = e; });
-            exportDataBtn?.addEventListener('click', handleExportData);
-            importDataBtn?.addEventListener('click', handleImportData);
-            importFileInput?.addEventListener('change', processImportFile);
+            exportDataBtn?.addEventListener('click', handleExportData); importDataBtn?.addEventListener('click', handleImportData); importFileInput?.addEventListener('change', processImportFile);
             languageSelector?.addEventListener('change', handleLanguageChange);
             changeSyncKeyBtn?.addEventListener('click', () => promptForSyncKey(true));
 
             if (!currentSyncKey && window.Gun) {
-                await promptForSyncKey(false); // Wait for user to provide key if not found
+                await promptForSyncKey(false); // This will handle loading/hiding internally now
             } else if (currentSyncKey && window.Gun) {
-                await initializeAppWithSyncKey();
-            } else { // No Gun or no sync key provided, run in offline mode
-                console.log("Running in offline mode (no Gun or sync key setup).");
-                updateAllDisplays(); // Update UI with localStorage data
-                 if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) { setTimeout(promptForMonthlyGoal, 600); }
-                hideLoading();
+                showLoading(t('common.initializingSync')); // Show loading before sync init
+                await initializeAppWithSyncKey(); // This will eventually hideLoading
+            } else {
+                updateAllDisplays();
+                if (!settings.goalHasBeenSet && !document.querySelector('.dialog-backdrop.visible')) { setTimeout(promptForMonthlyGoal, 600); }
+                hideLoading(); // Hide for offline mode
             }
 
-            if (dateCheckInterval) clearInterval(dateCheckInterval);
-            dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000);
-            registerServiceWorker();
-            console.log("App init sequence complete.");
+            if (dateCheckInterval) clearInterval(dateCheckInterval); dateCheckInterval = setInterval(checkDateAndUpdate, 60 * 1000);
+            registerServiceWorker(); console.log("App init sequence complete.");
         })();
     </script>
 </body>
