@@ -39,6 +39,7 @@
       "notesLabel": "Notas Revisita",
       "notesPlaceholder": "Detalhes, assunto...",
       "addButton": "Adicionar",
+      "updateButton": "Atualizar Revisita",
       "clearButton": "Limpar",
       "pendingListTitle": "Revisitas Pendentes",
       "listPlaceholderNoPending": "Nenhuma revisita pendente.",
@@ -52,6 +53,7 @@
       "hoursLabel": "Horas Plan. (HH:MM)",
       "hoursPlaceholder": "Ex: 3:00, 130",
       "saveButton": "Salvar Plano",
+      "updateButton": "Atualizar Plano",
       "clearButton": "Limpar",
       "listTitle": "Planejamentos",
       "listPlaceholderNoFuture": "Nenhum plano futuro.",
@@ -143,22 +145,27 @@
       "importProcessError": "Erro ao processar dados importados.",
       "importErrorInvalidFile": "Arquivo inválido ou corrompido.",
       "importErrorReadFile": "Erro ao ler o arquivo.",
-      "languageChanged": "Idioma alterado para {lang}."
+      "languageChanged": "Idioma alterado para {lang}.",
+      "syncError": "Erro na sincronização: {details}"
     },
     "common": {
       "editButton": "Editar",
       "deleteButton": "Excluir",
+      "saveButton": "Salvar",
+      "updateButton": "Atualizar",
+      "clearButton": "Limpar",
       "loading": "Carregando...",
       "never": "Nunca",
-      "invalidDate": "Data Inválida"
+      "invalidDate": "Data Inválida",
+      "noTag": "Sem Tag",
+      "noNotes": "Sem notas"
     },
     "tags": {
       "houseToHouse": "Casa em casa",
       "cart": "Carrinho",
       "letters": "Cartas",
       "informalWitnessing": "Informal",
-      "other": "Outro",
-      "noTag": "Sem Tag"
+      "other": "Outro"
     },
     "units": {
       "hour": "hora",
@@ -177,726 +184,268 @@
       "nextPrefix": "Próx.",
       "monthNames": ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
       "weekdaysShort": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
+    },
+    "sync": {
+      "title": "Sincronização P2P",
+      "openSettingsButton": "Configurar Sincronização",
+      "statusDefault": "Status: Desconectado",
+      "statusActive": "Sincr. com chave: ...{pinEnd}",
+      "statusActiveTitle": "Chave: {pinFull}",
+      "statusPublic": "Sincr. pública (sem chave)",
+      "settingsTitle": "Config. Sincronização",
+      "settingsDesc": "PIN numérico para sincronizar dados entre disp. Chave vazia = desativado.",
+      "pinLabel": "PIN Numérico:",
+      "pinPlaceholder": "Ex: 123456",
+      "pinHelper": "Só números. 6+ dígitos recomendado.",
+      "savePinButton": "Salvar PIN e Sincronizar",
+      "errorPinNumeric": "Erro: PIN deve ser numérico.",
+      "pinSavedRestart": "PIN salvo! Sincronizando...",
+      "gunMissing": "Erro: Biblioteca de sincr. (GunJS) falhou."
     }
   },
   "en": {
     "languageName": "English",
     "appTitle": "Pioneer Log",
     "dashboard": {
-      "weekHoursLabel": "Week Hours",
-      "monthTotalLabel": "Month:",
-      "forecastPrefix": "Left",
-      "forecastSuffixDaysPlural": "d",
-      "forecastSuffixDaysSingular": "d",
-      "goalMet": "Goal Reached! 🎉",
-      "goalNotMetMonthEnd": "Goal not met.",
-      "setGoalPrompt": "Set Monthly Goal",
-      "attemptPrefix": "Try ≈",
-      "perDay": "per",
-      "plannedTripsLabel": "Planned Service",
-      "monthGoalLabel": "Month Goal",
-      "upcomingRevisitsLabel": "Upcoming Revisits",
-      "noUpcomingRevisits": "No scheduled revisits."
+      "weekHoursLabel": "Week Hours", "monthTotalLabel": "Month:", "forecastPrefix": "Left", "forecastSuffixDaysPlural": "d", "forecastSuffixDaysSingular": "d", "goalMet": "Goal Reached! 🎉", "goalNotMetMonthEnd": "Goal not met.", "setGoalPrompt": "Set Monthly Goal", "attemptPrefix": "Try ≈", "perDay": "per", "plannedTripsLabel": "Planned Service", "monthGoalLabel": "Month Goal", "upcomingRevisitsLabel": "Upcoming Revisits", "noUpcomingRevisits": "No scheduled revisits."
     },
     "recordCard": {
-      "title": "Record",
-      "dateLabel": "Date",
-      "changeDateButton": "(Change)",
-      "timeLabel": "Time",
-      "timePlaceholder": "Ex: 2:30, 130",
-      "tagLabel": "Type",
-      "notesLabel": "Notes (max {maxLength})",
-      "notesPlaceholder": "Notes...",
-      "saveButton": "Save",
-      "updateButton": "Update",
-      "autoNoteFromPlan": "[AUTO] {hours} plan {date}"
+      "title": "Record", "dateLabel": "Date", "changeDateButton": "(Change)", "timeLabel": "Time", "timePlaceholder": "Ex: 2:30, 130", "tagLabel": "Type", "notesLabel": "Notes (max {maxLength})", "notesPlaceholder": "Notes...", "saveButton": "Save", "updateButton": "Update", "autoNoteFromPlan": "[AUTO] {hours} plan {date}"
     },
     "revisitCard": {
-      "title": "Add Revisit",
-      "nameLabel": "Name",
-      "namePlaceholder": "Name or ref.",
-      "dateLabel": "Schedule (Opt.)",
-      "notesLabel": "Revisit Notes",
-      "notesPlaceholder": "Details, topic...",
-      "addButton": "Add",
-      "clearButton": "Clear",
-      "pendingListTitle": "Pending Revisits",
-      "listPlaceholderNoPending": "No pending revisits.",
-      "scheduledForLabel": "Scheduled",
-      "markCompleteButton": "Complete",
-      "noNotes": "No notes"
+      "title": "Add Revisit", "nameLabel": "Name", "namePlaceholder": "Name or ref.", "dateLabel": "Schedule (Opt.)", "notesLabel": "Revisit Notes", "notesPlaceholder": "Details, topic...", "addButton": "Add", "updateButton": "Update Revisit", "clearButton": "Clear", "pendingListTitle": "Pending Revisits", "listPlaceholderNoPending": "No pending revisits.", "scheduledForLabel": "Scheduled", "markCompleteButton": "Complete", "noNotes": "No notes"
     },
     "planCard": {
-      "title": "Plan Hours",
-      "dateLabel": "Future Date",
-      "hoursLabel": "Planned Hrs (HH:MM)",
-      "hoursPlaceholder": "Ex: 3:00, 130",
-      "saveButton": "Save Plan",
-      "clearButton": "Clear",
-      "listTitle": "Plans",
-      "listPlaceholderNoFuture": "No future plans.",
-      "listPlaceholderNoPastOrFuture": "No plans.",
-      "pastDateSuffix": "(Past)",
-      "markDoneButton": "Done"
+      "title": "Plan Hours", "dateLabel": "Future Date", "hoursLabel": "Planned Hrs (HH:MM)", "hoursPlaceholder": "Ex: 3:00, 130", "saveButton": "Save Plan", "updateButton": "Update Plan", "clearButton": "Clear", "listTitle": "Plans", "listPlaceholderNoFuture": "No future plans.", "listPlaceholderNoPastOrFuture": "No plans.", "pastDateSuffix": "(Past)", "markDoneButton": "Done"
     },
     "statsCard": {
-      "title": "Monthly Summary",
-      "goalLabel": "Goal (Hours)",
-      "setGoalButton": "Set Goal",
-      "monthHoursLabel": "Month Hours",
-      "goalProgressLabel": "Goal Progress",
-      "avgHoursDayLabel": "Avg / Day",
-      "daysActiveLabel": "Active Days"
+      "title": "Monthly Summary", "goalLabel": "Goal (Hours)", "setGoalButton": "Set Goal", "monthHoursLabel": "Month Hours", "goalProgressLabel": "Goal Progress", "avgHoursDayLabel": "Avg / Day", "daysActiveLabel": "Active Days"
     },
     "chartsCard": {
-      "title": "Hours by Type",
-      "monthSelectorLabel": "View Month",
-      "totalHoursLabel": "Total Month",
-      "percentageDistributionTitle": "% Distribution",
-      "noDataOption": "No data",
-      "currentMonthSuffix": "(Current)",
-      "selectMonthMessage": "Select month.",
-      "noRecordsInMonthMessage": "No records in {month}.",
-      "renderErrorMessage": "Chart error.",
-      "noDataYetMessage": "Record hours."
+      "title": "Hours by Type", "monthSelectorLabel": "View Month", "totalHoursLabel": "Total Month", "percentageDistributionTitle": "% Distribution", "noDataOption": "No data", "currentMonthSuffix": "(Current)", "selectMonthMessage": "Select month.", "noRecordsInMonthMessage": "No records in {month}.", "renderErrorMessage": "Chart error.", "noDataYetMessage": "Record hours."
     },
     "historyCard": {
-      "title": "History",
-      "searchPlaceholder": "Search...",
-      "resultsCountSingular": "{count} result",
-      "resultsCountPlural": "{count} results",
-      "resultsCountForTermSingular": "{count} result for \"{term}\"",
-      "resultsCountForTermPlural": "{count} results for \"{term}\"",
-      "showingLastMonths": "Last {limit} months",
-      "noRecordsLastMonths": "No records last {limit} months",
-      "listPlaceholderNoRecords": "No records.",
-      "listPlaceholderNoSearchResults": "No search results.",
-      "listPlaceholderNoRecent": "No recent (use search).",
-      "noNotes": "No notes",
-      "revisitCompletedTag": "Revisit",
-      "revisitCompletedNotePrefix": "Revisit:",
-      "revisitOriginalNotes": "Orig. notes",
-      "originalNotesPreviewSuffix": "...",
-      "revisitCompletedMarker": "COMPLETED"
+      "title": "History", "searchPlaceholder": "Search...", "resultsCountSingular": "{count} result", "resultsCountPlural": "{count} results", "resultsCountForTermSingular": "{count} result for \"{term}\"", "resultsCountForTermPlural": "{count} results for \"{term}\"", "showingLastMonths": "Last {limit} months", "noRecordsLastMonths": "No records last {limit} months", "listPlaceholderNoRecords": "No records.", "listPlaceholderNoSearchResults": "No search results.", "listPlaceholderNoRecent": "No recent (use search).", "noNotes": "No notes", "revisitCompletedTag": "Revisit", "revisitCompletedNotePrefix": "Revisit:", "revisitOriginalNotes": "Orig. notes", "originalNotesPreviewSuffix": "...", "revisitCompletedMarker": "COMPLETED"
     },
     "settingsCard": {
-      "title": "Settings",
-      "dataManagementTitle": "Data Management",
-      "importButton": "Import Data",
-      "exportButton": "Export Data",
-      "lastExportLabel": "Last export:",
-      "languageLabel": "Language"
+      "title": "Settings", "dataManagementTitle": "Data Management", "importButton": "Import Data", "exportButton": "Export Data", "lastExportLabel": "Last export:", "languageLabel": "Language"
     },
     "dialog": {
-      "confirmDeleteRecordMessage": "Delete record? (Cannot undo)",
-      "confirmDeletePlanMessage": "Delete plan?",
-      "confirmDeleteRevisitMessage": "Delete revisit?",
-      "confirmImportMessage": "This will replace ALL current data with the data from the file. Continue?",
-      "confirmButton": "Confirm",
-      "cancelButton": "Cancel"
+      "confirmDeleteRecordMessage": "Delete record? (Cannot undo)", "confirmDeletePlanMessage": "Delete plan?", "confirmDeleteRevisitMessage": "Delete revisit?", "confirmImportMessage": "This will replace ALL current data with the data from the file. Continue?", "confirmButton": "Confirm", "cancelButton": "Cancel"
     },
     "feedback": {
-      "saveError": "Save failed.",
-      "loadError": "Load error.",
-      "goalSetSuccess": "Goal set!",
-      "invalidTimeFormat": "Invalid time (ex: 2:30, 45).",
-      "invalidDate": "Invalid date.",
-      "recordSavedSuccess": "Record saved.",
-      "recordDeletedSuccess": "Record deleted.",
-      "planNotFound": "Plan not found.",
-      "planMarkedDoneSuccess": "Plan recorded.",
-      "planSavedSuccess": "Plan saved.",
-      "planDatePastError": "Date must be future.",
-      "planFormInvalid": "Invalid Date/Hours (>0).",
-      "planDeletedSuccess": "Plan deleted.",
-      "goalUpdateSuccess": "Goal updated.",
-      "invalidGoalValue": "Invalid goal (>0).",
-      "notesLengthLimit": "{maxLength} char limit.",
-      "revisitNameRequired": "Revisit name required.",
-      "revisitSavedSuccess": "Revisit saved.",
-      "revisitNotFound": "Revisit not found.",
-      "revisitMarkedCompleteSuccess": "Revisit completed.",
-      "revisitDeletedSuccess": "Revisit deleted.",
-      "exportSuccess": "Data exported successfully!",
-      "exportError": "Failed to export data.",
-      "importSuccess": "Data imported successfully!",
-      "importProcessError": "Error processing imported data.",
-      "importErrorInvalidFile": "Invalid or corrupted file.",
-      "importErrorReadFile": "Error reading file.",
-      "languageChanged": "Language changed to {lang}."
+      "saveError": "Save failed.", "loadError": "Load error.", "goalSetSuccess": "Goal set!", "invalidTimeFormat": "Invalid time (ex: 2:30, 45).", "invalidDate": "Invalid date.", "recordSavedSuccess": "Record saved.", "recordDeletedSuccess": "Record deleted.", "planNotFound": "Plan not found.", "planMarkedDoneSuccess": "Plan recorded.", "planSavedSuccess": "Plan saved.", "planDatePastError": "Date must be future.", "planFormInvalid": "Invalid Date/Hours (>0).", "planDeletedSuccess": "Plan deleted.", "goalUpdateSuccess": "Goal updated.", "invalidGoalValue": "Invalid goal (>0).", "notesLengthLimit": "{maxLength} char limit.", "revisitNameRequired": "Revisit name required.", "revisitSavedSuccess": "Revisit saved.", "revisitNotFound": "Revisit not found.", "revisitMarkedCompleteSuccess": "Revisit completed.", "revisitDeletedSuccess": "Revisit deleted.", "exportSuccess": "Data exported successfully!", "exportError": "Failed to export data.", "importSuccess": "Data imported successfully!", "importProcessError": "Error processing imported data.", "importErrorInvalidFile": "Invalid or corrupted file.", "importErrorReadFile": "Error reading file.", "languageChanged": "Language changed to {lang}.", "syncError": "Sync error: {details}"
     },
     "common": {
-      "editButton": "Edit",
-      "deleteButton": "Delete",
-      "loading": "Loading...",
-      "never": "Never",
-      "invalidDate": "Invalid Date"
+      "editButton": "Edit", "deleteButton": "Delete", "saveButton": "Save", "updateButton": "Update", "clearButton": "Clear", "loading": "Loading...", "never": "Never", "invalidDate": "Invalid Date", "noTag": "No Tag", "noNotes": "No notes"
     },
     "tags": {
-      "houseToHouse": "House to house",
-      "cart": "Cart",
-      "letters": "Letters",
-      "informalWitnessing": "Informal",
-      "other": "Other",
-      "noTag": "No Tag"
+      "houseToHouse": "House to house", "cart": "Cart", "letters": "Letters", "informalWitnessing": "Informal", "other": "Other"
     },
     "units": {
-      "hour": "hour",
-      "hours": "hours",
-      "minute": "minute",
-      "minutes": "minutes",
-      "andConnector": "and",
-      "hour_short": "h",
-      "hours_short": "h",
-      "minute_short": "m",
-      "minutes_short": "m"
+      "hour": "hour", "hours": "hours", "minute": "minute", "minutes": "minutes", "andConnector": "and", "hour_short": "h", "hours_short": "h", "minute_short": "m", "minutes_short": "m"
     },
     "dates": {
-      "today": "Today",
-      "tomorrow": "Tomorrow",
-      "nextPrefix": "Next",
-      "monthNames": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      "today": "Today", "tomorrow": "Tomorrow", "nextPrefix": "Next", "monthNames": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], "weekdaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    },
+    "sync": {
+      "title": "P2P Sync", "openSettingsButton": "Setup Sync", "statusDefault": "Status: Disconnected", "statusActive": "Syncing (PIN: ...{pinEnd})", "statusActiveTitle": "Full PIN: {pinFull}", "statusPublic": "Public sync (no PIN)", "settingsTitle": "Sync Settings", "settingsDesc": "Enter a numeric PIN to sync data across devices. Empty PIN disables sync.", "pinLabel": "Numeric PIN:", "pinPlaceholder": "e.g. 123456", "pinHelper": "Numbers only. 6+ digits recommended.", "savePinButton": "Save PIN & Sync", "errorPinNumeric": "Error: PIN must be numeric.", "pinSavedRestart": "PIN saved! Syncing...", "gunMissing": "Error: Sync library (GunJS) failed to load."
     }
   },
   "es": {
     "languageName": "Español",
     "appTitle": "Registro Precursor",
     "dashboard": {
-      "weekHoursLabel": "Horas Semana",
-      "monthTotalLabel": "Mes:",
-      "forecastPrefix": "Faltan",
-      "forecastSuffixDaysPlural": "d",
-      "forecastSuffixDaysSingular": "d",
-      "goalMet": "¡Meta Alcanzada! 🎉",
-      "goalNotMetMonthEnd": "Meta no alcanzada.",
-      "setGoalPrompt": "Definir Meta Mensual",
-      "attemptPrefix": "Intentar ≈",
-      "perDay": "por",
-      "plannedTripsLabel": "Servicio Planeado",
-      "monthGoalLabel": "Meta Mes",
-      "upcomingRevisitsLabel": "Próximas Revisitas",
-      "noUpcomingRevisits": "Sin revisitas programadas."
+      "weekHoursLabel": "Horas Semana", "monthTotalLabel": "Mes:", "forecastPrefix": "Faltan", "forecastSuffixDaysPlural": "d", "forecastSuffixDaysSingular": "d", "goalMet": "¡Meta Alcanzada! 🎉", "goalNotMetMonthEnd": "Meta no alcanzada.", "setGoalPrompt": "Definir Meta Mensual", "attemptPrefix": "Intentar ≈", "perDay": "por", "plannedTripsLabel": "Servicio Planeado", "monthGoalLabel": "Meta Mes", "upcomingRevisitsLabel": "Próximas Revisitas", "noUpcomingRevisits": "Sin revisitas programadas."
     },
     "recordCard": {
-      "title": "Registrar",
-      "dateLabel": "Fecha",
-      "changeDateButton": "(Cambiar)",
-      "timeLabel": "Tiempo",
-      "timePlaceholder": "Ej: 2:30, 130",
-      "tagLabel": "Modalidad",
-      "notesLabel": "Notas (máx {maxLength})",
-      "notesPlaceholder": "Notas...",
-      "saveButton": "Guardar",
-      "updateButton": "Actualizar",
-      "autoNoteFromPlan": "[AUTO] {hours} plan {date}"
+      "title": "Registrar", "dateLabel": "Fecha", "changeDateButton": "(Cambiar)", "timeLabel": "Tiempo", "timePlaceholder": "Ej: 2:30, 130", "tagLabel": "Modalidad", "notesLabel": "Notas (máx {maxLength})", "notesPlaceholder": "Notas...", "saveButton": "Guardar", "updateButton": "Actualizar", "autoNoteFromPlan": "[AUTO] {hours} plan {date}"
     },
     "revisitCard": {
-      "title": "Añadir Revisita",
-      "nameLabel": "Nombre",
-      "namePlaceholder": "Nombre o ref.",
-      "dateLabel": "Programar (Opc.)",
-      "notesLabel": "Notas Revisita",
-      "notesPlaceholder": "Detalles, tema...",
-      "addButton": "Añadir",
-      "clearButton": "Limpiar",
-      "pendingListTitle": "Revisitas Pendientes",
-      "listPlaceholderNoPending": "Ninguna revisita pendiente.",
-      "scheduledForLabel": "Program. para",
-      "markCompleteButton": "Completar",
-      "noNotes": "Sin notas"
+      "title": "Añadir Revisita", "nameLabel": "Nombre", "namePlaceholder": "Nombre o ref.", "dateLabel": "Programar (Opc.)", "notesLabel": "Notas Revisita", "notesPlaceholder": "Detalles, tema...", "addButton": "Añadir", "updateButton": "Actualizar Revisita", "clearButton": "Limpiar", "pendingListTitle": "Revisitas Pendientes", "listPlaceholderNoPending": "Ninguna revisita pendiente.", "scheduledForLabel": "Program. para", "markCompleteButton": "Completar", "noNotes": "Sin notas"
     },
     "planCard": {
-      "title": "Planificar Horas",
-      "dateLabel": "Fecha Futura",
-      "hoursLabel": "Horas Plan. (HH:MM)",
-      "hoursPlaceholder": "Ej: 3:00, 130",
-      "saveButton": "Guardar Plan",
-      "clearButton": "Limpiar",
-      "listTitle": "Planes",
-      "listPlaceholderNoFuture": "Ningún plan futuro.",
-      "listPlaceholderNoPastOrFuture": "Sin planes.",
-      "pastDateSuffix": "(Pasado)",
-      "markDoneButton": "Hecho"
+      "title": "Planificar Horas", "dateLabel": "Fecha Futura", "hoursLabel": "Horas Plan. (HH:MM)", "hoursPlaceholder": "Ej: 3:00, 130", "saveButton": "Guardar Plan", "updateButton": "Actualizar Plan", "clearButton": "Limpiar", "listTitle": "Planes", "listPlaceholderNoFuture": "Ningún plan futuro.", "listPlaceholderNoPastOrFuture": "Sin planes.", "pastDateSuffix": "(Pasado)", "markDoneButton": "Hecho"
     },
     "statsCard": {
-      "title": "Resumen Mensual",
-      "goalLabel": "Meta (Horas)",
-      "setGoalButton": "Definir Meta",
-      "monthHoursLabel": "Horas Mes",
-      "goalProgressLabel": "Progreso Meta",
-      "avgHoursDayLabel": "Prom. / Día",
-      "daysActiveLabel": "Días Activos"
+      "title": "Resumen Mensual", "goalLabel": "Meta (Horas)", "setGoalButton": "Definir Meta", "monthHoursLabel": "Horas Mes", "goalProgressLabel": "Progreso Meta", "avgHoursDayLabel": "Prom. / Día", "daysActiveLabel": "Días Activos"
     },
     "chartsCard": {
-      "title": "Horas por Tipo",
-      "monthSelectorLabel": "Ver Mes",
-      "totalHoursLabel": "Total Mes",
-      "percentageDistributionTitle": "% Distribución",
-      "noDataOption": "Sin datos",
-      "currentMonthSuffix": "(Actual)",
-      "selectMonthMessage": "Selecciona mes.",
-      "noRecordsInMonthMessage": "Sin registros en {month}.",
-      "renderErrorMessage": "Error en gráfico.",
-      "noDataYetMessage": "Registra horas."
+      "title": "Horas por Tipo", "monthSelectorLabel": "Ver Mes", "totalHoursLabel": "Total Mes", "percentageDistributionTitle": "% Distribución", "noDataOption": "Sin datos", "currentMonthSuffix": "(Actual)", "selectMonthMessage": "Selecciona mes.", "noRecordsInMonthMessage": "Sin registros en {month}.", "renderErrorMessage": "Error en gráfico.", "noDataYetMessage": "Registra horas."
     },
     "historyCard": {
-      "title": "Historial",
-      "searchPlaceholder": "Buscar...",
-      "resultsCountSingular": "{count} resultado",
-      "resultsCountPlural": "{count} resultados",
-      "resultsCountForTermSingular": "{count} res. p/ \"{term}\"",
-      "resultsCountForTermPlural": "{count} res. p/ \"{term}\"",
-      "showingLastMonths": "Últimos {limit} meses",
-      "noRecordsLastMonths": "Sin reg. últ. {limit} meses",
-      "listPlaceholderNoRecords": "Ningún registro.",
-      "listPlaceholderNoSearchResults": "Sin resultados búsqueda.",
-      "listPlaceholderNoRecent": "Sin recientes (use busca).",
-      "noNotes": "Sin notas",
-      "revisitCompletedTag": "Revisita",
-      "revisitCompletedNotePrefix": "Revisita:",
-      "revisitOriginalNotes": "Notas orig.",
-      "originalNotesPreviewSuffix": "...",
-      "revisitCompletedMarker": "COMPLETADA"
+      "title": "Historial", "searchPlaceholder": "Buscar...", "resultsCountSingular": "{count} resultado", "resultsCountPlural": "{count} resultados", "resultsCountForTermSingular": "{count} res. p/ \"{term}\"", "resultsCountForTermPlural": "{count} res. p/ \"{term}\"", "showingLastMonths": "Últimos {limit} meses", "noRecordsLastMonths": "Sin reg. últ. {limit} meses", "listPlaceholderNoRecords": "Ningún registro.", "listPlaceholderNoSearchResults": "Sin resultados búsqueda.", "listPlaceholderNoRecent": "Sin recientes (use busca).", "noNotes": "Sin notas", "revisitCompletedTag": "Revisita", "revisitCompletedNotePrefix": "Revisita:", "revisitOriginalNotes": "Notas orig.", "originalNotesPreviewSuffix": "...", "revisitCompletedMarker": "COMPLETADA"
     },
     "settingsCard": {
-      "title": "Ajustes",
-      "dataManagementTitle": "Gestión de Datos",
-      "importButton": "Importar Datos",
-      "exportButton": "Exportar Datos",
-      "lastExportLabel": "Última exportación:",
-      "languageLabel": "Idioma"
+      "title": "Ajustes", "dataManagementTitle": "Gestión de Datos", "importButton": "Importar Datos", "exportButton": "Exportar Datos", "lastExportLabel": "Última exportación:", "languageLabel": "Idioma"
     },
     "dialog": {
-      "confirmDeleteRecordMessage": "¿Eliminar registro? (Irreversible)",
-      "confirmDeletePlanMessage": "¿Eliminar plan?",
-      "confirmDeleteRevisitMessage": "¿Eliminar revisita?",
-      "confirmImportMessage": "Esto reemplazará TODOS los datos actuales con los datos del archivo. ¿Continuar?",
-      "confirmButton": "Confirmar",
-      "cancelButton": "Cancelar"
+      "confirmDeleteRecordMessage": "¿Eliminar registro? (Irreversible)", "confirmDeletePlanMessage": "¿Eliminar plan?", "confirmDeleteRevisitMessage": "¿Eliminar revisita?", "confirmImportMessage": "Esto reemplazará TODOS los datos actuales con los datos del archivo. ¿Continuar?", "confirmButton": "Confirmar", "cancelButton": "Cancelar"
     },
     "feedback": {
-      "saveError": "Error al guardar.",
-      "loadError": "Error al cargar.",
-      "goalSetSuccess": "¡Meta establecida!",
-      "invalidTimeFormat": "Tiempo inválido (ej: 2:30, 45).",
-      "invalidDate": "Fecha inválida.",
-      "recordSavedSuccess": "Registro guardado.",
-      "recordDeletedSuccess": "Registro eliminado.",
-      "planNotFound": "Plan no encontrado.",
-      "planMarkedDoneSuccess": "Plan registrado.",
-      "planSavedSuccess": "Plan guardado.",
-      "planDatePastError": "Fecha debe ser futura.",
-      "planFormInvalid": "Fecha/Horas inválidas (>0).",
-      "planDeletedSuccess": "Plan eliminado.",
-      "goalUpdateSuccess": "Meta actualizada.",
-      "invalidGoalValue": "Meta inválida (>0).",
-      "notesLengthLimit": "Límite {maxLength} carac.",
-      "revisitNameRequired": "Nombre revisita requerido.",
-      "revisitSavedSuccess": "Revisita guardada.",
-      "revisitNotFound": "Revisita no encontrada.",
-      "revisitMarkedCompleteSuccess": "Revisita completada.",
-      "revisitDeletedSuccess": "Revisita eliminada.",
-      "exportSuccess": "¡Datos exportados con éxito!",
-      "exportError": "Error al exportar datos.",
-      "importSuccess": "¡Datos importados con éxito!",
-      "importProcessError": "Error al procesar datos importados.",
-      "importErrorInvalidFile": "Archivo inválido o corrupto.",
-      "importErrorReadFile": "Error al leer el archivo.",
-      "languageChanged": "Idioma cambiado a {lang}."
+      "saveError": "Error al guardar.", "loadError": "Error al cargar.", "goalSetSuccess": "¡Meta establecida!", "invalidTimeFormat": "Tiempo inválido (ej: 2:30, 45).", "invalidDate": "Fecha inválida.", "recordSavedSuccess": "Registro guardado.", "recordDeletedSuccess": "Registro eliminado.", "planNotFound": "Plan no encontrado.", "planMarkedDoneSuccess": "Plan registrado.", "planSavedSuccess": "Plan guardado.", "planDatePastError": "Fecha debe ser futura.", "planFormInvalid": "Fecha/Horas inválidas (>0).", "planDeletedSuccess": "Plan eliminado.", "goalUpdateSuccess": "Meta actualizada.", "invalidGoalValue": "Meta inválida (>0).", "notesLengthLimit": "Límite {maxLength} carac.", "revisitNameRequired": "Nombre revisita requerido.", "revisitSavedSuccess": "Revisita guardada.", "revisitNotFound": "Revisita no encontrada.", "revisitMarkedCompleteSuccess": "Revisita completada.", "revisitDeletedSuccess": "Revisita eliminada.", "exportSuccess": "¡Datos exportados con éxito!", "exportError": "Error al exportar datos.", "importSuccess": "¡Datos importados con éxito!", "importProcessError": "Error al procesar datos importados.", "importErrorInvalidFile": "Archivo inválido o corrupto.", "importErrorReadFile": "Error al leer el archivo.", "languageChanged": "Idioma cambiado a {lang}.", "syncError": "Error de sincronización: {details}"
     },
     "common": {
-      "editButton": "Editar",
-      "deleteButton": "Eliminar",
-      "loading": "Cargando...",
-      "never": "Nunca",
-      "invalidDate": "Fecha Inválida"
+      "editButton": "Editar", "deleteButton": "Eliminar", "saveButton": "Guardar", "updateButton": "Actualizar", "clearButton": "Limpiar", "loading": "Cargando...", "never": "Nunca", "invalidDate": "Fecha Inválida", "noTag": "Sin Etiqueta", "noNotes": "Sin notas"
     },
     "tags": {
-      "houseToHouse": "Casa en casa",
-      "cart": "Carrito",
-      "letters": "Cartas",
-      "informalWitnessing": "Informal",
-      "other": "Otro",
-      "noTag": "Sin Etiqueta"
+      "houseToHouse": "Casa en casa", "cart": "Carrito", "letters": "Cartas", "informalWitnessing": "Informal", "other": "Otro"
     },
     "units": {
-      "hour": "hora",
-      "hours": "horas",
-      "minute": "minuto",
-      "minutes": "minutos",
-      "andConnector": "y",
-      "hour_short": "h",
-      "hours_short": "h",
-      "minute_short": "m",
-      "minutes_short": "m"
+      "hour": "hora", "hours": "horas", "minute": "minuto", "minutes": "minutos", "andConnector": "y", "hour_short": "h", "hours_short": "h", "minute_short": "m", "minutes_short": "m"
     },
     "dates": {
-      "today": "Hoy",
-      "tomorrow": "Mañana",
-      "nextPrefix": "Próx.",
-      "monthNames": ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
-      "weekdaysShort": ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+      "today": "Hoy", "tomorrow": "Mañana", "nextPrefix": "Próx.", "monthNames": ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"], "weekdaysShort": ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
+    },
+    "sync": {
+      "title": "Sincronización P2P", "openSettingsButton": "Configurar Sincronización", "statusDefault": "Estado: Desconectado", "statusActive": "Sincronizando (PIN: ...{pinEnd})", "statusActiveTitle": "PIN completo: {pinFull}", "statusPublic": "Sincronización pública (sin PIN)", "settingsTitle": "Ajustes de Sincronización", "settingsDesc": "Ingrese un PIN numérico para sincronizar datos entre disp. PIN vacío = desactivado.", "pinLabel": "PIN Numérico:", "pinPlaceholder": "Ej: 123456", "pinHelper": "Solo números. 6+ dígitos recomendados.", "savePinButton": "Guardar PIN y Sincronizar", "errorPinNumeric": "Error: PIN debe ser numérico.", "pinSavedRestart": "¡PIN guardado! Sincronizando...", "gunMissing": "Error: Falló la carga de la biblioteca de sincronización (GunJS)."
     }
   },
   "de": {
     "languageName": "Deutsch",
     "appTitle": "Pionier-Bericht",
     "dashboard": {
-      "weekHoursLabel": "Std. Woche",
-      "monthTotalLabel": "Monat:",
-      "forecastPrefix": "Fehlen",
-      "forecastSuffixDaysPlural": "T",
-      "forecastSuffixDaysSingular": "T",
-      "goalMet": "Ziel erreicht! 🎉",
-      "goalNotMetMonthEnd": "Ziel nicht erreicht.",
-      "setGoalPrompt": "Monatsziel setzen",
-      "attemptPrefix": "≈",
-      "perDay": "pro",
-      "plannedTripsLabel": "Geplanter Dienst",
-      "monthGoalLabel": "Monatsziel",
-      "upcomingRevisitsLabel": "Nächste Rückbesuche",
-      "noUpcomingRevisits": "Keine geplanten Rückbesuche."
+      "weekHoursLabel": "Std. Woche", "monthTotalLabel": "Monat:", "forecastPrefix": "Fehlen", "forecastSuffixDaysPlural": "T", "forecastSuffixDaysSingular": "T", "goalMet": "Ziel erreicht! 🎉", "goalNotMetMonthEnd": "Ziel nicht erreicht.", "setGoalPrompt": "Monatsziel setzen", "attemptPrefix": "≈", "perDay": "pro", "plannedTripsLabel": "Geplanter Dienst", "monthGoalLabel": "Monatsziel", "upcomingRevisitsLabel": "Nächste Rückbesuche", "noUpcomingRevisits": "Keine geplanten Rückbesuche."
     },
     "recordCard": {
-      "title": "Erfassen",
-      "dateLabel": "Datum",
-      "changeDateButton": "(Ändern)",
-      "timeLabel": "Zeit",
-      "timePlaceholder": "Z.B.: 2:30, 130",
-      "tagLabel": "Art",
-      "notesLabel": "Notizen (max. {maxLength})",
-      "notesPlaceholder": "Notizen...",
-      "saveButton": "Speichern",
-      "updateButton": "Aktualisieren",
-      "autoNoteFromPlan": "[AUTO] {hours} Plan {date}"
+      "title": "Erfassen", "dateLabel": "Datum", "changeDateButton": "(Ändern)", "timeLabel": "Zeit", "timePlaceholder": "Z.B.: 2:30, 130", "tagLabel": "Art", "notesLabel": "Notizen (max. {maxLength})", "notesPlaceholder": "Notizen...", "saveButton": "Speichern", "updateButton": "Aktualisieren", "autoNoteFromPlan": "[AUTO] {hours} Plan {date}"
     },
     "revisitCard": {
-      "title": "Rückbesuch hinzu.",
-      "nameLabel": "Name",
-      "namePlaceholder": "Name od. Ref.",
-      "dateLabel": "Planen (Opt.)",
-      "notesLabel": "Notizen Rückbesuch",
-      "notesPlaceholder": "Details, Thema...",
-      "addButton": "Hinzufügen",
-      "clearButton": "Leeren",
-      "pendingListTitle": "Offene Rückbesuche",
-      "listPlaceholderNoPending": "Keine offenen Rückbesuche.",
-      "scheduledForLabel": "Geplant für",
-      "markCompleteButton": "Abschließen",
-      "noNotes": "Keine Notizen"
+      "title": "Rückbesuch hinzu.", "nameLabel": "Name", "namePlaceholder": "Name od. Ref.", "dateLabel": "Planen (Opt.)", "notesLabel": "Notizen Rückbesuch", "notesPlaceholder": "Details, Thema...", "addButton": "Hinzufügen", "updateButton": "Aktualisieren Rückbesuch", "clearButton": "Leeren", "pendingListTitle": "Offene Rückbesuche", "listPlaceholderNoPending": "Keine offenen Rückbesuche.", "scheduledForLabel": "Geplant für", "markCompleteButton": "Abschließen", "noNotes": "Keine Notizen"
     },
     "planCard": {
-      "title": "Stunden planen",
-      "dateLabel": "Zuk. Datum",
-      "hoursLabel": "Gepl. Std (HH:MM)",
-      "hoursPlaceholder": "Z.B.: 3:00, 130",
-      "saveButton": "Plan speichern",
-      "clearButton": "Leeren",
-      "listTitle": "Pläne",
-      "listPlaceholderNoFuture": "Keine zukünftigen Pläne.",
-      "listPlaceholderNoPastOrFuture": "Keine Pläne.",
-      "pastDateSuffix": "(Vergangen)",
-      "markDoneButton": "Erledigt"
+      "title": "Stunden planen", "dateLabel": "Zuk. Datum", "hoursLabel": "Gepl. Std (HH:MM)", "hoursPlaceholder": "Z.B.: 3:00, 130", "saveButton": "Plan speichern", "updateButton": "Aktualisieren Plan", "clearButton": "Leeren", "listTitle": "Pläne", "listPlaceholderNoFuture": "Keine zukünftigen Pläne.", "listPlaceholderNoPastOrFuture": "Keine Pläne.", "pastDateSuffix": "(Vergangen)", "markDoneButton": "Erledigt"
     },
     "statsCard": {
-      "title": "Monatsübersicht",
-      "goalLabel": "Ziel (Std)",
-      "setGoalButton": "Ziel setzen",
-      "monthHoursLabel": "Std. Monat",
-      "goalProgressLabel": "Zielfortschritt",
-      "avgHoursDayLabel": "Ø / Tag",
-      "daysActiveLabel": "Aktive Tage"
+      "title": "Monatsübersicht", "goalLabel": "Ziel (Std)", "setGoalButton": "Ziel setzen", "monthHoursLabel": "Std. Monat", "goalProgressLabel": "Zielfortschritt", "avgHoursDayLabel": "Ø / Tag", "daysActiveLabel": "Aktive Tage"
     },
     "chartsCard": {
-      "title": "Std nach Art",
-      "monthSelectorLabel": "Monat anz.",
-      "totalHoursLabel": "Gesamt Monat",
-      "percentageDistributionTitle": "% Verteilung",
-      "noDataOption": "Keine Daten",
-      "currentMonthSuffix": "(Aktuell)",
-      "selectMonthMessage": "Monat wählen.",
-      "noRecordsInMonthMessage": "Keine Einträge in {month}.",
-      "renderErrorMessage": "Grafikfehler.",
-      "noDataYetMessage": "Std erfassen."
+      "title": "Std nach Art", "monthSelectorLabel": "Monat anz.", "totalHoursLabel": "Gesamt Monat", "percentageDistributionTitle": "% Verteilung", "noDataOption": "Keine Daten", "currentMonthSuffix": "(Aktuell)", "selectMonthMessage": "Monat wählen.", "noRecordsInMonthMessage": "Keine Einträge in {month}.", "renderErrorMessage": "Grafikfehler.", "noDataYetMessage": "Std erfassen."
     },
     "historyCard": {
-      "title": "Verlauf",
-      "searchPlaceholder": "Suchen...",
-      "resultsCountSingular": "{count} Ergebnis",
-      "resultsCountPlural": "{count} Ergebnisse",
-      "resultsCountForTermSingular": "{count} Erg. für \"{term}\"",
-      "resultsCountForTermPlural": "{count} Erg. für \"{term}\"",
-      "showingLastMonths": "Letzte {limit} Monate",
-      "noRecordsLastMonths": "Keine Eintr. {limit} Mon.",
-      "listPlaceholderNoRecords": "Keine Einträge.",
-      "listPlaceholderNoSearchResults": "Keine Suchergebnisse.",
-      "listPlaceholderNoRecent": "Keine neuen (Suche nutzen).",
-      "noNotes": "Keine Notizen",
-      "revisitCompletedTag": "Rückbesuch",
-      "revisitCompletedNotePrefix": "Rückbesuch:",
-      "revisitOriginalNotes": "Orig. Notizen",
-      "originalNotesPreviewSuffix": "...",
-      "revisitCompletedMarker": "ABGESCHLOSSEN"
+      "title": "Verlauf", "searchPlaceholder": "Suchen...", "resultsCountSingular": "{count} Ergebnis", "resultsCountPlural": "{count} Ergebnisse", "resultsCountForTermSingular": "{count} Erg. für \"{term}\"", "resultsCountForTermPlural": "{count} Erg. für \"{term}\"", "showingLastMonths": "Letzte {limit} Monate", "noRecordsLastMonths": "Keine Eintr. {limit} Mon.", "listPlaceholderNoRecords": "Keine Einträge.", "listPlaceholderNoSearchResults": "Keine Suchergebnisse.", "listPlaceholderNoRecent": "Keine neuen (Suche nutzen).", "noNotes": "Keine Notizen", "revisitCompletedTag": "Rückbesuch", "revisitCompletedNotePrefix": "Rückbesuch:", "revisitOriginalNotes": "Orig. Notizen", "originalNotesPreviewSuffix": "...", "revisitCompletedMarker": "ABGESCHLOSSEN"
     },
     "settingsCard": {
-      "title": "Einstellungen",
-      "dataManagementTitle": "Datenverwaltung",
-      "importButton": "Daten importieren",
-      "exportButton": "Daten exportieren",
-      "lastExportLabel": "Letzter Export:",
-      "languageLabel": "Sprache"
+      "title": "Einstellungen", "dataManagementTitle": "Datenverwaltung", "importButton": "Daten importieren", "exportButton": "Daten exportieren", "lastExportLabel": "Letzter Export:", "languageLabel": "Sprache"
     },
     "dialog": {
-      "confirmDeleteRecordMessage": "Bericht löschen? (Unumkehrbar)",
-      "confirmDeletePlanMessage": "Plan löschen?",
-      "confirmDeleteRevisitMessage": "Rückbesuch löschen?",
-      "confirmImportMessage": "Dies ersetzt ALLE aktuellen Daten durch die Daten aus der Datei. Fortfahren?",
-      "confirmButton": "Bestätigen",
-      "cancelButton": "Abbrechen"
+      "confirmDeleteRecordMessage": "Bericht löschen? (Unumkehrbar)", "confirmDeletePlanMessage": "Plan löschen?", "confirmDeleteRevisitMessage": "Rückbesuch löschen?", "confirmImportMessage": "Dies ersetzt ALLE aktuellen Daten durch die Daten aus der Datei. Fortfahren?", "confirmButton": "Bestätigen", "cancelButton": "Abbrechen"
     },
     "feedback": {
-      "saveError": "Speichern fehlgeschl.",
-      "loadError": "Ladefehler.",
-      "goalSetSuccess": "Ziel festgelegt!",
-      "invalidTimeFormat": "Ungült. Zeit (z.B.: 2:30, 45).",
-      "invalidDate": "Ungült. Datum.",
-      "recordSavedSuccess": "Bericht gespeichert.",
-      "recordDeletedSuccess": "Bericht gelöscht.",
-      "planNotFound": "Plan nicht gefunden.",
-      "planMarkedDoneSuccess": "Plan erfasst.",
-      "planSavedSuccess": "Plan gespeichert.",
-      "planDatePastError": "Datum muss zukünftig sein.",
-      "planFormInvalid": "Datum/Std ungültig (>0).",
-      "planDeletedSuccess": "Plan gelöscht.",
-      "goalUpdateSuccess": "Ziel aktualisiert.",
-      "invalidGoalValue": "Ungült. Ziel (>0).",
-      "notesLengthLimit": "Limit {maxLength} Zeich.",
-      "revisitNameRequired": "Name (Rückbesuch) fehlt.",
-      "revisitSavedSuccess": "Rückbesuch gespeichert.",
-      "revisitNotFound": "Rückbesuch nicht gefund.",
-      "revisitMarkedCompleteSuccess": "Rückbesuch abgeschlossen.",
-      "revisitDeletedSuccess": "Rückbesuch gelöscht.",
-      "exportSuccess": "Daten erfolgreich exportiert!",
-      "exportError": "Datenexport fehlgeschlagen.",
-      "importSuccess": "Daten erfolgreich importiert!",
-      "importProcessError": "Fehler beim Verarbeiten der importierten Daten.",
-      "importErrorInvalidFile": "Ungültige oder beschädigte Datei.",
-      "importErrorReadFile": "Fehler beim Lesen der Datei.",
-      "languageChanged": "Sprache geändert zu {lang}."
+      "saveError": "Speichern fehlgeschl.", "loadError": "Ladefehler.", "goalSetSuccess": "Ziel festgelegt!", "invalidTimeFormat": "Ungült. Zeit (z.B.: 2:30, 45).", "invalidDate": "Ungült. Datum.", "recordSavedSuccess": "Bericht gespeichert.", "recordDeletedSuccess": "Bericht gelöscht.", "planNotFound": "Plan nicht gefunden.", "planMarkedDoneSuccess": "Plan erfasst.", "planSavedSuccess": "Plan gespeichert.", "planDatePastError": "Datum muss zukünftig sein.", "planFormInvalid": "Datum/Std ungültig (>0).", "planDeletedSuccess": "Plan gelöscht.", "goalUpdateSuccess": "Ziel aktualisiert.", "invalidGoalValue": "Ungült. Ziel (>0).", "notesLengthLimit": "Limit {maxLength} Zeich.", "revisitNameRequired": "Name (Rückbesuch) fehlt.", "revisitSavedSuccess": "Rückbesuch gespeichert.", "revisitNotFound": "Rückbesuch nicht gefund.", "revisitMarkedCompleteSuccess": "Rückbesuch abgeschlossen.", "revisitDeletedSuccess": "Rückbesuch gelöscht.", "exportSuccess": "Daten erfolgreich exportiert!", "exportError": "Datenexport fehlgeschlagen.", "importSuccess": "Daten erfolgreich importiert!", "importProcessError": "Fehler beim Verarbeiten der importierten Daten.", "importErrorInvalidFile": "Ungültige oder beschädigte Datei.", "importErrorReadFile": "Fehler beim Lesen der Datei.", "languageChanged": "Sprache geändert zu {lang}.", "syncError": "Sync-Fehler: {details}"
     },
     "common": {
-      "editButton": "Bearbeiten",
-      "deleteButton": "Löschen",
-      "loading": "Lädt...",
-      "never": "Nie",
-      "invalidDate": "Ungültiges Datum"
+      "editButton": "Bearbeiten", "deleteButton": "Löschen", "saveButton": "Speichern", "updateButton": "Aktualisieren", "clearButton": "Leeren", "loading": "Lädt...", "never": "Nie", "invalidDate": "Ungültiges Datum", "noTag": "Ohne Art", "noNotes": "Keine Notizen"
     },
     "tags": {
-      "houseToHouse": "Haus zu Haus",
-      "cart": "Trolley",
-      "letters": "Briefe",
-      "informalWitnessing": "Informell",
-      "other": "Anderes",
-      "noTag": "Ohne Art"
+      "houseToHouse": "Haus zu Haus", "cart": "Trolley", "letters": "Briefe", "informalWitnessing": "Informell", "other": "Anderes"
     },
     "units": {
-      "hour": "Stunde",
-      "hours": "Stunden",
-      "minute": "Minute",
-      "minutes": "Minuten",
-      "andConnector": "und",
-      "hour_short": "Std",
-      "hours_short": "Std",
-      "minute_short": "Min",
-      "minutes_short": "Min"
+      "hour": "Stunde", "hours": "Stunden", "minute": "Minute", "minutes": "Minuten", "andConnector": "und", "hour_short": "Std", "hours_short": "Std", "minute_short": "Min", "minutes_short": "Min"
     },
     "dates": {
-      "today": "Heute",
-      "tomorrow": "Morgen",
-      "nextPrefix": "Nächst.",
-      "monthNames": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
-      "weekdaysShort": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+      "today": "Heute", "tomorrow": "Morgen", "nextPrefix": "Nächst.", "monthNames": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"], "weekdaysShort": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+    },
+    "sync": {
+      "title": "P2P-Synchronisation", "openSettingsButton": "Sync einrichten", "statusDefault": "Status: Nicht verbunden", "statusActive": "Synchronisiert (PIN: ...{pinEnd})", "statusActiveTitle": "Vollst. PIN: {pinFull}", "statusPublic": "Öffentl. Sync (kein PIN)", "settingsTitle": "Sync-Einstellungen", "settingsDesc": "Numerischen PIN eingeben, um Daten zu synchronisieren. Leer lassen deaktiviert Sync.", "pinLabel": "Numerischer PIN:", "pinPlaceholder": "Z.B. 123456", "pinHelper": "Nur Zahlen. 6+ Ziffern empfohlen.", "savePinButton": "PIN speichern & Sync", "errorPinNumeric": "Fehler: PIN muss numerisch sein.", "pinSavedRestart": "PIN gespeichert! Synchronisiere...", "gunMissing": "Fehler: Sync-Bibliothek (GunJS) Ladefehler."
     }
   },
   "fr": {
     "languageName": "Français",
     "appTitle": "Rapport Pionnier",
     "dashboard": {
-      "weekHoursLabel": "Heures Semaine",
-      "monthTotalLabel": "Mois :",
-      "forecastPrefix": "Reste",
-      "forecastSuffixDaysPlural": "j",
-      "forecastSuffixDaysSingular": "j",
-      "goalMet": "Objectif atteint ! 🎉",
-      "goalNotMetMonthEnd": "Objectif non atteint.",
-      "setGoalPrompt": "Définir Obj. Mensuel",
-      "attemptPrefix": "Essayer ≈",
-      "perDay": "par",
-      "plannedTripsLabel": "Prédication Plan.",
-      "monthGoalLabel": "Objectif Mois",
-      "upcomingRevisitsLabel": "Prochaines N. Visites",
-      "noUpcomingRevisits": "Pas de N.V. planifiées."
+      "weekHoursLabel": "Heures Semaine", "monthTotalLabel": "Mois :", "forecastPrefix": "Reste", "forecastSuffixDaysPlural": "j", "forecastSuffixDaysSingular": "j", "goalMet": "Objectif atteint ! 🎉", "goalNotMetMonthEnd": "Objectif non atteint.", "setGoalPrompt": "Définir Obj. Mensuel", "attemptPrefix": "Essayer ≈", "perDay": "par", "plannedTripsLabel": "Prédication Plan.", "monthGoalLabel": "Objectif Mois", "upcomingRevisitsLabel": "Prochaines N. Visites", "noUpcomingRevisits": "Pas de N.V. planifiées."
     },
     "recordCard": {
-      "title": "Enregistrer",
-      "dateLabel": "Date",
-      "changeDateButton": "(Changer)",
-      "timeLabel": "Temps",
-      "timePlaceholder": "Ex : 2:30, 130",
-      "tagLabel": "Type",
-      "notesLabel": "Notes (max {maxLength})",
-      "notesPlaceholder": "Notes...",
-      "saveButton": "Sauver",
-      "updateButton": "MàJ",
-      "autoNoteFromPlan": "[AUTO] {hours} plan {date}"
+      "title": "Enregistrer", "dateLabel": "Date", "changeDateButton": "(Changer)", "timeLabel": "Temps", "timePlaceholder": "Ex : 2:30, 130", "tagLabel": "Type", "notesLabel": "Notes (max {maxLength})", "notesPlaceholder": "Notes...", "saveButton": "Sauver", "updateButton": "MàJ", "autoNoteFromPlan": "[AUTO] {hours} plan {date}"
     },
     "revisitCard": {
-      "title": "Ajouter N. Visite",
-      "nameLabel": "Nom",
-      "namePlaceholder": "Nom ou réf.",
-      "dateLabel": "Planifier (Opt.)",
-      "notesLabel": "Notes N. Visite",
-      "notesPlaceholder": "Détails, sujet...",
-      "addButton": "Ajouter",
-      "clearButton": "Effacer",
-      "pendingListTitle": "N. Visites Pend.",
-      "listPlaceholderNoPending": "Aucune N.V. pendante.",
-      "scheduledForLabel": "Planifié",
-      "markCompleteButton": "Terminer",
-      "noNotes": "Pas de notes"
+      "title": "Ajouter N. Visite", "nameLabel": "Nom", "namePlaceholder": "Nom ou réf.", "dateLabel": "Planifier (Opt.)", "notesLabel": "Notes N. Visite", "notesPlaceholder": "Détails, sujet...", "addButton": "Ajouter", "updateButton": "Actualiser N. Visite", "clearButton": "Effacer", "pendingListTitle": "N. Visites Pend.", "listPlaceholderNoPending": "Aucune N.V. pendante.", "scheduledForLabel": "Planifié", "markCompleteButton": "Terminer", "noNotes": "Pas de notes"
     },
     "planCard": {
-      "title": "Planifier Heures",
-      "dateLabel": "Date Future",
-      "hoursLabel": "Heures Plan. (HH:MM)",
-      "hoursPlaceholder": "Ex : 3:00, 130",
-      "saveButton": "Sauver Plan",
-      "clearButton": "Effacer",
-      "listTitle": "Plans",
-      "listPlaceholderNoFuture": "Aucun plan futur.",
-      "listPlaceholderNoPastOrFuture": "Aucun plan.",
-      "pastDateSuffix": "(Passé)",
-      "markDoneButton": "Fait"
+      "title": "Planifier Heures", "dateLabel": "Date Future", "hoursLabel": "Heures Plan. (HH:MM)", "hoursPlaceholder": "Ex : 3:00, 130", "saveButton": "Sauver Plan", "updateButton": "Actualiser Plan", "clearButton": "Effacer", "listTitle": "Plans", "listPlaceholderNoFuture": "Aucun plan futur.", "listPlaceholderNoPastOrFuture": "Aucun plan.", "pastDateSuffix": "(Passé)", "markDoneButton": "Fait"
     },
     "statsCard": {
-      "title": "Résumé Mensuel",
-      "goalLabel": "Objectif (Heures)",
-      "setGoalButton": "Définir Objectif",
-      "monthHoursLabel": "Heures Mois",
-      "goalProgressLabel": "Progression Obj.",
-      "avgHoursDayLabel": "Moy / Jour",
-      "daysActiveLabel": "Jours Actifs"
+      "title": "Résumé Mensuel", "goalLabel": "Objectif (Heures)", "setGoalButton": "Définir Objectif", "monthHoursLabel": "Heures Mois", "goalProgressLabel": "Progression Obj.", "avgHoursDayLabel": "Moy / Jour", "daysActiveLabel": "Jours Actifs"
     },
     "chartsCard": {
-      "title": "Heures par Type",
-      "monthSelectorLabel": "Voir Mois",
-      "totalHoursLabel": "Total Mois",
-      "percentageDistributionTitle": "% Distribution",
-      "noDataOption": "Pas de données",
-      "currentMonthSuffix": "(Actuel)",
-      "selectMonthMessage": "Choisir mois.",
-      "noRecordsInMonthMessage": "Pas d'enreg. en {month}.",
-      "renderErrorMessage": "Erreur graph.",
-      "noDataYetMessage": "Enregistrer heures."
+      "title": "Heures par Type", "monthSelectorLabel": "Voir Mois", "totalHoursLabel": "Total Mois", "percentageDistributionTitle": "% Distribution", "noDataOption": "Pas de données", "currentMonthSuffix": "(Actuel)", "selectMonthMessage": "Choisir mois.", "noRecordsInMonthMessage": "Pas d'enreg. en {month}.", "renderErrorMessage": "Erreur graph.", "noDataYetMessage": "Enregistrer heures."
     },
     "historyCard": {
-      "title": "Historique",
-      "searchPlaceholder": "Rechercher...",
-      "resultsCountSingular": "{count} résultat",
-      "resultsCountPlural": "{count} résultats",
-      "resultsCountForTermSingular": "{count} rés. p/ \"{term}\"",
-      "resultsCountForTermPlural": "{count} rés. p/ \"{term}\"",
-      "showingLastMonths": "{limit} derniers mois",
-      "noRecordsLastMonths": "Pas d'enreg. {limit} der. mois",
-      "listPlaceholderNoRecords": "Aucun enregistrement.",
-      "listPlaceholderNoSearchResults": "Pas de résultats.",
-      "listPlaceholderNoRecent": "Pas de récents (rech.).",
-      "noNotes": "Pas de notes",
-      "revisitCompletedTag": "N. Visite",
-      "revisitCompletedNotePrefix": "N. Visite:",
-      "revisitOriginalNotes": "Notes orig.",
-      "originalNotesPreviewSuffix": "...",
-      "revisitCompletedMarker": "TERMINÉE"
+      "title": "Historique", "searchPlaceholder": "Rechercher...", "resultsCountSingular": "{count} résultat", "resultsCountPlural": "{count} résultats", "resultsCountForTermSingular": "{count} rés. p/ \"{term}\"", "resultsCountForTermPlural": "{count} rés. p/ \"{term}\"", "showingLastMonths": "{limit} derniers mois", "noRecordsLastMonths": "Pas d'enreg. {limit} der. mois", "listPlaceholderNoRecords": "Aucun enregistrement.", "listPlaceholderNoSearchResults": "Pas de résultats.", "listPlaceholderNoRecent": "Pas de récents (rech.).", "noNotes": "Pas de notes", "revisitCompletedTag": "N. Visite", "revisitCompletedNotePrefix": "N. Visite:", "revisitOriginalNotes": "Notes orig.", "originalNotesPreviewSuffix": "...", "revisitCompletedMarker": "TERMINÉE"
     },
     "settingsCard": {
-      "title": "Paramètres",
-      "dataManagementTitle": "Gestion des Données",
-      "importButton": "Importer Données",
-      "exportButton": "Exporter Données",
-      "lastExportLabel": "Dernière exportation :",
-      "languageLabel": "Langue"
+      "title": "Paramètres", "dataManagementTitle": "Gestion des Données", "importButton": "Importer Données", "exportButton": "Exporter Données", "lastExportLabel": "Dernière exportation :", "languageLabel": "Langue"
     },
     "dialog": {
-      "confirmDeleteRecordMessage": "Supprimer rapport ? (Irréversible)",
-      "confirmDeletePlanMessage": "Supprimer plan ?",
-      "confirmDeleteRevisitMessage": "Supprimer N. Visite ?",
-      "confirmImportMessage": "Ceci remplacera TOUTES les données actuelles par les données du fichier. Continuer ?",
-      "confirmButton": "Confirmer",
-      "cancelButton": "Annuler"
+      "confirmDeleteRecordMessage": "Supprimer rapport ? (Irréversible)", "confirmDeletePlanMessage": "Supprimer plan ?", "confirmDeleteRevisitMessage": "Supprimer N. Visite ?", "confirmImportMessage": "Ceci remplacera TOUTES les données actuelles par les données du fichier. Continuer ?", "confirmButton": "Confirmer", "cancelButton": "Annuler"
     },
     "feedback": {
-      "saveError": "Sauvegarde échouée.",
-      "loadError": "Erreur chargement.",
-      "goalSetSuccess": "Objectif défini !",
-      "invalidTimeFormat": "Temps invalide (ex: 2:30, 45).",
-      "invalidDate": "Date invalide.",
-      "recordSavedSuccess": "Rapport enregistré.",
-      "recordDeletedSuccess": "Rapport supprimé.",
-      "planNotFound": "Plan non trouvé.",
-      "planMarkedDoneSuccess": "Plan enregistré.",
-      "planSavedSuccess": "Plan sauvegardé.",
-      "planDatePastError": "Date doit être future.",
-      "planFormInvalid": "Date/Heures invalides (>0).",
-      "planDeletedSuccess": "Plan supprimé.",
-      "goalUpdateSuccess": "Objectif mis à jour.",
-      "invalidGoalValue": "Objectif invalide (>0).",
-      "notesLengthLimit": "Limite {maxLength} car.",
-      "revisitNameRequired": "Nom N. Visite requis.",
-      "revisitSavedSuccess": "N. Visite enregistrée.",
-      "revisitNotFound": "N. Visite non trouvée.",
-      "revisitMarkedCompleteSuccess": "N. Visite terminée.",
-      "revisitDeletedSuccess": "N. Visite supprimée.",
-      "exportSuccess": "Données exportées avec succès !",
-      "exportError": "Échec de l'exportation des données.",
-      "importSuccess": "Données importées avec succès !",
-      "importProcessError": "Erreur lors du traitement des données importées.",
-      "importErrorInvalidFile": "Fichier invalide ou corrompu.",
-      "importErrorReadFile": "Erreur lors de la lecture du fichier.",
-      "languageChanged": "Langue changée en {lang}."
+      "saveError": "Sauvegarde échouée.", "loadError": "Erreur chargement.", "goalSetSuccess": "Objectif défini !", "invalidTimeFormat": "Temps invalide (ex: 2:30, 45).", "invalidDate": "Date invalide.", "recordSavedSuccess": "Rapport enregistré.", "recordDeletedSuccess": "Rapport supprimé.", "planNotFound": "Plan non trouvé.", "planMarkedDoneSuccess": "Plan enregistré.", "planSavedSuccess": "Plan sauvegardé.", "planDatePastError": "Date doit être future.", "planFormInvalid": "Date/Heures invalides (>0).", "planDeletedSuccess": "Plan supprimé.", "goalUpdateSuccess": "Objectif mis à jour.", "invalidGoalValue": "Objectif invalide (>0).", "notesLengthLimit": "Limite {maxLength} car.", "revisitNameRequired": "Nom N. Visite requis.", "revisitSavedSuccess": "N. Visite enregistrée.", "revisitNotFound": "N. Visite non trouvée.", "revisitMarkedCompleteSuccess": "N. Visite terminée.", "revisitDeletedSuccess": "N. Visite supprimée.", "exportSuccess": "Données exportées avec succès !", "exportError": "Échec de l'exportation des données.", "importSuccess": "Données importées avec succès !", "importProcessError": "Erreur lors du traitement des données importées.", "importErrorInvalidFile": "Fichier invalide ou corrompu.", "importErrorReadFile": "Erreur lors de la lecture du fichier.", "languageChanged": "Langue changée en {lang}.", "syncError": "Erreur de synchro: {details}"
     },
     "common": {
-      "editButton": "Modifier",
-      "deleteButton": "Suppr.",
-      "loading": "Chargement...",
-      "never": "Jamais",
-      "invalidDate": "Date Invalide"
+      "editButton": "Modifier", "deleteButton": "Suppr.", "saveButton": "Sauver", "updateButton": "MàJ", "clearButton": "Effacer", "loading": "Chargement...", "never": "Jamais", "invalidDate": "Date Invalide", "noTag": "Sans Type", "noNotes": "Pas de notes"
     },
     "tags": {
-      "houseToHouse": "Porte à porte",
-      "cart": "Présentoir",
-      "letters": "Lettres",
-      "informalWitnessing": "Informel",
-      "other": "Autre",
-      "noTag": "Sans Type"
+      "houseToHouse": "Porte à porte", "cart": "Présentoir", "letters": "Lettres", "informalWitnessing": "Informel", "other": "Autre"
     },
     "units": {
-      "hour": "heure",
-      "hours": "heures",
-      "minute": "minute",
-      "minutes": "minutes",
-      "andConnector": "et",
-      "hour_short": "h",
-      "hours_short": "h",
-      "minute_short": "min",
-      "minutes_short": "min"
+      "hour": "heure", "hours": "heures", "minute": "minute", "minutes": "minutes", "andConnector": "et", "hour_short": "h", "hours_short": "h", "minute_short": "min", "minutes_short": "min"
     },
     "dates": {
-      "today": "Auj.",
-      "tomorrow": "Demain",
-      "nextPrefix": "Proch.",
-      "monthNames": ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
-      "weekdaysShort": ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
+      "today": "Auj.", "tomorrow": "Demain", "nextPrefix": "Proch.", "monthNames": ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."], "weekdaysShort": ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
+    },
+    "sync": {
+      "title": "Synchronisation P2P", "openSettingsButton": "Configurer Synchro", "statusDefault": "Statut: Déconnecté", "statusActive": "Synchro (PIN: ...{pinEnd})", "statusActiveTitle": "PIN complet: {pinFull}", "statusPublic": "Synchro publique (sans PIN)", "settingsTitle": "Paramètres de Synchro", "settingsDesc": "Entrez un PIN numérique pour synchro. les données. PIN vide = désactivé.", "pinLabel": "PIN Numérique:", "pinPlaceholder": "Ex: 123456", "pinHelper": "Nombres seulement. 6+ chiffres recommandés.", "savePinButton": "Sauver PIN & Synchro", "errorPinNumeric": "Erreur: PIN doit être numérique.", "pinSavedRestart": "PIN sauvé ! Synchronisation...", "gunMissing": "Erreur: Échec chargement bibliothèque de synchro (GunJS)."
+    }
+  },
+  "it": {
+    "languageName": "Italiano",
+    "appTitle": "Registro Pioniere",
+    "dashboard": {
+      "weekHoursLabel": "Ore Sett.", "monthTotalLabel": "Mese:", "forecastPrefix": "Mancano", "forecastSuffixDaysPlural": "g", "forecastSuffixDaysSingular": "g", "goalMet": "Obiettivo Raggiunto! 🎉", "goalNotMetMonthEnd": "Obiettivo non raggiunto.", "setGoalPrompt": "Imposta Obiettivo Mensile", "attemptPrefix": "Prova ≈", "perDay": "al", "plannedTripsLabel": "Servizio Pianificato", "monthGoalLabel": "Obiettivo Mese", "upcomingRevisitsLabel": "Prossime Visite", "noUpcomingRevisits": "Nessuna visita programmata."
+    },
+    "recordCard": {
+      "title": "Registra", "dateLabel": "Data", "changeDateButton": "(Cambia)", "timeLabel": "Tempo", "timePlaceholder": "Es: 2:30, 130", "tagLabel": "Modalità", "notesLabel": "Note (max {maxLength})", "notesPlaceholder": "Note...", "saveButton": "Salva", "updateButton": "Aggiorna", "autoNoteFromPlan": "[AUTO] {hours} piano {date}"
+    },
+    "revisitCard": {
+      "title": "Aggiungi Visita", "nameLabel": "Nome", "namePlaceholder": "Nome o rif.", "dateLabel": "Programma (Opz.)", "notesLabel": "Note Visita", "notesPlaceholder": "Dettagli, sogg...", "addButton": "Aggiungi", "updateButton": "Aggiorna Visita", "clearButton": "Pulisci", "pendingListTitle": "Visite Pendenti", "listPlaceholderNoPending": "Nessuna visita pendente.", "scheduledForLabel": "Programmata", "markCompleteButton": "Completa", "noNotes": "Nessuna nota"
+    },
+    "planCard": {
+      "title": "Pianifica Ore", "dateLabel": "Data Futura", "hoursLabel": "Ore Pian. (HH:MM)", "hoursPlaceholder": "Es: 3:00, 130", "saveButton": "Salva Piano", "updateButton": "Aggiorna Piano", "clearButton": "Pulisci", "listTitle": "Piani", "listPlaceholderNoFuture": "Nessun piano futuro.", "listPlaceholderNoPastOrFuture": "Nessun piano.", "pastDateSuffix": "(Passato)", "markDoneButton": "Fatto"
+    },
+    "statsCard": {
+      "title": "Riepilogo Mensile", "goalLabel": "Obiettivo (Ore)", "setGoalButton": "Imposta Obiettivo", "monthHoursLabel": "Ore Mese", "goalProgressLabel": "Progresso Obiettivo", "avgHoursDayLabel": "Media / Giorno", "daysActiveLabel": "Giorni Attivi"
+    },
+    "chartsCard": {
+      "title": "Ore per Tipo", "monthSelectorLabel": "Vedi Mese", "totalHoursLabel": "Totale Mese", "percentageDistributionTitle": "% Distribuzione", "noDataOption": "Nessun dato", "currentMonthSuffix": "(Corrente)", "selectMonthMessage": "Selez. mese.", "noRecordsInMonthMessage": "Nessun reg. in {month}.", "renderErrorMessage": "Errore grafico.", "noDataYetMessage": "Registra ore."
+    },
+    "historyCard": {
+      "title": "Cronologia", "searchPlaceholder": "Cerca...", "resultsCountSingular": "{count} risultato", "resultsCountPlural": "{count} risultati", "resultsCountForTermSingular": "{count} ris. per \"{term}\"", "resultsCountForTermPlural": "{count} ris. per \"{term}\"", "showingLastMonths": "Ultimi {limit} mesi", "noRecordsLastMonths": "Nessun reg. ult. {limit} mesi", "listPlaceholderNoRecords": "Nessun registro.", "listPlaceholderNoSearchResults": "Nessun risultato.", "listPlaceholderNoRecent": "Nessun recente (usa cerca).", "noNotes": "Nessuna nota", "revisitCompletedTag": "Visita", "revisitCompletedNotePrefix": "Visita:", "revisitOriginalNotes": "Note orig.", "originalNotesPreviewSuffix": "...", "revisitCompletedMarker": "COMPLETATA"
+    },
+    "settingsCard": {
+      "title": "Impostazioni", "dataManagementTitle": "Gestione Dati", "importButton": "Importa Dati", "exportButton": "Esporta Dati", "lastExportLabel": "Ultima esportazione:", "languageLabel": "Lingua"
+    },
+    "dialog": {
+      "confirmDeleteRecordMessage": "Elimina record? (Irreversibile)", "confirmDeletePlanMessage": "Elimina piano?", "confirmDeleteRevisitMessage": "Elimina visita?", "confirmImportMessage": "Questo SOSTITUIRÀ TUTTI i dati attuali con quelli del file. Continuare?", "confirmButton": "Conferma", "cancelButton": "Annulla"
+    },
+    "feedback": {
+      "saveError": "Salvataggio fallito.", "loadError": "Errore caricamento.", "goalSetSuccess": "Obiettivo impostato!", "invalidTimeFormat": "Tempo non valido (es: 2:30, 45).", "invalidDate": "Data non valida.", "recordSavedSuccess": "Record salvato.", "recordDeletedSuccess": "Record eliminato.", "planNotFound": "Piano non trovato.", "planMarkedDoneSuccess": "Piano registrato.", "planSavedSuccess": "Piano salvato.", "planDatePastError": "Data deve essere futura.", "planFormInvalid": "Data/Ore non valide (>0).", "planDeletedSuccess": "Piano eliminato.", "goalUpdateSuccess": "Obiettivo aggiornato.", "invalidGoalValue": "Obiettivo non valido (>0).", "notesLengthLimit": "Limite {maxLength} caratt.", "revisitNameRequired": "Nome visita richiesto.", "revisitSavedSuccess": "Visita salvata.", "revisitNotFound": "Visita non trovata.", "revisitMarkedCompleteSuccess": "Visita completata.", "revisitDeletedSuccess": "Visita eliminata.", "exportSuccess": "Dati esportati con successo!", "exportError": "Errore esportazione dati.", "importSuccess": "Dati importati con successo!", "importProcessError": "Errore elaborazione dati importati.", "importErrorInvalidFile": "File non valido o corrotto.", "importErrorReadFile": "Errore lettura file.", "languageChanged": "Lingua cambiata in {lang}.", "syncError": "Errore sincr.: {details}"
+    },
+    "common": {
+      "editButton": "Modifica", "deleteButton": "Elimina", "saveButton": "Salva", "updateButton": "Aggiorna", "clearButton": "Pulisci", "loading": "Caricamento...", "never": "Mai", "invalidDate": "Data non valida", "noTag": "Nessun Tipo", "noNotes": "Nessuna nota"
+    },
+    "tags": {
+      "houseToHouse": "Casa in casa", "cart": "Carello", "letters": "Lettere", "informalWitnessing": "Informale", "other": "Altro"
+    },
+    "units": {
+      "hour": "ora", "hours": "ore", "minute": "minuto", "minutes": "minuti", "andConnector": "e", "hour_short": "o", "hours_short": "o", "minute_short": "m", "minutes_short": "m"
+    },
+    "dates": {
+      "today": "Oggi", "tomorrow": "Domani", "nextPrefix": "Pros.", "monthNames": ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"], "weekdaysShort": ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
+    },
+     "sync": {
+      "title": "Sincronizzazione P2P", "openSettingsButton": "Imposta Sincronizzazione", "statusDefault": "Stato: Disconnesso", "statusActive": "Sincronizz. (PIN: ...{pinEnd})", "statusActiveTitle": "PIN completo: {pinFull}", "statusPublic": "Sincronizz. pubblica (senza PIN)", "settingsTitle": "Impostazioni Sincronizzazione", "settingsDesc": "Inserisci un PIN numerico per sincronizzare i dati. PIN vuoto = disabilitato.", "pinLabel": "PIN Numerico:", "pinPlaceholder": "Es: 123456", "pinHelper": "Solo numeri. Consigliati 6+ cifre.", "savePinButton": "Salva PIN e Sincronizza", "errorPinNumeric": "Errore: PIN deve essere numerico.", "pinSavedRestart": "PIN salvato! Sincronizzazione...", "gunMissing": "Errore: Caricamento libreria sincr. (GunJS) fallito."
     }
   }
 }
