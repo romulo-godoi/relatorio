@@ -198,36 +198,7 @@ function getSyncPin(){return localStorage.getItem(SYNC_PIN_STORAGE_KEY)}
 function setSyncPin(p){const oP=currentSyncPin;if(p&&p.trim()!==''){localStorage.setItem(SYNC_PIN_STORAGE_KEY,p.trim())}else{localStorage.removeItem(SYNC_PIN_STORAGE_KEY)}currentSyncPin=p?p.trim():null;if(oP!==currentSyncPin){clearLocalStorageForPin(oP);console.log("Sync PIN changed, re-evaluating local storage and sync operations.");initializeSyncFramework(!0)}}
 function openSyncSettingsModal(){if(syncPinInput)syncPinInput.value=currentSyncPin||'';if(syncPinStatus)syncPinStatus.textContent='';syncSettingsModal?.classList.add('active')}
 function closeSyncSettingsModal(){syncSettingsModal?.classList.remove('active');if(!currentSyncPin&&!settings.goalHasBeenSet&&!document.querySelector('.dialog-backdrop.visible')){console.log("Sync modal closed, no PIN defined, public goal not set. Prompting.");setTimeout(promptForMonthlyGoal,300)}}
-function saveSyncPinHandler() {
-    const nPIn = syncPinInput?.value.trim();
-    const sPS = syncPinStatus;
-    if (nPIn !== '' && !/^\d+$/.test(nPIn)) {
-        if (sPS) {
-            sPS.textContent = t('sync.errorPinNumeric');
-            sPS.style.color = 'var(--danger-color)';
-        }
-        return;
-    }
-    const oP = currentSyncPin;
-    setSyncPin(nPIn); // This will call initializeSyncFramework(true) internally if PIN changed.
-    if (sPS) {
-        sPS.textContent = t('sync.pinSavedRestart');
-        sPS.style.color = 'var(--success-color)';
-    }
-    updateSyncStatusDisplay();
-    setTimeout(() => {
-        closeSyncSettingsModal(); // Close modal first
-        // The call to initializeSyncFramework(true) inside setSyncPin already handles
-        // data loading and Gun re-initialization if the PIN changed.
-        // The promptForMonthlyGoal logic is now handled within initializeSyncFramework
-        // after a PIN change or on initial load.
-        if (oP === (nPIn || null) && !currentSyncPin && !settings.goalHasBeenSet) {
-           // Case: PIN was empty, saved as empty, and public goal not set
-           // Prompt again if needed (though closeSyncSettingsModal might also cover this)
-           setTimeout(promptForMonthlyGoal, 200);
-        }
-    }, 1500);
-}
+function saveSyncPinHandler(){const nPIn=syncPinInput?.value.trim();const sPS=syncPinStatus;if(nPIn!==''&&!/^\d+$/.test(nPIn)){if(sPS){sPS.textContent=t('sync.errorPinNumeric');sPS.style.color='var(--danger-color)'}return}const oP=currentSyncPin;setSyncPin(nPIn);if(sPS){sPS.textContent=t('sync.pinSavedRestart');sPS.style.color='var(--success-color)'}updateSyncStatusDisplay();setTimeout(()=>{closeSyncSettingsModal();if(oP===(nPIn||null)&&!currentSyncPin&&!settings.goalHasBeenSet){setTimeout(promptForMonthlyGoal,200)}},1500)}
 function selectDOMElements(){appElement=document.getElementById('app');dashboardBox=document.getElementById('dashboard-box');confettiContainer=document.getElementById('confetti-container');dashboardWeekHours=document.getElementById('dashboard-week-hours');dashboardMonthPercentage=document.getElementById('dashboard-month-percentage');dashboardMonthTotal=document.getElementById('dashboard-month-total');dashboardForecast=document.getElementById('dashboard-forecast');dashboardPlannedDatesContainer=document.getElementById('dashboard-planned-dates');dashboardPlanList=document.getElementById('dashboard-plan-list');recordCard=document.getElementById('record-card');recordForm=document.getElementById('record-form');recordIdInput=document.getElementById('record-id');recordDateInput=document.getElementById('record-date');dateLabel=document.getElementById('date-label');displayDate=document.getElementById('display-date');changeDateBtn=document.getElementById('change-date-btn');recordHoursInput=document.getElementById('record-hours');recordTagSelect=document.getElementById('record-tag');recordNotesInput=document.getElementById('record-notes');recordNotesLabel=document.getElementById('record-notes-label');saveRecordBtn=document.getElementById('save-record-btn');planCard=document.getElementById('plan-card');planForm=document.getElementById('plan-form');planIdInput=document.getElementById('plan-id');planDateInput=document.getElementById('plan-date');planHoursInput=document.getElementById('plan-hours');savePlanBtn=document.getElementById('save-plan-btn');clearPlanFormBtn=document.getElementById('clear-plan-form-btn');planningList=document.getElementById('planning-list');planningListPlaceholder=planningList?.querySelector('.placeholder');monthlyGoalInput=document.getElementById('monthly-goal');saveGoalBtn=document.getElementById('save-goal-btn');statsMonthHours=document.getElementById('stats-month-hours');statsMonthGoalProgress=document.getElementById('stats-month-goal-progress');statsMonthProgressBar=document.getElementById('stats-month-progress-bar');statsAvgHoursDay=document.getElementById('stats-avg-hours-day');statsMonthDaysActive=document.getElementById('stats-month-days-active');chartMonthSelector=document.getElementById('chart-month-selector');monthlyHoursChartCtx=document.getElementById('monthlyHoursChart')?.getContext('2d');chartTotalHoursDisplay=document.getElementById('chart-total-hours-display');historyList=document.getElementById('history-list');historySearchInput=document.getElementById('history-search-input');historyListPlaceholder=historyList?.querySelector('.placeholder');showingResultsLabel=document.getElementById('showing-results-label');confirmationDialog=document.getElementById('confirmation-dialog');dialogMessage=document.getElementById('dialog-message');dialogConfirmBtn=document.getElementById('dialog-confirm-btn');dialogCancelBtn=document.getElementById('dialog-cancel-btn');revisitCard=document.getElementById('revisit-card');revisitForm=document.getElementById('revisit-form');revisitIdInput=document.getElementById('revisit-id');revisitNameInput=document.getElementById('revisit-name');revisitDateInput=document.getElementById('revisit-date');revisitNotesInput=document.getElementById('revisit-notes');saveRevisitBtn=document.getElementById('save-revisit-btn');clearRevisitFormBtn=document.getElementById('clear-revisit-form-btn');revisitListContainer=document.getElementById('revisit-list-container');revisitList=document.getElementById('revisit-list');revisitListPlaceholder=revisitList?.querySelector('.placeholder');dashboardRevisitsSection=document.getElementById('dashboard-revisits-section');dashboardRevisitList=document.getElementById('dashboard-revisit-list');plansSection=document.querySelector('.plans-section');openSyncSettingsBtn=document.getElementById('open-sync-settings-btn');syncSettingsModal=document.getElementById('sync-settings-modal');closeSyncSettingsBtn=document.getElementById('close-sync-settings-btn');syncPinInput=document.getElementById('sync-pin-input');saveSyncPinBtn=document.getElementById('save-sync-pin-btn');syncPinStatus=document.getElementById('sync-pin-status');syncStatusDisplay=document.getElementById('sync-status-display');try{computedStyles=getComputedStyle(document.body)}catch(e){computedStyles={}}textColor=computedStyles.getPropertyValue?.('--text-color')?.trim()||'#fff';textMutedColor=computedStyles.getPropertyValue?.('--text-color-secondary')?.trim()||'#aaa';tooltipBgColor=computedStyles.getPropertyValue?.('--card-bg')?.trim()||'#1c1c1e';chartColors=['#0A84FF','#30D158','#FF9F0A','#AF52DE','#5E5CE6','#FF69B4','#32CD32','#FFD700'].map((f,i)=>computedStyles.getPropertyValue?.(`--chart-color-${i+1}`)?.trim()||f)}
 function getCurrentDateString(){const t=new Date;return`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`}
 function parseLocalDate(dS){if(!dS||!/^\d{4}-\d{2}-\d{2}$/.test(dS))return new Date(NaN);const[y,m,d]=dS.split('-').map(Number);return new Date(y,m-1,d)}
@@ -241,72 +212,154 @@ function formatDecimalToTimeInput(d){if(isNaN(d)||d<=0)return"";const t=Math.rou
 function parseTimeInputToDecimal(s){if(!s)return 0;const t=s.trim();if(!t)return 0;const cM=t.match(/^(\d{1,3}):(\d{1,2})$/);if(cM){const h=parseInt(cM[1],10),m=parseInt(cM[2],10);if(!isNaN(h)&&!isNaN(m)&&m>=0&&m<60&&h>=0)return h+(m/60)}const nM=t.match(/^(\d+)$/);if(nM){const str=nM[1],v=parseInt(str,10);if(isNaN(v))return NaN;if(str.length<=2){if(v<60)return v/60}if(str.length>=3&&str.length<=4){const hS=str.slice(0,-2),mS=str.slice(-2);const h=parseInt(hS,10),m=parseInt(mS,10);if(!isNaN(h)&&!isNaN(m)&&m>=0&&m<60&&h>=0)return h+(m/60)}}return NaN}
 function formatRelativeDate(dS){if(!dS)return'';const today=new Date;today.setHours(0,0,0,0);const iD=parseLocalDate(dS);if(isNaN(iD.valueOf())||!Array.isArray(WEEKDAY_NAMES)||WEEKDAY_NAMES.length<7){return formatDisplayDate(dS)}const tmrw=new Date(today);tmrw.setDate(today.getDate()+1);const week=new Date(today);week.setDate(today.getDate()+7);const iT=iD.getTime();const tT=today.getTime();const tmT=tmrw.getTime();if(iT===tT)return t('dates.today');if(iT===tmT)return t('dates.tomorrow');if(iD>tmrw&&iD<week){return`${t('dates.nextPrefix')} ${WEEKDAY_NAMES[iD.getDay()]}`}return formatDisplayDate(dS)}
 function saveDataToLocalStorage(){try{localStorage.setItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.ENTRIES),JSON.stringify(recordedEntries));localStorage.setItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.PLANS),JSON.stringify(plannedEntries));localStorage.setItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.REVISITS),JSON.stringify(revisits));localStorage.setItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.SETTINGS),JSON.stringify(settings))}catch(e){console.error("Error saving to LS with sync:",e);showFeedback('feedback.saveError','danger')}}
-function loadDataFromLocalStorage(){try{currentSyncPin=getSyncPin();const sSet=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.SETTINGS));settings={...defaultSettings,...JSON.parse(sSet||'{}')};if(isNaN(settings.monthlyGoal)||settings.monthlyGoal<=0)settings.monthlyGoal=70;if(typeof settings.goalHasBeenSet!=='boolean')settings.goalHasBeenSet=!1;let sEnt=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.ENTRIES));if(sEnt){try{const p=JSON.parse(sEnt);recordedEntries=Array.isArray(p)?p.map(e=>({...e,notes:e.notes?.substring(0,NOTES_MAX_LENGTH)||'',tag:e.tag||DEFAULT_TAG_VALUE})):(()=>{throw new Error("Entries not array")})()}catch(e){recordedEntries=[];localStorage.removeItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.ENTRIES))}}const sPla=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.PLANS));plannedEntries=sPla?JSON.parse(sPla):[];plannedEntries.forEach(p=>{if(p.plannedHours!==undefined&&typeof p.plannedHours==='number'){p.hours=p.plannedHours;delete p.plannedHours}});const sRev=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.REVISITS));revisits=sRev?JSON.parse(sRev):[];revisits=revisits.map(rv=>({...rv,status:rv.status||'pending',notes:rv.notes?.substring(0,REVISIT_NOTES_MAX_LENGTH)||'',dateAdded:rv.dateAdded||getCurrentDateString(),scheduledDate:rv.scheduledDate||null}));sortAllDataLocally()}catch(e){console.error("Error loading from LS with sync:",e);recordedEntries=[];plannedEntries=[];revisits=[];settings={...defaultSettings};try{localStorage.clear()}catch(se){}showFeedback('feedback.loadError','danger')}}
+function loadDataFromLocalStorage(){try{currentSyncPin=getSyncPin();const sSet=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.SETTINGS));let loadedSettings=JSON.parse(sSet||'{}');settings={...defaultSettings,...loadedSettings};if(isNaN(settings.monthlyGoal)||settings.monthlyGoal<=0){settings.monthlyGoal=defaultSettings.monthlyGoal}if(typeof settings.goalHasBeenSet!=='boolean'){settings.goalHasBeenSet=defaultSettings.goalHasBeenSet}let sEnt=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.ENTRIES));if(sEnt){try{const p=JSON.parse(sEnt);recordedEntries=Array.isArray(p)?p.map(e=>({...e,notes:e.notes?.substring(0,NOTES_MAX_LENGTH)||'',tag:e.tag||DEFAULT_TAG_VALUE})):(()=>{throw new Error("Entries not array")})()}catch(e){recordedEntries=[];localStorage.removeItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.ENTRIES))}}const sPla=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.PLANS));plannedEntries=sPla?JSON.parse(sPla):[];plannedEntries.forEach(p=>{if(p.plannedHours!==undefined&&typeof p.plannedHours==='number'){p.hours=p.plannedHours;delete p.plannedHours}});const sRev=localStorage.getItem(getLocalStorageKeyWithSync(BASE_LS_KEYS.REVISITS));revisits=sRev?JSON.parse(sRev):[];revisits=revisits.map(rv=>({...rv,status:rv.status||'pending',notes:rv.notes?.substring(0,REVISIT_NOTES_MAX_LENGTH)||'',dateAdded:rv.dateAdded||getCurrentDateString(),scheduledDate:rv.scheduledDate||null}));sortAllDataLocally()}catch(e){console.error("Error loading from LS with sync:",e);recordedEntries=[];plannedEntries=[];revisits=[];settings={...defaultSettings};try{localStorage.clear()}catch(se){}showFeedback('feedback.loadError','danger')}}
 function sortAllDataLocally(){recordedEntries.sort((a,b)=>b.date.localeCompare(a.date));plannedEntries.sort((a,b)=>a.date.localeCompare(b.date));revisits.sort((a,b)=>{if(a.status!==b.status)return a.status==='pending'?-1:1;if(a.scheduledDate&&b.scheduledDate)return a.scheduledDate.localeCompare(b.scheduledDate);if(a.scheduledDate)return-1;if(b.scheduledDate)return 1;return(a.dateAdded||'').localeCompare(b.dateAdded||'')})}
 function clearLocalStorageForPin(pinToClear){if(!pinToClear)pinToClear='public';try{Object.values(BASE_LS_KEYS).forEach(baseKey=>{localStorage.removeItem(`${baseKey}_${pinToClear}`)});console.log(`LocalStorage cleared for pin: ${pinToClear}`)}catch(e){console.error("Error clearing LS for pin:",e)}}
 function updateSyncStatusDisplay(){if(!syncStatusDisplay)return;const k=currentSyncPin;if(k){syncStatusDisplay.textContent=t('sync.statusActive',{pinEnd:k.slice(-4)});syncStatusDisplay.title=t('sync.statusActiveTitle',{pinFull:k})}else{syncStatusDisplay.textContent=t('sync.statusPublic');syncStatusDisplay.title=''}}
 function getGunNodeName(baseNodeKey){const p=currentSyncPin||'public_v2';return`${GUN_NODE_PREFIX}${baseNodeKey}_${p}`}
-function initializeGunSync(isHardReset=!1){if(!window.Gun){console.error("GunJS not loaded!");showFeedback('sync.gunMissing','danger');return}if(gun&&!isHardReset&&isSyncInitialized)return;console.log(`Initializing Gun with PIN: ${currentSyncPin||'public'}`);if(gun){Object.values(NODE_KEYS).forEach(k=>{const gn=gun.get(getGunNodeName(k));if(gn)gn.off()});entriesGun=null;plansGun=null;revisitsGun=null;settingsGun=null}gun=Gun({peers:GUN_PEERS,localStorage:!1,radisk:!1});entriesGun=gun.get(getGunNodeName(NODE_KEYS.ENTRIES));plansGun=gun.get(getGunNodeName(NODE_KEYS.PLANS));revisitsGun=gun.get(getGunNodeName(NODE_KEYS.REVISITS));settingsGun=gun.get(getGunNodeName(NODE_KEYS.SETTINGS));entriesGun.map().on((d,id)=>{if(id&&d===null){recordedEntries=recordedEntries.filter(e=>e.id.toString()!==id.toString());console.log(`GUN: Deleted entry ${id}`)}else if(id&&d){const idx=recordedEntries.findIndex(e=>e.id.toString()===id.toString());if(idx>-1){if(JSON.stringify(recordedEntries[idx])!==JSON.stringify(d))recordedEntries[idx]={...recordedEntries[idx],...d}}else{recordedEntries.push(d)}console.log(`GUN: Received entry ${id}`)}sortAllDataLocally();saveDataToLocalStorage();updateAllDisplays()});plansGun.map().on((d,id)=>{if(id&&d===null){plannedEntries=plannedEntries.filter(p=>p.id.toString()!==id.toString());console.log(`GUN: Deleted plan ${id}`)}else if(id&&d){const idx=plannedEntries.findIndex(p=>p.id.toString()===id.toString());if(idx>-1){if(JSON.stringify(plannedEntries[idx])!==JSON.stringify(d))plannedEntries[idx]={...plannedEntries[idx],...d}}else{plannedEntries.push(d)}console.log(`GUN: Received plan ${id}`)}sortAllDataLocally();saveDataToLocalStorage();updateAllDisplays()});revisitsGun.map().on((d,id)=>{if(id&&d===null){revisits=revisits.filter(r=>r.id.toString()!==id.toString());console.log(`GUN: Deleted revisit ${id}`)}else if(id&&d){const idx=revisits.findIndex(r=>r.id.toString()===id.toString());if(idx>-1){if(JSON.stringify(revisits[idx])!==JSON.stringify(d))revisits[idx]={...revisits[idx],...d}}else{revisits.push(d)}console.log(`GUN: Received revisit ${id}`)}sortAllDataLocally();saveDataToLocalStorage();updateAllDisplays()});
-settingsGun.on(d=>{
-    if(d&&typeof d==='object'){
-        console.log("GUN EVT: Received data 'd' for settings:",JSON.parse(JSON.stringify(d)));
-        const sBefore=JSON.parse(JSON.stringify(settings));
-        let newSettings={...defaultSettings,...sBefore,...d};
-        if(typeof newSettings.monthlyGoal!=='number'||isNaN(newSettings.monthlyGoal)||newSettings.monthlyGoal<=0){
-            newSettings.monthlyGoal=(typeof sBefore.monthlyGoal==='number'&&sBefore.monthlyGoal>0)?sBefore.monthlyGoal:defaultSettings.monthlyGoal
-        }
-        if(typeof newSettings.goalHasBeenSet!=='boolean'){
-            newSettings.goalHasBeenSet=(typeof sBefore.goalHasBeenSet==='boolean')?sBefore.goalHasBeenSet:defaultSettings.goalHasBeenSet
-        }
-        if(d.monthlyGoal&&!newSettings.updatedAt){newSettings.updatedAt=Date.now()}
-        settings=newSettings;
-        console.log("GUN EVT: Settings after merge:",JSON.parse(JSON.stringify(settings)));
-        saveDataToLocalStorage();
-        if(monthlyGoalInput){monthlyGoalInput.value=settings.monthlyGoal}
-        updateAllDisplays()
-    }else if(d===null){
-        console.log("GUN EVT: Settings node is null in Gun. Current local settings are preserved for now.")
-    }else{
-        console.log("GUN EVT: Received non-object, non-null data for settings. Ignoring.",d)
+function initializeGunSync(isHardReset = !1) {
+    if (!window.Gun) { console.error("GunJS not loaded!"); showFeedback('sync.gunMissing', 'danger'); return; }
+    if (gun && !isHardReset && isSyncInitialized) return;
+    console.log(`Initializing Gun with PIN: ${currentSyncPin || 'public'}`);
+
+    if (gun) {
+        Object.values(NODE_KEYS).forEach(k => {
+            const gn = gun.get(getGunNodeName(k));
+            if (gn) gn.off();
+        });
+        entriesGun = null; plansGun = null; revisitsGun = null; settingsGun = null;
     }
-});
-isSyncInitialized=!0;updateSyncStatusDisplay();console.log("Gun listeners initialized.")}
-function resetAndInitializeAppSyncData(){console.log("Resetting and initializing app sync data...");currentSyncPin=getSyncPin();loadDataFromLocalStorage();initializeGunSync(!0);updateAllDisplays()}
-function initializeSyncFramework(isPinChange=!1){
-    currentSyncPin=getSyncPin();
-    if(isPinChange){
-        console.log("Sync framework: PIN change detected or forced re-init.");
-        loadDataFromLocalStorage();
-        initializeGunSync(!0);
-        updateAllDisplays();
-        setTimeout(()=>{
-            if(currentSyncPin&&!settings.goalHasBeenSet&&!syncSettingsModal.classList.contains('active')&&!document.querySelector('.dialog-backdrop.visible')){
-                console.log("Sync framework: PIN active, goal not set for this context. Prompting.");
-                promptForMonthlyGoal()
-            }
-        },1500)
-    }else{
-        console.log("Sync framework: Initializing on app load.");
-        if(!currentSyncPin&&Object.keys(translations).length>0){
-            if(!syncSettingsModal.classList.contains('active')&&!settings.goalHasBeenSet){
-                console.log("Sync framework: No PIN on load, goal not set for public. Opening sync settings modal.");
-                setTimeout(openSyncSettingsModal,800)
-            }else{
-                initializeGunSync()
-            }
-        }else{
-            initializeGunSync();
-            setTimeout(()=>{
-                if(currentSyncPin&&!settings.goalHasBeenSet&&!syncSettingsModal.classList.contains('active')&&!document.querySelector('.dialog-backdrop.visible')){
-                    console.log("Sync framework: App load with PIN, goal not set. Prompting.");
-                    promptForMonthlyGoal()
+    gun = Gun({ peers: GUN_PEERS, localStorage: !1, radisk: !1 });
+    entriesGun = gun.get(getGunNodeName(NODE_KEYS.ENTRIES));
+    plansGun = gun.get(getGunNodeName(NODE_KEYS.PLANS));
+    revisitsGun = gun.get(getGunNodeName(NODE_KEYS.REVISITS));
+    settingsGun = gun.get(getGunNodeName(NODE_KEYS.SETTINGS));
+
+    entriesGun.map().on((d, id) => { if (id && d === null) { recordedEntries = recordedEntries.filter(e => e.id.toString() !== id.toString()); console.log(`GUN: Deleted entry ${id}`) } else if (id && d) { const idx = recordedEntries.findIndex(e => e.id.toString() === id.toString()); if (idx > -1) { if (JSON.stringify(recordedEntries[idx]) !== JSON.stringify(d)) recordedEntries[idx] = { ...recordedEntries[idx], ...d } } else { recordedEntries.push(d) } console.log(`GUN: Received entry ${id}`) } sortAllDataLocally(); saveDataToLocalStorage(); updateAllDisplays() });
+    plansGun.map().on((d, id) => { if (id && d === null) { plannedEntries = plannedEntries.filter(p => p.id.toString() !== id.toString()); console.log(`GUN: Deleted plan ${id}`) } else if (id && d) { const idx = plannedEntries.findIndex(p => p.id.toString() === id.toString()); if (idx > -1) { if (JSON.stringify(plannedEntries[idx]) !== JSON.stringify(d)) plannedEntries[idx] = { ...plannedEntries[idx], ...d } } else { plannedEntries.push(d) } console.log(`GUN: Received plan ${id}`) } sortAllDataLocally(); saveDataToLocalStorage(); updateAllDisplays() });
+    revisitsGun.map().on((d, id) => { if (id && d === null) { revisits = revisits.filter(r => r.id.toString() !== id.toString()); console.log(`GUN: Deleted revisit ${id}`) } else if (id && d) { const idx = revisits.findIndex(r => r.id.toString() === id.toString()); if (idx > -1) { if (JSON.stringify(revisits[idx]) !== JSON.stringify(d)) revisits[idx] = { ...revisits[idx], ...d } } else { revisits.push(d) } console.log(`GUN: Received revisit ${id}`) } sortAllDataLocally(); saveDataToLocalStorage(); updateAllDisplays() });
+    
+    settingsGun.on(d => {
+        if (d && typeof d === 'object' && d['#']) { // Ensure 'd' is a Gun node object
+            console.log("GUN EVT: Received raw GUN data 'd' for settings:", JSON.parse(JSON.stringify(d)));
+            const sBefore = JSON.parse(JSON.stringify(settings)); // Local state BEFORE merge
+            console.log("GUN EVT: Local settings (sBefore) BEFORE merge:", JSON.parse(JSON.stringify(sBefore)));
+
+            let remoteSettingsData = {};
+            for (const key in d) {
+                if (key !== '_' && key !== '#' && key !== '>') {
+                    remoteSettingsData[key] = d[key];
                 }
-            },1500)
+            }
+            console.log("GUN EVT: Cleaned remoteSettingsData from Gun:", JSON.parse(JSON.stringify(remoteSettingsData)));
+
+            let newMergedSettings = {}; // Start with an empty object for merged result
+
+            // Merge monthlyGoal
+            if (remoteSettingsData.monthlyGoal !== undefined && (typeof remoteSettingsData.monthlyGoal === 'number' && !isNaN(remoteSettingsData.monthlyGoal) && remoteSettingsData.monthlyGoal > 0 )) {
+                if (sBefore.monthlyGoal !== undefined && sBefore.updatedAt && remoteSettingsData.updatedAt && sBefore.updatedAt > remoteSettingsData.updatedAt) {
+                    newMergedSettings.monthlyGoal = sBefore.monthlyGoal; // Local is newer
+                    console.log(`GUN EVT MERGE: monthlyGoal - Local (${sBefore.monthlyGoal} @ ${sBefore.updatedAt}) is newer than remote (${remoteSettingsData.monthlyGoal} @ ${remoteSettingsData.updatedAt}). Using local.`);
+                } else {
+                    newMergedSettings.monthlyGoal = remoteSettingsData.monthlyGoal; // Remote is newer or no clear winner, prefer remote
+                    console.log(`GUN EVT MERGE: monthlyGoal - Remote (${remoteSettingsData.monthlyGoal} @ ${remoteSettingsData.updatedAt}) wins over local (${sBefore.monthlyGoal} @ ${sBefore.updatedAt}). Using remote.`);
+                }
+            } else if (sBefore.monthlyGoal !== undefined && (typeof sBefore.monthlyGoal === 'number' && !isNaN(sBefore.monthlyGoal) && sBefore.monthlyGoal > 0 )) {
+                newMergedSettings.monthlyGoal = sBefore.monthlyGoal; // Remote doesn't have it, local does
+                console.log(`GUN EVT MERGE: monthlyGoal - Remote missing valid. Using local (${sBefore.monthlyGoal}).`);
+            } else {
+                newMergedSettings.monthlyGoal = defaultSettings.monthlyGoal; // Neither has it / remote invalid
+                console.log(`GUN EVT MERGE: monthlyGoal - Both missing or remote invalid. Using default (${defaultSettings.monthlyGoal}).`);
+            }
+
+            // Merge goalHasBeenSet
+            if (remoteSettingsData.goalHasBeenSet !== undefined && typeof remoteSettingsData.goalHasBeenSet === 'boolean') {
+                 if (sBefore.goalHasBeenSet !== undefined && sBefore.updatedAt && remoteSettingsData.updatedAt && sBefore.updatedAt > remoteSettingsData.updatedAt) {
+                    newMergedSettings.goalHasBeenSet = sBefore.goalHasBeenSet; // Local is newer
+                     console.log(`GUN EVT MERGE: goalHasBeenSet - Local (${sBefore.goalHasBeenSet} @ ${sBefore.updatedAt}) is newer than remote (${remoteSettingsData.goalHasBeenSet} @ ${remoteSettingsData.updatedAt}). Using local.`);
+                } else {
+                    newMergedSettings.goalHasBeenSet = remoteSettingsData.goalHasBeenSet; // Remote is newer or no clear winner
+                     console.log(`GUN EVT MERGE: goalHasBeenSet - Remote (${remoteSettingsData.goalHasBeenSet} @ ${remoteSettingsData.updatedAt}) wins over local (${sBefore.goalHasBeenSet} @ ${sBefore.updatedAt}). Using remote.`);
+                }
+            } else if (sBefore.goalHasBeenSet !== undefined && typeof sBefore.goalHasBeenSet === 'boolean') {
+                newMergedSettings.goalHasBeenSet = sBefore.goalHasBeenSet; // Remote doesn't have it or invalid, local does
+                console.log(`GUN EVT MERGE: goalHasBeenSet - Remote missing valid. Using local (${sBefore.goalHasBeenSet}).`);
+            } else {
+                newMergedSettings.goalHasBeenSet = defaultSettings.goalHasBeenSet; // Neither has it
+                console.log(`GUN EVT MERGE: goalHasBeenSet - Both missing or remote invalid. Using default (${defaultSettings.goalHasBeenSet}).`);
+            }
+            
+            // Merge updatedAt
+            if (remoteSettingsData.updatedAt && (!sBefore.updatedAt || remoteSettingsData.updatedAt > sBefore.updatedAt)) {
+                newMergedSettings.updatedAt = remoteSettingsData.updatedAt;
+            } else if (sBefore.updatedAt) {
+                newMergedSettings.updatedAt = sBefore.updatedAt;
+            } else if ( (newMergedSettings.monthlyGoal !== sBefore.monthlyGoal) || (newMergedSettings.goalHasBeenSet !== sBefore.goalHasBeenSet && sBefore.goalHasBeenSet !== undefined) ){
+                 // if values changed from sBefore due to remote data lacking updatedAt, but sBefore also lacking.
+                 newMergedSettings.updatedAt = Date.now();
+                 console.log("GUN EVT MERGE: updatedAt - Values changed due to remote, setting new timestamp.");
+            }
+
+
+            // Preserve other potential settings from remote if they exist and local doesn't conflict or is older
+            for (const key in remoteSettingsData) {
+                if (!newMergedSettings.hasOwnProperty(key) && key !== 'monthlyGoal' && key !== 'goalHasBeenSet' && key !== 'updatedAt') {
+                     if(sBefore[key] && sBefore.updatedAt && remoteSettingsData.updatedAt && sBefore.updatedAt > remoteSettingsData.updatedAt) {
+                        newMergedSettings[key] = sBefore[key]; // Local version of other prop is newer
+                     } else {
+                        newMergedSettings[key] = remoteSettingsData[key]; // Remote prop or local is older/no conflict
+                     }
+                } else if (!newMergedSettings.hasOwnProperty(key) && sBefore.hasOwnProperty(key)) {
+                     newMergedSettings[key] = sBefore[key]; // Remote does not have, local has, keep local
+                }
+            }
+            
+            settings = { ...defaultSettings, ...newMergedSettings };
+
+            console.log("GUN EVT: Final settings object AFTER merge:", JSON.parse(JSON.stringify(settings)));
+            
+            // Check if there was any actual change to core settings that might need re-sync
+            const settingsChanged = (sBefore.monthlyGoal !== settings.monthlyGoal) ||
+                                  (sBefore.goalHasBeenSet !== settings.goalHasBeenSet) ||
+                                  (!sBefore.updatedAt && settings.updatedAt) ||
+                                  (sBefore.updatedAt && settings.updatedAt && sBefore.updatedAt < settings.updatedAt);
+
+            saveDataToLocalStorage(); // Always save merged state to LS
+
+            if (settingsChanged) {
+                 console.log("GUN EVT: Core settings changed, attempting to PUT back to Gun to ensure consistency.", JSON.parse(JSON.stringify(settings)));
+                 // Only .put if values actually changed due to the merge favoring remote, or if local was incomplete and remote provided useful data.
+                 // This avoids echo loops if multiple clients resolve a conflict to the same state.
+                 // However, a simple .put(settings) might be fine if Gun handles idempotency well.
+                 // For safety, we could only put if sBefore.updatedAt is now older than settings.updatedAt.
+                if(!sBefore.updatedAt || (settings.updatedAt && sBefore.updatedAt < settings.updatedAt) || remoteSettingsData.monthlyGoal === undefined ) {
+                    settingsGun.put(settings); // Save resolved/merged settings back to Gun if remote was winner or local had no timestamp
+                }
+            }
+
+            if (monthlyGoalInput) { monthlyGoalInput.value = settings.monthlyGoal; }
+            updateAllDisplays();
+
+        } else if (d === null) {
+            console.log("GUN EVT: Settings node is NULL in Gun. Local settings preserved. A local save might be needed to repopulate Gun if this client has the latest.");
+            // Consider: if local settings exist, .put(settings) them back to Gun.
+            if(settings.updatedAt) { // if local settings have an update timestamp, they are likely valid
+                 console.log("GUN EVT: Settings node is NULL, but local data exists. Putting local settings back to Gun.");
+                 settingsGun.put(settings);
+            }
+        } else {
+            console.log("GUN EVT: Received non-object, non-Gun-node, or non-null data for settings. Ignoring:", d);
         }
-    }
+    });
+
+    isSyncInitialized = !0;
+    updateSyncStatusDisplay();
+    console.log("Gun listeners initialized.");
 }
+function resetAndInitializeAppSyncData(){console.log("Resetting and initializing app sync data...");currentSyncPin=getSyncPin();loadDataFromLocalStorage();initializeGunSync(!0);updateAllDisplays()}
+function initializeSyncFramework(isPinChange=!1){currentSyncPin=getSyncPin();if(isPinChange){console.log("Sync framework: PIN change detected or forced re-init.");loadDataFromLocalStorage();initializeGunSync(!0);updateAllDisplays();setTimeout(()=>{if(currentSyncPin&&!settings.goalHasBeenSet&&!syncSettingsModal.classList.contains('active')&&!document.querySelector('.dialog-backdrop.visible')){console.log("Sync framework: PIN active, goal not set for this context. Prompting.");promptForMonthlyGoal()}},1500)}else{console.log("Sync framework: Initializing on app load.");if(!currentSyncPin&&Object.keys(translations).length>0){if(!syncSettingsModal.classList.contains('active')&&!settings.goalHasBeenSet){console.log("Sync framework: No PIN on load, goal not set for public. Opening sync settings modal.");setTimeout(openSyncSettingsModal,800)}else{initializeGunSync()}}else{initializeGunSync();setTimeout(()=>{if(currentSyncPin&&!settings.goalHasBeenSet&&!syncSettingsModal.classList.contains('active')&&!document.querySelector('.dialog-backdrop.visible')){console.log("Sync framework: App load with PIN, goal not set. Prompting.");promptForMonthlyGoal()}},1500)}}}
 function triggerInstallPromptIfAvailable(c='?'){if(deferredInstallPrompt&&settings.goalHasBeenSet){setTimeout(()=>{deferredInstallPrompt.prompt().catch(e=>{});deferredInstallPrompt=null},300)}}
-function promptForMonthlyGoal(){let ok=!1;const m=t('statsCard.goalLabel');while(!ok){const i=prompt(m,settings.monthlyGoal);if(i===null){ok=!0;if(!settings.goalHasBeenSet){settings.goalHasBeenSet=!0;saveDataToLocalStorage();settingsGun?.put(settings);updateAllDisplays()}}else{const g=parseInt(i,10);if(!isNaN(g)&&g>0){settings.monthlyGoal=g;settings.goalHasBeenSet=!0;if(monthlyGoalInput)monthlyGoalInput.value=g;saveDataToLocalStorage();settingsGun?.put(settings);ok=!0;updateAllDisplays();showFeedback("feedback.goalSetSuccess","success");triggerInstallPromptIfAvailable('initial goal')}else{alert(t("feedback.invalidGoalValue"))}}}}
+function promptForMonthlyGoal(){if(syncSettingsModal?.classList.contains('active')||document.querySelector('.dialog-backdrop.visible'))return;let ok=!1;const m=t('statsCard.goalLabel');const cGV=settings.monthlyGoal||defaultSettings.monthlyGoal;while(!ok){const i=prompt(m,cGV);if(i===null){ok=!0;if(!settings.goalHasBeenSet){settings.goalHasBeenSet=!0;settings.updatedAt=Date.now();saveDataToLocalStorage();settingsGun?.put(settings);updateAllDisplays()}}else{const g=parseInt(i,10);if(!isNaN(g)&&g>0){settings.monthlyGoal=g;settings.goalHasBeenSet=!0;settings.updatedAt=Date.now();if(monthlyGoalInput)monthlyGoalInput.value=g;saveDataToLocalStorage();settingsGun?.put(settings);ok=!0;updateAllDisplays();showFeedback("feedback.goalSetSuccess","success");triggerInstallPromptIfAvailable('initial goal')}else{alert(t("feedback.invalidGoalValue"))}}}}
 function setDateInputVisibility(v){isDateInputVisible=v;if(v){recordDateInput?.classList.remove('hidden');dateLabel?.classList.add('visually-hidden');recordDateInput?.focus()}else{recordDateInput?.classList.add('hidden');dateLabel?.classList.remove('visually-hidden');if(displayDate)displayDate.textContent=(!recordDateInput?.value||recordDateInput.value===getCurrentDateString())?t('dates.today'):formatDisplayDate(recordDateInput.value)}}
 function toggleCard(cE){if(!cE)return;const iE=cE.classList.contains('expanded');cE.classList.toggle('expanded',!iE);const i=cE.querySelector('.toggle-icon');if(i)i.textContent=!iE?'▲':'▼'}
 function clearRecordForm(){recordForm?.reset();if(recordIdInput)recordIdInput.value='';if(recordDateInput)recordDateInput.value=getCurrentDateString();setDateInputVisibility(!1);if(recordTagSelect)recordTagSelect.value=DEFAULT_TAG_VALUE;if(recordNotesInput)recordNotesInput.value='';if(recordHoursInput)recordHoursInput.value='';if(saveRecordBtn)saveRecordBtn.textContent=t('recordCard.saveButton');saveRecordBtn?.classList.remove('editing');currentEditingId=null}
@@ -336,7 +389,7 @@ function updateStatistics(){const tdy=new Date;const cM=tdy.getMonth();const cY=
 function populateMonthSelector(){if(!chartMonthSelector)return;const aM=new Set;recordedEntries.filter(e=>e.type!=='revisit_completed').forEach(e=>{const dO=parseLocalDate(e.date);if(!isNaN(dO.valueOf())){aM.add(getMonthYearString(dO))}});const sM=Array.from(aM).sort((a,b)=>{const[mA,yA]=a.split('/').map(Number);const[mB,yB]=b.split('/').map(Number);return(yB-yA)||(mB-mA)});const oSV=chartMonthSelector.value;chartMonthSelector.innerHTML='';if(sM.length===0){const o=document.createElement('option');o.value='';o.textContent=t('chartsCard.noDataOption');chartMonthSelector.append(o);chartMonthSelector.disabled=!0;return}chartMonthSelector.disabled=!1;const cMS=getMonthYearString(new Date);let cMF=formatMonthYearExtensive(cMS);let hCMD=!1;let dSOV=!1;sM.forEach(mYV=>{const o=document.createElement('option');let mF=formatMonthYearExtensive(mYV);o.value=mYV;o.textContent=mF||mYV;if(mYV===oSV){o.selected=!0;dSOV=!0}else if(mYV===cMS&&!dSOV){o.selected=!0}if(mYV===cMS){hCMD=!0}chartMonthSelector.append(o)});if(!hCMD&&cMF&&Array.isArray(MONTH_NAMES)&&MONTH_NAMES.length>0){const o=document.createElement('option');o.value=cMS;o.textContent=`${cMF} (${t('chartsCard.currentMonthSuffix')})`;chartMonthSelector.insertBefore(o,chartMonthSelector.firstChild);if(!dSOV&&!chartMonthSelector.querySelector('option[selected]')){o.selected=!0}}if(!chartMonthSelector.value&&chartMonthSelector.options.length>0){chartMonthSelector.options[0].selected=!0}}
 function renderCharts(sMY){if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();monthlyHoursChartInstance=null}if(!sMY||sMY===''){clearChartWithMessage(t('chartsCard.selectMonthMessage'));return}try{const[sM,sY]=sMY.split('/').map(Number);const mI=sM-1;const eFM=recordedEntries.filter(e=>e.type!=='revisit_completed').filter(e=>{const d=parseLocalDate(e.date);if(isNaN(d.valueOf()))return!1;return d.getMonth()===mI&&d.getFullYear()===sY});if(eFM.length===0){clearChartWithMessage(t('chartsCard.noRecordsInMonthMessage',{month:formatMonthYearExtensive(sMY)}));return}let tH=0;const hBT={};eFM.forEach(e=>{const tN=e.tag||DEFAULT_TAG_VALUE;const h=e.hours||0;tH+=h;hBT[tN]=(hBT[tN]||0)+h});if(chartTotalHoursDisplay)chartTotalHoursDisplay.innerHTML=`${t('chartsCard.totalHoursLabel')} <strong>${formatHoursExtensive(tH)}</strong>`;const aD=Object.entries(hBT).map(([tg,hs])=>({label:t(tagKeyMapping[tg]||'tags.noTag'),value:hs}));aD.sort((a,b)=>b.value-a.value);const lbls=aD.map(i=>i.label);const vals=aD.map(i=>i.value);const bCs=lbls.map((_,i)=>chartColors[i%chartColors.length]);if(!monthlyHoursChartCtx)return;monthlyHoursChartInstance=new Chart(monthlyHoursChartCtx,{type:'pie',data:{labels:lbls,datasets:[{data:vals,backgroundColor:bCs,borderColor:tooltipBgColor||'#1c1c1e',borderWidth:1.5}]},options:{responsive:!0,maintainAspectRatio:!1,plugins:{title:{display:!0,text:t('chartsCard.percentageDistributionTitle'),color:textMutedColor,font:{size:12,weight:'normal'},padding:{bottom:15}},tooltip:{backgroundColor:tooltipBgColor,titleColor:textColor,bodyColor:textColor,displayColors:!0,padding:10,cornerRadius:6,callbacks:{label:c=>{const l=c.label||'';const v=c.parsed||0;const p=tH>0?((v/tH)*100).toFixed(1):0;return`${l}: ${formatHoursExtensive(v)} (${p}%)`}}},legend:{position:'bottom',align:'center',labels:{color:textMutedColor,boxWidth:12,padding:15}}}}})}catch(e){console.error("Error rendering chart:", e); clearChartWithMessage(t('chartsCard.renderErrorMessage'))}}
 function clearChartWithMessage(m){if(monthlyHoursChartInstance){monthlyHoursChartInstance.destroy();monthlyHoursChartInstance=null}if(chartTotalHoursDisplay)chartTotalHoursDisplay.textContent='';const c=monthlyHoursChartCtx;if(c){c.clearRect(0,0,c.canvas.width,c.canvas.height);c.save();c.textAlign='center';c.textBaseline='middle';c.fillStyle=textMutedColor;c.font=`14px ${computedStyles?.fontFamily||'sans-serif'}`;c.fillText(m,c.canvas.width/2,c.canvas.height/2);c.restore()}}
-function updateAllDisplays(){if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Translations not ready, skipping update.");return}try{applyStaticTranslations();updateDashboard();updateDashboardPlannedDates();updateStatistics();renderHistory();renderPlanning();renderRevisits();populateMonthSelector();const sV=chartMonthSelector?.value;if(!chartMonthSelector?.disabled&&sV){renderCharts(sV)}else if(!chartMonthSelector?.disabled&&chartMonthSelector?.options?.length>0&&chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=!0;renderCharts(chartMonthSelector.options[0].value)}else{clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'))}if(plansSection){const iRV=!dashboardRevisitsSection?.classList.contains('hidden');const iPV=!dashboardPlannedDatesContainer?.classList.contains('hidden');plansSection.classList.toggle('hidden',!(iRV||iPV))}updateSyncStatusDisplay()}catch(er){console.error("Error during updateAllDisplays:",er)}}
+function updateAllDisplays(){if(typeof t!=='function'||!translations?.[currentLang]){console.warn("Translations not ready, skipping update.");return}try{if(monthlyGoalInput)monthlyGoalInput.value=settings.monthlyGoal;applyStaticTranslations();updateDashboard();updateDashboardPlannedDates();updateStatistics();renderHistory();renderPlanning();renderRevisits();populateMonthSelector();const sV=chartMonthSelector?.value;if(!chartMonthSelector?.disabled&&sV){renderCharts(sV)}else if(!chartMonthSelector?.disabled&&chartMonthSelector?.options?.length>0&&chartMonthSelector.options[0]?.value){chartMonthSelector.options[0].selected=!0;renderCharts(chartMonthSelector.options[0].value)}else{clearChartWithMessage(t(recordedEntries.length===0?'chartsCard.noDataYetMessage':'chartsCard.selectMonthMessage'))}if(plansSection){const iRV=!dashboardRevisitsSection?.classList.contains('hidden');const iPV=!dashboardPlannedDatesContainer?.classList.contains('hidden');plansSection.classList.toggle('hidden',!(iRV||iPV))}updateSyncStatusDisplay()}catch(er){console.error("Error during updateAllDisplays:",er)}}
 function formatTimeInputOnType(ev){const i=ev.target;let v=i.value;let oP=i.selectionStart;let nV=v.replace(/[^\d]/g,'').substring(0,4);let fV=nV;let cA=!1;if(nV.length===3){fV=`${nV.substring(0,1)}:${nV.substring(1)}`;if(v.indexOf(':')===-1&&oP>=1){cA=!0}}else if(nV.length>=4){fV=`${nV.substring(0,nV.length-2)}:${nV.substring(nV.length-2)}`;if(v.indexOf(':')===-1&&oP>=fV.indexOf(':')){cA=!0}}if(i.value!==fV){i.value=fV;let nP=oP;if(cA){nP++}nP=Math.min(nP,fV.length);requestAnimationFrame(()=>{try{i.setSelectionRange(nP,nP)}catch(e){}})}}
 function registerServiceWorker(){if('serviceWorker'in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./service-worker.js').then(r=>console.log('SW registered:',r.scope)).catch(e=>console.error('SW reg failed:',e))});navigator.serviceWorker.addEventListener('controllerchange',()=>{console.log('SW controller changed.')})}}
 function checkDateAndUpdate(){const nDS=getCurrentDateString();if(nDS!==lastCheckedDateString){lastCheckedDateString=nDS;updateAllDisplays()}}
@@ -344,7 +397,6 @@ function checkDateAndUpdate(){const nDS=getCurrentDateString();if(nDS!==lastChec
 loadDataFromLocalStorage();
 await loadTranslations();
 selectDOMElements();
-applyStaticTranslations();
 
 if(monthlyGoalInput)monthlyGoalInput.value=settings.monthlyGoal;
 if(recordDateInput)recordDateInput.value=getCurrentDateString();
@@ -384,8 +436,12 @@ syncSettingsModal?.addEventListener('click',e=>{if(e.target===syncSettingsModal)
 if(dateCheckInterval)clearInterval(dateCheckInterval);
 dateCheckInterval=setInterval(checkDateAndUpdate,6e4);
 
-initializeSyncFramework(); // Handles initial Gun setup and conditional goal prompt / sync modal
-updateAllDisplays();
+initializeSyncFramework(); 
+// Chamar applyStaticTranslations aqui para que as traduções dos botões e
+// elementos da UI estejam prontas antes de updateAllDisplays, que pode
+// depender de alguns desses textos (ex: ao criar botões dinamicamente).
+applyStaticTranslations(); 
+updateAllDisplays(); //Agora a ordem é Init DOMElems, loadData, loadTranslations, applyStatic, initSync, updateDisplays
 registerServiceWorker();
 
 if(loadingIndicator)loadingIndicator.classList.add('hidden');
