@@ -7,7 +7,7 @@
     --text-color: #ffffff;
     --text-color-secondary: rgba(235, 235, 245, 0.65); /* Levemente mais opaco */
     --text-color-tertiary: rgba(235, 235, 245, 0.5);
-    --border-color: #3a3a3c;
+    --border-color: #2E2E30; /* Lighter and less prominent */
     --separator-color: rgba(58, 58, 60, 0.6);
     --shadow-color: rgba(0, 0, 0, 0.2);
     --danger-color: #FF453A;
@@ -26,14 +26,17 @@
     --outer-padding: 15px;
     --transition-speed: 0.3s;
     --transition-speed-fast: 0.1s;
-    --content-transition: max-height 0.35s ease-out, opacity 0.25s ease-out 0.1s, padding 0.35s ease-out, margin 0.35s ease-out;
+    --content-transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.05s, padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --dashboard-border-thickness: 3px;
     --progress-percent: 0;
     --celebrate-color-1: #fbc531; --celebrate-color-2: #e84118; --celebrate-color-3: #4cd137;
     --celebrate-color-4: #487eb0; --celebrate-color-5: #9c88ff;
-    --primary-gradient: linear-gradient(45deg, var(--primary-color), #5A9EFF);
+    --primary-gradient: var(--primary-color); /* Simplificado para cor sólida */
 
-    /* Variáveis para Estilo "Vidro" */
+    /* Nova variável para fundo de seção do dashboard */
+    --dashboard-section-bg: #252527;
+
+    /* Variáveis para Estilo "Vidro" (serão removidas dos dashboard-sections) */
     --glass-bg: rgba(44, 44, 46, 0.6); /* Base ligeiramente escura */
     --glass-bg-light: rgba(255, 255, 255, 0.08); /* Alternativa mais clara, pode testar */
     --glass-border-color: rgba(255, 255, 255, 0.08);
@@ -72,10 +75,8 @@ h1 { display: none; }
 
 /* --- Estilo Base da Sub-Box ("Vidro") --- */
 .dashboard-section {
-    background-color: var(--glass-bg); /* Fundo semi-transparente */
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur)); /* Suporte Safari */
-    border: 1px solid var(--glass-border-color); /* Borda sutil */
+    background-color: var(--dashboard-section-bg); /* Fundo flat */
+    /* backdrop-filter e border removidos para design flat */
     border-radius: var(--border-radius-large); /* Cantos mais arredondados */
     padding: 20px 25px; /* Padding interno generoso */
     position: relative;
@@ -91,8 +92,8 @@ h1 { display: none; }
 
 /* Estilo Vidro no modo Goal Met */
 #dashboard-box.goal-met .dashboard-section {
-    background-color: var(--glass-bg-met);
-    border-color: var(--glass-border-color-met);
+    background-color: transparent; /* Seções ficam transparentes para mostrar gradiente do #dashboard-box */
+    /* border-color removido */
 }
 
 
@@ -106,9 +107,12 @@ h1 { display: none; }
 }
 #dashboard-month-percentage {
     font-size: 3.5em; font-weight: 700; line-height: 1; margin-bottom: 10px;
-    margin-top: 0; background: var(--primary-gradient); -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent;
-    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); letter-spacing: -1px;
+    margin-top: 0;
+    /* Removido background clip e text-fill-color transparent */
+    /* background: var(--primary-gradient); -webkit-background-clip: text; */
+    /* -webkit-text-fill-color: transparent; background-clip: text; text-fill-color: transparent; */
+    color: var(--primary-color); /* Aplicando a cor primária diretamente */
+    letter-spacing: -1px; /* text-shadow removido para design flat */
 }
 /* Label Meta (não é mais o .dashboard-label padrão aqui) */
 .hero-section > [data-translate-key="dashboard.monthGoalLabel"] {
@@ -238,18 +242,18 @@ h1 { display: none; }
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
     overflow: hidden;
-    transition: box-shadow var(--transition-speed) ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: box-shadow var(--transition-speed) ease; /* Transição de sombra pode ser removida se não houver mais sombras */
+    /* box-shadow removido para design flat */
 }
 .card:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 0, 0, 0.07);
+    /* box-shadow removido para design flat */
 }
 .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px var(--card-padding); cursor: pointer; transition: background-color var(--transition-speed-fast) ease; position: relative; }
 .card-header::after { content: ''; position: absolute; bottom: 0; left: var(--card-padding); right: var(--card-padding); height: 1px; background-color: var(--border-color); opacity: 1; transition: opacity var(--transition-speed-fast) ease; }
 .card.expanded .card-header::after { opacity: 0; }
 .card:not(.expanded) .card-header:hover { background-color: rgba(255, 255, 255, 0.03); }
 .card-header h2 { color: var(--text-color); margin-bottom: 0; font-size: 1.15em; font-weight: 600; pointer-events: none; }
-.toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform var(--transition-speed) ease; color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
+.toggle-icon { font-size: 0.8em; font-weight: bold; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); color: var(--text-color-secondary); margin-left: 10px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
 .card.expanded .toggle-icon { transform: rotate(180deg); }
 .card-content { padding: 0 var(--card-padding); max-height: 0; opacity: 0; overflow: hidden; border-top: 1px solid var(--border-color); transition: var(--content-transition); margin-top: -1px; }
 .card.expanded .card-content { padding-top: var(--card-padding); padding-bottom: calc(var(--card-padding) + 5px); max-height: 1500px; opacity: 1; margin-top: 0; overflow: visible; }
